@@ -29,7 +29,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
-    <html lang="vi" className={`${displayFont.variable} ${bodyFont.variable}`}>
+    <html lang="vi" data-scroll-behavior="smooth" className={`${displayFont.variable} ${bodyFont.variable}`}>
       <body>
         <a className="skip-link" href="#main-content">
           Bỏ qua điều hướng

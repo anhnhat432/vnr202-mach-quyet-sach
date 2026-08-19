@@ -1,5 +1,6 @@
 web/node_modules/
 web/.next/
+web/.vercel/
 web/playwright-report/
 web/test-results/
 web/coverage/

@@ -4,28 +4,30 @@ Status values: `[ ] pending`, `[-] in progress`, `[x] complete`, `[!] blocked`.
 
 ## Phase 0 - Figma
 
-- [ ] `T000` Create the Figma Design file and page structure. Depends: approved Figma brief. DoD: file URL recorded and ten required pages exist.
-- [ ] `T001` Build variables, styles, grids and foundations. Depends: T000. DoD: tokens match approved palette/type/spacing and have desktop/mobile/projector modes.
+- [x] `T000` Create the Figma Design file and page structure. Depends: approved Figma brief. DoD: file URL recorded and ten required pages exist.
+- [-] `T001` Build variables, styles, grids and foundations. Depends: T000. DoD: tokens match approved palette/type/spacing and have desktop/mobile/projector modes.
 - [ ] `T002` Build component library and variants. Depends: T001. DoD: required interaction/loading/error/connection/rank states exist.
-- [ ] `T003` Compose public desktop/mobile flows. Depends: T002. DoD: homepage, dossier index, one full dossier, cause map and evidence matrix prototype.
+- [-] `T003` Compose public desktop/mobile flows. Depends: T002. DoD: homepage, dossier index, one full dossier, cause map and evidence matrix prototype.
 - [ ] `T004` Compose Live Arena, two games, Passport, auth and projector flows. Depends: T002. DoD: both games and two independent leaderboards have responsive/projection states.
 - [ ] `T005` Compose admin and motion/reduced-motion prototypes. Depends: T002. DoD: roster/content/competition/monitor states and four approved motion patterns.
 - [ ] `T006` Figma handoff audit. Depends: T003-T005. DoD: token/component names map to code, no Core rule invented, screenshots approved.
 
-Phase 0 evidence snapshot (2026-08-19): Figma Make Version 5 and its public preview are recorded in `docs/sdd/evidence/phase-0/README.md`. The generated prototype covers the public experience, both games, two independent leaderboards, resume state, mobile cause-map Slice, projector UI, Passport, auth and admin shells. `T000`-`T006` remain open because the separate Figma Design handoff file has not yet been verified to contain the ten required pages, variables, component library and handoff notes.
+Phase 0 evidence snapshot (2026-08-19): Figma Make Version 5 and the Figma Design file are recorded in `docs/sdd/evidence/phase-0/README.md`. The Design file has ten ordered pages, 31 variables, nine text styles, an `Action Button` set with six variants and a `Status Chip` set with four variants. `T001` and `T003` remain in progress because responsive/projector modes and two captures are incomplete; the broader component, Arena/admin/motion and handoff gates remain open.
 
 ## Phase 1 - Foundation and public slice
 
-- [ ] `T010` Initialize Git, project context and ignore rules. Depends: T006. DoD: clean repository with no secrets/roster data tracked.
-- [ ] `T011` Scaffold `web` Next.js app and pin dependencies. Depends: T010. DoD: dev, lint, typecheck and build scripts pass.
-- [ ] `T012` Configure Vitest, Playwright and CI. Depends: T011. DoD: sample unit and browser smoke tests pass locally/CI.
-- [ ] `T013` Implement design tokens and responsive app shell from Figma. Depends: T006,T011. DoD: visual token contract tests and desktop/mobile shell.
-- [ ] `T014` Initialize Supabase and public content migration/RLS. Depends: T010. DoD: `supabase db reset` and public/anon RLS tests pass.
-- [ ] `T015` Implement API envelope, errors, request IDs and public repositories. Depends: T011,T014. DoD: contract tests return stable envelopes/codes.
-- [ ] `T016` Implement homepage and dossier metadata index. Depends: T013,T015. DoD: local catalogue validates all 15 planned records; public UI renders only the three Published vertical-slice dossiers, responsive.
-- [ ] `T017` Implement Scenario Engine vertical slice. Depends: T013,T015. DoD: one complete representative dossier per chapter traverses six stages.
-- [ ] `T018` Implement cause map and evidence matrix vertical slices. Depends: T015,T017. DoD: source-backed node/edge/claim navigation works desktop/mobile.
-- [ ] `T019` Phase 1 accessibility, E2E and build gate. Depends: T012-T018. DoD: phase exit gate and traceability evidence recorded.
+- [x] `T010` Initialize Git, project context and ignore rules. Depends: T006. DoD: clean repository with no secrets/roster data tracked.
+- [x] `T011` Scaffold `web` Next.js app and pin dependencies. Depends: T010. DoD: dev, lint, typecheck and build scripts pass.
+- [x] `T012` Configure Vitest, Playwright and CI. Depends: T011. DoD: sample unit and browser smoke tests pass locally/CI.
+- [x] `T013` Implement design tokens and responsive app shell from Figma. Depends: T006,T011. DoD: visual token contract tests and desktop/mobile shell.
+- [!] `T014` Initialize Supabase and public content migration/RLS. Depends: T010. DoD: `supabase db reset` and public/anon RLS tests pass.
+- [x] `T015` Implement API envelope, errors, request IDs and public repositories. Depends: T011,T014. DoD: contract tests return stable envelopes/codes.
+- [x] `T016` Implement homepage and dossier metadata index. Depends: T013,T015. DoD: local catalogue validates all 15 planned records; public UI renders only the three Published vertical-slice dossiers, responsive.
+- [x] `T017` Implement Scenario Engine vertical slice. Depends: T013,T015. DoD: one complete representative dossier per chapter traverses six stages.
+- [x] `T018` Implement cause map and evidence matrix vertical slices. Depends: T015,T017. DoD: source-backed node/edge/claim navigation works desktop/mobile.
+- [!] `T019` Phase 1 accessibility, E2E and build gate. Depends: T012-T018. DoD: phase exit gate and traceability evidence recorded.
+
+Phase 1 evidence snapshot (2026-08-19): lint, typecheck, 11 unit tests, 10 desktop/mobile E2E tests, production build and dependency audit pass. The migration and static RLS contract tests pass, but `supabase db reset` and `supabase test db` cannot run because Docker and Podman are not installed; therefore `T014` and the complete `T019` exit gate remain blocked rather than falsely marked complete. See `docs/sdd/evidence/phase-1/README.md`.
 
 ## Phase 2 - Full public content
 

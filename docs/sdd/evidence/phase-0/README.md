@@ -2,7 +2,7 @@
 
 Date: 2026-08-19  
 Method: Hybrid SDD+ADD; Full Core contracts and Standard/Light Shell verification  
-Status: Figma Make prototype accepted as a generated UI deliverable; Figma Design handoff gate remains open
+Status: Figma Make prototype accepted; Figma Design structure/foundations partially verified; full handoff gate remains open
 
 ## Artifacts
 
@@ -11,6 +11,15 @@ Status: Figma Make prototype accepted as a generated UI deliverable; Figma Desig
 - Figma Design/handoff candidate: `https://www.figma.com/design/sazgk1wXpc6X80BuqOSAV9`
 
 The Make editor and public preview were marked as deliverable/handoff artifacts after Version 5.
+
+## Figma Design Verification
+
+- PASS: the Design file has ten correctly ordered pages; `T000` is complete.
+- PARTIAL: 31 variables exist across Primitives, Color, Spacing and Radius; all have CSS code syntax and no broken aliases or `ALL_SCOPES` residue.
+- PARTIAL: nine text styles exist.
+- PARTIAL: `Action Button` has six variants and `Status Chip` has four variants; the full required state/component library is not complete.
+- PASS: editable captures exist for Kho Hồ sơ (`6:2`), Mạch Nguyên Nhân (`5:2`), Ma trận Bằng chứng (`7:2`) and Live Arena (`4:2`, placed on page `05 Live Arena`).
+- BLOCKED: homepage and dossier capture jobs remained in `processing` after ten polls (`87958e36-845a-4f69-a57c-fd21d05dafd7` and `b3a5b88e-85ab-46f1-8024-42466b2e6431`).
 
 ## Validation Evidence
 
@@ -47,11 +56,11 @@ The Make editor and public preview were marked as deliverable/handoff artifacts 
 
 ## Open Phase 0 Gate
 
-Do not close `T000`-`T006` yet. The Make prototype is polished and behaviorally representative, but the separate Figma Design file has not been verified to contain:
+`T000` is complete. Keep `T001` and `T003` in progress and `T002`, `T004`, `T005`, `T006` open. The Design file still needs:
 
-1. all ten required pages;
-2. variables, typography, grids and projector safe area;
-3. reusable component variants and states;
+1. responsive/projector variable modes, grids and projector safe area;
+2. the remaining reusable component variants and required loading/error/connection/rank states;
+3. completed homepage/dossier, both-game, Passport, auth, projector and admin compositions;
 4. prototype/motion and reduced-motion documentation;
 5. final handoff notes mapping tokens and components to code.
 

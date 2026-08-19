@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "generate:content": "node ../scripts/sync-web-content.mjs",
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run generate:content && next build",
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
