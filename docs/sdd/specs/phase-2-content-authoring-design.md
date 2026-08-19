@@ -108,7 +108,7 @@ docs/sdd/content/
   publication-manifest.json
 ```
 
-`sources.json`, the dossier files and `causal-links.json` are the authoring source of truth. A dossier's `status` remains its canonical publication state. `publication-manifest.json` records the corresponding human approval evidence, and validation rejects any mismatch between the manifest and dossier status. Generated web JSON and Supabase SQL remain build artifacts.
+`sources.json`, the dossier files and `causal-links.json` are the authoring source of truth. A dossier's `status` remains its canonical publication state. `publication-manifest.json` records either human approval evidence or the truthful legacy baseline for the three unchanged Phase 1 Published dossiers, and validation rejects any mismatch between the manifest and dossier status. Generated web JSON and Supabase SQL remain build artifacts.
 
 ### 5.2 Dossier package
 
@@ -142,6 +142,8 @@ A Draft has:
 `reviewedBy`, `reviewedAt` and `approvalRef` SHALL be absent until a human approves the dossier. AI-authored code, scripts or content generation SHALL NOT populate those fields.
 
 A publication change requires all three human fields, a matching approval record in `publication-manifest.json` and a status transition committed separately from Draft authoring.
+
+The existing Published dossiers 02, 06 and 13 predate this publication workflow. Their migration SHALL use `legacy-baseline` records tied to source commit `6c918ce432e7fd7c3c1f6c697a180564fb08b935` and a SHA-256 fingerprint of the unchanged migrated dossier. A legacy record SHALL NOT contain or imply `reviewedBy`, `reviewedAt` or `approvalRef`, and any editorial mutation invalidates the fingerprint and requires the normal human-review workflow before publication.
 
 ## 6. Academic Source Rules
 
@@ -294,7 +296,7 @@ The browser never determines publication state. Build-time projection and later 
 
 - Exactly 15 dossier metadata records and five per chapter.
 - Every Draft and Published dossier satisfies the same structural schema.
-- Existing Published dossiers retain their approved minimum of four evidence cards and two decisions unless separately re-reviewed; every new Phase 2 Draft has six evidence cards and three decisions.
+- Existing Phase 1 Published dossiers retain their current minimum of four evidence cards and two decisions unless separately reviewed; every new Phase 2 Draft has six evidence cards and three decisions.
 - Every decision has a matching consequence path, and every full dossier has six claims and six causal nodes.
 - All source references resolve to Verified source records with locators and rights notes.
 - Public projection contains only Published dossiers and Verified referenced sources.
