@@ -1,0 +1,147 @@
+<mxfile>
+  <diagram id="system-context" name="System Context">
+    <mxGraphModel dx="800" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="ctx_student" value="Sinh vien&#xa;[Person]&#xa;Kham pha ho so, choi hai game va xem ket qua ca nhan" style="shape=mxgraph.c4.person2;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#083F75;strokeColor=#06315C;" vertex="1" parent="1">
+          <mxGeometry x="0" y="0" width="200" height="180" as="geometry"/>
+        </mxCell>
+        <mxCell id="ctx_visitor" value="Khach cong khai&#xa;[Person]&#xa;Kham pha noi dung va xem leaderboard ma khong can dang nhap" style="shape=mxgraph.c4.person2;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#083F75;strokeColor=#06315C;" vertex="1" parent="1">
+          <mxGeometry x="240" y="0" width="200" height="180" as="geometry"/>
+        </mxCell>
+        <mxCell id="ctx_admin" value="Quan tri vien / Giang vien&#xa;[Person]&#xa;Quan ly lop, noi dung, cuoc thi va audit" style="shape=mxgraph.c4.person2;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#083F75;strokeColor=#06315C;" vertex="1" parent="1">
+          <mxGeometry x="470" y="0" width="200" height="180" as="geometry"/>
+        </mxCell>
+        <UserObject label="VNR202 - Mach Quyet Sach&#xa;[Software System]&#xa;Trai nghiem lich su cong khai va Live Arena realtime" link="data:page/id,containers" id="ctx_system">
+          <mxCell style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#1061B0;strokeColor=#0D5091;" vertex="1" parent="1">
+          <mxGeometry x="450" y="250" width="240" height="120" as="geometry"/>
+        </mxCell>
+        </UserObject>
+        <mxCell id="ctx_supabase" value="Supabase Platform&#xa;[Software System]&#xa;PostgreSQL, Auth va Realtime" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#8C8496;strokeColor=#736782;" vertex="1" parent="1">
+          <mxGeometry x="450" y="430" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="ctx_vercel" value="Vercel&#xa;[Software System]&#xa;Hosting, CDN, server runtime va cron" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#8C8496;strokeColor=#736782;" vertex="1" parent="1">
+          <mxGeometry x="710" y="30" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="ctx_sources" value="Hoc lieu VNR202&#xa;[Software System]&#xa;Slide, giao trinh, van kien va tai lieu tham khao da kiem chung" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#8C8496;strokeColor=#736782;" vertex="1" parent="1">
+          <mxGeometry x="980" y="30" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="e0" value="Su dung qua HTTPS" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="ctx_student" target="ctx_system">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="100" y="240"/><mxPoint x="100" y="310"/><mxPoint x="100" y="310"/><mxPoint x="100" y="310"/><mxPoint x="440" y="310"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e1" value="Kham pha va xem live" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="ctx_visitor" target="ctx_system">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="450" y="90"/><mxPoint x="460" y="90"/><mxPoint x="460" y="90"/><mxPoint x="460" y="90"/><mxPoint x="460" y="230"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e2" value="Quan tri qua HTTPS" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="ctx_admin" target="ctx_system">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="570" y="180"/><mxPoint x="570" y="230"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e3" value="Auth, SQL/RPC, Broadcast/Presence" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="ctx_system" target="ctx_supabase">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="570" y="370"/><mxPoint x="570" y="420"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e4" value="Chay Next.js" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="ctx_vercel" target="ctx_system">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="690" y="90"/><mxPoint x="680" y="90"/><mxPoint x="680" y="90"/><mxPoint x="680" y="90"/><mxPoint x="680" y="230"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e5" value="Cung cap noi dung co nguon" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="ctx_sources" target="ctx_system">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="1100" y="210"/><mxPoint x="1100" y="310"/><mxPoint x="1100" y="310"/><mxPoint x="1100" y="310"/><mxPoint x="700" y="310"/></Array></mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="containers" name="Containers">
+    <mxGraphModel dx="800" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="con_browser" value="Browser Experience&#xa;[Container: React 19]&#xa;Public UI, gameplay UI, projector leaderboard va realtime subscriber" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#23A2D9;strokeColor=#0E7DAD;" vertex="1" parent="1">
+          <mxGeometry x="450" y="0" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <UserObject label="Next.js Application&#xa;[Container: Next.js 16 / TypeScript 7]&#xa;Server Components, Route Handlers, domain services, validation va cache" link="data:page/id,components" id="con_next">
+          <mxCell style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#23A2D9;strokeColor=#0E7DAD;" vertex="1" parent="1">
+          <mxGeometry x="230" y="190" width="240" height="120" as="geometry"/>
+        </mxCell>
+        </UserObject>
+        <mxCell id="con_auth" value="Supabase Auth&#xa;[Software System: Managed Auth]&#xa;Password hash, access token va refresh session" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#8C8496;strokeColor=#736782;" vertex="1" parent="1">
+          <mxGeometry x="0" y="370" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="con_postgres" value="Supabase PostgreSQL&#xa;[Container: PostgreSQL / RLS / RPC]&#xa;Source of truth cho content, attempt, timer, score, rank va audit" style="shape=cylinder3;size=15;boundedLbl=1;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#23A2D9;strokeColor=#0E7DAD;" vertex="1" parent="1">
+          <mxGeometry x="280" y="370" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="con_realtime" value="Supabase Realtime&#xa;[Software System: Broadcast / Presence]&#xa;Notification versioned; khong phai source of truth" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#8C8496;strokeColor=#736782;" vertex="1" parent="1">
+          <mxGeometry x="360" y="560" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="con_vercel" value="Vercel Runtime&#xa;[Software System: CDN / Functions / Cron]&#xa;Deploy, cache public pages va goi reconcile idempotent" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#8C8496;strokeColor=#736782;" vertex="1" parent="1">
+          <mxGeometry x="170" y="0" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="e0" value="HTML, RSC va JSON/HTTPS" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="con_browser" target="con_next">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="460" y="120"/><mxPoint x="460" y="170"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e1" value="Subscribe Broadcast/Presence" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="con_browser" target="con_realtime">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="560" y="120"/><mxPoint x="560" y="540"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e2" value="SSR cookies va Admin API" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="con_next" target="con_auth">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="230" y="310"/><mxPoint x="230" y="360"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e3" value="RLS queries va transactional RPC" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="con_next" target="con_postgres">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="370" y="310"/><mxPoint x="370" y="360"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e4" value="Publish versioned change hints" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="con_postgres" target="con_realtime">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="440" y="490"/><mxPoint x="440" y="540"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e5" value="Host va schedule reconcile" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="con_vercel" target="con_next">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="320" y="120"/><mxPoint x="320" y="170"/></Array></mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="components" name="Components">
+    <mxGraphModel dx="800" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="cmp_public" value="Public Experience&#xa;[Component: Server Components + UI]&#xa;15 dossiers, cause map va evidence matrix" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#63BEF2;strokeColor=#2086C9;" vertex="1" parent="1">
+          <mxGeometry x="0" y="370" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="cmp_auth" value="Auth &amp; Passport&#xa;[Component: Route Handlers + Supabase SSR]&#xa;Student ID login, password change va student results" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#63BEF2;strokeColor=#2086C9;" vertex="1" parent="1">
+          <mxGeometry x="280" y="370" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="cmp_attempt" value="Competition &amp; Attempt Service&#xa;[Component: TypeScript + PostgreSQL RPC]&#xa;Schedule, one attempt, resume, heartbeat va device transfer" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#63BEF2;strokeColor=#2086C9;" vertex="1" parent="1">
+          <mxGeometry x="640" y="0" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="cmp_scoring" value="Scoring Engine&#xa;[Component: PostgreSQL functions]&#xa;Evaluate once, server time, normalized score va tie-breakers" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#63BEF2;strokeColor=#2086C9;" vertex="1" parent="1">
+          <mxGeometry x="550" y="190" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="cmp_leaderboard" value="Leaderboard Service&#xa;[Component: Projection + Broadcast]&#xa;Two independent rankings, versioning va authoritative resync" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#63BEF2;strokeColor=#2086C9;" vertex="1" parent="1">
+          <mxGeometry x="550" y="370" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="cmp_admin" value="Admin &amp; Content Governance&#xa;[Component: Route Handlers + service role]&#xa;Roster, Draft-Reviewed-Published, readiness va audit" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#63BEF2;strokeColor=#2086C9;" vertex="1" parent="1">
+          <mxGeometry x="900" y="370" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="cmp_data" value="Data Access Boundary&#xa;[Component: Supabase clients + repositories]&#xa;RLS reads, server-only writes, error mapping va request IDs" style="rounded=1;arcSize=10;html=1;whiteSpace=wrap;fontSize=12;fontColor=#ffffff;align=center;fillColor=#63BEF2;strokeColor=#2086C9;" vertex="1" parent="1">
+          <mxGeometry x="550" y="560" width="240" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="e0" value="Read published projections" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="cmp_public" target="cmp_data">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="120" y="550"/><mxPoint x="120" y="640"/><mxPoint x="120" y="640"/><mxPoint x="120" y="640"/><mxPoint x="540" y="640"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e1" value="Read/write own profile and progress" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="cmp_auth" target="cmp_data">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="400" y="540"/><mxPoint x="400" y="600"/><mxPoint x="400" y="600"/><mxPoint x="400" y="600"/><mxPoint x="540" y="600"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e2" value="Submit scored interaction" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="cmp_attempt" target="cmp_scoring">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="720" y="120"/><mxPoint x="720" y="170"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e3" value="Commit score and rank version" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="cmp_scoring" target="cmp_leaderboard">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="670" y="310"/><mxPoint x="670" y="360"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e4" value="Persist / reconcile" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="cmp_attempt" target="cmp_data">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="840" y="260"/><mxPoint x="840" y="600"/><mxPoint x="840" y="600"/><mxPoint x="840" y="600"/><mxPoint x="800" y="600"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e5" value="Read authoritative projection" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="cmp_leaderboard" target="cmp_data">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="670" y="490"/><mxPoint x="670" y="540"/></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e6" value="Service-role governed mutations" style="endArrow=blockThin;endFill=1;endSize=10;html=1;fontSize=11;fontColor=#404040;strokeColor=#828282;labelBackgroundColor=#ffffff;rounded=0;" edge="1" parent="1" source="cmp_admin" target="cmp_data">
+          <mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="1020" y="550"/><mxPoint x="1020" y="640"/><mxPoint x="1020" y="640"/><mxPoint x="1020" y="640"/><mxPoint x="800" y="640"/></Array></mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

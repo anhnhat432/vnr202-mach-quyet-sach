@@ -1,0 +1,180 @@
+{
+  "title": "VNR202 - Mach Quyet Sach",
+  "levels": [
+    {
+      "name": "System Context",
+      "elements": [
+        {
+          "id": "ctx_student",
+          "type": "person",
+          "label": "Sinh vien",
+          "desc": "Kham pha ho so, choi hai game va xem ket qua ca nhan"
+        },
+        {
+          "id": "ctx_visitor",
+          "type": "person",
+          "label": "Khach cong khai",
+          "desc": "Kham pha noi dung va xem leaderboard ma khong can dang nhap"
+        },
+        {
+          "id": "ctx_admin",
+          "type": "person",
+          "label": "Quan tri vien / Giang vien",
+          "desc": "Quan ly lop, noi dung, cuoc thi va audit"
+        },
+        {
+          "id": "ctx_system",
+          "type": "system",
+          "label": "VNR202 - Mach Quyet Sach",
+          "desc": "Trai nghiem lich su cong khai va Live Arena realtime",
+          "children": "Containers"
+        },
+        {
+          "id": "ctx_supabase",
+          "type": "external",
+          "label": "Supabase Platform",
+          "desc": "PostgreSQL, Auth va Realtime"
+        },
+        {
+          "id": "ctx_vercel",
+          "type": "external",
+          "label": "Vercel",
+          "desc": "Hosting, CDN, server runtime va cron"
+        },
+        {
+          "id": "ctx_sources",
+          "type": "external",
+          "label": "Hoc lieu VNR202",
+          "desc": "Slide, giao trinh, van kien va tai lieu tham khao da kiem chung"
+        }
+      ],
+      "relations": [
+        { "from": "ctx_student", "to": "ctx_system", "label": "Su dung qua HTTPS" },
+        { "from": "ctx_visitor", "to": "ctx_system", "label": "Kham pha va xem live" },
+        { "from": "ctx_admin", "to": "ctx_system", "label": "Quan tri qua HTTPS" },
+        { "from": "ctx_system", "to": "ctx_supabase", "label": "Auth, SQL/RPC, Broadcast/Presence" },
+        { "from": "ctx_vercel", "to": "ctx_system", "label": "Chay Next.js" },
+        { "from": "ctx_sources", "to": "ctx_system", "label": "Cung cap noi dung co nguon" }
+      ]
+    },
+    {
+      "name": "Containers",
+      "elements": [
+        {
+          "id": "con_browser",
+          "type": "container",
+          "label": "Browser Experience",
+          "tech": "React 19",
+          "desc": "Public UI, gameplay UI, projector leaderboard va realtime subscriber"
+        },
+        {
+          "id": "con_next",
+          "type": "container",
+          "label": "Next.js Application",
+          "tech": "Next.js 16 / TypeScript 7",
+          "desc": "Server Components, Route Handlers, domain services, validation va cache",
+          "children": "Components"
+        },
+        {
+          "id": "con_auth",
+          "type": "external",
+          "label": "Supabase Auth",
+          "tech": "Managed Auth",
+          "desc": "Password hash, access token va refresh session"
+        },
+        {
+          "id": "con_postgres",
+          "type": "database",
+          "label": "Supabase PostgreSQL",
+          "tech": "PostgreSQL / RLS / RPC",
+          "desc": "Source of truth cho content, attempt, timer, score, rank va audit"
+        },
+        {
+          "id": "con_realtime",
+          "type": "external",
+          "label": "Supabase Realtime",
+          "tech": "Broadcast / Presence",
+          "desc": "Notification versioned; khong phai source of truth"
+        },
+        {
+          "id": "con_vercel",
+          "type": "external",
+          "label": "Vercel Runtime",
+          "tech": "CDN / Functions / Cron",
+          "desc": "Deploy, cache public pages va goi reconcile idempotent"
+        }
+      ],
+      "relations": [
+        { "from": "con_browser", "to": "con_next", "label": "HTML, RSC va JSON/HTTPS" },
+        { "from": "con_browser", "to": "con_realtime", "label": "Subscribe Broadcast/Presence" },
+        { "from": "con_next", "to": "con_auth", "label": "SSR cookies va Admin API" },
+        { "from": "con_next", "to": "con_postgres", "label": "RLS queries va transactional RPC" },
+        { "from": "con_postgres", "to": "con_realtime", "label": "Publish versioned change hints" },
+        { "from": "con_vercel", "to": "con_next", "label": "Host va schedule reconcile" }
+      ]
+    },
+    {
+      "name": "Components",
+      "elements": [
+        {
+          "id": "cmp_public",
+          "type": "component",
+          "label": "Public Experience",
+          "tech": "Server Components + UI",
+          "desc": "15 dossiers, cause map va evidence matrix"
+        },
+        {
+          "id": "cmp_auth",
+          "type": "component",
+          "label": "Auth & Passport",
+          "tech": "Route Handlers + Supabase SSR",
+          "desc": "Student ID login, password change va student results"
+        },
+        {
+          "id": "cmp_attempt",
+          "type": "component",
+          "label": "Competition & Attempt Service",
+          "tech": "TypeScript + PostgreSQL RPC",
+          "desc": "Schedule, one attempt, resume, heartbeat va device transfer"
+        },
+        {
+          "id": "cmp_scoring",
+          "type": "component",
+          "label": "Scoring Engine",
+          "tech": "PostgreSQL functions",
+          "desc": "Evaluate once, server time, normalized score va tie-breakers"
+        },
+        {
+          "id": "cmp_leaderboard",
+          "type": "component",
+          "label": "Leaderboard Service",
+          "tech": "Projection + Broadcast",
+          "desc": "Two independent rankings, versioning va authoritative resync"
+        },
+        {
+          "id": "cmp_admin",
+          "type": "component",
+          "label": "Admin & Content Governance",
+          "tech": "Route Handlers + service role",
+          "desc": "Roster, Draft-Reviewed-Published, readiness va audit"
+        },
+        {
+          "id": "cmp_data",
+          "type": "component",
+          "label": "Data Access Boundary",
+          "tech": "Supabase clients + repositories",
+          "desc": "RLS reads, server-only writes, error mapping va request IDs"
+        }
+      ],
+      "relations": [
+        { "from": "cmp_public", "to": "cmp_data", "label": "Read published projections" },
+        { "from": "cmp_auth", "to": "cmp_data", "label": "Read/write own profile and progress" },
+        { "from": "cmp_attempt", "to": "cmp_scoring", "label": "Submit scored interaction" },
+        { "from": "cmp_scoring", "to": "cmp_leaderboard", "label": "Commit score and rank version" },
+        { "from": "cmp_attempt", "to": "cmp_data", "label": "Persist / reconcile" },
+        { "from": "cmp_leaderboard", "to": "cmp_data", "label": "Read authoritative projection" },
+        { "from": "cmp_admin", "to": "cmp_data", "label": "Service-role governed mutations" }
+      ]
+    }
+  ]
+}

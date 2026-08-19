@@ -1,0 +1,17 @@
+web/node_modules/
+web/.next/
+web/playwright-report/
+web/test-results/
+web/coverage/
+.env
+.env.*
+!.env.example
+supabase/.branches/
+supabase/.temp/
+*.log
+course_materials/
+tmp/
+**/__pycache__/
+*.pyc
+analysis/course_corpus.json
+roster*.csv
