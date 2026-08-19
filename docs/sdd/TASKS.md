@@ -27,7 +27,7 @@ Phase 0 evidence snapshot (2026-08-19): Figma Make Version 5 and the Figma Desig
 - [x] `T018` Implement cause map and evidence matrix vertical slices. Depends: T015,T017. DoD: source-backed node/edge/claim navigation works desktop/mobile.
 - [!] `T019` Phase 1 accessibility, E2E and build gate. Depends: T012-T018. DoD: phase exit gate and traceability evidence recorded.
 
-Phase 1 evidence snapshot (2026-08-19): lint, typecheck, 11 unit tests, 10 desktop/mobile E2E tests, production build and dependency audit pass. The migration and static RLS contract tests pass, but `supabase db reset` and `supabase test db` cannot run because Docker and Podman are not installed; therefore `T014` and the complete `T019` exit gate remain blocked rather than falsely marked complete. See `docs/sdd/evidence/phase-1/README.md`.
+Phase 1 evidence snapshot (2026-08-19): lint, typecheck, 11 unit tests, 10 desktop/mobile E2E tests, production build and dependency audit pass. The public preview is live at `https://vnr202-mach-quyet-sach.vercel.app`. The migration and static RLS contract tests pass, but `supabase db reset` and `supabase test db` cannot run because Docker and Podman are not installed; therefore `T014` and the complete `T019` exit gate remain blocked rather than falsely marked complete. This preview does not close the full production `T064` gate. See `docs/sdd/evidence/phase-1/README.md`.
 
 ## Phase 2 - Full public content
 

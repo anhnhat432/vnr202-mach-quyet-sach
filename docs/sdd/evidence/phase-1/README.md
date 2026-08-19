@@ -77,10 +77,18 @@ The Vitest migration contract confirms RLS is enabled on all seven public tables
 - Desktop and mobile Chromium: an evidence claim opens issuer/author source details.
 - Serious and critical axe violations on the homepage: zero in the automated run.
 
+## Public Preview Deployment
+
+- Production URL: `https://vnr202-mach-quyet-sach.vercel.app`
+- Vercel deployment: `dpl_2DJKvhUHmWryzu9rtdLch63zi75a`
+- Project root directory: `web`; the build still reads the committed root SDD seed through `../scripts/sync-web-content.mjs`.
+- Remote HTTP smoke: homepage `200`, CSP/HSTS/`nosniff` present, `/api/v1/dossiers` returns three records and a UUID request ID.
+- Remote browser smoke: desktop homepage title, full dossier-to-comparison flow and mobile cause-map Slice pass with no console or page errors.
+- GitHub integration evidence: private repository `anhnhat432/vnr202-mach-quyet-sach`, branch `feat/phase-1-public-slice`, PR `#1` open and intentionally not merged.
+
 ## Remaining Gaps
 
 - Install and run Docker Desktop or Podman, then rerun `supabase db reset` and `supabase test db`.
 - Publish and review the remaining 12 dossiers in Phase 2.
 - Complete the Figma component/state, projector, admin and motion handoff gates.
 - Implement identity, one-attempt game Core, two authoritative realtime leaderboards and admin flows in Phases 3-5.
-- Production URL and remote smoke-test evidence are added after deployment.
