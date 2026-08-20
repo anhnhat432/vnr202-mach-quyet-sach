@@ -38,4 +38,21 @@ describe("Chapter 1 Draft dossiers", () => {
     expect(dossier.causalNodes).toHaveLength(6);
     expect(dossier.review.reviewedBy).toBeUndefined();
   });
+
+  it("authors dossier 03 as a complete hidden Draft", () => {
+    const dossier = JSON.parse(
+      fs.readFileSync(path.join(root, "docs/sdd/content/dossiers/03-giu-mach-phong-trao.json"), "utf8"),
+    );
+    expect(dossier.status).toBe("draft");
+    expect(dossier.experience.evidence).toHaveLength(6);
+    expect(dossier.experience.decision.options).toHaveLength(3);
+    expect(dossier.claims.map((claim: { category: string }) => claim.category)).toEqual([
+      "context",
+      "basis",
+      "implementation",
+      "result",
+      "limitation",
+      "lesson",
+    ]);
+  });
 });
