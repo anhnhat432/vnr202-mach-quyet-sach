@@ -37,4 +37,26 @@ describe("content publication contract", () => {
     dossier.title = `${dossier.title} changed`;
     expect(() => validateContentCatalog(copy)).toThrow(/LEGACY_CONTENT_CHANGED/);
   });
+
+  it("rejects unresolved evidence and claim source references", () => {
+    const evidenceCopy = structuredClone(catalog);
+    const evidenceDraft = evidenceCopy.dossiers.find((item: { orderIndex: number }) => item.orderIndex === 1);
+    evidenceDraft.experience.evidence[0].sourceIds[0] = "ffffffff-ffff-ffff-ffff-ffffffffffff";
+    expect(() => validateContentCatalog(evidenceCopy)).toThrow(/UNKNOWN_EVIDENCE_SOURCE/);
+
+    const claimCopy = structuredClone(catalog);
+    const claimDraft = claimCopy.dossiers.find((item: { orderIndex: number }) => item.orderIndex === 1);
+    claimDraft.claims[0].sourceLinks[0].sourceId = "ffffffff-ffff-ffff-ffff-ffffffffffff";
+    expect(() => validateContentCatalog(claimCopy)).toThrow(/UNKNOWN_CLAIM_SOURCE/);
+  });
+
+  it("rejects causal links that do not resolve to canonical nodes and claims", () => {
+    const nodeCopy = structuredClone(catalog);
+    nodeCopy.causalLinks[0].sourceNodeId = "missing-node";
+    expect(() => validateContentCatalog(nodeCopy)).toThrow(/UNKNOWN_LINK_SOURCE_NODE/);
+
+    const claimCopy = structuredClone(catalog);
+    claimCopy.causalLinks[0].claimId = "missing-claim";
+    expect(() => validateContentCatalog(claimCopy)).toThrow(/UNKNOWN_LINK_CLAIM/);
+  });
 });
