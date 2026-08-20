@@ -104,4 +104,14 @@ Static migration/RLS contract tests still pass. This checkpoint does not claim P
 - Public runtime count: 3 Published dossiers (02, 06 and 13).
 - Internal Chapter 1 review batch: 4 Draft dossiers (01, 03, 04 and 05).
 - `T020` and `T021`: in progress pending human academic review and publication; `T024` and `T025`: pending.
-- Production deployment and remote smoke evidence are recorded only after the checkpoint branch is pushed and deployed.
+
+## Integration and production smoke
+
+- Branch: `feat/phase-2-chapter-1-drafts` at commit `69bf83997d5098fb5a32ad7d351fb232c47c3256` before this deployment-evidence update.
+- Pull request: `https://github.com/anhnhat432/vnr202-mach-quyet-sach/pull/2`, stacked on `feat/phase-1-public-slice`; not merged.
+- GitHub Actions check `web`: PASS in 1m07s, run `32340839536`, job `96339459181`.
+- Vercel deployment ID: `dpl_7NHUUYQEkbBVKZ8XkGchDDpbrbwu`.
+- Deployment URL: `https://vnr202-mach-quyet-sach-11av0ox5l-anhnhat432s-projects.vercel.app`.
+- Production alias: `https://vnr202-mach-quyet-sach.vercel.app`.
+- Remote API smoke: exactly three Published dossiers; Draft route returned HTTP 404.
+- Remote browser smoke: homepage 200, Published dossier 200, Draft dossier 404 and mobile Cause Slice relation panel visible.
