@@ -63,3 +63,45 @@ Draft and review annotations remain confined to review-only frames. Public Catal
 
 - Phase 2A public states are approved; broader Phase 0 Arena, auth, admin, projector and full handoff work remains tracked in `docs/sdd/TASKS.md`.
 - The Make project must only be updated later if the user requests the promised Make rebuild after quota reset.
+
+## Checkpoint A1 implementation evidence
+
+- Canonical authoring is split into `sources.json`, 15 ordered dossier files, `causal-links.json` and `publication-manifest.json`.
+- Dossiers 01, 03, 04 and 05 are complete source-backed Drafts with six evidence cards, three decision options, six claims and six causal nodes each.
+- Every new claim carries a Verified course source, precise slide locator and support scope.
+- The Chapter 1 decision chain contains five validated links from the independence-path dossier through the August opportunity dossier.
+- `docs/sdd/content/reviews/chapter-1-review.md` is generated for human review and explicitly states that no dossier is authorized for publication.
+- Draft files contain no `reviewedBy`, `reviewedAt` or `approvalRef` metadata. AI assistance is recorded only as Draft authoring support.
+
+## Automated validation
+
+Commands run on 2026-08-20:
+
+- `npm --prefix web run generate:content`: PASS; generated 15 canonical dossiers and retained exactly three Published runtime dossiers.
+- `npm --prefix web run review:chapter-1`: PASS; deterministic human review pack generated.
+- `npm --prefix web run lint`: PASS.
+- `npm --prefix web run typecheck`: PASS.
+- `npm --prefix web run test`: PASS; 10 files and 28 tests.
+- `npm --prefix web run test:e2e`: PASS; 12 tests across desktop Chromium and mobile Chromium.
+- `npm --prefix web run build`: PASS; Next.js production build completed.
+- `npm --prefix web audit --audit-level=high`: PASS; zero vulnerabilities.
+- `git diff --check`: PASS.
+
+`public-draft-boundary.spec.ts` demonstrates that the public catalogue does not render dossiers 01, 03, 04 or 05, `/api/v1/dossiers` returns exactly three Published records, and `/ho-so/con-duong-nao-cho-doc-lap` returns HTTP 404 on desktop and mobile.
+
+## Supabase runtime status
+
+Runtime database validation remains BLOCKED, not passed:
+
+- `npx --yes supabase@2.115.0 status --debug`: Docker command not found and Podman not found.
+- `npx --yes supabase@2.115.0 db reset`: failed to inspect the local service because the container runtime is unavailable.
+- `npx --yes supabase@2.115.0 test db`: connection refused at `127.0.0.1:54322`; the local database is not running.
+
+Static migration/RLS contract tests still pass. This checkpoint does not claim PostgreSQL RLS runtime evidence.
+
+## Checkpoint status
+
+- Public runtime count: 3 Published dossiers (02, 06 and 13).
+- Internal Chapter 1 review batch: 4 Draft dossiers (01, 03, 04 and 05).
+- `T020` and `T021`: in progress pending human academic review and publication; `T024` and `T025`: pending.
+- Production deployment and remote smoke evidence are recorded only after the checkpoint branch is pushed and deployed.
