@@ -65,3 +65,9 @@ The Make editor and public preview were marked as deliverable/handoff artifacts 
 5. final handoff notes mapping tokens and components to code.
 
 The next Phase 0 action is to complete or verify that Design-file structure, then run the formal `T006` handoff audit.
+
+## Phase 2A Design Addendum (2026-08-20)
+
+The user approved the editable Phase 2A public-state frames in the same Figma Design file. Evidence, screenshots and exact node IDs are recorded in `docs/sdd/evidence/phase-2/chapter-1/README.md` and `docs/sdd/evidence/phase-2/chapter-1/figma.json`.
+
+This addendum does not close the broader Phase 0 handoff gate. It only closes the Phase 2A public-state design approval required before Chapter 1 Draft implementation. Make Version 5 remains the baseline Make artifact; the approved Phase 2A additions were authored in Figma Design under the user's explicit fallback approval.
