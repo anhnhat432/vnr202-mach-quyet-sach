@@ -1,7 +1,7 @@
 # Phase 2A Chapter 1 Figma Evidence
 
-Date: 2026-08-20  
-Status: Approved by the user  
+Date: 2026-08-20
+Status: Approved by the user
 Design file: `https://www.figma.com/design/sazgk1wXpc6X80BuqOSAV9`
 
 ## Source and approval boundary
