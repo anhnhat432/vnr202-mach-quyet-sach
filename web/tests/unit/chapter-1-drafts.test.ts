@@ -55,4 +55,17 @@ describe("Chapter 1 Draft dossiers", () => {
       "lesson",
     ]);
   });
+
+  it("authors dossier 04 with open and semi-open struggle choices", () => {
+    const dossier = JSON.parse(
+      fs.readFileSync(
+        path.join(root, "docs/sdd/content/dossiers/04-linh-hoat-trong-mot-cua-so-dan-chu.json"),
+        "utf8",
+      ),
+    );
+    expect(dossier.status).toBe("draft");
+    expect(dossier.experience.evidence).toHaveLength(6);
+    expect(dossier.experience.decision.options).toHaveLength(3);
+    expect(dossier.experience.historicalComparison.limitations.length).toBeGreaterThanOrEqual(1);
+  });
 });

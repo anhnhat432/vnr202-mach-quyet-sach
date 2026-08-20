@@ -1,16 +1,287 @@
 {
   "id": "20000000-0000-0000-0000-000000000004",
+  "versionId": "30000000-0000-0000-0000-000000000004",
   "slug": "linh-hoat-trong-cua-so-dan-chu",
   "chapter": "chapter_1",
   "orderIndex": 4,
   "title": "Linh hoạt trong một cửa sổ dân chủ",
   "centralQuestion": "Khi điều kiện thay đổi, mục tiêu và hình thức đấu tranh cần điều chỉnh ra sao?",
   "status": "draft",
+  "experience": {
+    "briefing": {
+      "period": "1936-1939",
+      "context": [
+        "Nguy cơ phát xít và chiến tranh thúc đẩy phong trào chống phát xít, trong khi Mặt trận Nhân dân Pháp thắng cử tạo ra một khoảng không hoạt động chính trị tương đối thuận lợi hơn.",
+        "Ở Đông Dương, yêu cầu dân sinh, dân chủ, cơm áo và hòa bình trở thành điểm quy tụ rộng của nhiều tầng lớp."
+      ],
+      "centralContradiction": "Mục tiêu chiến lược giải phóng dân tộc lâu dài phải được duy trì trong khi nhiệm vụ và hình thức đấu tranh trước mắt cần điều chỉnh theo một không gian chính trị tạm thời.",
+      "objective": "Mở rộng lực lượng quần chúng và năng lực chính trị thông qua các mục tiêu trước mắt cùng hình thức công khai, nửa công khai, hợp pháp và nửa hợp pháp.",
+      "constraints": [
+        "Không được nhầm nhiệm vụ trước mắt với từ bỏ mục tiêu chiến lược.",
+        "Khoảng không dân chủ phụ thuộc tình hình quốc tế và chính sách thuộc địa nên có thể khép lại nhanh chóng."
+      ]
+    },
+    "evidence": [
+      {
+        "id": "d04-e1",
+        "label": "Nguy cơ phát xít và chiến tranh",
+        "kind": "event",
+        "summary": "Sự hình thành phe phát xít làm nhiệm vụ chống phát xít, chống chiến tranh trở thành yêu cầu cấp bách.",
+        "sourceIds": [
+          "10000000-0000-0000-0000-000000000006"
+        ],
+        "isDistractor": false
+      },
+      {
+        "id": "d04-e2",
+        "label": "Mặt trận Nhân dân Pháp thắng cử",
+        "kind": "event",
+        "summary": "Thay đổi chính trị tại Pháp tạo điều kiện tương đối cho yêu sách dân chủ ở thuộc địa.",
+        "sourceIds": [
+          "10000000-0000-0000-0000-000000000006"
+        ],
+        "isDistractor": false
+      },
+      {
+        "id": "d04-e3",
+        "label": "Chủ trương tháng 7/1936",
+        "kind": "document",
+        "summary": "Chủ trương điều chỉnh nhiệm vụ trước mắt và phương thức tập hợp lực lượng phù hợp bối cảnh.",
+        "sourceIds": [
+          "10000000-0000-0000-0000-000000000006"
+        ],
+        "isDistractor": false
+      },
+      {
+        "id": "d04-e4",
+        "label": "Phong trào dân sinh, dân chủ",
+        "kind": "event",
+        "summary": "Mít tinh, hội họp, báo chí và vận động dân nguyện mở rộng khả năng tổ chức quần chúng.",
+        "sourceIds": [
+          "10000000-0000-0000-0000-000000000006"
+        ],
+        "isDistractor": false
+      },
+      {
+        "id": "d04-e5",
+        "label": "Mặt trận tập hợp rộng rãi",
+        "kind": "assessment",
+        "summary": "Việc xây dựng hình thức mặt trận cho phép kết nối nhiều lực lượng quanh yêu cầu trước mắt.",
+        "sourceIds": [
+          "10000000-0000-0000-0000-000000000006"
+        ],
+        "isDistractor": false
+      },
+      {
+        "id": "d04-e6",
+        "label": "Chỉ sử dụng đấu tranh bí mật và vũ trang",
+        "kind": "assessment",
+        "summary": "Hoạt động bí mật vẫn cần thiết nhưng nếu loại bỏ mọi hình thức hợp pháp sẽ bỏ lỡ khả năng mở rộng lực lượng trong cửa sổ dân chủ.",
+        "sourceIds": [
+          "10000000-0000-0000-0000-000000000006"
+        ],
+        "isDistractor": true
+      }
+    ],
+    "decision": {
+      "prompt": "Lựa chọn nào vừa tận dụng được không gian dân chủ tạm thời vừa giữ được định hướng chiến lược lâu dài?",
+      "requiredEvidenceCount": 4,
+      "options": [
+        {
+          "id": "flexible-front",
+          "label": "Mở rộng mặt trận và kết hợp hình thức đấu tranh linh hoạt",
+          "rationale": "Tập hợp lực lượng quanh yêu cầu trước mắt, đồng thời duy trì tổ chức và định hướng chiến lược."
+        },
+        {
+          "id": "unchanged-slogans",
+          "label": "Giữ nguyên toàn bộ khẩu hiệu và hình thức của giai đoạn trước",
+          "rationale": "Thể hiện tính liên tục nhưng không phản ánh nhiệm vụ trước mắt và tương quan chính trị mới."
+        },
+        {
+          "id": "abandon-strategy",
+          "label": "Chỉ theo đuổi cải cách dân chủ và từ bỏ mục tiêu độc lập",
+          "rationale": "Có thể mở rộng hoạt động trước mắt nhưng làm mất định hướng giải phóng dân tộc."
+        }
+      ]
+    },
+    "projectedConsequences": [
+      {
+        "optionId": "flexible-front",
+        "steps": [
+          "Mở rộng yêu cầu dễ quy tụ",
+          "Tăng năng lực tổ chức công khai và nửa công khai",
+          "Tích lũy lực lượng và kinh nghiệm chính trị"
+        ]
+      },
+      {
+        "optionId": "unchanged-slogans",
+        "steps": [
+          "Khẩu hiệu ít phù hợp không gian mới",
+          "Khó hình thành liên minh rộng",
+          "Bỏ lỡ cơ hội phát triển lực lượng"
+        ]
+      },
+      {
+        "optionId": "abandon-strategy",
+        "steps": [
+          "Tập trung hoàn toàn vào cải cách",
+          "Phụ thuộc không gian dân chủ do chính quyền quyết định",
+          "Khó chuyển hướng khi chiến tranh và đàn áp trở lại"
+        ]
+      }
+    ],
+    "historicalComparison": {
+      "actualDecision": "Đảng điều chỉnh nhiệm vụ trước mắt, xây dựng mặt trận rộng rãi và kết hợp nhiều hình thức đấu tranh công khai, nửa công khai, hợp pháp và nửa hợp pháp.",
+      "implementation": [
+        "Tổ chức phong trào dân nguyện, mít tinh, hội họp và hoạt động báo chí.",
+        "Tập hợp nhiều tầng lớp quanh yêu cầu tự do, dân chủ, cơm áo và hòa bình."
+      ],
+      "results": [
+        "Lực lượng quần chúng và ảnh hưởng chính trị được mở rộng.",
+        "Đội ngũ cán bộ tích lũy kinh nghiệm tổ chức và hoạt động công khai."
+      ],
+      "limitations": [
+        "Các yêu sách chưa thể giải quyết mâu thuẫn dân tộc căn bản.",
+        "Không gian hoạt động nhanh chóng bị thu hẹp khi chiến tranh bùng nổ và đàn áp trở lại."
+      ]
+    },
+    "lessons": [
+      "Nhiệm vụ và hình thức đấu tranh phải được điều chỉnh theo bối cảnh cụ thể.",
+      "Linh hoạt trước mắt phải gắn với việc giữ mục tiêu chiến lược và tổ chức lâu dài."
+    ]
+  },
+  "claims": [
+    {
+      "id": "d04-context-claim",
+      "category": "context",
+      "statement": "Nguy cơ phát xít, chiến tranh và thắng lợi của Mặt trận Nhân dân Pháp tạo một khoảng không chính trị tương đối thuận lợi cho yêu sách dân chủ.",
+      "sourceLinks": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000006",
+          "locator": "Slides 3-5",
+          "supportScope": "Hỗ trợ bối cảnh quốc tế, nguy cơ phát xít và điều kiện chính trị tương đối mới tại Pháp."
+        }
+      ]
+    },
+    {
+      "id": "d04-basis-claim",
+      "category": "basis",
+      "statement": "Nhiệm vụ và hình thức đấu tranh trước mắt cần điều chỉnh theo không gian chính trị tạm thời nhưng không được từ bỏ mục tiêu giải phóng dân tộc.",
+      "sourceLinks": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000006",
+          "locator": "Slides 6-7",
+          "supportScope": "Hỗ trợ chủ trương điều chỉnh nhiệm vụ trước mắt và phương thức tập hợp lực lượng."
+        }
+      ]
+    },
+    {
+      "id": "d04-implementation-claim",
+      "category": "implementation",
+      "statement": "Phong trào sử dụng dân nguyện, mít tinh, hội họp, báo chí cùng các hình thức công khai, nửa công khai, hợp pháp và nửa hợp pháp.",
+      "sourceLinks": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000006",
+          "locator": "Slides 8-10",
+          "supportScope": "Hỗ trợ các hình thức tổ chức và đấu tranh được triển khai trong phong trào dân chủ."
+        }
+      ]
+    },
+    {
+      "id": "d04-result-claim",
+      "category": "result",
+      "statement": "Lực lượng quần chúng, ảnh hưởng chính trị và kinh nghiệm tổ chức công khai của đội ngũ cán bộ được mở rộng.",
+      "sourceLinks": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000006",
+          "locator": "Slides 8-11",
+          "supportScope": "Hỗ trợ kết quả phát triển lực lượng và tích lũy kinh nghiệm chính trị trong giai đoạn 1936-1939."
+        }
+      ]
+    },
+    {
+      "id": "d04-limitation-claim",
+      "category": "limitation",
+      "statement": "Các yêu sách dân chủ chưa giải quyết mâu thuẫn dân tộc căn bản và không gian hoạt động bị thu hẹp nhanh khi chiến tranh bùng nổ.",
+      "sourceLinks": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000006",
+          "locator": "Slides 8-11",
+          "supportScope": "Hỗ trợ giới hạn của yêu sách trước mắt và tính tạm thời của cửa sổ hoạt động dân chủ."
+        }
+      ]
+    },
+    {
+      "id": "d04-lesson-claim",
+      "category": "lesson",
+      "statement": "Linh hoạt về nhiệm vụ và hình thức trước mắt phải luôn gắn với mục tiêu chiến lược cùng việc duy trì tổ chức lâu dài.",
+      "sourceLinks": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000006",
+          "locator": "Slides 6-11",
+          "supportScope": "Hỗ trợ bài học điều chỉnh sách lược, mở rộng mặt trận và giữ định hướng chiến lược."
+        }
+      ]
+    }
+  ],
+  "causalNodes": [
+    {
+      "id": "d04-context",
+      "lane": "context",
+      "label": "Cửa sổ chống phát xít và dân chủ",
+      "explanation": "Bối cảnh chống phát xít và thay đổi chính trị tại Pháp mở ra một không gian hoạt động tương đối thuận lợi hơn.",
+      "claimId": "d04-context-claim"
+    },
+    {
+      "id": "d04-contradiction",
+      "lane": "contradiction",
+      "label": "Điều chỉnh trước mắt nhưng không mất mục tiêu",
+      "explanation": "Phong trào phải điều chỉnh nhiệm vụ và hình thức trước mắt mà vẫn duy trì mục tiêu giải phóng dân tộc lâu dài.",
+      "claimId": "d04-basis-claim"
+    },
+    {
+      "id": "d04-force",
+      "lane": "force",
+      "label": "Mặt trận rộng và quần chúng đô thị-nông thôn",
+      "explanation": "Nhiều tầng lớp được tập hợp quanh yêu cầu tự do, dân chủ, cơm áo và hòa bình.",
+      "claimId": "d04-implementation-claim"
+    },
+    {
+      "id": "d04-decision",
+      "lane": "decision",
+      "label": "Kết hợp hình thức đấu tranh linh hoạt",
+      "explanation": "Đảng xây dựng mặt trận rộng và kết hợp hoạt động công khai, nửa công khai, hợp pháp và nửa hợp pháp.",
+      "claimId": "d04-implementation-claim"
+    },
+    {
+      "id": "d04-result",
+      "lane": "result",
+      "label": "Mở rộng lực lượng và kinh nghiệm",
+      "explanation": "Quần chúng, ảnh hưởng chính trị và kinh nghiệm tổ chức công khai được mở rộng trong cửa sổ dân chủ.",
+      "claimId": "d04-result-claim"
+    },
+    {
+      "id": "d04-lesson",
+      "lane": "lesson",
+      "label": "Linh hoạt phải gắn với mục tiêu chiến lược",
+      "explanation": "Điều chỉnh sách lược chỉ bền vững khi không làm mất mục tiêu giải phóng dân tộc và năng lực tổ chức lâu dài.",
+      "claimId": "d04-lesson-claim"
+    }
+  ],
   "review": {
     "aiAssistance": {
       "used": true,
-      "role": "metadata planning only"
+      "role": "AI-assisted academic Draft for human review; not reviewed or published"
     }
   },
-  "sourceRefs": []
+  "sourceRefs": [
+    {
+      "sourceId": "10000000-0000-0000-0000-000000000001",
+      "locator": "Chương I - Phong trào dân chủ 1936-1939"
+    },
+    {
+      "sourceId": "10000000-0000-0000-0000-000000000006",
+      "locator": "Slides 3-11"
+    }
+  ]
 }
