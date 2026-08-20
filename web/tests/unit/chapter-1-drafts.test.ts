@@ -25,3 +25,17 @@ describe("Chapter 1 authoring sources", () => {
     ).toBe(true);
   });
 });
+
+describe("Chapter 1 Draft dossiers", () => {
+  it("authors dossier 01 as a complete hidden Draft", () => {
+    const dossier = JSON.parse(
+      fs.readFileSync(path.join(root, "docs/sdd/content/dossiers/01-con-duong-nao-cho-doc-lap.json"), "utf8"),
+    );
+    expect(dossier.status).toBe("draft");
+    expect(dossier.experience.evidence).toHaveLength(6);
+    expect(dossier.experience.decision.options).toHaveLength(3);
+    expect(dossier.claims).toHaveLength(6);
+    expect(dossier.causalNodes).toHaveLength(6);
+    expect(dossier.review.reviewedBy).toBeUndefined();
+  });
+});
