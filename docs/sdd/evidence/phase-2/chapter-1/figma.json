@@ -1,0 +1,14 @@
+{
+  "makeUrl": "https://www.figma.com/make/W6ZmtodyEVSDKQEdWyAqMk/VNR202---Mach-Quyet-Sach",
+  "makeVersion": 5,
+  "designUrl": "https://www.figma.com/design/sazgk1wXpc6X80BuqOSAV9",
+  "frames": {
+    "catalogueDesktop": "22:3",
+    "catalogueMobile": "22:4",
+    "scenarioComparison": "22:7",
+    "causeOverview": "22:10",
+    "causeMobile": "22:12",
+    "evidenceFilter": "22:14",
+    "reducedMotion": "22:19"
+  }
+}

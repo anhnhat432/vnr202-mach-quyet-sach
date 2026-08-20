@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "publications": [
+    {
+      "kind": "legacy-baseline",
+      "dossierId": "20000000-0000-0000-0000-000000000002",
+      "status": "published",
+      "sourceCommit": "6c918ce432e7fd7c3c1f6c697a180564fb08b935",
+      "capturedAt": "2026-08-19",
+      "contentSha256": "ce0cffa4f41e11a97967e6af94557ebb2ee9c4ec13f257db2aa5d1f15d810ba5",
+      "note": "Migrated unchanged from Phase 1 public preview; this record does not assert academic review."
+    },
+    {
+      "kind": "legacy-baseline",
+      "dossierId": "20000000-0000-0000-0000-000000000006",
+      "status": "published",
+      "sourceCommit": "6c918ce432e7fd7c3c1f6c697a180564fb08b935",
+      "capturedAt": "2026-08-19",
+      "contentSha256": "ff09f745d0dde523af4708e4f7b7a1064a2933f049320e08f4caf48b3238e33b",
+      "note": "Migrated unchanged from Phase 1 public preview; this record does not assert academic review."
+    },
+    {
+      "kind": "legacy-baseline",
+      "dossierId": "20000000-0000-0000-0000-000000000013",
+      "status": "published",
+      "sourceCommit": "6c918ce432e7fd7c3c1f6c697a180564fb08b935",
+      "capturedAt": "2026-08-19",
+      "contentSha256": "25426f538a18a1a0f4570571ed924a68ed36ab8aa420a9c3a716b0e4ce78d9b7",
+      "note": "Migrated unchanged from Phase 1 public preview; this record does not assert academic review."
+    }
+  ]
+}

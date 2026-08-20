@@ -1,0 +1,276 @@
+{
+  "id": "20000000-0000-0000-0000-000000000009",
+  "versionId": "30000000-0000-0000-0000-000000000009",
+  "slug": "mot-dat-nuoc-hai-nhiem-vu-chien-luoc",
+  "chapter": "chapter_2",
+  "orderIndex": 9,
+  "title": "Một đất nước, hai nhiệm vụ chiến lược",
+  "centralQuestion": "Làm thế nào một Đảng lãnh đạo đồng thời hai nhiệm vụ cách mạng khác nhau ở hai miền?",
+  "status": "draft",
+  "experience": {
+    "briefing": {
+      "period": "1954-1965",
+      "context": [
+        "Sau Hiệp định Geneve 1954, đất nước tạm thời bị chia cắt: miền Bắc được giải phóng, miền Nam đặt dưới chính quyền Sài Gòn do Mỹ hậu thuẫn.",
+        "Mỹ phá hoại Hiệp định Geneve, dựng lên chính quyền Ngô Đình Diệm và biến miền Nam thành thuộc địa kiểu mới."
+      ],
+      "centralContradiction": "Một Đảng phải đồng thời lãnh đạo xây dựng chủ nghĩa xã hội ở miền Bắc và đấu tranh giải phóng miền Nam, trong khi hai nhiệm vụ có yêu cầu, điều kiện và phương thức khác nhau.",
+      "objective": "Xác định mối quan hệ giữa hai nhiệm vụ chiến lược, phân bổ nguồn lực và xây dựng đường lối phù hợp cho từng miền.",
+      "constraints": [
+        "Miền Bắc vừa thoát khỏi chiến tranh, kinh tế kiệt quệ, cần ổn định và xây dựng.",
+        "Miền Nam đối mặt với chế độ độc tài được Mỹ hậu thuẫn mạnh về quân sự."
+      ]
+    },
+    "evidence": [
+      {
+        "id": "d09-e1",
+        "label": "Hai nhiệm vụ chiến lược được xác định",
+        "kind": "document",
+        "summary": "Đảng xác định cách mạng xã hội chủ nghĩa ở miền Bắc và cách mạng dân tộc dân chủ nhân dân ở miền Nam là hai nhiệm vụ chiến lược của một cuộc cách mạng thống nhất đất nước.",
+        "sourceIds": ["10000000-0000-0000-0000-000000000015"],
+        "isDistractor": false
+      },
+      {
+        "id": "d09-e2",
+        "label": "Miền Bắc - hậu phương lớn",
+        "kind": "data",
+        "summary": "Miền Bắc thực hiện kế hoạch 3 năm khôi phục kinh tế (1955-1957), cải tạo xã hội chủ nghĩa và kế hoạch 5 năm lần thứ nhất (1961-1965), trở thành hậu phương vững chắc.",
+        "sourceIds": ["10000000-0000-0000-0000-000000000015"],
+        "isDistractor": false
+      },
+      {
+        "id": "d09-e3",
+        "label": "Phong trào Đồng khởi 1959-1960",
+        "kind": "event",
+        "summary": "Từ đấu tranh chính trị hòa bình chuyển sang kết hợp đấu tranh chính trị với vũ trang, Đồng khởi làm sụp đổ từng mảng chính quyền địch ở nông thôn.",
+        "sourceIds": ["10000000-0000-0000-0000-000000000015"],
+        "isDistractor": false
+      },
+      {
+        "id": "d09-e4",
+        "label": "Mặt trận Dân tộc Giải phóng miền Nam ra đời",
+        "kind": "event",
+        "summary": "Mặt trận đoàn kết rộng rãi các lực lượng yêu nước, tạo cơ sở chính trị và pháp lý cho cuộc đấu tranh giải phóng miền Nam.",
+        "sourceIds": ["10000000-0000-0000-0000-000000000015"],
+        "isDistractor": false
+      },
+      {
+        "id": "d09-e5",
+        "label": "Chi viện từ miền Bắc cho miền Nam",
+        "kind": "data",
+        "summary": "Đường mòn Hồ Chí Minh trên bộ và trên biển được tổ chức, vận chuyển cán bộ, vũ khí, lương thực từ hậu phương lớn miền Bắc vào tiền tuyến miền Nam.",
+        "sourceIds": ["10000000-0000-0000-0000-000000000015"],
+        "isDistractor": false
+      },
+      {
+        "id": "d09-e6",
+        "label": "Chỉ tập trung xây dựng miền Bắc",
+        "kind": "assessment",
+        "summary": "Ưu tiên tuyệt đối cho xây dựng chủ nghĩa xã hội ở miền Bắc có thể củng cố hậu phương nhưng làm chậm nhịp độ đấu tranh ở miền Nam.",
+        "sourceIds": ["10000000-0000-0000-0000-000000000015"],
+        "isDistractor": true
+      }
+    ],
+    "decision": {
+      "prompt": "Chọn phương án xử lý mối quan hệ giữa hai nhiệm vụ chiến lược ở hai miền.",
+      "requiredEvidenceCount": 4,
+      "options": [
+        {
+          "id": "parallel-tasks",
+          "label": "Đồng thời thực hiện hai nhiệm vụ, miền Bắc là hậu phương, miền Nam là tiền tuyến",
+          "rationale": "Kết hợp xây dựng miền Bắc vững mạnh làm chỗ dựa với đẩy mạnh đấu tranh giải phóng miền Nam."
+        },
+        {
+          "id": "north-first",
+          "label": "Tập trung xây dựng miền Bắc, tạm hoãn đấu tranh vũ trang ở miền Nam",
+          "rationale": "Củng cố hậu phương trước nhưng có thể bỏ lỡ thời cơ và làm suy yếu phong trào miền Nam."
+        },
+        {
+          "id": "south-first",
+          "label": "Dồn toàn lực cho giải phóng miền Nam trước",
+          "rationale": "Đẩy nhanh thống nhất nhưng thiếu hậu phương vững chắc, khó duy trì cuộc đấu tranh lâu dài."
+        }
+      ]
+    },
+    "projectedConsequences": [
+      {
+        "optionId": "parallel-tasks",
+        "steps": [
+          "Miền Bắc phát triển kinh tế-xã hội, tăng cường quốc phòng.",
+          "Miền Nam đẩy mạnh đấu tranh chính trị kết hợp vũ trang.",
+          "Hai miền hỗ trợ nhau: hậu phương mạnh, tiền tuyến vững."
+        ]
+      },
+      {
+        "optionId": "north-first",
+        "steps": [
+          "Miền Bắc tập trung nguồn lực xây dựng.",
+          "Phong trào miền Nam thiếu sự chi viện kịp thời.",
+          "Đối phương củng cố vị trí, gây khó khăn cho giai đoạn sau."
+        ]
+      },
+      {
+        "optionId": "south-first",
+        "steps": [
+          "Tập trung lực lượng cho miền Nam.",
+          "Miền Bắc không đủ thời gian củng cố.",
+          "Thiếu hậu phương bền vững cho kháng chiến lâu dài."
+        ]
+      }
+    ],
+    "historicalComparison": {
+      "actualDecision": "Đảng xác định đồng thời thực hiện hai nhiệm vụ chiến lược: cách mạng xã hội chủ nghĩa ở miền Bắc và cách mạng dân tộc dân chủ nhân dân ở miền Nam; miền Bắc là hậu phương lớn, miền Nam là tiền tuyến lớn.",
+      "implementation": [
+        "Miền Bắc thực hiện khôi phục kinh tế, cải tạo xã hội chủ nghĩa và kế hoạch 5 năm lần thứ nhất.",
+        "Miền Nam chuyển từ đấu tranh chính trị hòa bình sang kết hợp đấu tranh chính trị với vũ trang qua phong trào Đồng khởi.",
+        "Tổ chức tuyến chi viện chiến lược Bắc-Nam (đường bộ và đường biển)."
+      ],
+      "results": [
+        "Miền Bắc trở thành hậu phương vững chắc về chính trị, kinh tế, quân sự.",
+        "Cách mạng miền Nam chuyển từ thế giữ gìn lực lượng sang thế tiến công, làm thất bại chiến lược 'Chiến tranh đặc biệt' của Mỹ."
+      ],
+      "limitations": [
+        "Nguồn lực bị phân tán cho hai nhiệm vụ lớn trong điều kiện đất nước còn nghèo.",
+        "Miền Bắc chịu sức ép từ nguy cơ chiến tranh phá hoại của Mỹ."
+      ]
+    },
+    "lessons": [
+      "Hai nhiệm vụ chiến lược không mâu thuẫn mà hỗ trợ lẫn nhau: hậu phương mạnh tạo sức cho tiền tuyến, tiền tuyến thắng bảo vệ thành quả hậu phương.",
+      "Năng lực lãnh đạo thống nhất của một Đảng trên phạm vi cả nước là nhân tố quyết định thắng lợi."
+    ]
+  },
+  "claims": [
+    {
+      "id": "d09-context-claim",
+      "category": "context",
+      "statement": "Sau 1954, đất nước tạm thời bị chia cắt: miền Bắc được giải phóng và đi lên chủ nghĩa xã hội, miền Nam đặt dưới chính quyền Sài Gòn do Mỹ hậu thuẫn.",
+      "sourceLinks": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000015",
+          "locator": "Slides 3-8",
+          "supportScope": "Hỗ trợ bối cảnh đất nước sau Hiệp định Geneve và hai nhiệm vụ chiến lược."
+        }
+      ]
+    },
+    {
+      "id": "d09-basis-claim",
+      "category": "basis",
+      "statement": "Một Đảng phải đồng thời lãnh đạo hai nhiệm vụ cách mạng khác nhau ở hai miền, đòi hỏi đường lối thống nhất nhưng phương thức phù hợp với từng miền.",
+      "sourceLinks": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000015",
+          "locator": "Slides 6-12",
+          "supportScope": "Hỗ trợ căn cứ xác định mối quan hệ giữa hai nhiệm vụ chiến lược."
+        }
+      ]
+    },
+    {
+      "id": "d09-implementation-claim",
+      "category": "implementation",
+      "statement": "Miền Bắc xây dựng chủ nghĩa xã hội và trở thành hậu phương lớn; miền Nam chuyển sang kết hợp đấu tranh chính trị với vũ trang qua Đồng khởi và thành lập Mặt trận Dân tộc Giải phóng.",
+      "sourceLinks": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000015",
+          "locator": "Slides 10-18",
+          "supportScope": "Hỗ trợ tổ chức thực hiện hai nhiệm vụ chiến lược ở hai miền."
+        }
+      ]
+    },
+    {
+      "id": "d09-result-claim",
+      "category": "result",
+      "statement": "Miền Bắc trở thành hậu phương vững chắc; cách mạng miền Nam chuyển sang thế tiến công, làm thất bại chiến lược 'Chiến tranh đặc biệt' của Mỹ.",
+      "sourceLinks": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000015",
+          "locator": "Slides 15-18",
+          "supportScope": "Hỗ trợ kết quả thực hiện hai nhiệm vụ chiến lược giai đoạn 1954-1965."
+        }
+      ]
+    },
+    {
+      "id": "d09-limitation-claim",
+      "category": "limitation",
+      "statement": "Nguồn lực đất nước bị phân tán cho hai nhiệm vụ lớn; miền Bắc chịu sức ép từ nguy cơ chiến tranh phá hoại của Mỹ.",
+      "sourceLinks": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000015",
+          "locator": "Slides 15-18",
+          "supportScope": "Hỗ trợ đánh giá hạn chế và thách thức trong thực hiện hai nhiệm vụ."
+        }
+      ]
+    },
+    {
+      "id": "d09-lesson-claim",
+      "category": "lesson",
+      "statement": "Hai nhiệm vụ chiến lược không mâu thuẫn mà hỗ trợ lẫn nhau; năng lực lãnh đạo thống nhất của Đảng trên phạm vi cả nước là nhân tố quyết định.",
+      "sourceLinks": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000015",
+          "locator": "Slides 10-18",
+          "supportScope": "Hỗ trợ bài học về mối quan hệ hậu phương-tiền tuyến và vai trò lãnh đạo thống nhất."
+        }
+      ]
+    }
+  ],
+  "causalNodes": [
+    {
+      "id": "d09-context",
+      "lane": "context",
+      "label": "Đất nước tạm thời chia cắt sau 1954",
+      "explanation": "Hiệp định Geneve chia cắt tạm thời, miền Bắc giải phóng, miền Nam dưới chính quyền Sài Gòn.",
+      "claimId": "d09-context-claim"
+    },
+    {
+      "id": "d09-contradiction",
+      "lane": "contradiction",
+      "label": "Hai nhiệm vụ khác nhau, một sự lãnh đạo",
+      "explanation": "Xây dựng chủ nghĩa xã hội và đấu tranh giải phóng là hai nhiệm vụ khác biệt nhưng phải được lãnh đạo thống nhất.",
+      "claimId": "d09-basis-claim"
+    },
+    {
+      "id": "d09-force",
+      "lane": "force",
+      "label": "Hậu phương miền Bắc và lực lượng miền Nam",
+      "explanation": "Miền Bắc xây dựng tiềm lực, miền Nam phát triển lực lượng cách mạng; hai miền hỗ trợ nhau.",
+      "claimId": "d09-implementation-claim"
+    },
+    {
+      "id": "d09-decision",
+      "lane": "decision",
+      "label": "Đồng thời thực hiện hai nhiệm vụ chiến lược",
+      "explanation": "Đảng xác định miền Bắc là hậu phương lớn, miền Nam là tiền tuyến lớn; hai nhiệm vụ hỗ trợ lẫn nhau.",
+      "claimId": "d09-implementation-claim"
+    },
+    {
+      "id": "d09-result",
+      "lane": "result",
+      "label": "Hậu phương vững, tiền tuyến mạnh",
+      "explanation": "Miền Bắc trở thành hậu phương vững chắc; cách mạng miền Nam chuyển sang thế tiến công.",
+      "claimId": "d09-result-claim"
+    },
+    {
+      "id": "d09-lesson",
+      "lane": "lesson",
+      "label": "Thống nhất lãnh đạo, linh hoạt phương thức",
+      "explanation": "Một Đảng lãnh đạo thống nhất nhưng phương thức phải phù hợp với điều kiện từng miền.",
+      "claimId": "d09-lesson-claim"
+    }
+  ],
+  "review": {
+    "aiAssistance": {
+      "used": true,
+      "role": "AI-assisted academic Draft for human review; not reviewed or published"
+    }
+  },
+  "sourceRefs": [
+    {
+      "sourceId": "10000000-0000-0000-0000-000000000001",
+      "locator": "Chương II - Một Đảng lãnh đạo hai nhiệm vụ chiến lược"
+    },
+    {
+      "sourceId": "10000000-0000-0000-0000-000000000015",
+      "locator": "Slides 3-18"
+    }
+  ]
+}

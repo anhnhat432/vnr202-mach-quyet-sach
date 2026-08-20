@@ -1,0 +1,135 @@
+{
+  "id": "20000000-0000-0000-0000-000000000013",
+  "versionId": "30000000-0000-0000-0000-000000000013",
+  "slug": "doi-moi-hay-tut-hau",
+  "chapter": "chapter_3",
+  "orderIndex": 13,
+  "title": "Đổi mới hay tụt hậu",
+  "centralQuestion": "Một cuộc khủng hoảng toàn diện đòi hỏi thay đổi tư duy và cơ chế đến mức nào?",
+  "status": "published",
+  "experience": {
+    "briefing": {
+      "period": "1986-1996",
+      "context": [
+        "Kinh tế - xã hội lâm vào khủng hoảng, hàng hóa khan hiếm và lạm phát năm 1986 ở mức rất cao.",
+        "Các bước khoán và tự chủ trước Đại hội VI cho thấy thực tiễn đã vượt khỏi nhiều ràng buộc của cơ chế cũ."
+      ],
+      "centralContradiction": "Nhu cầu giải phóng năng lực sản xuất đối lập với cơ chế quản lý tập trung, bao cấp không còn phù hợp.",
+      "objective": "Đưa đất nước ra khỏi khủng hoảng đồng thời giữ định hướng phát triển và ổn định xã hội.",
+      "constraints": [
+        "Nguồn lực trong nước hạn chế và môi trường quốc tế biến động.",
+        "Đổi mới phải đồng bộ nhưng cần kiểm soát tác động xã hội và năng lực quản lý."
+      ]
+    },
+    "evidence": [
+      {
+        "id": "c3-e1",
+        "label": "Lạm phát và thiếu hụt hàng hóa",
+        "kind": "data",
+        "summary": "Khủng hoảng cho thấy cơ chế phân phối và quản lý cũ không tạo đủ động lực sản xuất.",
+        "sourceIds": [
+          "10000000-0000-0000-0000-000000000022"
+        ],
+        "isDistractor": false
+      },
+      {
+        "id": "c3-e2",
+        "label": "Các thử nghiệm khoán và tự chủ",
+        "kind": "event",
+        "summary": "Những bước đột phá từ thực tiễn cho thấy trao quyền chủ động có thể cải thiện hiệu quả sản xuất.",
+        "sourceIds": [
+          "10000000-0000-0000-0000-000000000001"
+        ],
+        "isDistractor": false
+      },
+      {
+        "id": "c3-e3",
+        "label": "Yêu cầu đổi mới tư duy",
+        "kind": "document",
+        "summary": "Đại hội VI nhấn mạnh nhìn thẳng sự thật, đánh giá đúng sự thật và đổi mới toàn diện.",
+        "sourceIds": [
+          "10000000-0000-0000-0000-000000000022"
+        ],
+        "isDistractor": false
+      },
+      {
+        "id": "c3-e4",
+        "label": "Tiếp tục điều chỉnh nhỏ trong cơ chế cũ",
+        "kind": "assessment",
+        "summary": "Các sửa đổi rời rạc có thể giảm áp lực ngắn hạn nhưng không xử lý mâu thuẫn cơ chế ở quy mô toàn nền kinh tế.",
+        "sourceIds": [
+          "10000000-0000-0000-0000-000000000022"
+        ],
+        "isDistractor": true
+      }
+    ],
+    "decision": {
+      "prompt": "Chọn hướng quyết định phù hợp khi các biện pháp cục bộ không còn đủ giải quyết khủng hoảng.",
+      "requiredEvidenceCount": 3,
+      "options": [
+        {
+          "id": "comprehensive-renovation",
+          "label": "Đổi mới toàn diện, trước hết đổi mới tư duy và cơ chế kinh tế",
+          "rationale": "Thừa nhận yêu cầu khách quan của thực tiễn và tạo động lực cho nhiều thành phần kinh tế."
+        },
+        {
+          "id": "minor-adjustments",
+          "label": "Giữ cơ chế cũ và chỉ điều chỉnh một số khâu phân phối",
+          "rationale": "Ít xáo trộn trước mắt nhưng không xử lý nguyên nhân hệ thống của khủng hoảng."
+        }
+      ]
+    },
+    "projectedConsequences": [
+      {
+        "optionId": "comprehensive-renovation",
+        "steps": [
+          "Mở rộng quyền chủ động sản xuất và lưu thông.",
+          "Hình thành cơ chế kinh tế nhiều thành phần có quản lý.",
+          "Tạo điều kiện ổn định và từng bước thoát khỏi khủng hoảng."
+        ]
+      },
+      {
+        "optionId": "minor-adjustments",
+        "steps": [
+          "Một số điểm nghẽn được xử lý tạm thời.",
+          "Động lực sản xuất và tín hiệu thị trường tiếp tục bị hạn chế.",
+          "Khủng hoảng có nguy cơ kéo dài và làm giảm niềm tin."
+        ]
+      }
+    ],
+    "historicalComparison": {
+      "actualDecision": "Đại hội VI năm 1986 mở đường cho đổi mới toàn diện, coi đổi mới kinh tế là trọng tâm ban đầu và từng bước hoàn thiện nhận thức về cơ chế thị trường.",
+      "implementation": [
+        "Thực hiện các chính sách khoán, tự chủ sản xuất và thừa nhận nền kinh tế nhiều thành phần.",
+        "Điều chỉnh cơ chế quản lý, phân phối và mở rộng quan hệ kinh tế đối ngoại."
+      ],
+      "results": [
+        "Đất nước từng bước kiềm chế lạm phát, phát triển sản xuất và thoát khỏi khủng hoảng kinh tế - xã hội.",
+        "Tạo nền tảng cho giai đoạn công nghiệp hóa, hiện đại hóa và hội nhập tiếp theo."
+      ],
+      "limitations": [
+        "Quá trình đổi mới phát sinh chênh lệch, hạn chế quản lý và yêu cầu tiếp tục hoàn thiện thể chế."
+      ]
+    },
+    "lessons": [
+      "Đổi mới phải xuất phát từ thực tiễn và dám nhìn thẳng vào hạn chế của mô hình hiện hành.",
+      "Cải cách kinh tế cần đi cùng năng lực quản lý, ổn định xã hội và mục tiêu phát triển lâu dài."
+    ]
+  },
+  "review": {
+    "aiAssistance": {
+      "used": true,
+      "role": "Phase 1 preview authoring assistance; no academic-review assertion"
+    }
+  },
+  "sourceRefs": [
+    {
+      "sourceId": "10000000-0000-0000-0000-000000000001",
+      "locator": "Chương III"
+    },
+    {
+      "sourceId": "10000000-0000-0000-0000-000000000022",
+      "locator": "Slides 3-26"
+    }
+  ]
+}

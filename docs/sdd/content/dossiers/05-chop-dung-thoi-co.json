@@ -1,0 +1,315 @@
+{
+  "id": "20000000-0000-0000-0000-000000000005",
+  "versionId": "30000000-0000-0000-0000-000000000005",
+  "slug": "chop-dung-thoi-co",
+  "chapter": "chapter_1",
+  "orderIndex": 5,
+  "title": "Chớp đúng thời cơ",
+  "centralQuestion": "Điều kiện nào biến thời cơ thành quyết định Tổng khởi nghĩa?",
+  "status": "draft",
+  "experience": {
+    "briefing": {
+      "period": "1939-1945",
+      "context": [
+        "Chiến tranh thế giới thứ hai làm thay đổi sâu sắc tình hình Đông Dương, đặt dân tộc dưới sự thống trị chồng chéo và làm nhiệm vụ giải phóng dân tộc trở nên cấp bách.",
+        "Từ chuyển hướng chiến lược 1939-1941, phong trào từng bước xây dựng mặt trận, lực lượng chính trị, lực lượng vũ trang và căn cứ địa trước khi thời cơ trực tiếp xuất hiện năm 1945."
+      ],
+      "centralContradiction": "Khởi nghĩa quá sớm khi lực lượng chưa đủ có thể thất bại, nhưng chậm quyết định khi bộ máy đối phương khủng hoảng có thể làm mất thời cơ giành chính quyền.",
+      "objective": "Kết hợp chuẩn bị lâu dài với khả năng đánh giá tình thế và phát động Tổng khởi nghĩa trong khoảng thời gian có lợi nhất.",
+      "constraints": [
+        "Phải thống nhất hành động trên phạm vi rộng trong thời gian rất ngắn.",
+        "Quyết định phải dựa trên cả sự tan rã của đối phương và mức độ sẵn sàng của lực lượng trong nước."
+      ]
+    },
+    "evidence": [
+      {
+        "id": "d05-e1",
+        "label": "Chuyển hướng chiến lược 1939-1941",
+        "kind": "document",
+        "summary": "Các Hội nghị Trung ương VI-VIII từng bước đặt nhiệm vụ giải phóng dân tộc lên hàng đầu và xác định chuẩn bị khởi nghĩa là nhiệm vụ trung tâm.",
+        "sourceIds": [
+          "10000000-0000-0000-0000-000000000007"
+        ],
+        "isDistractor": false
+      },
+      {
+        "id": "d05-e2",
+        "label": "Việt Minh và khối đoàn kết dân tộc",
+        "kind": "event",
+        "summary": "Mặt trận Việt Minh tạo khuôn khổ tập hợp rộng rãi lực lượng theo mục tiêu giải phóng dân tộc.",
+        "sourceIds": [
+          "10000000-0000-0000-0000-000000000007",
+          "10000000-0000-0000-0000-000000000008"
+        ],
+        "isDistractor": false
+      },
+      {
+        "id": "d05-e3",
+        "label": "Lực lượng vũ trang và căn cứ địa",
+        "kind": "event",
+        "summary": "Cứu quốc quân, đội vũ trang và hệ thống căn cứ tạo năng lực hỗ trợ khởi nghĩa khi tình thế chuyển biến.",
+        "sourceIds": [
+          "10000000-0000-0000-0000-000000000008"
+        ],
+        "isDistractor": false
+      },
+      {
+        "id": "d05-e4",
+        "label": "Nhật đảo chính Pháp và chỉ thị tháng 3/1945",
+        "kind": "document",
+        "summary": "Sự thay đổi kẻ thù trực tiếp dẫn đến điều chỉnh khẩu hiệu và phát động cao trào kháng Nhật cứu nước.",
+        "sourceIds": [
+          "10000000-0000-0000-0000-000000000009"
+        ],
+        "isDistractor": false
+      },
+      {
+        "id": "d05-e5",
+        "label": "Nhật đầu hàng và khoảng trống quyền lực",
+        "kind": "event",
+        "summary": "Tháng 8/1945, thất bại của Nhật làm bộ máy cai trị khủng hoảng trong khi lực lượng cách mạng đã được huy động.",
+        "sourceIds": [
+          "10000000-0000-0000-0000-000000000009"
+        ],
+        "isDistractor": false
+      },
+      {
+        "id": "d05-e6",
+        "label": "Chờ lực lượng Đồng minh thiết lập trật tự mới",
+        "kind": "assessment",
+        "summary": "Chờ đợi có thể tránh rủi ro tức thời nhưng trao quyền chủ động cho lực lượng bên ngoài và làm thời cơ trong nước trôi qua.",
+        "sourceIds": [
+          "10000000-0000-0000-0000-000000000009"
+        ],
+        "isDistractor": true
+      }
+    ],
+    "decision": {
+      "prompt": "Khi đối phương khủng hoảng và lực lượng trong nước đã được chuẩn bị, quyết định nào bảo đảm quyền chủ động?",
+      "requiredEvidenceCount": 4,
+      "options": [
+        {
+          "id": "general-uprising",
+          "label": "Phát động Tổng khởi nghĩa trong thời cơ tháng Tám",
+          "rationale": "Kết hợp khoảng trống quyền lực với lực lượng chính trị, vũ trang và căn cứ đã chuẩn bị."
+        },
+        {
+          "id": "uprising-1939",
+          "label": "Phát động tổng khởi nghĩa ngay từ năm 1939",
+          "rationale": "Thể hiện quyết tâm nhưng chưa có đủ lực lượng, mặt trận và điều kiện trực tiếp."
+        },
+        {
+          "id": "wait-allies",
+          "label": "Chờ trật tự sau chiến tranh do lực lượng bên ngoài xác lập",
+          "rationale": "Giảm quyết định trong ngắn hạn nhưng có nguy cơ mất quyền chủ động và để lực lượng khác chiếm khoảng trống."
+        }
+      ]
+    },
+    "projectedConsequences": [
+      {
+        "optionId": "general-uprising",
+        "steps": [
+          "Phát lệnh khi bộ máy đối phương rối loạn",
+          "Huy động lực lượng trên phạm vi rộng",
+          "Giành chính quyền trước khi trật tự thuộc địa được tái lập"
+        ]
+      },
+      {
+        "optionId": "uprising-1939",
+        "steps": [
+          "Hành động khi lực lượng chưa hoàn chỉnh",
+          "Khó phối hợp toàn quốc",
+          "Nguy cơ bị đàn áp trước khi thời cơ xuất hiện"
+        ]
+      },
+      {
+        "optionId": "wait-allies",
+        "steps": [
+          "Không sử dụng khoảng trống quyền lực",
+          "Các lực lượng bên ngoài tiến vào",
+          "Điều kiện giành chính quyền chủ động trở nên bất lợi hơn"
+        ]
+      }
+    ],
+    "historicalComparison": {
+      "actualDecision": "Sau quá trình chuyển hướng và chuẩn bị lực lượng, Đảng quyết định phát động Tổng khởi nghĩa khi Nhật đầu hàng và bộ máy cai trị khủng hoảng trong tháng 8/1945.",
+      "implementation": [
+        "Phát triển cao trào kháng Nhật, mở rộng các hình thức giành chính quyền từng phần và chuẩn bị cơ quan lãnh đạo khởi nghĩa.",
+        "Triệu tập Hội nghị toàn quốc và Đại hội Quốc dân, phát lệnh khởi nghĩa và huy động lực lượng tại các địa phương."
+      ],
+      "results": [
+        "Chính quyền được giành trên phạm vi cả nước trong thời gian ngắn.",
+        "Nước Việt Nam Dân chủ Cộng hòa ra đời, mở ra kỷ nguyên độc lập dân tộc."
+      ],
+      "limitations": [
+        "Chính quyền mới phải đối mặt ngay với nhiều khó khăn trong nước và sự can thiệp của các lực lượng bên ngoài.",
+        "Thắng lợi không xóa bỏ ngay mọi hậu quả kinh tế, xã hội và tổ chức do chế độ cũ để lại."
+      ]
+    },
+    "lessons": [
+      "Thời cơ chỉ có thể được tận dụng khi đã có quá trình chuẩn bị lực lượng lâu dài.",
+      "Quyết định chiến lược phải kết hợp đánh giá đúng tình thế với khả năng tổ chức hành động nhanh và thống nhất."
+    ]
+  },
+  "claims": [
+    {
+      "id": "d05-context-claim",
+      "category": "context",
+      "statement": "Chiến tranh thế giới thứ hai và sự thống trị chồng chéo làm nhiệm vụ giải phóng dân tộc trở nên cấp bách trong giai đoạn 1939-1945.",
+      "sourceLinks": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000007",
+          "locator": "Slides 3-10",
+          "supportScope": "Hỗ trợ bối cảnh chiến tranh và căn cứ chuyển nhiệm vụ giải phóng dân tộc lên hàng đầu."
+        }
+      ]
+    },
+    {
+      "id": "d05-basis-claim",
+      "category": "basis",
+      "statement": "Quyết định khởi nghĩa phải cân bằng nguy cơ hành động quá sớm với nguy cơ bỏ lỡ khoảng trống quyền lực khi đối phương khủng hoảng.",
+      "sourceLinks": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000009",
+          "locator": "Slides 8-12",
+          "supportScope": "Hỗ trợ căn cứ đánh giá thời cơ trực tiếp sau khi Nhật đầu hàng và bộ máy cai trị rối loạn."
+        }
+      ]
+    },
+    {
+      "id": "d05-implementation-claim",
+      "category": "implementation",
+      "statement": "Việt Minh, lực lượng chính trị, lực lượng vũ trang, căn cứ địa và cao trào kháng Nhật được chuẩn bị trước khi phát lệnh Tổng khởi nghĩa.",
+      "sourceLinks": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000007",
+          "locator": "Slides 10-16",
+          "supportScope": "Hỗ trợ việc xây dựng Việt Minh và định hướng chuẩn bị khởi nghĩa trong chuyển hướng chiến lược."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000008",
+          "locator": "Slides 5-9",
+          "supportScope": "Hỗ trợ quá trình xây dựng lực lượng vũ trang và căn cứ trước thời cơ trực tiếp."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000009",
+          "locator": "Slides 3-12",
+          "supportScope": "Hỗ trợ cao trào kháng Nhật, cơ quan lãnh đạo và quá trình phát động Tổng khởi nghĩa."
+        }
+      ]
+    },
+    {
+      "id": "d05-result-claim",
+      "category": "result",
+      "statement": "Chính quyền được giành trên phạm vi cả nước trong thời gian ngắn và nước Việt Nam Dân chủ Cộng hòa ra đời.",
+      "sourceLinks": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000009",
+          "locator": "Slides 8-12",
+          "supportScope": "Hỗ trợ diễn biến và kết quả trực tiếp của Tổng khởi nghĩa Tháng Tám."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000010",
+          "locator": "Slides 3-6",
+          "supportScope": "Hỗ trợ tính chất và ý nghĩa của thắng lợi cùng sự ra đời của nhà nước mới."
+        }
+      ]
+    },
+    {
+      "id": "d05-limitation-claim",
+      "category": "limitation",
+      "statement": "Chính quyền mới phải đối mặt ngay với khó khăn trong nước, lực lượng bên ngoài và những hậu quả kinh tế, xã hội do chế độ cũ để lại.",
+      "sourceLinks": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000010",
+          "locator": "Slides 3-9",
+          "supportScope": "Hỗ trợ đánh giá ý nghĩa thắng lợi trong quan hệ với những nhiệm vụ và khó khăn còn tiếp tục."
+        }
+      ]
+    },
+    {
+      "id": "d05-lesson-claim",
+      "category": "lesson",
+      "statement": "Thời cơ chỉ được tận dụng khi có chuẩn bị lực lượng lâu dài, đánh giá đúng tình thế và tổ chức hành động nhanh, thống nhất.",
+      "sourceLinks": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000010",
+          "locator": "Slides 6-9",
+          "supportScope": "Hỗ trợ bài học về chuẩn bị lực lượng, nhận định thời cơ và năng lực tổ chức hành động."
+        }
+      ]
+    }
+  ],
+  "causalNodes": [
+    {
+      "id": "d05-context",
+      "lane": "context",
+      "label": "Chiến tranh và sự thống trị chồng chéo",
+      "explanation": "Chiến tranh thế giới làm thay đổi tình hình Đông Dương và đặt nhiệm vụ giải phóng dân tộc ở vị trí cấp bách.",
+      "claimId": "d05-context-claim"
+    },
+    {
+      "id": "d05-contradiction",
+      "lane": "contradiction",
+      "label": "Khởi nghĩa sớm hay để lỡ thời cơ",
+      "explanation": "Hành động quá sớm có thể thất bại, nhưng chậm quyết định khi đối phương khủng hoảng có thể làm mất quyền chủ động.",
+      "claimId": "d05-basis-claim"
+    },
+    {
+      "id": "d05-force",
+      "lane": "force",
+      "label": "Việt Minh, lực lượng vũ trang và căn cứ",
+      "explanation": "Mặt trận, lực lượng chính trị, lực lượng vũ trang và căn cứ địa tạo nền tảng để hành động khi tình thế chuyển biến.",
+      "claimId": "d05-implementation-claim"
+    },
+    {
+      "id": "d05-decision",
+      "lane": "decision",
+      "label": "Phát động Tổng khởi nghĩa đúng thời cơ",
+      "explanation": "Đảng phát lệnh Tổng khởi nghĩa khi Nhật đầu hàng, bộ máy cai trị khủng hoảng và lực lượng trong nước đã được huy động.",
+      "claimId": "d05-implementation-claim"
+    },
+    {
+      "id": "d05-result",
+      "lane": "result",
+      "label": "Giành chính quyền và lập nhà nước mới",
+      "explanation": "Chính quyền được giành trên phạm vi cả nước và nước Việt Nam Dân chủ Cộng hòa ra đời.",
+      "claimId": "d05-result-claim"
+    },
+    {
+      "id": "d05-lesson",
+      "lane": "lesson",
+      "label": "Chuẩn bị lâu dài để hành động đúng lúc",
+      "explanation": "Khả năng chớp thời cơ phụ thuộc vào chuẩn bị lực lượng, nhận định tình thế và tổ chức hành động thống nhất.",
+      "claimId": "d05-lesson-claim"
+    }
+  ],
+  "review": {
+    "aiAssistance": {
+      "used": true,
+      "role": "AI-assisted academic Draft for human review; not reviewed or published"
+    }
+  },
+  "sourceRefs": [
+    {
+      "sourceId": "10000000-0000-0000-0000-000000000001",
+      "locator": "Chương I - Giải phóng dân tộc 1939-1945 và Cách mạng Tháng Tám"
+    },
+    {
+      "sourceId": "10000000-0000-0000-0000-000000000007",
+      "locator": "Slides 3-16"
+    },
+    {
+      "sourceId": "10000000-0000-0000-0000-000000000008",
+      "locator": "Slides 3-9"
+    },
+    {
+      "sourceId": "10000000-0000-0000-0000-000000000009",
+      "locator": "Slides 3-12"
+    },
+    {
+      "sourceId": "10000000-0000-0000-0000-000000000010",
+      "locator": "Slides 3-9"
+    }
+  ]
+}

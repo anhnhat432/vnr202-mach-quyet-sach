@@ -1,0 +1,300 @@
+{
+  "id": "20000000-0000-0000-0000-000000000010",
+  "versionId": "30000000-0000-0000-0000-000000000010",
+  "slug": "tu-doi-dau-cuc-bo-den-toan-thang",
+  "chapter": "chapter_2",
+  "orderIndex": 10,
+  "title": "Từ đối đầu cục bộ đến toàn thắng",
+  "centralQuestion": "Làm thế nào đánh bại ý chí xâm lược của đế quốc Mỹ và giành thắng lợi hoàn toàn?",
+  "status": "draft",
+  "experience": {
+    "briefing": {
+      "period": "1965-1975",
+      "context": [
+        "Sau thất bại của 'Chiến tranh đặc biệt', Mỹ chuyển sang 'Chiến tranh cục bộ' với quân viễn chinh Mỹ trực tiếp tham chiến và mở rộng chiến tranh phá hoại miền Bắc.",
+        "Tương quan lực lượng thay đổi qua từng chiến lược chiến tranh của Mỹ: từ 'Chiến tranh cục bộ' sang 'Việt Nam hóa chiến tranh'."
+      ],
+      "centralContradiction": "Yêu cầu đánh bại ý chí xâm lược của đế quốc Mỹ và giành độc lập, thống nhất đối lập với sức mạnh quân sự vượt trội và các chiến lược chiến tranh leo thang của Mỹ.",
+      "objective": "Từng bước làm thất bại các chiến lược chiến tranh của Mỹ, buộc Mỹ rút quân và đánh đổ chính quyền Sài Gòn, hoàn thành giải phóng miền Nam, thống nhất đất nước.",
+      "constraints": [
+        "Mỹ có ưu thế tuyệt đối về hỏa lực, không quân và hải quân.",
+        "Cần kết hợp đấu tranh quân sự, chính trị, ngoại giao để tạo sức mạnh tổng hợp."
+      ]
+    },
+    "evidence": [
+      {
+        "id": "d10-e1",
+        "label": "Chiến tranh cục bộ và phá hoại miền Bắc",
+        "kind": "event",
+        "summary": "Mỹ đưa quân viễn chinh vào miền Nam, đồng thời mở chiến tranh phá hoại bằng không quân và hải quân đối với miền Bắc.",
+        "sourceIds": ["10000000-0000-0000-0000-000000000016"],
+        "isDistractor": false
+      },
+      {
+        "id": "d10-e2",
+        "label": "Tổng tiến công Tết Mậu Thân 1968",
+        "kind": "event",
+        "summary": "Cuộc Tổng tiến công và nổi dậy Tết Mậu Thân làm lung lay ý chí xâm lược của Mỹ, buộc Mỹ xuống thang chiến tranh và chấp nhận đàm phán tại Paris.",
+        "sourceIds": ["10000000-0000-0000-0000-000000000016"],
+        "isDistractor": false
+      },
+      {
+        "id": "d10-e3",
+        "label": "Hiệp định Paris 1973",
+        "kind": "document",
+        "summary": "Hiệp định buộc Mỹ rút hết quân, công nhận độc lập, chủ quyền, thống nhất và toàn vẹn lãnh thổ Việt Nam, nhưng chính quyền Sài Gòn vẫn tồn tại.",
+        "sourceIds": ["10000000-0000-0000-0000-000000000017"],
+        "isDistractor": false
+      },
+      {
+        "id": "d10-e4",
+        "label": "Miền Bắc chống chiến tranh phá hoại và chi viện",
+        "kind": "data",
+        "summary": "Miền Bắc vừa chiến đấu chống chiến tranh phá hoại, vừa sản xuất và chi viện tối đa cho miền Nam, thể hiện vai trò hậu phương lớn.",
+        "sourceIds": ["10000000-0000-0000-0000-000000000016"],
+        "isDistractor": false
+      },
+      {
+        "id": "d10-e5",
+        "label": "Tổng tiến công mùa Xuân 1975",
+        "kind": "event",
+        "summary": "Chiến dịch Tây Nguyên, Huế-Đà Nẵng và Hồ Chí Minh lịch sử giải phóng hoàn toàn miền Nam trong 55 ngày đêm.",
+        "sourceIds": ["10000000-0000-0000-0000-000000000017"],
+        "isDistractor": false
+      },
+      {
+        "id": "d10-e6",
+        "label": "Chỉ dựa vào đàm phán, hạn chế đấu tranh vũ trang",
+        "kind": "assessment",
+        "summary": "Ưu tiên đàm phán có thể giảm tổn thất nhưng không tạo được sức ép quân sự đủ mạnh để buộc đối phương nhượng bộ thực chất.",
+        "sourceIds": ["10000000-0000-0000-0000-000000000017"],
+        "isDistractor": true
+      }
+    ],
+    "decision": {
+      "prompt": "Chọn phương án kết hợp các mặt trận để đánh bại ý chí xâm lược của Mỹ và giành thắng lợi cuối cùng.",
+      "requiredEvidenceCount": 4,
+      "options": [
+        {
+          "id": "combined-strategy",
+          "label": "Kết hợp quân sự-chính trị-ngoại giao, đánh từng bước, tiến tới tổng tiến công",
+          "rationale": "Vừa đánh vừa đàm, tạo sức ép tổng hợp, từng bước làm thay đổi tương quan lực lượng và kết thúc chiến tranh."
+        },
+        {
+          "id": "military-only",
+          "label": "Chỉ dựa vào đấu tranh quân sự thuần túy",
+          "rationale": "Tập trung sức mạnh quân sự nhưng bỏ qua mặt trận chính trị-ngoại giao, khó tạo đột phá chiến lược."
+        },
+        {
+          "id": "negotiation-only",
+          "label": "Ưu tiên đàm phán, hạn chế đấu tranh vũ trang",
+          "rationale": "Giảm tổn thất nhưng thiếu sức ép quân sự để buộc đối phương nhượng bộ thực chất."
+        }
+      ]
+    },
+    "projectedConsequences": [
+      {
+        "optionId": "combined-strategy",
+        "steps": [
+          "Đánh bại từng chiến lược chiến tranh của Mỹ.",
+          "Buộc Mỹ rút quân qua Hiệp định Paris.",
+          "Tận dụng thời cơ tổng tiến công giành toàn thắng."
+        ]
+      },
+      {
+        "optionId": "military-only",
+        "steps": [
+          "Tổn thất lớn trong đối đầu trực diện.",
+          "Thiếu đòn bẩy chính trị-ngoại giao.",
+          "Khó tạo được sự đồng thuận quốc tế."
+        ]
+      },
+      {
+        "optionId": "negotiation-only",
+        "steps": [
+          "Đối phương không chịu sức ép quân sự thực sự.",
+          "Đàm phán kéo dài không kết quả.",
+          "Mất thời cơ khi tương quan lực lượng thay đổi."
+        ]
+      }
+    ],
+    "historicalComparison": {
+      "actualDecision": "Đảng kiên trì đường lối kết hợp đấu tranh quân sự, chính trị và ngoại giao; từng bước đánh bại các chiến lược chiến tranh của Mỹ; ký Hiệp định Paris buộc Mỹ rút quân; và tổ chức Tổng tiến công mùa Xuân 1975 giải phóng hoàn toàn miền Nam.",
+      "implementation": [
+        "Đánh bại 'Chiến tranh cục bộ' với đỉnh cao Tổng tiến công Tết Mậu Thân 1968.",
+        "Đánh bại 'Việt Nam hóa chiến tranh', kết hợp đàm phán tại Paris.",
+        "Ký Hiệp định Paris 1973, buộc Mỹ rút quân.",
+        "Tổ chức Tổng tiến công và nổi dậy mùa Xuân 1975 với ba chiến dịch lớn."
+      ],
+      "results": [
+        "Giải phóng hoàn toàn miền Nam, thống nhất đất nước.",
+        "Hoàn thành cuộc cách mạng dân tộc dân chủ nhân dân trên phạm vi cả nước."
+      ],
+      "limitations": [
+        "Chiến tranh kéo dài gây tổn thất lớn về người và của.",
+        "Hậu quả chiến tranh để lại nhiều vấn đề kinh tế-xã hội cần giải quyết sau thống nhất."
+      ]
+    },
+    "lessons": [
+      "Kết hợp chặt chẽ ba mặt trận quân sự-chính trị-ngoại giao tạo sức mạnh tổng hợp đánh bại đế quốc mạnh.",
+      "Nắm vững thời cơ chiến lược, chuyển từ tiến công chiến lược sang tổng tiến công khi tương quan lực lượng có lợi."
+    ]
+  },
+  "claims": [
+    {
+      "id": "d10-context-claim",
+      "category": "context",
+      "statement": "Mỹ leo thang chiến tranh với 'Chiến tranh cục bộ', đưa quân viễn chinh vào miền Nam và mở rộng chiến tranh phá hoại miền Bắc, tạo ra thách thức lớn nhất cho cách mạng Việt Nam.",
+      "sourceLinks": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000016",
+          "locator": "Slides 3-10",
+          "supportScope": "Hỗ trợ bối cảnh Mỹ leo thang chiến tranh và các chiến lược chiến tranh."
+        }
+      ]
+    },
+    {
+      "id": "d10-basis-claim",
+      "category": "basis",
+      "statement": "Để đánh bại ý chí xâm lược của Mỹ, cần kết hợp đấu tranh quân sự, chính trị và ngoại giao, từng bước làm thay đổi tương quan lực lượng.",
+      "sourceLinks": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000016",
+          "locator": "Slides 10-18",
+          "supportScope": "Hỗ trợ căn cứ kết hợp ba mặt trận đấu tranh."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000017",
+          "locator": "Slides 3-8",
+          "supportScope": "Hỗ trợ căn cứ đàm phán Paris và chuyển giai đoạn chiến lược."
+        }
+      ]
+    },
+    {
+      "id": "d10-implementation-claim",
+      "category": "implementation",
+      "statement": "Ta đánh bại 'Chiến tranh cục bộ' với đỉnh cao Tết Mậu Thân 1968, đánh bại 'Việt Nam hóa chiến tranh', ký Hiệp định Paris buộc Mỹ rút quân, và tổ chức Tổng tiến công mùa Xuân 1975.",
+      "sourceLinks": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000016",
+          "locator": "Slides 12-20",
+          "supportScope": "Hỗ trợ đánh bại Chiến tranh cục bộ và Tết Mậu Thân."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000017",
+          "locator": "Slides 8-18",
+          "supportScope": "Hỗ trợ Hiệp định Paris và Tổng tiến công 1975."
+        }
+      ]
+    },
+    {
+      "id": "d10-result-claim",
+      "category": "result",
+      "statement": "Miền Nam hoàn toàn giải phóng, đất nước thống nhất, hoàn thành cuộc cách mạng dân tộc dân chủ nhân dân trên phạm vi cả nước.",
+      "sourceLinks": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000017",
+          "locator": "Slides 15-18",
+          "supportScope": "Hỗ trợ kết quả Tổng tiến công 1975 và ý nghĩa thắng lợi."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000018",
+          "locator": "Slides 3-8",
+          "supportScope": "Hỗ trợ ý nghĩa lịch sử của thắng lợi 1975."
+        }
+      ]
+    },
+    {
+      "id": "d10-limitation-claim",
+      "category": "limitation",
+      "statement": "Chiến tranh kéo dài 21 năm gây tổn thất lớn về người và của; hậu quả chiến tranh để lại nhiều vấn đề kinh tế-xã hội cần giải quyết sau thống nhất.",
+      "sourceLinks": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000018",
+          "locator": "Slides 6-12",
+          "supportScope": "Hỗ trợ đánh giá hạn chế, tổn thất và thách thức sau chiến tranh."
+        }
+      ]
+    },
+    {
+      "id": "d10-lesson-claim",
+      "category": "lesson",
+      "statement": "Kết hợp chặt chẽ ba mặt trận quân sự-chính trị-ngoại giao tạo sức mạnh tổng hợp; nắm vững thời cơ chiến lược để chuyển sang tổng tiến công khi điều kiện chín muồi.",
+      "sourceLinks": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000018",
+          "locator": "Slides 8-12",
+          "supportScope": "Hỗ trợ bài học về kết hợp ba mặt trận và nghệ thuật nắm thời cơ."
+        }
+      ]
+    }
+  ],
+  "causalNodes": [
+    {
+      "id": "d10-context",
+      "lane": "context",
+      "label": "Mỹ leo thang chiến tranh 1965",
+      "explanation": "Mỹ đưa quân viễn chinh vào miền Nam và mở chiến tranh phá hoại miền Bắc, tạo thách thức lớn nhất.",
+      "claimId": "d10-context-claim"
+    },
+    {
+      "id": "d10-contradiction",
+      "lane": "contradiction",
+      "label": "Đánh bại ý chí xâm lược đối lập với sức mạnh quân sự Mỹ",
+      "explanation": "Yêu cầu giành thắng lợi cuối cùng đối lập với ưu thế quân sự vượt trội của Mỹ.",
+      "claimId": "d10-basis-claim"
+    },
+    {
+      "id": "d10-force",
+      "lane": "force",
+      "label": "Sức mạnh tổng hợp ba mặt trận",
+      "explanation": "Quân sự-chính trị-ngoại giao kết hợp, hậu phương miền Bắc chi viện cho tiền tuyến miền Nam.",
+      "claimId": "d10-implementation-claim"
+    },
+    {
+      "id": "d10-decision",
+      "lane": "decision",
+      "label": "Kết hợp đánh-đàm, tiến tới tổng tiến công",
+      "explanation": "Vừa đánh vừa đàm, từng bước thay đổi tương quan, ký Hiệp định Paris và tổ chức Tổng tiến công 1975.",
+      "claimId": "d10-implementation-claim"
+    },
+    {
+      "id": "d10-result",
+      "lane": "result",
+      "label": "Toàn thắng 1975, thống nhất đất nước",
+      "explanation": "Giải phóng hoàn toàn miền Nam, hoàn thành cách mạng dân tộc dân chủ nhân dân.",
+      "claimId": "d10-result-claim"
+    },
+    {
+      "id": "d10-lesson",
+      "lane": "lesson",
+      "label": "Ba mặt trận và thời cơ chiến lược",
+      "explanation": "Kết hợp quân sự-chính trị-ngoại giao và nắm vững thời cơ là chìa khóa thắng lợi.",
+      "claimId": "d10-lesson-claim"
+    }
+  ],
+  "review": {
+    "aiAssistance": {
+      "used": true,
+      "role": "AI-assisted academic Draft for human review; not reviewed or published"
+    }
+  },
+  "sourceRefs": [
+    {
+      "sourceId": "10000000-0000-0000-0000-000000000001",
+      "locator": "Chương II - Kháng chiến chống Mỹ và thống nhất đất nước"
+    },
+    {
+      "sourceId": "10000000-0000-0000-0000-000000000016",
+      "locator": "Slides 3-20"
+    },
+    {
+      "sourceId": "10000000-0000-0000-0000-000000000017",
+      "locator": "Slides 3-18"
+    },
+    {
+      "sourceId": "10000000-0000-0000-0000-000000000018",
+      "locator": "Slides 3-12"
+    }
+  ]
+}

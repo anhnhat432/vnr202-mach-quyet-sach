@@ -1,0 +1,16 @@
+{
+  "id": "20000000-0000-0000-0000-000000000015",
+  "slug": "giu-niem-tin-bang-nang-luc-the-che",
+  "chapter": "chapter_3",
+  "orderIndex": 15,
+  "title": "Giữ niềm tin bằng năng lực thể chế",
+  "centralQuestion": "Thành tựu, hạn chế và phòng chống tham nhũng liên hệ thế nào với niềm tin và năng lực phát triển?",
+  "status": "draft",
+  "review": {
+    "aiAssistance": {
+      "used": true,
+      "role": "metadata planning only"
+    }
+  },
+  "sourceRefs": []
+}

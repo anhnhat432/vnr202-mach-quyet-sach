@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "generate:content": "node ../scripts/sync-web-content.mjs",
+    "generate:content": "node ../scripts/build-content-catalog.mjs",
+    "review:chapter-1": "npm run generate:content && node ../scripts/generate-review-pack.mjs",
     "dev": "next dev",
     "build": "npm run generate:content && next build",
     "start": "next start",

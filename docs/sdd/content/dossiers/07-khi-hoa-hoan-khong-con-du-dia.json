@@ -1,0 +1,276 @@
+{
+  "id": "20000000-0000-0000-0000-000000000007",
+  "versionId": "30000000-0000-0000-0000-000000000007",
+  "slug": "khi-hoa-hoan-khong-con-du-dia",
+  "chapter": "chapter_2",
+  "orderIndex": 7,
+  "title": "Khi hòa hoãn không còn dư địa",
+  "centralQuestion": "Khi nhân nhượng đã đến giới hạn, chuyển sang kháng chiến toàn quốc cần đường lối và tổ chức ra sao?",
+  "status": "draft",
+  "experience": {
+    "briefing": {
+      "period": "1946-1947",
+      "context": [
+        "Sau Hiệp định Sơ bộ 6/3/1946 và Tạm ước 14/9/1946, thực dân Pháp liên tục vi phạm cam kết, mở rộng chiếm đóng và gây hấn tại Nam Bộ, Hải Phòng, Hà Nội.",
+        "Chính quyền cách mạng đã tận dụng thời gian hòa hoãn để củng cố lực lượng, nhưng không gian chính trị tiếp tục bị thu hẹp."
+      ],
+      "centralContradiction": "Yêu cầu bảo vệ độc lập và toàn vẹn lãnh thổ đối lập với việc đối phương liên tục lấn tới, khiến các biện pháp hòa bình không còn khả năng ngăn chặn chiến tranh.",
+      "objective": "Xác định thời điểm chuyển từ nhân nhượng có nguyên tắc sang kháng chiến toàn quốc và xây dựng đường lối kháng chiến phù hợp với tương quan lực lượng.",
+      "constraints": [
+        "Không thể tiếp tục nhân nhượng khi đối phương đã đơn phương xé bỏ thỏa thuận.",
+        "Lực lượng vũ trang và hậu cần còn non trẻ, cần đường lối phát huy được lợi thế chính trị và địa lý."
+      ]
+    },
+    "evidence": [
+      {
+        "id": "d07-e1",
+        "label": "Pháp vi phạm Hiệp định Sơ bộ và Tạm ước",
+        "kind": "event",
+        "summary": "Thực dân Pháp liên tục gây hấn, chiếm đóng trái phép và đơn phương xé bỏ các thỏa thuận, đẩy tình thế vượt khỏi kiểm soát ngoại giao.",
+        "sourceIds": ["10000000-0000-0000-0000-000000000012"],
+        "isDistractor": false
+      },
+      {
+        "id": "d07-e2",
+        "label": "Lời kêu gọi toàn quốc kháng chiến",
+        "kind": "document",
+        "summary": "Ngày 19/12/1946, Chủ tịch Hồ Chí Minh ra Lời kêu gọi toàn quốc kháng chiến, xác định tính chất chính nghĩa và quyết tâm bảo vệ độc lập.",
+        "sourceIds": ["10000000-0000-0000-0000-000000000012"],
+        "isDistractor": false
+      },
+      {
+        "id": "d07-e3",
+        "label": "Đường lối kháng chiến toàn dân, toàn diện, lâu dài",
+        "kind": "document",
+        "summary": "Chỉ thị Toàn dân kháng chiến và tác phẩm Kháng chiến nhất định thắng lợi xác lập đường lối dựa vào sức dân, kết hợp quân sự-chính trị-kinh tế-văn hóa-ngoại giao.",
+        "sourceIds": ["10000000-0000-0000-0000-000000000012"],
+        "isDistractor": false
+      },
+      {
+        "id": "d07-e4",
+        "label": "Cuộc chiến đấu giam chân địch tại Hà Nội",
+        "kind": "event",
+        "summary": "Quân dân Hà Nội chiến đấu giam chân địch trong 60 ngày đêm, tạo thời gian cho cả nước chuyển vào trạng thái kháng chiến.",
+        "sourceIds": ["10000000-0000-0000-0000-000000000012"],
+        "isDistractor": false
+      },
+      {
+        "id": "d07-e5",
+        "label": "Chuyển cơ quan đầu não lên Việt Bắc",
+        "kind": "event",
+        "summary": "Các cơ quan đầu não và lực lượng chủ lực rút lên căn cứ địa Việt Bắc an toàn, bảo toàn lực lượng cho kháng chiến lâu dài.",
+        "sourceIds": ["10000000-0000-0000-0000-000000000012"],
+        "isDistractor": false
+      },
+      {
+        "id": "d07-e6",
+        "label": "Tiếp tục nhân nhượng vô điều kiện",
+        "kind": "assessment",
+        "summary": "Tiếp tục nhân nhượng khi đối phương đã lấn tới có thể làm mất thêm lãnh thổ và suy giảm ý chí kháng chiến của nhân dân.",
+        "sourceIds": ["10000000-0000-0000-0000-000000000012"],
+        "isDistractor": true
+      }
+    ],
+    "decision": {
+      "prompt": "Khi hòa hoãn không còn dư địa, hướng hành động nào bảo toàn được chính quyền và tạo nền tảng cho kháng chiến lâu dài?",
+      "requiredEvidenceCount": 4,
+      "options": [
+        {
+          "id": "nationwide-resistance",
+          "label": "Phát động kháng chiến toàn quốc với đường lối toàn dân, toàn diện, lâu dài",
+          "rationale": "Chuyển đất nước vào trạng thái chiến tranh nhân dân, phát huy sức mạnh tổng hợp và lợi thế chính nghĩa."
+        },
+        {
+          "id": "unconditional-concession",
+          "label": "Tiếp tục nhân nhượng để tránh chiến tranh bằng mọi giá",
+          "rationale": "Có thể trì hoãn xung đột trước mắt nhưng làm mất thế chủ động, lãnh thổ và niềm tin của nhân dân."
+        },
+        {
+          "id": "conventional-war",
+          "label": "Tổ chức kháng chiến theo mô hình chiến tranh chính quy thông thường",
+          "rationale": "Tập trung vào đối đầu quân sự trực diện nhưng bỏ qua lợi thế chiến tranh nhân dân và địa hình."
+        }
+      ]
+    },
+    "projectedConsequences": [
+      {
+        "optionId": "nationwide-resistance",
+        "steps": [
+          "Huy động sức mạnh toàn dân cho kháng chiến.",
+          "Bảo toàn lực lượng chủ lực và cơ quan đầu não.",
+          "Tạo thế trận chiến tranh nhân dân rộng khắp."
+        ]
+      },
+      {
+        "optionId": "unconditional-concession",
+        "steps": [
+          "Đối phương tiếp tục lấn tới từng bước.",
+          "Chính quyền mất dần không gian kiểm soát.",
+          "Ý chí kháng chiến của nhân dân bị suy giảm."
+        ]
+      },
+      {
+        "optionId": "conventional-war",
+        "steps": [
+          "Đối đầu trực diện với lực lượng vượt trội về vũ khí.",
+          "Tổn thất lớn trong giai đoạn đầu.",
+          "Khó duy trì kháng chiến lâu dài."
+        ]
+      }
+    ],
+    "historicalComparison": {
+      "actualDecision": "Phát động kháng chiến toàn quốc ngày 19/12/1946 với đường lối toàn dân, toàn diện, lâu dài và dựa vào sức mình là chính; vừa chiến đấu giam chân địch vừa chuyển cơ quan đầu não lên Việt Bắc.",
+      "implementation": [
+        "Ra Lời kêu gọi toàn quốc kháng chiến và Chỉ thị Toàn dân kháng chiến.",
+        "Tổ chức cuộc chiến đấu giam chân địch tại các đô thị, đặc biệt là Hà Nội.",
+        "Chuyển cơ quan đầu não, lực lượng chủ lực và cơ sở công nghiệp lên căn cứ địa Việt Bắc."
+      ],
+      "results": [
+        "Bảo toàn được lực lượng chủ lực và cơ quan lãnh đạo kháng chiến.",
+        "Cả nước chuyển vào trạng thái kháng chiến có tổ chức và đường lối rõ ràng."
+      ],
+      "limitations": [
+        "Phải rút khỏi các đô thị lớn và vùng đồng bằng, tạm thời mất không gian kiểm soát rộng.",
+        "Lực lượng vũ trang còn non trẻ, trang bị thiếu thốn, phải vừa chiến đấu vừa xây dựng."
+      ]
+    },
+    "lessons": [
+      "Hòa hoãn có nguyên tắc chỉ có giá trị khi đối phương còn tôn trọng thỏa thuận; khi giới hạn bị vượt qua, phải kiên quyết chuyển sang thế trận mới.",
+      "Đường lối kháng chiến toàn dân, toàn diện, lâu dài là sự vận dụng sáng tạo vào điều kiện một nước nhỏ chống lại đế quốc mạnh."
+    ]
+  },
+  "claims": [
+    {
+      "id": "d07-context-claim",
+      "category": "context",
+      "statement": "Thực dân Pháp liên tục vi phạm Hiệp định Sơ bộ và Tạm ước, mở rộng chiếm đóng và gây hấn, khiến không gian hòa bình bị thu hẹp đến mức không thể tiếp tục nhân nhượng.",
+      "sourceLinks": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000012",
+          "locator": "Slides 3-8",
+          "supportScope": "Hỗ trợ bối cảnh Pháp vi phạm thỏa thuận và đẩy tình thế đến giới hạn."
+        }
+      ]
+    },
+    {
+      "id": "d07-basis-claim",
+      "category": "basis",
+      "statement": "Khi đối phương đã đơn phương xé bỏ thỏa thuận, tiếp tục nhân nhượng sẽ làm mất thế chủ động và suy giảm ý chí kháng chiến; chuyển sang kháng chiến là lựa chọn bắt buộc để bảo vệ độc lập.",
+      "sourceLinks": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000012",
+          "locator": "Slides 8-12",
+          "supportScope": "Hỗ trợ căn cứ chuyển từ hòa hoãn sang kháng chiến toàn quốc."
+        }
+      ]
+    },
+    {
+      "id": "d07-implementation-claim",
+      "category": "implementation",
+      "statement": "Đường lối kháng chiến toàn dân, toàn diện, lâu dài và dựa vào sức mình là chính được xác lập, kết hợp chiến đấu giam chân địch tại đô thị với chuyển lực lượng lên căn cứ địa.",
+      "sourceLinks": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000012",
+          "locator": "Slides 10-18",
+          "supportScope": "Hỗ trợ nội dung đường lối và tổ chức thực hiện giai đoạn đầu kháng chiến."
+        }
+      ]
+    },
+    {
+      "id": "d07-result-claim",
+      "category": "result",
+      "statement": "Lực lượng chủ lực và cơ quan đầu não được bảo toàn, cả nước chuyển vào trạng thái kháng chiến có tổ chức, tạo nền tảng cho cuộc kháng chiến lâu dài.",
+      "sourceLinks": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000012",
+          "locator": "Slides 15-18",
+          "supportScope": "Hỗ trợ kết quả bảo toàn lực lượng và chuyển đất nước vào kháng chiến."
+        }
+      ]
+    },
+    {
+      "id": "d07-limitation-claim",
+      "category": "limitation",
+      "statement": "Phải rút khỏi các đô thị lớn và vùng đồng bằng, lực lượng vũ trang còn non trẻ, trang bị thiếu thốn, đặt ra yêu cầu vừa chiến đấu vừa xây dựng lực lượng.",
+      "sourceLinks": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000012",
+          "locator": "Slides 15-18",
+          "supportScope": "Hỗ trợ đánh giá hạn chế về không gian kiểm soát và tương quan lực lượng ban đầu."
+        }
+      ]
+    },
+    {
+      "id": "d07-lesson-claim",
+      "category": "lesson",
+      "statement": "Trong quan hệ với đối phương mạnh hơn, hòa hoãn có nguyên tắc phải đi cùng chuẩn bị sẵn sàng cho tình huống xấu nhất; khi giới hạn bị vượt qua, kiên quyết chuyển sang thế trận mới với đường lối phù hợp.",
+      "sourceLinks": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000012",
+          "locator": "Slides 10-18",
+          "supportScope": "Hỗ trợ bài học về giới hạn hòa hoãn và chuyển đổi chiến lược."
+        }
+      ]
+    }
+  ],
+  "causalNodes": [
+    {
+      "id": "d07-context",
+      "lane": "context",
+      "label": "Pháp vi phạm thỏa thuận và mở rộng chiếm đóng",
+      "explanation": "Thực dân Pháp liên tục gây hấn và xé bỏ thỏa thuận, đẩy tình thế vượt khỏi kiểm soát ngoại giao.",
+      "claimId": "d07-context-claim"
+    },
+    {
+      "id": "d07-contradiction",
+      "lane": "contradiction",
+      "label": "Hòa hoãn không còn dư địa",
+      "explanation": "Yêu cầu bảo vệ độc lập đối lập với việc đối phương liên tục lấn tới, khiến nhân nhượng không còn tác dụng.",
+      "claimId": "d07-basis-claim"
+    },
+    {
+      "id": "d07-force",
+      "lane": "force",
+      "label": "Toàn dân và lực lượng vũ trang non trẻ",
+      "explanation": "Sức mạnh toàn dân và lực lượng vũ trang vừa được xây dựng là nền tảng cho kháng chiến lâu dài.",
+      "claimId": "d07-implementation-claim"
+    },
+    {
+      "id": "d07-decision",
+      "lane": "decision",
+      "label": "Phát động kháng chiến toàn quốc",
+      "explanation": "Ngày 19/12/1946, kháng chiến toàn quốc bùng nổ với đường lối toàn dân, toàn diện, lâu dài.",
+      "claimId": "d07-implementation-claim"
+    },
+    {
+      "id": "d07-result",
+      "lane": "result",
+      "label": "Bảo toàn lực lượng, chuyển vào thế trận kháng chiến",
+      "explanation": "Lực lượng chủ lực và cơ quan đầu não được bảo toàn, cả nước bước vào kháng chiến có tổ chức.",
+      "claimId": "d07-result-claim"
+    },
+    {
+      "id": "d07-lesson",
+      "lane": "lesson",
+      "label": "Hòa hoãn phải đi cùng sẵn sàng chiến đấu",
+      "explanation": "Nhân nhượng có nguyên tắc chỉ có giá trị khi đối phương tôn trọng thỏa thuận; phải chuẩn bị cho tình huống xấu nhất.",
+      "claimId": "d07-lesson-claim"
+    }
+  ],
+  "review": {
+    "aiAssistance": {
+      "used": true,
+      "role": "AI-assisted academic Draft for human review; not reviewed or published"
+    }
+  },
+  "sourceRefs": [
+    {
+      "sourceId": "10000000-0000-0000-0000-000000000001",
+      "locator": "Chương II - Đường lối kháng chiến chống Pháp"
+    },
+    {
+      "sourceId": "10000000-0000-0000-0000-000000000012",
+      "locator": "Slides 3-18"
+    }
+  ]
+}

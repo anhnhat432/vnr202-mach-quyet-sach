@@ -1,0 +1,287 @@
+{
+  "id": "20000000-0000-0000-0000-000000000003",
+  "versionId": "30000000-0000-0000-0000-000000000003",
+  "slug": "giu-mach-phong-trao",
+  "chapter": "chapter_1",
+  "orderIndex": 3,
+  "title": "Giữ mạch phong trào",
+  "centralQuestion": "Làm thế nào phục hồi tổ chức và phong trào sau tổn thất lớn?",
+  "status": "draft",
+  "experience": {
+    "briefing": {
+      "period": "1930-1935",
+      "context": [
+        "Khủng hoảng kinh tế 1929-1933 tác động mạnh đến Đông Dương, làm đời sống công nhân, nông dân và các tầng lớp lao động thêm khó khăn.",
+        "Phong trào 1930-1931 phát triển rộng, nổi bật ở Nghệ An và Hà Tĩnh, sau đó bị đàn áp nặng nề khiến hệ thống tổ chức chịu tổn thất."
+      ],
+      "centralContradiction": "Nhu cầu duy trì sức đấu tranh và năng lực lãnh đạo đối lập với khủng bố thuộc địa, tổn thất cán bộ và nguy cơ phong trào bị đứt gãy.",
+      "objective": "Bảo toàn hạt nhân tổ chức, tổng kết kinh nghiệm và từng bước khôi phục hệ thống để phong trào có thể tiếp tục phát triển.",
+      "constraints": [
+        "Không thể duy trì cường độ đấu tranh như khi cao trào đang lên.",
+        "Khôi phục tổ chức phải diễn ra trong điều kiện theo dõi, bắt bớ và liên lạc khó khăn."
+      ]
+    },
+    "evidence": [
+      {
+        "id": "d03-e1",
+        "label": "Tác động của khủng hoảng 1929-1933",
+        "kind": "data",
+        "summary": "Suy giảm kinh tế và chính sách chuyển gánh nặng khủng hoảng làm mâu thuẫn xã hội thêm gay gắt.",
+        "sourceIds": [
+          "10000000-0000-0000-0000-000000000005"
+        ],
+        "isDistractor": false
+      },
+      {
+        "id": "d03-e2",
+        "label": "Phong trào công nhân và nông dân 1930",
+        "kind": "event",
+        "summary": "Bãi công, biểu tình và hoạt động ngày Quốc tế Lao động cho thấy phong trào có khả năng liên kết và mang nội dung chính trị.",
+        "sourceIds": [
+          "10000000-0000-0000-0000-000000000005"
+        ],
+        "isDistractor": false
+      },
+      {
+        "id": "d03-e3",
+        "label": "Xô viết Nghệ-Tĩnh",
+        "kind": "event",
+        "summary": "Các hình thức chính quyền cách mạng ở cơ sở thể hiện năng lực tổ chức quần chúng nhưng đối mặt đàn áp quyết liệt.",
+        "sourceIds": [
+          "10000000-0000-0000-0000-000000000005"
+        ],
+        "isDistractor": false
+      },
+      {
+        "id": "d03-e4",
+        "label": "Luận cương chính trị tháng 10/1930",
+        "kind": "document",
+        "summary": "Luận cương hệ thống hóa nhiều vấn đề chiến lược nhưng bộc lộ hạn chế trong nhận thức nhiệm vụ dân tộc và lực lượng cách mạng.",
+        "sourceIds": [
+          "10000000-0000-0000-0000-000000000005"
+        ],
+        "isDistractor": false
+      },
+      {
+        "id": "d03-e5",
+        "label": "Khôi phục tổ chức 1932-1935",
+        "kind": "event",
+        "summary": "Cán bộ và cơ sở còn lại từng bước nối lại liên lạc, xây dựng chương trình hành động và tiến tới Đại hội I.",
+        "sourceIds": [
+          "10000000-0000-0000-0000-000000000005"
+        ],
+        "isDistractor": false
+      },
+      {
+        "id": "d03-e6",
+        "label": "Phát động ngay tổng khởi nghĩa trên toàn quốc",
+        "kind": "assessment",
+        "summary": "Tinh thần tiến công là cần thiết nhưng điều kiện tổ chức và tương quan lực lượng sau đàn áp chưa cho phép một cuộc tổng khởi nghĩa.",
+        "sourceIds": [
+          "10000000-0000-0000-0000-000000000005"
+        ],
+        "isDistractor": true
+      }
+    ],
+    "decision": {
+      "prompt": "Sau tổn thất lớn, lựa chọn nào giúp phong trào không bị đứt mạch nhưng vẫn tránh một quyết định vượt quá điều kiện?",
+      "requiredEvidenceCount": 4,
+      "options": [
+        {
+          "id": "preserve-rebuild",
+          "label": "Bảo toàn hạt nhân, tổng kết và từng bước khôi phục tổ chức",
+          "rationale": "Giữ lực lượng cốt lõi, điều chỉnh phương thức hoạt động và chuẩn bị cho giai đoạn mới."
+        },
+        {
+          "id": "immediate-uprising",
+          "label": "Phát động ngay tổng khởi nghĩa",
+          "rationale": "Thể hiện quyết tâm nhưng bỏ qua tổn thất tổ chức và điều kiện khách quan."
+        },
+        {
+          "id": "permanent-retreat",
+          "label": "Rút khỏi hoạt động trong nước vô thời hạn",
+          "rationale": "Giảm rủi ro trước mắt nhưng làm suy yếu liên hệ với quần chúng và khả năng phục hồi."
+        }
+      ]
+    },
+    "projectedConsequences": [
+      {
+        "optionId": "preserve-rebuild",
+        "steps": [
+          "Giữ hạt nhân cán bộ",
+          "Khôi phục cơ sở và liên lạc",
+          "Tái lập năng lực lãnh đạo phong trào"
+        ]
+      },
+      {
+        "optionId": "immediate-uprising",
+        "steps": [
+          "Huy động trong điều kiện tổ chức suy yếu",
+          "Dễ bị cô lập và đàn áp",
+          "Tổn thất có thể sâu hơn"
+        ]
+      },
+      {
+        "optionId": "permanent-retreat",
+        "steps": [
+          "Giảm hoạt động công khai và bí mật",
+          "Mất liên hệ với cơ sở",
+          "Phong trào khó phục hồi khi điều kiện thay đổi"
+        ]
+      }
+    ],
+    "historicalComparison": {
+      "actualDecision": "Đảng và các cán bộ còn lại kiên trì khôi phục tổ chức, xây dựng chương trình hành động, nối lại phong trào và tiến tới Đại hội I năm 1935.",
+      "implementation": [
+        "Duy trì cơ sở bí mật và liên lạc trong điều kiện đàn áp.",
+        "Tổng kết phong trào, xây dựng chương trình hành động và củng cố hệ thống tổ chức."
+      ],
+      "results": [
+        "Hệ thống tổ chức từng bước được phục hồi.",
+        "Năng lực lãnh đạo được tái lập để bước vào giai đoạn đấu tranh mới."
+      ],
+      "limitations": [
+        "Nhiều cán bộ, cơ sở và quần chúng bị tổn thất.",
+        "Một số nhận thức chiến lược và lực lượng vẫn cần tiếp tục điều chỉnh."
+      ]
+    },
+    "lessons": [
+      "Sau cao trào và đàn áp, bảo toàn tổ chức là điều kiện để duy trì năng lực hành động lâu dài.",
+      "Tổng kết hạn chế là một phần của phục hồi, không chỉ khôi phục số lượng cơ sở."
+    ]
+  },
+  "claims": [
+    {
+      "id": "d03-context-claim",
+      "category": "context",
+      "statement": "Khủng hoảng kinh tế 1929-1933 làm mâu thuẫn xã hội gay gắt và góp phần tạo bối cảnh cho cao trào cách mạng 1930-1931.",
+      "sourceLinks": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000005",
+          "locator": "Slides 3-9",
+          "supportScope": "Hỗ trợ bối cảnh khủng hoảng, phong trào công nông và Xô viết Nghệ-Tĩnh."
+        }
+      ]
+    },
+    {
+      "id": "d03-basis-claim",
+      "category": "basis",
+      "statement": "Tổn thất sau đàn áp khiến bảo toàn hạt nhân và khôi phục tổ chức phù hợp hơn một cuộc tổng khởi nghĩa vượt quá điều kiện.",
+      "sourceLinks": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000005",
+          "locator": "Slides 8-18",
+          "supportScope": "Hỗ trợ đánh giá tổn thất, hạn chế chiến lược và yêu cầu khôi phục hệ thống tổ chức."
+        }
+      ]
+    },
+    {
+      "id": "d03-implementation-claim",
+      "category": "implementation",
+      "statement": "Các hạt nhân còn lại duy trì cơ sở bí mật, nối lại liên lạc, xây dựng chương trình hành động và củng cố hệ thống tổ chức.",
+      "sourceLinks": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000005",
+          "locator": "Slides 15-18",
+          "supportScope": "Hỗ trợ các bước khôi phục tổ chức từ năm 1932 đến Đại hội I năm 1935."
+        }
+      ]
+    },
+    {
+      "id": "d03-result-claim",
+      "category": "result",
+      "statement": "Hệ thống tổ chức và năng lực lãnh đạo từng bước được phục hồi để phong trào bước vào giai đoạn đấu tranh mới.",
+      "sourceLinks": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000005",
+          "locator": "Slides 15-18",
+          "supportScope": "Hỗ trợ kết quả phục hồi cơ sở, chương trình hành động và năng lực lãnh đạo."
+        }
+      ]
+    },
+    {
+      "id": "d03-limitation-claim",
+      "category": "limitation",
+      "statement": "Phong trào chịu tổn thất lớn về cán bộ, cơ sở và quần chúng, đồng thời còn những hạn chế nhận thức cần tiếp tục điều chỉnh.",
+      "sourceLinks": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000005",
+          "locator": "Slides 8-18",
+          "supportScope": "Hỗ trợ mức độ đàn áp, tổn thất tổ chức và các vấn đề được tổng kết trong giai đoạn phục hồi."
+        }
+      ]
+    },
+    {
+      "id": "d03-lesson-claim",
+      "category": "lesson",
+      "statement": "Sau cao trào và đàn áp, bảo toàn tổ chức phải đi cùng tổng kết hạn chế để duy trì năng lực hành động lâu dài.",
+      "sourceLinks": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000005",
+          "locator": "Slides 10-18",
+          "supportScope": "Hỗ trợ bài học từ Luận cương, tổn thất phong trào và quá trình khôi phục 1932-1935."
+        }
+      ]
+    }
+  ],
+  "causalNodes": [
+    {
+      "id": "d03-context",
+      "lane": "context",
+      "label": "Khủng hoảng và cao trào 1930-1931",
+      "explanation": "Khủng hoảng kinh tế và mâu thuẫn xã hội góp phần thúc đẩy phong trào công nhân, nông dân phát triển thành cao trào.",
+      "claimId": "d03-context-claim"
+    },
+    {
+      "id": "d03-contradiction",
+      "lane": "contradiction",
+      "label": "Đàn áp đe dọa làm đứt gãy phong trào",
+      "explanation": "Khủng bố thuộc địa và tổn thất cán bộ đe dọa khả năng duy trì phong trào cùng năng lực lãnh đạo.",
+      "claimId": "d03-basis-claim"
+    },
+    {
+      "id": "d03-force",
+      "lane": "force",
+      "label": "Hạt nhân cán bộ và cơ sở quần chúng",
+      "explanation": "Cán bộ và cơ sở còn lại là lực lượng cốt lõi để nối lại liên lạc và từng bước khôi phục tổ chức.",
+      "claimId": "d03-implementation-claim"
+    },
+    {
+      "id": "d03-decision",
+      "lane": "decision",
+      "label": "Bảo toàn và khôi phục tổ chức",
+      "explanation": "Đảng kiên trì bảo toàn hạt nhân, tổng kết kinh nghiệm và xây dựng lại hệ thống thay vì hành động vượt quá điều kiện.",
+      "claimId": "d03-implementation-claim"
+    },
+    {
+      "id": "d03-result",
+      "lane": "result",
+      "label": "Năng lực lãnh đạo được tái lập",
+      "explanation": "Hệ thống tổ chức từng bước phục hồi và tạo nền tảng để bước vào giai đoạn đấu tranh tiếp theo.",
+      "claimId": "d03-result-claim"
+    },
+    {
+      "id": "d03-lesson",
+      "lane": "lesson",
+      "label": "Phục hồi phải đi cùng tổng kết hạn chế",
+      "explanation": "Khôi phục bền vững không chỉ nối lại cơ sở mà còn phải nhận diện và điều chỉnh những hạn chế chiến lược.",
+      "claimId": "d03-lesson-claim"
+    }
+  ],
+  "review": {
+    "aiAssistance": {
+      "used": true,
+      "role": "AI-assisted academic Draft for human review; not reviewed or published"
+    }
+  },
+  "sourceRefs": [
+    {
+      "sourceId": "10000000-0000-0000-0000-000000000001",
+      "locator": "Chương I - Phong trào 1930-1935"
+    },
+    {
+      "sourceId": "10000000-0000-0000-0000-000000000005",
+      "locator": "Slides 3-18"
+    }
+  ]
+}
