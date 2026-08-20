@@ -3,45 +3,16 @@ import { z } from "zod";
 import seed from "@/generated/content-catalog.json";
 
 import {
-  chapterSchema,
-  dossierExperienceSchema,
-  postgresUuidSchema,
+  authoredDossierSchema,
+  contentCatalogSchema,
+  sourceRecordSchema,
   type DossierSummary,
   type PublishedDossier,
 } from "@/features/content/contracts/dossier";
 
-const sourceRecordSchema = z.object({
-  id: postgresUuidSchema,
-  title: z.string().min(2),
-  authorOrIssuer: z.string().min(2),
-  publicationYear: z.number().int(),
-  locator: z.string(),
-  url: z.url().nullable(),
-  sourceType: z.string().min(2),
-  rightsNote: z.string(),
-  verificationStatus: z.enum(["pending", "verified"]),
-});
+const parsedSeed = contentCatalogSchema.parse(seed);
 
-const dossierSchema = z.object({
-  id: postgresUuidSchema,
-  versionId: postgresUuidSchema.optional(),
-  slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
-  chapter: chapterSchema,
-  orderIndex: z.number().int().min(1).max(15),
-  title: z.string().min(2),
-  centralQuestion: z.string().min(10),
-  status: z.enum(["draft", "reviewed", "published"]),
-  experience: dossierExperienceSchema.optional(),
-});
-
-const parsedSeed = z
-  .object({
-    sources: z.array(sourceRecordSchema).min(1),
-    dossiers: z.array(dossierSchema).length(15),
-  })
-  .parse(seed);
-
-function toSummary(item: z.infer<typeof dossierSchema>): DossierSummary {
+function toSummary(item: z.infer<typeof authoredDossierSchema>): DossierSummary {
   return {
     id: item.id,
     slug: item.slug,
