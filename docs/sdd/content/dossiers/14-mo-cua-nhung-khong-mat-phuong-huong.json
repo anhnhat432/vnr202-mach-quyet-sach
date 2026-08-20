@@ -1,0 +1,16 @@
+{
+  "id": "20000000-0000-0000-0000-000000000014",
+  "slug": "mo-cua-khong-mat-phuong-huong",
+  "chapter": "chapter_3",
+  "orderIndex": 14,
+  "title": "Mở cửa nhưng không mất phương hướng",
+  "centralQuestion": "Làm thế nào kết hợp hội nhập, hiện đại hóa và các động lực tăng trưởng mới?",
+  "status": "draft",
+  "review": {
+    "aiAssistance": {
+      "used": true,
+      "role": "metadata planning only"
+    }
+  },
+  "sourceRefs": []
+}

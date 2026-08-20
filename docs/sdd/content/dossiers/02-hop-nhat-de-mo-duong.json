@@ -1,0 +1,135 @@
+{
+  "id": "20000000-0000-0000-0000-000000000002",
+  "versionId": "30000000-0000-0000-0000-000000000002",
+  "slug": "hop-nhat-de-mo-duong",
+  "chapter": "chapter_1",
+  "orderIndex": 2,
+  "title": "Hợp nhất để mở đường",
+  "centralQuestion": "Làm thế nào thống nhất lực lượng cộng sản và hình thành một cương lĩnh có khả năng quy tụ cách mạng?",
+  "status": "published",
+  "experience": {
+    "briefing": {
+      "period": "1929-1930",
+      "context": [
+        "Phong trào công nhân và phong trào yêu nước phát triển, đòi hỏi một tổ chức lãnh đạo thống nhất.",
+        "Ba tổ chức cộng sản lần lượt ra đời nhưng hoạt động phân tán và có nguy cơ tranh giành ảnh hưởng."
+      ],
+      "centralContradiction": "Yêu cầu thống nhất lực lượng cách mạng đối lập với tình trạng chia rẽ tổ chức và thiếu một cương lĩnh chung.",
+      "objective": "Hình thành một chính đảng thống nhất với đường lối giải phóng dân tộc phù hợp hoàn cảnh Việt Nam.",
+      "constraints": [
+        "Phải xử lý bất đồng giữa các tổ chức cộng sản.",
+        "Cương lĩnh phải xác định đúng nhiệm vụ, lực lượng và phương pháp cách mạng."
+      ]
+    },
+    "evidence": [
+      {
+        "id": "c1-e1",
+        "label": "Sự trưởng thành của phong trào công nhân",
+        "kind": "event",
+        "summary": "Các cuộc bãi công chuyển dần từ yêu cầu kinh tế sang nội dung chính trị và liên kết rộng hơn.",
+        "sourceIds": [
+          "10000000-0000-0000-0000-000000000004"
+        ],
+        "isDistractor": false
+      },
+      {
+        "id": "c1-e2",
+        "label": "Ba tổ chức cộng sản cùng tồn tại",
+        "kind": "assessment",
+        "summary": "Sự ra đời của các tổ chức cộng sản phản ánh xu thế cách mạng nhưng tạo nguy cơ phân tán lãnh đạo.",
+        "sourceIds": [
+          "10000000-0000-0000-0000-000000000004"
+        ],
+        "isDistractor": false
+      },
+      {
+        "id": "c1-e3",
+        "label": "Vai trò chuẩn bị của Nguyễn Ái Quốc",
+        "kind": "document",
+        "summary": "Công tác truyền bá lý luận, đào tạo cán bộ và xây dựng tổ chức tạo tiền đề tư tưởng, chính trị và tổ chức.",
+        "sourceIds": [
+          "10000000-0000-0000-0000-000000000001"
+        ],
+        "isDistractor": false
+      },
+      {
+        "id": "c1-e4",
+        "label": "Ưu tiên mở rộng từng tổ chức riêng lẻ",
+        "kind": "assessment",
+        "summary": "Tiếp tục phát triển riêng lẻ có thể tăng lực lượng cục bộ nhưng không giải quyết yêu cầu thống nhất lãnh đạo.",
+        "sourceIds": [
+          "10000000-0000-0000-0000-000000000004"
+        ],
+        "isDistractor": true
+      }
+    ],
+    "decision": {
+      "prompt": "Hãy chọn hướng quyết định có khả năng giải quyết đồng thời vấn đề tổ chức và đường lối.",
+      "requiredEvidenceCount": 3,
+      "options": [
+        {
+          "id": "unify",
+          "label": "Triệu tập hội nghị hợp nhất và thông qua cương lĩnh chung",
+          "rationale": "Giải quyết chia rẽ tổ chức đồng thời xác lập nhiệm vụ và lực lượng cách mạng."
+        },
+        {
+          "id": "separate",
+          "label": "Giữ ba tổ chức hoạt động độc lập rồi phối hợp khi cần",
+          "rationale": "Tránh va chạm trước mắt nhưng duy trì cạnh tranh và thiếu trung tâm lãnh đạo thống nhất."
+        }
+      ]
+    },
+    "projectedConsequences": [
+      {
+        "optionId": "unify",
+        "steps": [
+          "Tạo một trung tâm lãnh đạo thống nhất.",
+          "Hình thành cương lĩnh chung làm căn cứ tập hợp lực lượng.",
+          "Giảm xung đột tổ chức và mở khả năng phát triển phong trào trên phạm vi cả nước."
+        ]
+      },
+      {
+        "optionId": "separate",
+        "steps": [
+          "Mỗi tổ chức tiếp tục xây dựng ảnh hưởng riêng.",
+          "Cạnh tranh làm suy giảm khả năng phối hợp.",
+          "Phong trào thiếu đường lối và cơ quan lãnh đạo thống nhất."
+        ]
+      }
+    ],
+    "historicalComparison": {
+      "actualDecision": "Hội nghị đầu năm 1930 do Nguyễn Ái Quốc chủ trì đã thống nhất các tổ chức cộng sản và thành lập Đảng Cộng sản Việt Nam.",
+      "implementation": [
+        "Thông qua các văn kiện xác định phương hướng chiến lược, nhiệm vụ và lực lượng cách mạng.",
+        "Xây dựng tổ chức thống nhất thay cho tình trạng phân tán trước đó."
+      ],
+      "results": [
+        "Chấm dứt cơ bản khủng hoảng về đường lối và tổ chức lãnh đạo của cách mạng Việt Nam.",
+        "Tạo nền tảng chính trị để lãnh đạo phong trào cách mạng phát triển."
+      ],
+      "limitations": [
+        "Việc thống nhất tổ chức không tự động loại bỏ mọi khác biệt nhận thức và khó khăn trong thực tiễn hoạt động bí mật."
+      ]
+    },
+    "lessons": [
+      "Thống nhất tổ chức phải gắn với thống nhất đường lối.",
+      "Đường lối chỉ có sức quy tụ khi xuất phát từ yêu cầu thực tế của dân tộc."
+    ]
+  },
+  "review": {
+    "aiAssistance": {
+      "used": true,
+      "role": "Phase 1 preview authoring assistance; no academic-review assertion"
+    }
+  },
+  "sourceRefs": [
+    {
+      "sourceId": "10000000-0000-0000-0000-000000000001",
+      "locator": "Chương I"
+    },
+    {
+      "sourceId": "10000000-0000-0000-0000-000000000004",
+      "locator": "Slides 3-18"
+    }
+  ]
+}

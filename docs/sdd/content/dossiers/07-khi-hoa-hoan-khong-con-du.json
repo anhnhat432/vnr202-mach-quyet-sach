@@ -1,0 +1,16 @@
+{
+  "id": "20000000-0000-0000-0000-000000000007",
+  "slug": "khi-hoa-hoan-khong-con-du",
+  "chapter": "chapter_2",
+  "orderIndex": 7,
+  "title": "Khi hòa hoãn không còn đủ",
+  "centralQuestion": "Khi nào cần chuyển từ hòa hoãn sang kháng chiến toàn quốc?",
+  "status": "draft",
+  "review": {
+    "aiAssistance": {
+      "used": true,
+      "role": "metadata planning only"
+    }
+  },
+  "sourceRefs": []
+}

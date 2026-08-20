@@ -1,0 +1,16 @@
+{
+  "id": "20000000-0000-0000-0000-000000000009",
+  "slug": "mot-dat-nuoc-hai-nhiem-vu",
+  "chapter": "chapter_2",
+  "orderIndex": 9,
+  "title": "Một đất nước, hai nhiệm vụ chiến lược",
+  "centralQuestion": "Hai miền có thể hỗ trợ nhau như thế nào trong một chiến lược chung?",
+  "status": "draft",
+  "review": {
+    "aiAssistance": {
+      "used": true,
+      "role": "metadata planning only"
+    }
+  },
+  "sourceRefs": []
+}

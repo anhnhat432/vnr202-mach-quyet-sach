@@ -1,0 +1,16 @@
+{
+  "id": "20000000-0000-0000-0000-000000000004",
+  "slug": "linh-hoat-trong-cua-so-dan-chu",
+  "chapter": "chapter_1",
+  "orderIndex": 4,
+  "title": "Linh hoạt trong một cửa sổ dân chủ",
+  "centralQuestion": "Khi điều kiện thay đổi, mục tiêu và hình thức đấu tranh cần điều chỉnh ra sao?",
+  "status": "draft",
+  "review": {
+    "aiAssistance": {
+      "used": true,
+      "role": "metadata planning only"
+    }
+  },
+  "sourceRefs": []
+}

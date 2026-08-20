@@ -1,0 +1,16 @@
+{
+  "id": "20000000-0000-0000-0000-000000000003",
+  "slug": "giu-mach-phong-trao",
+  "chapter": "chapter_1",
+  "orderIndex": 3,
+  "title": "Giữ mạch phong trào",
+  "centralQuestion": "Làm thế nào phục hồi tổ chức và phong trào sau tổn thất lớn?",
+  "status": "draft",
+  "review": {
+    "aiAssistance": {
+      "used": true,
+      "role": "metadata planning only"
+    }
+  },
+  "sourceRefs": []
+}

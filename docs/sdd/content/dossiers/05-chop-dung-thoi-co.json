@@ -1,0 +1,16 @@
+{
+  "id": "20000000-0000-0000-0000-000000000005",
+  "slug": "chop-dung-thoi-co",
+  "chapter": "chapter_1",
+  "orderIndex": 5,
+  "title": "Chớp đúng thời cơ",
+  "centralQuestion": "Điều kiện nào biến thời cơ thành quyết định Tổng khởi nghĩa?",
+  "status": "draft",
+  "review": {
+    "aiAssistance": {
+      "used": true,
+      "role": "metadata planning only"
+    }
+  },
+  "sourceRefs": []
+}

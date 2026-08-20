@@ -1,0 +1,16 @@
+{
+  "id": "20000000-0000-0000-0000-000000000011",
+  "slug": "bai-toan-hau-chien",
+  "chapter": "chapter_3",
+  "orderIndex": 11,
+  "title": "Bài toán hậu chiến",
+  "centralQuestion": "Làm thế nào vừa thống nhất, khôi phục vừa bảo vệ đất nước sau chiến tranh?",
+  "status": "draft",
+  "review": {
+    "aiAssistance": {
+      "used": true,
+      "role": "metadata planning only"
+    }
+  },
+  "sourceRefs": []
+}

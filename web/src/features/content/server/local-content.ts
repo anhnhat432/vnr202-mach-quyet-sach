@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import seed from "@/generated/phase-1-seed.json";
+import seed from "@/generated/content-catalog.json";
 
 import {
   chapterSchema,

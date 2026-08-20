@@ -1,0 +1,136 @@
+{
+  "id": "20000000-0000-0000-0000-000000000006",
+  "versionId": "30000000-0000-0000-0000-000000000006",
+  "slug": "giu-chinh-quyen-giua-vong-vay",
+  "chapter": "chapter_2",
+  "orderIndex": 6,
+  "title": "Giữ chính quyền giữa vòng vây",
+  "centralQuestion": "Ưu tiên quyết sách nào để bảo vệ chính quyền non trẻ trong nhiều nguy cơ đồng thời?",
+  "status": "published",
+  "experience": {
+    "briefing": {
+      "period": "1945-1946",
+      "context": [
+        "Chính quyền cách mạng mới thành lập phải đối mặt nạn đói, nạn dốt và tài chính kiệt quệ.",
+        "Nhiều lực lượng nước ngoài và phản động cùng gây sức ép trong khi bộ máy nhà nước còn non trẻ."
+      ],
+      "centralContradiction": "Phải bảo vệ thành quả cách mạng trong khi nguồn lực kinh tế, quân sự và hành chính đều rất hạn chế.",
+      "objective": "Củng cố tính chính danh, giảm bớt kẻ thù trực tiếp và tạo thời gian xây dựng lực lượng.",
+      "constraints": [
+        "Không thể đồng thời đối đầu quân sự với mọi lực lượng.",
+        "Đời sống nhân dân và năng lực quản trị cần được cải thiện ngay."
+      ]
+    },
+    "evidence": [
+      {
+        "id": "c2-e1",
+        "label": "Nạn đói và ngân khố khó khăn",
+        "kind": "data",
+        "summary": "Khủng hoảng đời sống và tài chính đe dọa trực tiếp niềm tin vào chính quyền mới.",
+        "sourceIds": [
+          "10000000-0000-0000-0000-000000000011"
+        ],
+        "isDistractor": false
+      },
+      {
+        "id": "c2-e2",
+        "label": "Yêu cầu xây dựng chính quyền hợp pháp",
+        "kind": "document",
+        "summary": "Tổng tuyển cử và xây dựng thiết chế nhà nước giúp củng cố nền tảng chính trị và pháp lý.",
+        "sourceIds": [
+          "10000000-0000-0000-0000-000000000001"
+        ],
+        "isDistractor": false
+      },
+      {
+        "id": "c2-e3",
+        "label": "Nhiều lực lượng gây sức ép",
+        "kind": "assessment",
+        "summary": "Tình thế đòi hỏi phân hóa đối phương và lựa chọn đối tượng nguy hiểm trực tiếp theo từng thời điểm.",
+        "sourceIds": [
+          "10000000-0000-0000-0000-000000000011"
+        ],
+        "isDistractor": false
+      },
+      {
+        "id": "c2-e4",
+        "label": "Tập trung duy nhất vào quân sự",
+        "kind": "assessment",
+        "summary": "Ưu tiên tuyệt đối cho đối đầu quân sự bỏ qua khủng hoảng dân sinh, chính trị và ngoại giao.",
+        "sourceIds": [
+          "10000000-0000-0000-0000-000000000011"
+        ],
+        "isDistractor": true
+      }
+    ],
+    "decision": {
+      "prompt": "Chọn gói quyết sách tạo được thời gian, tính chính danh và sức dân cho chính quyền mới.",
+      "requiredEvidenceCount": 3,
+      "options": [
+        {
+          "id": "combined",
+          "label": "Kết hợp dân sinh, xây dựng chính quyền và ngoại giao mềm dẻo",
+          "rationale": "Giải quyết đồng thời nền tảng bên trong và áp lực đối ngoại trong điều kiện chưa thể đối đầu toàn diện."
+        },
+        {
+          "id": "military-first",
+          "label": "Dồn toàn bộ nguồn lực vào đối đầu quân sự ngay lập tức",
+          "rationale": "Thể hiện quyết tâm nhưng làm tăng nguy cơ bị cô lập và suy yếu nền tảng trong nước."
+        }
+      ]
+    },
+    "projectedConsequences": [
+      {
+        "optionId": "combined",
+        "steps": [
+          "Cải thiện niềm tin và huy động sức dân.",
+          "Củng cố cơ sở pháp lý của chính quyền.",
+          "Phân hóa đối phương và kéo dài thời gian chuẩn bị lực lượng."
+        ]
+      },
+      {
+        "optionId": "military-first",
+        "steps": [
+          "Nguồn lực ít ỏi bị phân tán trong đối đầu nhiều phía.",
+          "Khủng hoảng dân sinh tiếp tục làm suy giảm nền tảng xã hội.",
+          "Chính quyền có nguy cơ bị cô lập trước khi củng cố lực lượng."
+        ]
+      }
+    ],
+    "historicalComparison": {
+      "actualDecision": "Đường lối bảo vệ chính quyền kết hợp chống đói, chống dốt, xây dựng nhà nước mới, trấn áp phản cách mạng và ngoại giao linh hoạt.",
+      "implementation": [
+        "Tổ chức Tổng tuyển cử và xây dựng các thiết chế nhà nước.",
+        "Phát động các biện pháp cứu đói, tăng gia sản xuất và xóa nạn mù chữ.",
+        "Thực hiện sách lược hòa hoãn có nguyên tắc để phân hóa đối phương và tranh thủ thời gian."
+      ],
+      "results": [
+        "Chính quyền cách mạng được củng cố và vượt qua giai đoạn đặc biệt nguy hiểm.",
+        "Lực lượng được chuẩn bị thêm cho cuộc kháng chiến lâu dài."
+      ],
+      "limitations": [
+        "Các biện pháp hòa hoãn chỉ có giá trị trong thời gian nhất định và không loại bỏ nguy cơ chiến tranh."
+      ]
+    },
+    "lessons": [
+      "Bảo vệ chính quyền cần kết hợp sức mạnh dân sinh, chính trị, quân sự và ngoại giao.",
+      "Trong thế yếu phải biết phân hóa đối phương và sử dụng thời gian như một nguồn lực chiến lược."
+    ]
+  },
+  "review": {
+    "aiAssistance": {
+      "used": true,
+      "role": "Phase 1 preview authoring assistance; no academic-review assertion"
+    }
+  },
+  "sourceRefs": [
+    {
+      "sourceId": "10000000-0000-0000-0000-000000000001",
+      "locator": "Chương II"
+    },
+    {
+      "sourceId": "10000000-0000-0000-0000-000000000011",
+      "locator": "Slides 3-18"
+    }
+  ]
+}

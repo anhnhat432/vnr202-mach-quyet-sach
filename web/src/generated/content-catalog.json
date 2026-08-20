@@ -1,4 +1,5 @@
 {
+  "schemaVersion": 2,
   "sources": [
     {
       "id": "10000000-0000-0000-0000-000000000001",
@@ -53,7 +54,14 @@
       "orderIndex": 1,
       "title": "Con đường nào cho độc lập?",
       "centralQuestion": "Một đường lối mới cần đáp ứng những điều kiện nào để giải quyết khủng hoảng cứu nước?",
-      "status": "draft"
+      "status": "draft",
+      "review": {
+        "aiAssistance": {
+          "used": true,
+          "role": "metadata planning only"
+        }
+      },
+      "sourceRefs": []
     },
     {
       "id": "20000000-0000-0000-0000-000000000002",
@@ -84,7 +92,9 @@
             "label": "Sự trưởng thành của phong trào công nhân",
             "kind": "event",
             "summary": "Các cuộc bãi công chuyển dần từ yêu cầu kinh tế sang nội dung chính trị và liên kết rộng hơn.",
-            "sourceIds": ["10000000-0000-0000-0000-000000000004"],
+            "sourceIds": [
+              "10000000-0000-0000-0000-000000000004"
+            ],
             "isDistractor": false
           },
           {
@@ -92,7 +102,9 @@
             "label": "Ba tổ chức cộng sản cùng tồn tại",
             "kind": "assessment",
             "summary": "Sự ra đời của các tổ chức cộng sản phản ánh xu thế cách mạng nhưng tạo nguy cơ phân tán lãnh đạo.",
-            "sourceIds": ["10000000-0000-0000-0000-000000000004"],
+            "sourceIds": [
+              "10000000-0000-0000-0000-000000000004"
+            ],
             "isDistractor": false
           },
           {
@@ -100,7 +112,9 @@
             "label": "Vai trò chuẩn bị của Nguyễn Ái Quốc",
             "kind": "document",
             "summary": "Công tác truyền bá lý luận, đào tạo cán bộ và xây dựng tổ chức tạo tiền đề tư tưởng, chính trị và tổ chức.",
-            "sourceIds": ["10000000-0000-0000-0000-000000000001"],
+            "sourceIds": [
+              "10000000-0000-0000-0000-000000000001"
+            ],
             "isDistractor": false
           },
           {
@@ -108,7 +122,9 @@
             "label": "Ưu tiên mở rộng từng tổ chức riêng lẻ",
             "kind": "assessment",
             "summary": "Tiếp tục phát triển riêng lẻ có thể tăng lực lượng cục bộ nhưng không giải quyết yêu cầu thống nhất lãnh đạo.",
-            "sourceIds": ["10000000-0000-0000-0000-000000000004"],
+            "sourceIds": [
+              "10000000-0000-0000-0000-000000000004"
+            ],
             "isDistractor": true
           }
         ],
@@ -169,18 +185,42 @@
             "id": "10000000-0000-0000-0000-000000000001",
             "title": "Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên",
             "authorOrIssuer": "Bộ Giáo dục và Đào tạo",
+            "publicationYear": 2021,
             "locator": "Chương I",
-            "url": null
+            "url": null,
+            "sourceType": "textbook",
+            "rightsNote": "Tài liệu chính của môn học",
+            "verificationStatus": "verified"
           },
           {
             "id": "10000000-0000-0000-0000-000000000004",
             "title": "VNR202 Session 4 - Thành lập Đảng và Cương lĩnh chính trị đầu tiên",
             "authorOrIssuer": "Bộ môn VNR202, FPT University",
+            "publicationYear": 2026,
             "locator": "Slides 3-18",
-            "url": null
+            "url": null,
+            "sourceType": "course_slide",
+            "rightsNote": "Học liệu nội bộ dùng cho sản phẩm môn học",
+            "verificationStatus": "verified"
           }
         ]
-      }
+      },
+      "review": {
+        "aiAssistance": {
+          "used": true,
+          "role": "Phase 1 preview authoring assistance; no academic-review assertion"
+        }
+      },
+      "sourceRefs": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương I"
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000004",
+          "locator": "Slides 3-18"
+        }
+      ]
     },
     {
       "id": "20000000-0000-0000-0000-000000000003",
@@ -189,7 +229,14 @@
       "orderIndex": 3,
       "title": "Giữ mạch phong trào",
       "centralQuestion": "Làm thế nào phục hồi tổ chức và phong trào sau tổn thất lớn?",
-      "status": "draft"
+      "status": "draft",
+      "review": {
+        "aiAssistance": {
+          "used": true,
+          "role": "metadata planning only"
+        }
+      },
+      "sourceRefs": []
     },
     {
       "id": "20000000-0000-0000-0000-000000000004",
@@ -198,7 +245,14 @@
       "orderIndex": 4,
       "title": "Linh hoạt trong một cửa sổ dân chủ",
       "centralQuestion": "Khi điều kiện thay đổi, mục tiêu và hình thức đấu tranh cần điều chỉnh ra sao?",
-      "status": "draft"
+      "status": "draft",
+      "review": {
+        "aiAssistance": {
+          "used": true,
+          "role": "metadata planning only"
+        }
+      },
+      "sourceRefs": []
     },
     {
       "id": "20000000-0000-0000-0000-000000000005",
@@ -207,7 +261,14 @@
       "orderIndex": 5,
       "title": "Chớp đúng thời cơ",
       "centralQuestion": "Điều kiện nào biến thời cơ thành quyết định Tổng khởi nghĩa?",
-      "status": "draft"
+      "status": "draft",
+      "review": {
+        "aiAssistance": {
+          "used": true,
+          "role": "metadata planning only"
+        }
+      },
+      "sourceRefs": []
     },
     {
       "id": "20000000-0000-0000-0000-000000000006",
@@ -238,7 +299,9 @@
             "label": "Nạn đói và ngân khố khó khăn",
             "kind": "data",
             "summary": "Khủng hoảng đời sống và tài chính đe dọa trực tiếp niềm tin vào chính quyền mới.",
-            "sourceIds": ["10000000-0000-0000-0000-000000000011"],
+            "sourceIds": [
+              "10000000-0000-0000-0000-000000000011"
+            ],
             "isDistractor": false
           },
           {
@@ -246,7 +309,9 @@
             "label": "Yêu cầu xây dựng chính quyền hợp pháp",
             "kind": "document",
             "summary": "Tổng tuyển cử và xây dựng thiết chế nhà nước giúp củng cố nền tảng chính trị và pháp lý.",
-            "sourceIds": ["10000000-0000-0000-0000-000000000001"],
+            "sourceIds": [
+              "10000000-0000-0000-0000-000000000001"
+            ],
             "isDistractor": false
           },
           {
@@ -254,7 +319,9 @@
             "label": "Nhiều lực lượng gây sức ép",
             "kind": "assessment",
             "summary": "Tình thế đòi hỏi phân hóa đối phương và lựa chọn đối tượng nguy hiểm trực tiếp theo từng thời điểm.",
-            "sourceIds": ["10000000-0000-0000-0000-000000000011"],
+            "sourceIds": [
+              "10000000-0000-0000-0000-000000000011"
+            ],
             "isDistractor": false
           },
           {
@@ -262,7 +329,9 @@
             "label": "Tập trung duy nhất vào quân sự",
             "kind": "assessment",
             "summary": "Ưu tiên tuyệt đối cho đối đầu quân sự bỏ qua khủng hoảng dân sinh, chính trị và ngoại giao.",
-            "sourceIds": ["10000000-0000-0000-0000-000000000011"],
+            "sourceIds": [
+              "10000000-0000-0000-0000-000000000011"
+            ],
             "isDistractor": true
           }
         ],
@@ -324,18 +393,42 @@
             "id": "10000000-0000-0000-0000-000000000001",
             "title": "Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên",
             "authorOrIssuer": "Bộ Giáo dục và Đào tạo",
+            "publicationYear": 2021,
             "locator": "Chương II",
-            "url": null
+            "url": null,
+            "sourceType": "textbook",
+            "rightsNote": "Tài liệu chính của môn học",
+            "verificationStatus": "verified"
           },
           {
             "id": "10000000-0000-0000-0000-000000000011",
             "title": "VNR202 Session 11 - Xây dựng và bảo vệ chính quyền cách mạng 1945-1946",
             "authorOrIssuer": "Bộ môn VNR202, FPT University",
+            "publicationYear": 2026,
             "locator": "Slides 3-18",
-            "url": null
+            "url": null,
+            "sourceType": "course_slide",
+            "rightsNote": "Học liệu nội bộ dùng cho sản phẩm môn học",
+            "verificationStatus": "verified"
           }
         ]
-      }
+      },
+      "review": {
+        "aiAssistance": {
+          "used": true,
+          "role": "Phase 1 preview authoring assistance; no academic-review assertion"
+        }
+      },
+      "sourceRefs": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương II"
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000011",
+          "locator": "Slides 3-18"
+        }
+      ]
     },
     {
       "id": "20000000-0000-0000-0000-000000000007",
@@ -344,7 +437,14 @@
       "orderIndex": 7,
       "title": "Khi hòa hoãn không còn đủ",
       "centralQuestion": "Khi nào cần chuyển từ hòa hoãn sang kháng chiến toàn quốc?",
-      "status": "draft"
+      "status": "draft",
+      "review": {
+        "aiAssistance": {
+          "used": true,
+          "role": "metadata planning only"
+        }
+      },
+      "sourceRefs": []
     },
     {
       "id": "20000000-0000-0000-0000-000000000008",
@@ -353,7 +453,14 @@
       "orderIndex": 8,
       "title": "Tạo thế cho quyết chiến",
       "centralQuestion": "Làm thế nào chuyển từ cầm cự sang chủ động chiến lược và kết thúc chiến tranh?",
-      "status": "draft"
+      "status": "draft",
+      "review": {
+        "aiAssistance": {
+          "used": true,
+          "role": "metadata planning only"
+        }
+      },
+      "sourceRefs": []
     },
     {
       "id": "20000000-0000-0000-0000-000000000009",
@@ -362,7 +469,14 @@
       "orderIndex": 9,
       "title": "Một đất nước, hai nhiệm vụ chiến lược",
       "centralQuestion": "Hai miền có thể hỗ trợ nhau như thế nào trong một chiến lược chung?",
-      "status": "draft"
+      "status": "draft",
+      "review": {
+        "aiAssistance": {
+          "used": true,
+          "role": "metadata planning only"
+        }
+      },
+      "sourceRefs": []
     },
     {
       "id": "20000000-0000-0000-0000-000000000010",
@@ -371,7 +485,14 @@
       "orderIndex": 10,
       "title": "Từ đối đầu cục bộ đến toàn thắng",
       "centralQuestion": "Những điều chỉnh nào tạo ra thế và lực cho quyết định kết thúc chiến tranh?",
-      "status": "draft"
+      "status": "draft",
+      "review": {
+        "aiAssistance": {
+          "used": true,
+          "role": "metadata planning only"
+        }
+      },
+      "sourceRefs": []
     },
     {
       "id": "20000000-0000-0000-0000-000000000011",
@@ -380,7 +501,14 @@
       "orderIndex": 11,
       "title": "Bài toán hậu chiến",
       "centralQuestion": "Làm thế nào vừa thống nhất, khôi phục vừa bảo vệ đất nước sau chiến tranh?",
-      "status": "draft"
+      "status": "draft",
+      "review": {
+        "aiAssistance": {
+          "used": true,
+          "role": "metadata planning only"
+        }
+      },
+      "sourceRefs": []
     },
     {
       "id": "20000000-0000-0000-0000-000000000012",
@@ -389,7 +517,14 @@
       "orderIndex": 12,
       "title": "Phá vỡ sức ì của cơ chế cũ",
       "centralQuestion": "Các bước đột phá cục bộ đã bộc lộ nhu cầu đổi mới toàn diện như thế nào?",
-      "status": "draft"
+      "status": "draft",
+      "review": {
+        "aiAssistance": {
+          "used": true,
+          "role": "metadata planning only"
+        }
+      },
+      "sourceRefs": []
     },
     {
       "id": "20000000-0000-0000-0000-000000000013",
@@ -420,7 +555,9 @@
             "label": "Lạm phát và thiếu hụt hàng hóa",
             "kind": "data",
             "summary": "Khủng hoảng cho thấy cơ chế phân phối và quản lý cũ không tạo đủ động lực sản xuất.",
-            "sourceIds": ["10000000-0000-0000-0000-000000000022"],
+            "sourceIds": [
+              "10000000-0000-0000-0000-000000000022"
+            ],
             "isDistractor": false
           },
           {
@@ -428,7 +565,9 @@
             "label": "Các thử nghiệm khoán và tự chủ",
             "kind": "event",
             "summary": "Những bước đột phá từ thực tiễn cho thấy trao quyền chủ động có thể cải thiện hiệu quả sản xuất.",
-            "sourceIds": ["10000000-0000-0000-0000-000000000001"],
+            "sourceIds": [
+              "10000000-0000-0000-0000-000000000001"
+            ],
             "isDistractor": false
           },
           {
@@ -436,7 +575,9 @@
             "label": "Yêu cầu đổi mới tư duy",
             "kind": "document",
             "summary": "Đại hội VI nhấn mạnh nhìn thẳng sự thật, đánh giá đúng sự thật và đổi mới toàn diện.",
-            "sourceIds": ["10000000-0000-0000-0000-000000000022"],
+            "sourceIds": [
+              "10000000-0000-0000-0000-000000000022"
+            ],
             "isDistractor": false
           },
           {
@@ -444,7 +585,9 @@
             "label": "Tiếp tục điều chỉnh nhỏ trong cơ chế cũ",
             "kind": "assessment",
             "summary": "Các sửa đổi rời rạc có thể giảm áp lực ngắn hạn nhưng không xử lý mâu thuẫn cơ chế ở quy mô toàn nền kinh tế.",
-            "sourceIds": ["10000000-0000-0000-0000-000000000022"],
+            "sourceIds": [
+              "10000000-0000-0000-0000-000000000022"
+            ],
             "isDistractor": true
           }
         ],
@@ -505,18 +648,42 @@
             "id": "10000000-0000-0000-0000-000000000001",
             "title": "Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên",
             "authorOrIssuer": "Bộ Giáo dục và Đào tạo",
+            "publicationYear": 2021,
             "locator": "Chương III",
-            "url": null
+            "url": null,
+            "sourceType": "textbook",
+            "rightsNote": "Tài liệu chính của môn học",
+            "verificationStatus": "verified"
           },
           {
             "id": "10000000-0000-0000-0000-000000000022",
             "title": "VNR202 Session 22 - Đại hội VI và đường lối đổi mới toàn diện",
             "authorOrIssuer": "Bộ môn VNR202, FPT University",
+            "publicationYear": 2026,
             "locator": "Slides 3-26",
-            "url": null
+            "url": null,
+            "sourceType": "course_slide",
+            "rightsNote": "Học liệu nội bộ dùng cho sản phẩm môn học",
+            "verificationStatus": "verified"
           }
         ]
-      }
+      },
+      "review": {
+        "aiAssistance": {
+          "used": true,
+          "role": "Phase 1 preview authoring assistance; no academic-review assertion"
+        }
+      },
+      "sourceRefs": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương III"
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000022",
+          "locator": "Slides 3-26"
+        }
+      ]
     },
     {
       "id": "20000000-0000-0000-0000-000000000014",
@@ -525,7 +692,14 @@
       "orderIndex": 14,
       "title": "Mở cửa nhưng không mất phương hướng",
       "centralQuestion": "Làm thế nào kết hợp hội nhập, hiện đại hóa và các động lực tăng trưởng mới?",
-      "status": "draft"
+      "status": "draft",
+      "review": {
+        "aiAssistance": {
+          "used": true,
+          "role": "metadata planning only"
+        }
+      },
+      "sourceRefs": []
     },
     {
       "id": "20000000-0000-0000-0000-000000000015",
@@ -534,7 +708,47 @@
       "orderIndex": 15,
       "title": "Giữ niềm tin bằng năng lực thể chế",
       "centralQuestion": "Thành tựu, hạn chế và phòng chống tham nhũng liên hệ thế nào với niềm tin và năng lực phát triển?",
-      "status": "draft"
+      "status": "draft",
+      "review": {
+        "aiAssistance": {
+          "used": true,
+          "role": "metadata planning only"
+        }
+      },
+      "sourceRefs": []
     }
-  ]
+  ],
+  "causalLinks": [],
+  "publicationManifest": {
+    "schemaVersion": 1,
+    "publications": [
+      {
+        "kind": "legacy-baseline",
+        "dossierId": "20000000-0000-0000-0000-000000000002",
+        "status": "published",
+        "sourceCommit": "6c918ce432e7fd7c3c1f6c697a180564fb08b935",
+        "capturedAt": "2026-08-19",
+        "contentSha256": "ce0cffa4f41e11a97967e6af94557ebb2ee9c4ec13f257db2aa5d1f15d810ba5",
+        "note": "Migrated unchanged from Phase 1 public preview; this record does not assert academic review."
+      },
+      {
+        "kind": "legacy-baseline",
+        "dossierId": "20000000-0000-0000-0000-000000000006",
+        "status": "published",
+        "sourceCommit": "6c918ce432e7fd7c3c1f6c697a180564fb08b935",
+        "capturedAt": "2026-08-19",
+        "contentSha256": "ff09f745d0dde523af4708e4f7b7a1064a2933f049320e08f4caf48b3238e33b",
+        "note": "Migrated unchanged from Phase 1 public preview; this record does not assert academic review."
+      },
+      {
+        "kind": "legacy-baseline",
+        "dossierId": "20000000-0000-0000-0000-000000000013",
+        "status": "published",
+        "sourceCommit": "6c918ce432e7fd7c3c1f6c697a180564fb08b935",
+        "capturedAt": "2026-08-19",
+        "contentSha256": "25426f538a18a1a0f4570571ed924a68ed36ab8aa420a9c3a716b0e4ce78d9b7",
+        "note": "Migrated unchanged from Phase 1 public preview; this record does not assert academic review."
+      }
+    ]
+  }
 }

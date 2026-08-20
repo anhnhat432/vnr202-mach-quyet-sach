@@ -1,0 +1,16 @@
+{
+  "id": "20000000-0000-0000-0000-000000000001",
+  "slug": "con-duong-nao-cho-doc-lap",
+  "chapter": "chapter_1",
+  "orderIndex": 1,
+  "title": "Con đường nào cho độc lập?",
+  "centralQuestion": "Một đường lối mới cần đáp ứng những điều kiện nào để giải quyết khủng hoảng cứu nước?",
+  "status": "draft",
+  "review": {
+    "aiAssistance": {
+      "used": true,
+      "role": "metadata planning only"
+    }
+  },
+  "sourceRefs": []
+}

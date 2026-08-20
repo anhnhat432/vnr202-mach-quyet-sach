@@ -1,0 +1,16 @@
+{
+  "id": "20000000-0000-0000-0000-000000000010",
+  "slug": "tu-doi-dau-cuc-bo-den-toan-thang",
+  "chapter": "chapter_2",
+  "orderIndex": 10,
+  "title": "Từ đối đầu cục bộ đến toàn thắng",
+  "centralQuestion": "Những điều chỉnh nào tạo ra thế và lực cho quyết định kết thúc chiến tranh?",
+  "status": "draft",
+  "review": {
+    "aiAssistance": {
+      "used": true,
+      "role": "metadata planning only"
+    }
+  },
+  "sourceRefs": []
+}

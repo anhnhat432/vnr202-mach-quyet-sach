@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "sources": [
+    {
+      "id": "10000000-0000-0000-0000-000000000001",
+      "title": "Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên",
+      "authorOrIssuer": "Bộ Giáo dục và Đào tạo",
+      "publicationYear": 2021,
+      "locator": "Chương I-III",
+      "url": null,
+      "sourceType": "textbook",
+      "rightsNote": "Tài liệu chính của môn học",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "10000000-0000-0000-0000-000000000004",
+      "title": "VNR202 Session 4 - Thành lập Đảng và Cương lĩnh chính trị đầu tiên",
+      "authorOrIssuer": "Bộ môn VNR202, FPT University",
+      "publicationYear": 2026,
+      "locator": "Slides 3-18",
+      "url": null,
+      "sourceType": "course_slide",
+      "rightsNote": "Học liệu nội bộ dùng cho sản phẩm môn học",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "10000000-0000-0000-0000-000000000011",
+      "title": "VNR202 Session 11 - Xây dựng và bảo vệ chính quyền cách mạng 1945-1946",
+      "authorOrIssuer": "Bộ môn VNR202, FPT University",
+      "publicationYear": 2026,
+      "locator": "Slides 3-18",
+      "url": null,
+      "sourceType": "course_slide",
+      "rightsNote": "Học liệu nội bộ dùng cho sản phẩm môn học",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "10000000-0000-0000-0000-000000000022",
+      "title": "VNR202 Session 22 - Đại hội VI và đường lối đổi mới toàn diện",
+      "authorOrIssuer": "Bộ môn VNR202, FPT University",
+      "publicationYear": 2026,
+      "locator": "Slides 3-26",
+      "url": null,
+      "sourceType": "course_slide",
+      "rightsNote": "Học liệu nội bộ dùng cho sản phẩm môn học",
+      "verificationStatus": "verified"
+    }
+  ]
+}

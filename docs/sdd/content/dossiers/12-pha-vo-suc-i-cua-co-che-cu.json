@@ -1,0 +1,16 @@
+{
+  "id": "20000000-0000-0000-0000-000000000012",
+  "slug": "pha-vo-suc-i-co-che-cu",
+  "chapter": "chapter_3",
+  "orderIndex": 12,
+  "title": "Phá vỡ sức ì của cơ chế cũ",
+  "centralQuestion": "Các bước đột phá cục bộ đã bộc lộ nhu cầu đổi mới toàn diện như thế nào?",
+  "status": "draft",
+  "review": {
+    "aiAssistance": {
+      "used": true,
+      "role": "metadata planning only"
+    }
+  },
+  "sourceRefs": []
+}
