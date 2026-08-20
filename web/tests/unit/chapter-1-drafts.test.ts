@@ -68,4 +68,22 @@ describe("Chapter 1 Draft dossiers", () => {
     expect(dossier.experience.decision.options).toHaveLength(3);
     expect(dossier.experience.historicalComparison.limitations.length).toBeGreaterThanOrEqual(1);
   });
+
+  it("authors dossier 05 with preparation, opportunity and lesson sources", () => {
+    const dossier = JSON.parse(
+      fs.readFileSync(path.join(root, "docs/sdd/content/dossiers/05-chop-dung-thoi-co.json"), "utf8"),
+    );
+    expect(dossier.status).toBe("draft");
+    expect(dossier.experience.evidence).toHaveLength(6);
+    expect(dossier.experience.decision.options).toHaveLength(3);
+    expect(new Set(dossier.sourceRefs.map((ref: { sourceId: string }) => ref.sourceId))).toEqual(
+      new Set([
+        "10000000-0000-0000-0000-000000000001",
+        "10000000-0000-0000-0000-000000000007",
+        "10000000-0000-0000-0000-000000000008",
+        "10000000-0000-0000-0000-000000000009",
+        "10000000-0000-0000-0000-000000000010",
+      ]),
+    );
+  });
 });
