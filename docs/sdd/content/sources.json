@@ -13,39 +13,6 @@
       "verificationStatus": "verified"
     },
     {
-      "id": "10000000-0000-0000-0000-000000000004",
-      "title": "VNR202 Session 4 - Thành lập Đảng và Cương lĩnh chính trị đầu tiên",
-      "authorOrIssuer": "Bộ môn VNR202, FPT University",
-      "publicationYear": 2026,
-      "locator": "Slides 3-18",
-      "url": null,
-      "sourceType": "course_slide",
-      "rightsNote": "Học liệu nội bộ dùng cho sản phẩm môn học",
-      "verificationStatus": "verified"
-    },
-    {
-      "id": "10000000-0000-0000-0000-000000000011",
-      "title": "VNR202 Session 11 - Xây dựng và bảo vệ chính quyền cách mạng 1945-1946",
-      "authorOrIssuer": "Bộ môn VNR202, FPT University",
-      "publicationYear": 2026,
-      "locator": "Slides 3-18",
-      "url": null,
-      "sourceType": "course_slide",
-      "rightsNote": "Học liệu nội bộ dùng cho sản phẩm môn học",
-      "verificationStatus": "verified"
-    },
-    {
-      "id": "10000000-0000-0000-0000-000000000022",
-      "title": "VNR202 Session 22 - Đại hội VI và đường lối đổi mới toàn diện",
-      "authorOrIssuer": "Bộ môn VNR202, FPT University",
-      "publicationYear": 2026,
-      "locator": "Slides 3-26",
-      "url": null,
-      "sourceType": "course_slide",
-      "rightsNote": "Học liệu nội bộ dùng cho sản phẩm môn học",
-      "verificationStatus": "verified"
-    },
-    {
       "id": "10000000-0000-0000-0000-000000000003",
       "title": "VNR202 Session 3 - Bối cảnh và sự chuẩn bị của Nguyễn Ái Quốc",
       "authorOrIssuer": "Bộ môn VNR202, FPT University",
@@ -54,6 +21,17 @@
       "url": null,
       "sourceType": "course_slide",
       "rightsNote": "Học liệu nội bộ; sản phẩm chỉ diễn giải và ghi locator, không phân phối lại slide",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "10000000-0000-0000-0000-000000000004",
+      "title": "VNR202 Session 4 - Thành lập Đảng và Cương lĩnh chính trị đầu tiên",
+      "authorOrIssuer": "Bộ môn VNR202, FPT University",
+      "publicationYear": 2026,
+      "locator": "Slides 3-18",
+      "url": null,
+      "sourceType": "course_slide",
+      "rightsNote": "Học liệu nội bộ dùng cho sản phẩm môn học",
       "verificationStatus": "verified"
     },
     {
@@ -120,6 +98,105 @@
       "url": null,
       "sourceType": "course_slide",
       "rightsNote": "Học liệu nội bộ; sản phẩm chỉ diễn giải và ghi locator, không phân phối lại slide",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "10000000-0000-0000-0000-000000000011",
+      "title": "VNR202 Session 11 - Xây dựng và bảo vệ chính quyền cách mạng 1945-1946",
+      "authorOrIssuer": "Bộ môn VNR202, FPT University",
+      "publicationYear": 2026,
+      "locator": "Slides 3-18",
+      "url": null,
+      "sourceType": "course_slide",
+      "rightsNote": "Học liệu nội bộ dùng cho sản phẩm môn học",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "10000000-0000-0000-0000-000000000012",
+      "title": "VNR202 Session 12 - Đường lối kháng chiến toàn quốc và tổ chức thực hiện 1946-1950",
+      "authorOrIssuer": "Bộ môn VNR202, FPT University",
+      "publicationYear": 2026,
+      "locator": "Slides 3-18",
+      "url": null,
+      "sourceType": "course_slide",
+      "rightsNote": "Học liệu nội bộ; sản phẩm chỉ diễn giải và ghi locator, không phân phối lại slide",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "10000000-0000-0000-0000-000000000013",
+      "title": "VNR202 Session 13 - Kháng chiến chống Pháp và Đại hội II",
+      "authorOrIssuer": "Bộ môn VNR202, FPT University",
+      "publicationYear": 2026,
+      "locator": "Slides 3-15",
+      "url": null,
+      "sourceType": "course_slide",
+      "rightsNote": "Học liệu nội bộ; sản phẩm chỉ diễn giải và ghi locator, không phân phối lại slide",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "10000000-0000-0000-0000-000000000014",
+      "title": "VNR202 Session 14 - Điện Biên Phủ và Hiệp định Geneve",
+      "authorOrIssuer": "Bộ môn VNR202, FPT University",
+      "publicationYear": 2026,
+      "locator": "Slides 3-16",
+      "url": null,
+      "sourceType": "course_slide",
+      "rightsNote": "Học liệu nội bộ; sản phẩm chỉ diễn giải và ghi locator, không phân phối lại slide",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "10000000-0000-0000-0000-000000000015",
+      "title": "VNR202 Session 15 - Một Đảng lãnh đạo hai nhiệm vụ chiến lược 1954-1965",
+      "authorOrIssuer": "Bộ môn VNR202, FPT University",
+      "publicationYear": 2026,
+      "locator": "Slides 3-18",
+      "url": null,
+      "sourceType": "course_slide",
+      "rightsNote": "Học liệu nội bộ; sản phẩm chỉ diễn giải và ghi locator, không phân phối lại slide",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "10000000-0000-0000-0000-000000000016",
+      "title": "VNR202 Session 16 - Các chiến lược chiến tranh của Mỹ và vai trò hậu phương miền Bắc",
+      "authorOrIssuer": "Bộ môn VNR202, FPT University",
+      "publicationYear": 2026,
+      "locator": "Slides 3-20",
+      "url": null,
+      "sourceType": "course_slide",
+      "rightsNote": "Học liệu nội bộ; sản phẩm chỉ diễn giải và ghi locator, không phân phối lại slide",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "10000000-0000-0000-0000-000000000017",
+      "title": "VNR202 Session 17 - Hiệp định Paris và Tổng tiến công 1975",
+      "authorOrIssuer": "Bộ môn VNR202, FPT University",
+      "publicationYear": 2026,
+      "locator": "Slides 3-18",
+      "url": null,
+      "sourceType": "course_slide",
+      "rightsNote": "Học liệu nội bộ; sản phẩm chỉ diễn giải và ghi locator, không phân phối lại slide",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "10000000-0000-0000-0000-000000000018",
+      "title": "VNR202 Session 18 - Ý nghĩa, hạn chế và kinh nghiệm lãnh đạo 1945-1975",
+      "authorOrIssuer": "Bộ môn VNR202, FPT University",
+      "publicationYear": 2026,
+      "locator": "Slides 3-12",
+      "url": null,
+      "sourceType": "course_slide",
+      "rightsNote": "Học liệu nội bộ; sản phẩm chỉ diễn giải và ghi locator, không phân phối lại slide",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "10000000-0000-0000-0000-000000000022",
+      "title": "VNR202 Session 22 - Đại hội VI và đường lối đổi mới toàn diện",
+      "authorOrIssuer": "Bộ môn VNR202, FPT University",
+      "publicationYear": 2026,
+      "locator": "Slides 3-26",
+      "url": null,
+      "sourceType": "course_slide",
+      "rightsNote": "Học liệu nội bộ dùng cho sản phẩm môn học",
       "verificationStatus": "verified"
     }
   ]

@@ -13,39 +13,6 @@
       "verificationStatus": "verified"
     },
     {
-      "id": "10000000-0000-0000-0000-000000000004",
-      "title": "VNR202 Session 4 - Thành lập Đảng và Cương lĩnh chính trị đầu tiên",
-      "authorOrIssuer": "Bộ môn VNR202, FPT University",
-      "publicationYear": 2026,
-      "locator": "Slides 3-18",
-      "url": null,
-      "sourceType": "course_slide",
-      "rightsNote": "Học liệu nội bộ dùng cho sản phẩm môn học",
-      "verificationStatus": "verified"
-    },
-    {
-      "id": "10000000-0000-0000-0000-000000000011",
-      "title": "VNR202 Session 11 - Xây dựng và bảo vệ chính quyền cách mạng 1945-1946",
-      "authorOrIssuer": "Bộ môn VNR202, FPT University",
-      "publicationYear": 2026,
-      "locator": "Slides 3-18",
-      "url": null,
-      "sourceType": "course_slide",
-      "rightsNote": "Học liệu nội bộ dùng cho sản phẩm môn học",
-      "verificationStatus": "verified"
-    },
-    {
-      "id": "10000000-0000-0000-0000-000000000022",
-      "title": "VNR202 Session 22 - Đại hội VI và đường lối đổi mới toàn diện",
-      "authorOrIssuer": "Bộ môn VNR202, FPT University",
-      "publicationYear": 2026,
-      "locator": "Slides 3-26",
-      "url": null,
-      "sourceType": "course_slide",
-      "rightsNote": "Học liệu nội bộ dùng cho sản phẩm môn học",
-      "verificationStatus": "verified"
-    },
-    {
       "id": "10000000-0000-0000-0000-000000000003",
       "title": "VNR202 Session 3 - Bối cảnh và sự chuẩn bị của Nguyễn Ái Quốc",
       "authorOrIssuer": "Bộ môn VNR202, FPT University",
@@ -54,6 +21,17 @@
       "url": null,
       "sourceType": "course_slide",
       "rightsNote": "Học liệu nội bộ; sản phẩm chỉ diễn giải và ghi locator, không phân phối lại slide",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "10000000-0000-0000-0000-000000000004",
+      "title": "VNR202 Session 4 - Thành lập Đảng và Cương lĩnh chính trị đầu tiên",
+      "authorOrIssuer": "Bộ môn VNR202, FPT University",
+      "publicationYear": 2026,
+      "locator": "Slides 3-18",
+      "url": null,
+      "sourceType": "course_slide",
+      "rightsNote": "Học liệu nội bộ dùng cho sản phẩm môn học",
       "verificationStatus": "verified"
     },
     {
@@ -120,6 +98,105 @@
       "url": null,
       "sourceType": "course_slide",
       "rightsNote": "Học liệu nội bộ; sản phẩm chỉ diễn giải và ghi locator, không phân phối lại slide",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "10000000-0000-0000-0000-000000000011",
+      "title": "VNR202 Session 11 - Xây dựng và bảo vệ chính quyền cách mạng 1945-1946",
+      "authorOrIssuer": "Bộ môn VNR202, FPT University",
+      "publicationYear": 2026,
+      "locator": "Slides 3-18",
+      "url": null,
+      "sourceType": "course_slide",
+      "rightsNote": "Học liệu nội bộ dùng cho sản phẩm môn học",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "10000000-0000-0000-0000-000000000012",
+      "title": "VNR202 Session 12 - Đường lối kháng chiến toàn quốc và tổ chức thực hiện 1946-1950",
+      "authorOrIssuer": "Bộ môn VNR202, FPT University",
+      "publicationYear": 2026,
+      "locator": "Slides 3-18",
+      "url": null,
+      "sourceType": "course_slide",
+      "rightsNote": "Học liệu nội bộ; sản phẩm chỉ diễn giải và ghi locator, không phân phối lại slide",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "10000000-0000-0000-0000-000000000013",
+      "title": "VNR202 Session 13 - Kháng chiến chống Pháp và Đại hội II",
+      "authorOrIssuer": "Bộ môn VNR202, FPT University",
+      "publicationYear": 2026,
+      "locator": "Slides 3-15",
+      "url": null,
+      "sourceType": "course_slide",
+      "rightsNote": "Học liệu nội bộ; sản phẩm chỉ diễn giải và ghi locator, không phân phối lại slide",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "10000000-0000-0000-0000-000000000014",
+      "title": "VNR202 Session 14 - Điện Biên Phủ và Hiệp định Geneve",
+      "authorOrIssuer": "Bộ môn VNR202, FPT University",
+      "publicationYear": 2026,
+      "locator": "Slides 3-16",
+      "url": null,
+      "sourceType": "course_slide",
+      "rightsNote": "Học liệu nội bộ; sản phẩm chỉ diễn giải và ghi locator, không phân phối lại slide",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "10000000-0000-0000-0000-000000000015",
+      "title": "VNR202 Session 15 - Một Đảng lãnh đạo hai nhiệm vụ chiến lược 1954-1965",
+      "authorOrIssuer": "Bộ môn VNR202, FPT University",
+      "publicationYear": 2026,
+      "locator": "Slides 3-18",
+      "url": null,
+      "sourceType": "course_slide",
+      "rightsNote": "Học liệu nội bộ; sản phẩm chỉ diễn giải và ghi locator, không phân phối lại slide",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "10000000-0000-0000-0000-000000000016",
+      "title": "VNR202 Session 16 - Các chiến lược chiến tranh của Mỹ và vai trò hậu phương miền Bắc",
+      "authorOrIssuer": "Bộ môn VNR202, FPT University",
+      "publicationYear": 2026,
+      "locator": "Slides 3-20",
+      "url": null,
+      "sourceType": "course_slide",
+      "rightsNote": "Học liệu nội bộ; sản phẩm chỉ diễn giải và ghi locator, không phân phối lại slide",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "10000000-0000-0000-0000-000000000017",
+      "title": "VNR202 Session 17 - Hiệp định Paris và Tổng tiến công 1975",
+      "authorOrIssuer": "Bộ môn VNR202, FPT University",
+      "publicationYear": 2026,
+      "locator": "Slides 3-18",
+      "url": null,
+      "sourceType": "course_slide",
+      "rightsNote": "Học liệu nội bộ; sản phẩm chỉ diễn giải và ghi locator, không phân phối lại slide",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "10000000-0000-0000-0000-000000000018",
+      "title": "VNR202 Session 18 - Ý nghĩa, hạn chế và kinh nghiệm lãnh đạo 1945-1975",
+      "authorOrIssuer": "Bộ môn VNR202, FPT University",
+      "publicationYear": 2026,
+      "locator": "Slides 3-12",
+      "url": null,
+      "sourceType": "course_slide",
+      "rightsNote": "Học liệu nội bộ; sản phẩm chỉ diễn giải và ghi locator, không phân phối lại slide",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "10000000-0000-0000-0000-000000000022",
+      "title": "VNR202 Session 22 - Đại hội VI và đường lối đổi mới toàn diện",
+      "authorOrIssuer": "Bộ môn VNR202, FPT University",
+      "publicationYear": 2026,
+      "locator": "Slides 3-26",
+      "url": null,
+      "sourceType": "course_slide",
+      "rightsNote": "Học liệu nội bộ dùng cho sản phẩm môn học",
       "verificationStatus": "verified"
     }
   ],
@@ -1750,67 +1827,1317 @@
     },
     {
       "id": "20000000-0000-0000-0000-000000000007",
-      "slug": "khi-hoa-hoan-khong-con-du",
+      "versionId": "30000000-0000-0000-0000-000000000007",
+      "slug": "khi-hoa-hoan-khong-con-du-dia",
       "chapter": "chapter_2",
       "orderIndex": 7,
-      "title": "Khi hòa hoãn không còn đủ",
-      "centralQuestion": "Khi nào cần chuyển từ hòa hoãn sang kháng chiến toàn quốc?",
+      "title": "Khi hòa hoãn không còn dư địa",
+      "centralQuestion": "Khi nhân nhượng đã đến giới hạn, chuyển sang kháng chiến toàn quốc cần đường lối và tổ chức ra sao?",
       "status": "draft",
+      "experience": {
+        "briefing": {
+          "period": "1946-1947",
+          "context": [
+            "Sau Hiệp định Sơ bộ 6/3/1946 và Tạm ước 14/9/1946, thực dân Pháp liên tục vi phạm cam kết, mở rộng chiếm đóng và gây hấn tại Nam Bộ, Hải Phòng, Hà Nội.",
+            "Chính quyền cách mạng đã tận dụng thời gian hòa hoãn để củng cố lực lượng, nhưng không gian chính trị tiếp tục bị thu hẹp."
+          ],
+          "centralContradiction": "Yêu cầu bảo vệ độc lập và toàn vẹn lãnh thổ đối lập với việc đối phương liên tục lấn tới, khiến các biện pháp hòa bình không còn khả năng ngăn chặn chiến tranh.",
+          "objective": "Xác định thời điểm chuyển từ nhân nhượng có nguyên tắc sang kháng chiến toàn quốc và xây dựng đường lối kháng chiến phù hợp với tương quan lực lượng.",
+          "constraints": [
+            "Không thể tiếp tục nhân nhượng khi đối phương đã đơn phương xé bỏ thỏa thuận.",
+            "Lực lượng vũ trang và hậu cần còn non trẻ, cần đường lối phát huy được lợi thế chính trị và địa lý."
+          ]
+        },
+        "evidence": [
+          {
+            "id": "d07-e1",
+            "label": "Pháp vi phạm Hiệp định Sơ bộ và Tạm ước",
+            "kind": "event",
+            "summary": "Thực dân Pháp liên tục gây hấn, chiếm đóng trái phép và đơn phương xé bỏ các thỏa thuận, đẩy tình thế vượt khỏi kiểm soát ngoại giao.",
+            "sourceIds": [
+              "10000000-0000-0000-0000-000000000012"
+            ],
+            "isDistractor": false
+          },
+          {
+            "id": "d07-e2",
+            "label": "Lời kêu gọi toàn quốc kháng chiến",
+            "kind": "document",
+            "summary": "Ngày 19/12/1946, Chủ tịch Hồ Chí Minh ra Lời kêu gọi toàn quốc kháng chiến, xác định tính chất chính nghĩa và quyết tâm bảo vệ độc lập.",
+            "sourceIds": [
+              "10000000-0000-0000-0000-000000000012"
+            ],
+            "isDistractor": false
+          },
+          {
+            "id": "d07-e3",
+            "label": "Đường lối kháng chiến toàn dân, toàn diện, lâu dài",
+            "kind": "document",
+            "summary": "Chỉ thị Toàn dân kháng chiến và tác phẩm Kháng chiến nhất định thắng lợi xác lập đường lối dựa vào sức dân, kết hợp quân sự-chính trị-kinh tế-văn hóa-ngoại giao.",
+            "sourceIds": [
+              "10000000-0000-0000-0000-000000000012"
+            ],
+            "isDistractor": false
+          },
+          {
+            "id": "d07-e4",
+            "label": "Cuộc chiến đấu giam chân địch tại Hà Nội",
+            "kind": "event",
+            "summary": "Quân dân Hà Nội chiến đấu giam chân địch trong 60 ngày đêm, tạo thời gian cho cả nước chuyển vào trạng thái kháng chiến.",
+            "sourceIds": [
+              "10000000-0000-0000-0000-000000000012"
+            ],
+            "isDistractor": false
+          },
+          {
+            "id": "d07-e5",
+            "label": "Chuyển cơ quan đầu não lên Việt Bắc",
+            "kind": "event",
+            "summary": "Các cơ quan đầu não và lực lượng chủ lực rút lên căn cứ địa Việt Bắc an toàn, bảo toàn lực lượng cho kháng chiến lâu dài.",
+            "sourceIds": [
+              "10000000-0000-0000-0000-000000000012"
+            ],
+            "isDistractor": false
+          },
+          {
+            "id": "d07-e6",
+            "label": "Tiếp tục nhân nhượng vô điều kiện",
+            "kind": "assessment",
+            "summary": "Tiếp tục nhân nhượng khi đối phương đã lấn tới có thể làm mất thêm lãnh thổ và suy giảm ý chí kháng chiến của nhân dân.",
+            "sourceIds": [
+              "10000000-0000-0000-0000-000000000012"
+            ],
+            "isDistractor": true
+          }
+        ],
+        "decision": {
+          "prompt": "Khi hòa hoãn không còn dư địa, hướng hành động nào bảo toàn được chính quyền và tạo nền tảng cho kháng chiến lâu dài?",
+          "requiredEvidenceCount": 4,
+          "options": [
+            {
+              "id": "nationwide-resistance",
+              "label": "Phát động kháng chiến toàn quốc với đường lối toàn dân, toàn diện, lâu dài",
+              "rationale": "Chuyển đất nước vào trạng thái chiến tranh nhân dân, phát huy sức mạnh tổng hợp và lợi thế chính nghĩa."
+            },
+            {
+              "id": "unconditional-concession",
+              "label": "Tiếp tục nhân nhượng để tránh chiến tranh bằng mọi giá",
+              "rationale": "Có thể trì hoãn xung đột trước mắt nhưng làm mất thế chủ động, lãnh thổ và niềm tin của nhân dân."
+            },
+            {
+              "id": "conventional-war",
+              "label": "Tổ chức kháng chiến theo mô hình chiến tranh chính quy thông thường",
+              "rationale": "Tập trung vào đối đầu quân sự trực diện nhưng bỏ qua lợi thế chiến tranh nhân dân và địa hình."
+            }
+          ]
+        },
+        "projectedConsequences": [
+          {
+            "optionId": "nationwide-resistance",
+            "steps": [
+              "Huy động sức mạnh toàn dân cho kháng chiến.",
+              "Bảo toàn lực lượng chủ lực và cơ quan đầu não.",
+              "Tạo thế trận chiến tranh nhân dân rộng khắp."
+            ]
+          },
+          {
+            "optionId": "unconditional-concession",
+            "steps": [
+              "Đối phương tiếp tục lấn tới từng bước.",
+              "Chính quyền mất dần không gian kiểm soát.",
+              "Ý chí kháng chiến của nhân dân bị suy giảm."
+            ]
+          },
+          {
+            "optionId": "conventional-war",
+            "steps": [
+              "Đối đầu trực diện với lực lượng vượt trội về vũ khí.",
+              "Tổn thất lớn trong giai đoạn đầu.",
+              "Khó duy trì kháng chiến lâu dài."
+            ]
+          }
+        ],
+        "historicalComparison": {
+          "actualDecision": "Phát động kháng chiến toàn quốc ngày 19/12/1946 với đường lối toàn dân, toàn diện, lâu dài và dựa vào sức mình là chính; vừa chiến đấu giam chân địch vừa chuyển cơ quan đầu não lên Việt Bắc.",
+          "implementation": [
+            "Ra Lời kêu gọi toàn quốc kháng chiến và Chỉ thị Toàn dân kháng chiến.",
+            "Tổ chức cuộc chiến đấu giam chân địch tại các đô thị, đặc biệt là Hà Nội.",
+            "Chuyển cơ quan đầu não, lực lượng chủ lực và cơ sở công nghiệp lên căn cứ địa Việt Bắc."
+          ],
+          "results": [
+            "Bảo toàn được lực lượng chủ lực và cơ quan lãnh đạo kháng chiến.",
+            "Cả nước chuyển vào trạng thái kháng chiến có tổ chức và đường lối rõ ràng."
+          ],
+          "limitations": [
+            "Phải rút khỏi các đô thị lớn và vùng đồng bằng, tạm thời mất không gian kiểm soát rộng.",
+            "Lực lượng vũ trang còn non trẻ, trang bị thiếu thốn, phải vừa chiến đấu vừa xây dựng."
+          ]
+        },
+        "lessons": [
+          "Hòa hoãn có nguyên tắc chỉ có giá trị khi đối phương còn tôn trọng thỏa thuận; khi giới hạn bị vượt qua, phải kiên quyết chuyển sang thế trận mới.",
+          "Đường lối kháng chiến toàn dân, toàn diện, lâu dài là sự vận dụng sáng tạo vào điều kiện một nước nhỏ chống lại đế quốc mạnh."
+        ],
+        "sources": [
+          {
+            "id": "10000000-0000-0000-0000-000000000001",
+            "title": "Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên",
+            "authorOrIssuer": "Bộ Giáo dục và Đào tạo",
+            "publicationYear": 2021,
+            "locator": "Chương II - Đường lối kháng chiến chống Pháp",
+            "url": null,
+            "sourceType": "textbook",
+            "rightsNote": "Tài liệu chính của môn học",
+            "verificationStatus": "verified"
+          },
+          {
+            "id": "10000000-0000-0000-0000-000000000012",
+            "title": "VNR202 Session 12 - Đường lối kháng chiến toàn quốc và tổ chức thực hiện 1946-1950",
+            "authorOrIssuer": "Bộ môn VNR202, FPT University",
+            "publicationYear": 2026,
+            "locator": "Slides 3-18",
+            "url": null,
+            "sourceType": "course_slide",
+            "rightsNote": "Học liệu nội bộ; sản phẩm chỉ diễn giải và ghi locator, không phân phối lại slide",
+            "verificationStatus": "verified"
+          }
+        ]
+      },
+      "claims": [
+        {
+          "id": "d07-context-claim",
+          "category": "context",
+          "statement": "Thực dân Pháp liên tục vi phạm Hiệp định Sơ bộ và Tạm ước, mở rộng chiếm đóng và gây hấn, khiến không gian hòa bình bị thu hẹp đến mức không thể tiếp tục nhân nhượng.",
+          "sourceLinks": [
+            {
+              "sourceId": "10000000-0000-0000-0000-000000000012",
+              "locator": "Slides 3-8",
+              "supportScope": "Hỗ trợ bối cảnh Pháp vi phạm thỏa thuận và đẩy tình thế đến giới hạn."
+            }
+          ]
+        },
+        {
+          "id": "d07-basis-claim",
+          "category": "basis",
+          "statement": "Khi đối phương đã đơn phương xé bỏ thỏa thuận, tiếp tục nhân nhượng sẽ làm mất thế chủ động và suy giảm ý chí kháng chiến; chuyển sang kháng chiến là lựa chọn bắt buộc để bảo vệ độc lập.",
+          "sourceLinks": [
+            {
+              "sourceId": "10000000-0000-0000-0000-000000000012",
+              "locator": "Slides 8-12",
+              "supportScope": "Hỗ trợ căn cứ chuyển từ hòa hoãn sang kháng chiến toàn quốc."
+            }
+          ]
+        },
+        {
+          "id": "d07-implementation-claim",
+          "category": "implementation",
+          "statement": "Đường lối kháng chiến toàn dân, toàn diện, lâu dài và dựa vào sức mình là chính được xác lập, kết hợp chiến đấu giam chân địch tại đô thị với chuyển lực lượng lên căn cứ địa.",
+          "sourceLinks": [
+            {
+              "sourceId": "10000000-0000-0000-0000-000000000012",
+              "locator": "Slides 10-18",
+              "supportScope": "Hỗ trợ nội dung đường lối và tổ chức thực hiện giai đoạn đầu kháng chiến."
+            }
+          ]
+        },
+        {
+          "id": "d07-result-claim",
+          "category": "result",
+          "statement": "Lực lượng chủ lực và cơ quan đầu não được bảo toàn, cả nước chuyển vào trạng thái kháng chiến có tổ chức, tạo nền tảng cho cuộc kháng chiến lâu dài.",
+          "sourceLinks": [
+            {
+              "sourceId": "10000000-0000-0000-0000-000000000012",
+              "locator": "Slides 15-18",
+              "supportScope": "Hỗ trợ kết quả bảo toàn lực lượng và chuyển đất nước vào kháng chiến."
+            }
+          ]
+        },
+        {
+          "id": "d07-limitation-claim",
+          "category": "limitation",
+          "statement": "Phải rút khỏi các đô thị lớn và vùng đồng bằng, lực lượng vũ trang còn non trẻ, trang bị thiếu thốn, đặt ra yêu cầu vừa chiến đấu vừa xây dựng lực lượng.",
+          "sourceLinks": [
+            {
+              "sourceId": "10000000-0000-0000-0000-000000000012",
+              "locator": "Slides 15-18",
+              "supportScope": "Hỗ trợ đánh giá hạn chế về không gian kiểm soát và tương quan lực lượng ban đầu."
+            }
+          ]
+        },
+        {
+          "id": "d07-lesson-claim",
+          "category": "lesson",
+          "statement": "Trong quan hệ với đối phương mạnh hơn, hòa hoãn có nguyên tắc phải đi cùng chuẩn bị sẵn sàng cho tình huống xấu nhất; khi giới hạn bị vượt qua, kiên quyết chuyển sang thế trận mới với đường lối phù hợp.",
+          "sourceLinks": [
+            {
+              "sourceId": "10000000-0000-0000-0000-000000000012",
+              "locator": "Slides 10-18",
+              "supportScope": "Hỗ trợ bài học về giới hạn hòa hoãn và chuyển đổi chiến lược."
+            }
+          ]
+        }
+      ],
+      "causalNodes": [
+        {
+          "id": "d07-context",
+          "lane": "context",
+          "label": "Pháp vi phạm thỏa thuận và mở rộng chiếm đóng",
+          "explanation": "Thực dân Pháp liên tục gây hấn và xé bỏ thỏa thuận, đẩy tình thế vượt khỏi kiểm soát ngoại giao.",
+          "claimId": "d07-context-claim"
+        },
+        {
+          "id": "d07-contradiction",
+          "lane": "contradiction",
+          "label": "Hòa hoãn không còn dư địa",
+          "explanation": "Yêu cầu bảo vệ độc lập đối lập với việc đối phương liên tục lấn tới, khiến nhân nhượng không còn tác dụng.",
+          "claimId": "d07-basis-claim"
+        },
+        {
+          "id": "d07-force",
+          "lane": "force",
+          "label": "Toàn dân và lực lượng vũ trang non trẻ",
+          "explanation": "Sức mạnh toàn dân và lực lượng vũ trang vừa được xây dựng là nền tảng cho kháng chiến lâu dài.",
+          "claimId": "d07-implementation-claim"
+        },
+        {
+          "id": "d07-decision",
+          "lane": "decision",
+          "label": "Phát động kháng chiến toàn quốc",
+          "explanation": "Ngày 19/12/1946, kháng chiến toàn quốc bùng nổ với đường lối toàn dân, toàn diện, lâu dài.",
+          "claimId": "d07-implementation-claim"
+        },
+        {
+          "id": "d07-result",
+          "lane": "result",
+          "label": "Bảo toàn lực lượng, chuyển vào thế trận kháng chiến",
+          "explanation": "Lực lượng chủ lực và cơ quan đầu não được bảo toàn, cả nước bước vào kháng chiến có tổ chức.",
+          "claimId": "d07-result-claim"
+        },
+        {
+          "id": "d07-lesson",
+          "lane": "lesson",
+          "label": "Hòa hoãn phải đi cùng sẵn sàng chiến đấu",
+          "explanation": "Nhân nhượng có nguyên tắc chỉ có giá trị khi đối phương tôn trọng thỏa thuận; phải chuẩn bị cho tình huống xấu nhất.",
+          "claimId": "d07-lesson-claim"
+        }
+      ],
       "review": {
         "aiAssistance": {
           "used": true,
-          "role": "metadata planning only"
+          "role": "AI-assisted academic Draft for human review; not reviewed or published"
         }
       },
-      "sourceRefs": []
+      "sourceRefs": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương II - Đường lối kháng chiến chống Pháp"
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000012",
+          "locator": "Slides 3-18"
+        }
+      ]
     },
     {
       "id": "20000000-0000-0000-0000-000000000008",
+      "versionId": "30000000-0000-0000-0000-000000000008",
       "slug": "tao-the-cho-quyet-chien",
       "chapter": "chapter_2",
       "orderIndex": 8,
       "title": "Tạo thế cho quyết chiến",
-      "centralQuestion": "Làm thế nào chuyển từ cầm cự sang chủ động chiến lược và kết thúc chiến tranh?",
+      "centralQuestion": "Làm thế nào chuyển từ phòng ngự cầm cự sang phản công và kết thúc chiến tranh bằng một thắng lợi quyết định?",
       "status": "draft",
+      "experience": {
+        "briefing": {
+          "period": "1950-1954",
+          "context": [
+            "Sau chiến thắng Biên giới 1950, cuộc kháng chiến chống Pháp chuyển sang giai đoạn mới: ta giành quyền chủ động chiến lược trên chiến trường chính.",
+            "Đế quốc Mỹ can thiệp sâu hơn, viện trợ cho Pháp và tìm cách kéo dài, mở rộng chiến tranh Đông Dương."
+          ],
+          "centralContradiction": "Yêu cầu kết thúc chiến tranh bằng thắng lợi quân sự quyết định đối lập với việc đối phương tăng cường lực lượng và tìm cách giành lại thế chủ động.",
+          "objective": "Tạo lập thế trận có lợi nhất để đánh bại kế hoạch quân sự cuối cùng của đối phương, buộc họ phải chấp nhận một giải pháp chính trị có lợi cho ta.",
+          "constraints": [
+            "Đối phương còn ưu thế về hỏa lực, không quân và hậu cần.",
+            "Cần chọn địa bàn và thời điểm quyết chiến mà ở đó ta phát huy được sở trường, hạn chế được sở trường của địch."
+          ]
+        },
+        "evidence": [
+          {
+            "id": "d08-e1",
+            "label": "Chiến thắng Biên giới 1950",
+            "kind": "event",
+            "summary": "Chiến dịch Biên giới khai thông biên giới Việt-Trung, phá vỡ thế bao vây của địch và đưa cuộc kháng chiến sang giai đoạn chủ động phản công.",
+            "sourceIds": [
+              "10000000-0000-0000-0000-000000000013"
+            ],
+            "isDistractor": false
+          },
+          {
+            "id": "d08-e2",
+            "label": "Đại hội II của Đảng (1951)",
+            "kind": "document",
+            "summary": "Đại hội quyết định đưa Đảng ra hoạt động công khai, thông qua Chính cương và Điều lệ mới, tăng cường sự lãnh đạo toàn diện đối với kháng chiến.",
+            "sourceIds": [
+              "10000000-0000-0000-0000-000000000013"
+            ],
+            "isDistractor": false
+          },
+          {
+            "id": "d08-e3",
+            "label": "Kế hoạch Nava và tập đoàn cứ điểm Điện Biên Phủ",
+            "kind": "event",
+            "summary": "Pháp-Mỹ triển khai Kế hoạch Nava với hy vọng chuyển bại thành thắng trong 18 tháng, xây dựng Điện Biên Phủ thành tập đoàn cứ điểm mạnh nhất Đông Dương.",
+            "sourceIds": [
+              "10000000-0000-0000-0000-000000000014"
+            ],
+            "isDistractor": false
+          },
+          {
+            "id": "d08-e4",
+            "label": "Quyết định chọn Điện Biên Phủ làm điểm quyết chiến",
+            "kind": "event",
+            "summary": "Bộ Chính trị và Tổng Quân ủy quyết định chấp nhận khiêu chiến tại Điện Biên Phủ, tập trung lực lượng để tiêu diệt tập đoàn cứ điểm.",
+            "sourceIds": [
+              "10000000-0000-0000-0000-000000000014"
+            ],
+            "isDistractor": false
+          },
+          {
+            "id": "d08-e5",
+            "label": "Hậu cần và dân công phục vụ chiến dịch",
+            "kind": "data",
+            "summary": "Hàng vạn dân công, thanh niên xung phong bảo đảm hậu cần, kéo pháo, mở đường, vận chuyển lương thực vũ khí lên Điện Biên Phủ.",
+            "sourceIds": [
+              "10000000-0000-0000-0000-000000000014"
+            ],
+            "isDistractor": false
+          },
+          {
+            "id": "d08-e6",
+            "label": "Tránh quyết chiến, kéo dài đàm phán",
+            "kind": "assessment",
+            "summary": "Tránh đối đầu trực tiếp có thể giảm tổn thất trước mắt nhưng để đối phương có thời gian củng cố và thay đổi tương quan có lợi cho họ.",
+            "sourceIds": [
+              "10000000-0000-0000-0000-000000000014"
+            ],
+            "isDistractor": true
+          }
+        ],
+        "decision": {
+          "prompt": "Chọn phương án tạo thế và kết thúc chiến tranh có lợi nhất cho cách mạng Việt Nam.",
+          "requiredEvidenceCount": 4,
+          "options": [
+            {
+              "id": "dien-bien-phu",
+              "label": "Tập trung lực lượng quyết chiến tại Điện Biên Phủ",
+              "rationale": "Chấp nhận khiêu chiến tại địa bàn ta có thể tập trung ưu thế, tiêu diệt lực lượng tinh nhuệ nhất của địch, tạo đòn quyết định cho đàm phán."
+            },
+            {
+              "id": "avoid-decisive",
+              "label": "Tránh quyết chiến, tiếp tục chiến tranh du kích rộng khắp",
+              "rationale": "Giảm rủi ro tổn thất lớn nhưng kéo dài chiến tranh, để đối phương có thời gian tăng viện và thay đổi cục diện."
+            },
+            {
+              "id": "negotiate-early",
+              "label": "Ưu tiên đàm phán, chấp nhận giải pháp chia cắt tạm thời",
+              "rationale": "Sớm chấm dứt chiến sự nhưng có thể không đạt được mục tiêu độc lập, thống nhất trọn vẹn."
+            }
+          ]
+        },
+        "projectedConsequences": [
+          {
+            "optionId": "dien-bien-phu",
+            "steps": [
+              "Huy động tổng lực cho một chiến dịch quyết định.",
+              "Tiêu diệt tập đoàn cứ điểm, làm sụp đổ ý chí tiếp tục chiến tranh của đối phương.",
+              "Tạo ưu thế tuyệt đối trên bàn đàm phán Geneve."
+            ]
+          },
+          {
+            "optionId": "avoid-decisive",
+            "steps": [
+              "Chiến tranh kéo dài, đối phương được tăng viện.",
+              "Mỹ can thiệp sâu hơn vào Đông Dương.",
+              "Cơ hội kết thúc chiến tranh bị trì hoãn."
+            ]
+          },
+          {
+            "optionId": "negotiate-early",
+            "steps": [
+              "Đạt được ngừng bắn sớm.",
+              "Có thể phải chấp nhận vĩ tuyến chia cắt bất lợi hơn.",
+              "Chưa phát huy hết thắng lợi quân sự đã đạt được."
+            ]
+          }
+        ],
+        "historicalComparison": {
+          "actualDecision": "Bộ Chính trị quyết định chọn Điện Biên Phủ làm điểm quyết chiến chiến lược, tập trung đại bộ phận chủ lực, huy động tối đa hậu cần tại chỗ, thực hiện phương châm 'đánh chắc, tiến chắc' và giành toàn thắng.",
+          "implementation": [
+            "Tập trung 4 đại đoàn chủ lực và toàn bộ pháo binh, công binh cho chiến dịch.",
+            "Huy động hơn 260.000 dân công, thanh niên xung phong bảo đảm hậu cần.",
+            "Thay đổi phương châm từ 'đánh nhanh, thắng nhanh' sang 'đánh chắc, tiến chắc'."
+          ],
+          "results": [
+            "Tiêu diệt hoàn toàn tập đoàn cứ điểm Điện Biên Phủ sau 56 ngày đêm.",
+            "Buộc Pháp ký Hiệp định Geneve, chấm dứt chiến tranh, công nhận độc lập, chủ quyền, thống nhất và toàn vẹn lãnh thổ ba nước Đông Dương."
+          ],
+          "limitations": [
+            "Hiệp định Geneve mới giải phóng được miền Bắc, miền Nam tạm thời đặt dưới sự kiểm soát của chính quyền Sài Gòn.",
+            "Đất nước tạm thời bị chia cắt hai miền với hai chế độ chính trị khác nhau."
+          ]
+        },
+        "lessons": [
+          "Thắng lợi quân sự quyết định là cơ sở cho thắng lợi trên bàn đàm phán; 'đánh cho Mỹ cút, đánh cho ngụy nhào' là nguyên lý xuyên suốt.",
+          "Phát huy sức mạnh tổng hợp của chiến tranh nhân dân, kết hợp quân sự-chính trị-hậu cần-ngoại giao trong một chiến dịch quyết định."
+        ],
+        "sources": [
+          {
+            "id": "10000000-0000-0000-0000-000000000001",
+            "title": "Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên",
+            "authorOrIssuer": "Bộ Giáo dục và Đào tạo",
+            "publicationYear": 2021,
+            "locator": "Chương II - Kháng chiến chống Pháp và Điện Biên Phủ",
+            "url": null,
+            "sourceType": "textbook",
+            "rightsNote": "Tài liệu chính của môn học",
+            "verificationStatus": "verified"
+          },
+          {
+            "id": "10000000-0000-0000-0000-000000000013",
+            "title": "VNR202 Session 13 - Kháng chiến chống Pháp và Đại hội II",
+            "authorOrIssuer": "Bộ môn VNR202, FPT University",
+            "publicationYear": 2026,
+            "locator": "Slides 3-15",
+            "url": null,
+            "sourceType": "course_slide",
+            "rightsNote": "Học liệu nội bộ; sản phẩm chỉ diễn giải và ghi locator, không phân phối lại slide",
+            "verificationStatus": "verified"
+          },
+          {
+            "id": "10000000-0000-0000-0000-000000000014",
+            "title": "VNR202 Session 14 - Điện Biên Phủ và Hiệp định Geneve",
+            "authorOrIssuer": "Bộ môn VNR202, FPT University",
+            "publicationYear": 2026,
+            "locator": "Slides 3-16",
+            "url": null,
+            "sourceType": "course_slide",
+            "rightsNote": "Học liệu nội bộ; sản phẩm chỉ diễn giải và ghi locator, không phân phối lại slide",
+            "verificationStatus": "verified"
+          }
+        ]
+      },
+      "claims": [
+        {
+          "id": "d08-context-claim",
+          "category": "context",
+          "statement": "Sau chiến thắng Biên giới 1950, ta giành quyền chủ động chiến lược, nhưng Pháp-Mỹ tăng cường lực lượng và triển khai Kế hoạch Nava hòng chuyển bại thành thắng.",
+          "sourceLinks": [
+            {
+              "sourceId": "10000000-0000-0000-0000-000000000013",
+              "locator": "Slides 3-10",
+              "supportScope": "Hỗ trợ bối cảnh chuyển giai đoạn kháng chiến và sự can thiệp của Mỹ."
+            },
+            {
+              "sourceId": "10000000-0000-0000-0000-000000000014",
+              "locator": "Slides 3-6",
+              "supportScope": "Hỗ trợ bối cảnh Kế hoạch Nava và tập đoàn cứ điểm Điện Biên Phủ."
+            }
+          ]
+        },
+        {
+          "id": "d08-basis-claim",
+          "category": "basis",
+          "statement": "Cần một thắng lợi quân sự quyết định để làm sụp đổ ý chí tiếp tục chiến tranh của đối phương và tạo ưu thế tuyệt đối trên bàn đàm phán.",
+          "sourceLinks": [
+            {
+              "sourceId": "10000000-0000-0000-0000-000000000014",
+              "locator": "Slides 6-10",
+              "supportScope": "Hỗ trợ căn cứ lựa chọn quyết chiến chiến lược và mối quan hệ với đàm phán."
+            }
+          ]
+        },
+        {
+          "id": "d08-implementation-claim",
+          "category": "implementation",
+          "statement": "Ta tập trung lực lượng chủ lực, huy động hậu cần tại chỗ quy mô lớn, thay đổi phương châm tác chiến và tổ chức chiến dịch Điện Biên Phủ với phương châm 'đánh chắc, tiến chắc'.",
+          "sourceLinks": [
+            {
+              "sourceId": "10000000-0000-0000-0000-000000000014",
+              "locator": "Slides 8-16",
+              "supportScope": "Hỗ trợ tổ chức thực hiện chiến dịch Điện Biên Phủ."
+            }
+          ]
+        },
+        {
+          "id": "d08-result-claim",
+          "category": "result",
+          "statement": "Chiến thắng Điện Biên Phủ buộc Pháp ký Hiệp định Geneve, chấm dứt chiến tranh, công nhận độc lập, chủ quyền, thống nhất và toàn vẹn lãnh thổ Việt Nam.",
+          "sourceLinks": [
+            {
+              "sourceId": "10000000-0000-0000-0000-000000000014",
+              "locator": "Slides 12-16",
+              "supportScope": "Hỗ trợ kết quả chiến dịch và Hiệp định Geneve."
+            }
+          ]
+        },
+        {
+          "id": "d08-limitation-claim",
+          "category": "limitation",
+          "statement": "Hiệp định Geneve mới giải phóng được miền Bắc, đất nước tạm thời bị chia cắt, miền Nam tiếp tục là chiến trường của cuộc đấu tranh giải phóng dân tộc.",
+          "sourceLinks": [
+            {
+              "sourceId": "10000000-0000-0000-0000-000000000014",
+              "locator": "Slides 14-16",
+              "supportScope": "Hỗ trợ đánh giá hạn chế của Hiệp định Geneve và tình hình sau 1954."
+            }
+          ]
+        },
+        {
+          "id": "d08-lesson-claim",
+          "category": "lesson",
+          "statement": "Thắng lợi quân sự quyết định là cơ sở cho thắng lợi ngoại giao; kết hợp chặt chẽ giữa đấu tranh quân sự, chính trị và ngoại giao tạo sức mạnh tổng hợp kết thúc chiến tranh.",
+          "sourceLinks": [
+            {
+              "sourceId": "10000000-0000-0000-0000-000000000014",
+              "locator": "Slides 12-16",
+              "supportScope": "Hỗ trợ bài học về mối quan hệ quân sự-ngoại giao và nghệ thuật kết thúc chiến tranh."
+            }
+          ]
+        }
+      ],
+      "causalNodes": [
+        {
+          "id": "d08-context",
+          "lane": "context",
+          "label": "Chủ động chiến lược sau Biên giới 1950",
+          "explanation": "Chiến thắng Biên giới khai thông biên giới, phá thế bao vây và đưa kháng chiến sang giai đoạn mới.",
+          "claimId": "d08-context-claim"
+        },
+        {
+          "id": "d08-contradiction",
+          "lane": "contradiction",
+          "label": "Yêu cầu kết thúc chiến tranh đối lập với Kế hoạch Nava",
+          "explanation": "Ta cần thắng lợi quyết định trong khi đối phương tăng cường lực lượng và tìm cách giành lại thế chủ động.",
+          "claimId": "d08-basis-claim"
+        },
+        {
+          "id": "d08-force",
+          "lane": "force",
+          "label": "Chủ lực tinh nhuệ và hậu cần nhân dân",
+          "explanation": "Các đại đoàn chủ lực và hàng vạn dân công tạo nên sức mạnh tổng hợp cho chiến dịch quyết định.",
+          "claimId": "d08-implementation-claim"
+        },
+        {
+          "id": "d08-decision",
+          "lane": "decision",
+          "label": "Chọn Điện Biên Phủ làm điểm quyết chiến",
+          "explanation": "Bộ Chính trị quyết định chấp nhận khiêu chiến, tập trung lực lượng tiêu diệt tập đoàn cứ điểm.",
+          "claimId": "d08-implementation-claim"
+        },
+        {
+          "id": "d08-result",
+          "lane": "result",
+          "label": "Toàn thắng Điện Biên Phủ và Hiệp định Geneve",
+          "explanation": "Chiến thắng quân sự quyết định buộc Pháp ký Hiệp định, chấm dứt chiến tranh.",
+          "claimId": "d08-result-claim"
+        },
+        {
+          "id": "d08-lesson",
+          "lane": "lesson",
+          "label": "Quân sự-Ngoại giao kết hợp",
+          "explanation": "Thắng lợi quân sự tạo cơ sở cho thắng lợi ngoại giao; hai mặt trận hỗ trợ lẫn nhau.",
+          "claimId": "d08-lesson-claim"
+        }
+      ],
       "review": {
         "aiAssistance": {
           "used": true,
-          "role": "metadata planning only"
+          "role": "AI-assisted academic Draft for human review; not reviewed or published"
         }
       },
-      "sourceRefs": []
+      "sourceRefs": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương II - Kháng chiến chống Pháp và Điện Biên Phủ"
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000013",
+          "locator": "Slides 3-15"
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000014",
+          "locator": "Slides 3-16"
+        }
+      ]
     },
     {
       "id": "20000000-0000-0000-0000-000000000009",
-      "slug": "mot-dat-nuoc-hai-nhiem-vu",
+      "versionId": "30000000-0000-0000-0000-000000000009",
+      "slug": "mot-dat-nuoc-hai-nhiem-vu-chien-luoc",
       "chapter": "chapter_2",
       "orderIndex": 9,
       "title": "Một đất nước, hai nhiệm vụ chiến lược",
-      "centralQuestion": "Hai miền có thể hỗ trợ nhau như thế nào trong một chiến lược chung?",
+      "centralQuestion": "Làm thế nào một Đảng lãnh đạo đồng thời hai nhiệm vụ cách mạng khác nhau ở hai miền?",
       "status": "draft",
+      "experience": {
+        "briefing": {
+          "period": "1954-1965",
+          "context": [
+            "Sau Hiệp định Geneve 1954, đất nước tạm thời bị chia cắt: miền Bắc được giải phóng, miền Nam đặt dưới chính quyền Sài Gòn do Mỹ hậu thuẫn.",
+            "Mỹ phá hoại Hiệp định Geneve, dựng lên chính quyền Ngô Đình Diệm và biến miền Nam thành thuộc địa kiểu mới."
+          ],
+          "centralContradiction": "Một Đảng phải đồng thời lãnh đạo xây dựng chủ nghĩa xã hội ở miền Bắc và đấu tranh giải phóng miền Nam, trong khi hai nhiệm vụ có yêu cầu, điều kiện và phương thức khác nhau.",
+          "objective": "Xác định mối quan hệ giữa hai nhiệm vụ chiến lược, phân bổ nguồn lực và xây dựng đường lối phù hợp cho từng miền.",
+          "constraints": [
+            "Miền Bắc vừa thoát khỏi chiến tranh, kinh tế kiệt quệ, cần ổn định và xây dựng.",
+            "Miền Nam đối mặt với chế độ độc tài được Mỹ hậu thuẫn mạnh về quân sự."
+          ]
+        },
+        "evidence": [
+          {
+            "id": "d09-e1",
+            "label": "Hai nhiệm vụ chiến lược được xác định",
+            "kind": "document",
+            "summary": "Đảng xác định cách mạng xã hội chủ nghĩa ở miền Bắc và cách mạng dân tộc dân chủ nhân dân ở miền Nam là hai nhiệm vụ chiến lược của một cuộc cách mạng thống nhất đất nước.",
+            "sourceIds": [
+              "10000000-0000-0000-0000-000000000015"
+            ],
+            "isDistractor": false
+          },
+          {
+            "id": "d09-e2",
+            "label": "Miền Bắc - hậu phương lớn",
+            "kind": "data",
+            "summary": "Miền Bắc thực hiện kế hoạch 3 năm khôi phục kinh tế (1955-1957), cải tạo xã hội chủ nghĩa và kế hoạch 5 năm lần thứ nhất (1961-1965), trở thành hậu phương vững chắc.",
+            "sourceIds": [
+              "10000000-0000-0000-0000-000000000015"
+            ],
+            "isDistractor": false
+          },
+          {
+            "id": "d09-e3",
+            "label": "Phong trào Đồng khởi 1959-1960",
+            "kind": "event",
+            "summary": "Từ đấu tranh chính trị hòa bình chuyển sang kết hợp đấu tranh chính trị với vũ trang, Đồng khởi làm sụp đổ từng mảng chính quyền địch ở nông thôn.",
+            "sourceIds": [
+              "10000000-0000-0000-0000-000000000015"
+            ],
+            "isDistractor": false
+          },
+          {
+            "id": "d09-e4",
+            "label": "Mặt trận Dân tộc Giải phóng miền Nam ra đời",
+            "kind": "event",
+            "summary": "Mặt trận đoàn kết rộng rãi các lực lượng yêu nước, tạo cơ sở chính trị và pháp lý cho cuộc đấu tranh giải phóng miền Nam.",
+            "sourceIds": [
+              "10000000-0000-0000-0000-000000000015"
+            ],
+            "isDistractor": false
+          },
+          {
+            "id": "d09-e5",
+            "label": "Chi viện từ miền Bắc cho miền Nam",
+            "kind": "data",
+            "summary": "Đường mòn Hồ Chí Minh trên bộ và trên biển được tổ chức, vận chuyển cán bộ, vũ khí, lương thực từ hậu phương lớn miền Bắc vào tiền tuyến miền Nam.",
+            "sourceIds": [
+              "10000000-0000-0000-0000-000000000015"
+            ],
+            "isDistractor": false
+          },
+          {
+            "id": "d09-e6",
+            "label": "Chỉ tập trung xây dựng miền Bắc",
+            "kind": "assessment",
+            "summary": "Ưu tiên tuyệt đối cho xây dựng chủ nghĩa xã hội ở miền Bắc có thể củng cố hậu phương nhưng làm chậm nhịp độ đấu tranh ở miền Nam.",
+            "sourceIds": [
+              "10000000-0000-0000-0000-000000000015"
+            ],
+            "isDistractor": true
+          }
+        ],
+        "decision": {
+          "prompt": "Chọn phương án xử lý mối quan hệ giữa hai nhiệm vụ chiến lược ở hai miền.",
+          "requiredEvidenceCount": 4,
+          "options": [
+            {
+              "id": "parallel-tasks",
+              "label": "Đồng thời thực hiện hai nhiệm vụ, miền Bắc là hậu phương, miền Nam là tiền tuyến",
+              "rationale": "Kết hợp xây dựng miền Bắc vững mạnh làm chỗ dựa với đẩy mạnh đấu tranh giải phóng miền Nam."
+            },
+            {
+              "id": "north-first",
+              "label": "Tập trung xây dựng miền Bắc, tạm hoãn đấu tranh vũ trang ở miền Nam",
+              "rationale": "Củng cố hậu phương trước nhưng có thể bỏ lỡ thời cơ và làm suy yếu phong trào miền Nam."
+            },
+            {
+              "id": "south-first",
+              "label": "Dồn toàn lực cho giải phóng miền Nam trước",
+              "rationale": "Đẩy nhanh thống nhất nhưng thiếu hậu phương vững chắc, khó duy trì cuộc đấu tranh lâu dài."
+            }
+          ]
+        },
+        "projectedConsequences": [
+          {
+            "optionId": "parallel-tasks",
+            "steps": [
+              "Miền Bắc phát triển kinh tế-xã hội, tăng cường quốc phòng.",
+              "Miền Nam đẩy mạnh đấu tranh chính trị kết hợp vũ trang.",
+              "Hai miền hỗ trợ nhau: hậu phương mạnh, tiền tuyến vững."
+            ]
+          },
+          {
+            "optionId": "north-first",
+            "steps": [
+              "Miền Bắc tập trung nguồn lực xây dựng.",
+              "Phong trào miền Nam thiếu sự chi viện kịp thời.",
+              "Đối phương củng cố vị trí, gây khó khăn cho giai đoạn sau."
+            ]
+          },
+          {
+            "optionId": "south-first",
+            "steps": [
+              "Tập trung lực lượng cho miền Nam.",
+              "Miền Bắc không đủ thời gian củng cố.",
+              "Thiếu hậu phương bền vững cho kháng chiến lâu dài."
+            ]
+          }
+        ],
+        "historicalComparison": {
+          "actualDecision": "Đảng xác định đồng thời thực hiện hai nhiệm vụ chiến lược: cách mạng xã hội chủ nghĩa ở miền Bắc và cách mạng dân tộc dân chủ nhân dân ở miền Nam; miền Bắc là hậu phương lớn, miền Nam là tiền tuyến lớn.",
+          "implementation": [
+            "Miền Bắc thực hiện khôi phục kinh tế, cải tạo xã hội chủ nghĩa và kế hoạch 5 năm lần thứ nhất.",
+            "Miền Nam chuyển từ đấu tranh chính trị hòa bình sang kết hợp đấu tranh chính trị với vũ trang qua phong trào Đồng khởi.",
+            "Tổ chức tuyến chi viện chiến lược Bắc-Nam (đường bộ và đường biển)."
+          ],
+          "results": [
+            "Miền Bắc trở thành hậu phương vững chắc về chính trị, kinh tế, quân sự.",
+            "Cách mạng miền Nam chuyển từ thế giữ gìn lực lượng sang thế tiến công, làm thất bại chiến lược 'Chiến tranh đặc biệt' của Mỹ."
+          ],
+          "limitations": [
+            "Nguồn lực bị phân tán cho hai nhiệm vụ lớn trong điều kiện đất nước còn nghèo.",
+            "Miền Bắc chịu sức ép từ nguy cơ chiến tranh phá hoại của Mỹ."
+          ]
+        },
+        "lessons": [
+          "Hai nhiệm vụ chiến lược không mâu thuẫn mà hỗ trợ lẫn nhau: hậu phương mạnh tạo sức cho tiền tuyến, tiền tuyến thắng bảo vệ thành quả hậu phương.",
+          "Năng lực lãnh đạo thống nhất của một Đảng trên phạm vi cả nước là nhân tố quyết định thắng lợi."
+        ],
+        "sources": [
+          {
+            "id": "10000000-0000-0000-0000-000000000001",
+            "title": "Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên",
+            "authorOrIssuer": "Bộ Giáo dục và Đào tạo",
+            "publicationYear": 2021,
+            "locator": "Chương II - Một Đảng lãnh đạo hai nhiệm vụ chiến lược",
+            "url": null,
+            "sourceType": "textbook",
+            "rightsNote": "Tài liệu chính của môn học",
+            "verificationStatus": "verified"
+          },
+          {
+            "id": "10000000-0000-0000-0000-000000000015",
+            "title": "VNR202 Session 15 - Một Đảng lãnh đạo hai nhiệm vụ chiến lược 1954-1965",
+            "authorOrIssuer": "Bộ môn VNR202, FPT University",
+            "publicationYear": 2026,
+            "locator": "Slides 3-18",
+            "url": null,
+            "sourceType": "course_slide",
+            "rightsNote": "Học liệu nội bộ; sản phẩm chỉ diễn giải và ghi locator, không phân phối lại slide",
+            "verificationStatus": "verified"
+          }
+        ]
+      },
+      "claims": [
+        {
+          "id": "d09-context-claim",
+          "category": "context",
+          "statement": "Sau 1954, đất nước tạm thời bị chia cắt: miền Bắc được giải phóng và đi lên chủ nghĩa xã hội, miền Nam đặt dưới chính quyền Sài Gòn do Mỹ hậu thuẫn.",
+          "sourceLinks": [
+            {
+              "sourceId": "10000000-0000-0000-0000-000000000015",
+              "locator": "Slides 3-8",
+              "supportScope": "Hỗ trợ bối cảnh đất nước sau Hiệp định Geneve và hai nhiệm vụ chiến lược."
+            }
+          ]
+        },
+        {
+          "id": "d09-basis-claim",
+          "category": "basis",
+          "statement": "Một Đảng phải đồng thời lãnh đạo hai nhiệm vụ cách mạng khác nhau ở hai miền, đòi hỏi đường lối thống nhất nhưng phương thức phù hợp với từng miền.",
+          "sourceLinks": [
+            {
+              "sourceId": "10000000-0000-0000-0000-000000000015",
+              "locator": "Slides 6-12",
+              "supportScope": "Hỗ trợ căn cứ xác định mối quan hệ giữa hai nhiệm vụ chiến lược."
+            }
+          ]
+        },
+        {
+          "id": "d09-implementation-claim",
+          "category": "implementation",
+          "statement": "Miền Bắc xây dựng chủ nghĩa xã hội và trở thành hậu phương lớn; miền Nam chuyển sang kết hợp đấu tranh chính trị với vũ trang qua Đồng khởi và thành lập Mặt trận Dân tộc Giải phóng.",
+          "sourceLinks": [
+            {
+              "sourceId": "10000000-0000-0000-0000-000000000015",
+              "locator": "Slides 10-18",
+              "supportScope": "Hỗ trợ tổ chức thực hiện hai nhiệm vụ chiến lược ở hai miền."
+            }
+          ]
+        },
+        {
+          "id": "d09-result-claim",
+          "category": "result",
+          "statement": "Miền Bắc trở thành hậu phương vững chắc; cách mạng miền Nam chuyển sang thế tiến công, làm thất bại chiến lược 'Chiến tranh đặc biệt' của Mỹ.",
+          "sourceLinks": [
+            {
+              "sourceId": "10000000-0000-0000-0000-000000000015",
+              "locator": "Slides 15-18",
+              "supportScope": "Hỗ trợ kết quả thực hiện hai nhiệm vụ chiến lược giai đoạn 1954-1965."
+            }
+          ]
+        },
+        {
+          "id": "d09-limitation-claim",
+          "category": "limitation",
+          "statement": "Nguồn lực đất nước bị phân tán cho hai nhiệm vụ lớn; miền Bắc chịu sức ép từ nguy cơ chiến tranh phá hoại của Mỹ.",
+          "sourceLinks": [
+            {
+              "sourceId": "10000000-0000-0000-0000-000000000015",
+              "locator": "Slides 15-18",
+              "supportScope": "Hỗ trợ đánh giá hạn chế và thách thức trong thực hiện hai nhiệm vụ."
+            }
+          ]
+        },
+        {
+          "id": "d09-lesson-claim",
+          "category": "lesson",
+          "statement": "Hai nhiệm vụ chiến lược không mâu thuẫn mà hỗ trợ lẫn nhau; năng lực lãnh đạo thống nhất của Đảng trên phạm vi cả nước là nhân tố quyết định.",
+          "sourceLinks": [
+            {
+              "sourceId": "10000000-0000-0000-0000-000000000015",
+              "locator": "Slides 10-18",
+              "supportScope": "Hỗ trợ bài học về mối quan hệ hậu phương-tiền tuyến và vai trò lãnh đạo thống nhất."
+            }
+          ]
+        }
+      ],
+      "causalNodes": [
+        {
+          "id": "d09-context",
+          "lane": "context",
+          "label": "Đất nước tạm thời chia cắt sau 1954",
+          "explanation": "Hiệp định Geneve chia cắt tạm thời, miền Bắc giải phóng, miền Nam dưới chính quyền Sài Gòn.",
+          "claimId": "d09-context-claim"
+        },
+        {
+          "id": "d09-contradiction",
+          "lane": "contradiction",
+          "label": "Hai nhiệm vụ khác nhau, một sự lãnh đạo",
+          "explanation": "Xây dựng chủ nghĩa xã hội và đấu tranh giải phóng là hai nhiệm vụ khác biệt nhưng phải được lãnh đạo thống nhất.",
+          "claimId": "d09-basis-claim"
+        },
+        {
+          "id": "d09-force",
+          "lane": "force",
+          "label": "Hậu phương miền Bắc và lực lượng miền Nam",
+          "explanation": "Miền Bắc xây dựng tiềm lực, miền Nam phát triển lực lượng cách mạng; hai miền hỗ trợ nhau.",
+          "claimId": "d09-implementation-claim"
+        },
+        {
+          "id": "d09-decision",
+          "lane": "decision",
+          "label": "Đồng thời thực hiện hai nhiệm vụ chiến lược",
+          "explanation": "Đảng xác định miền Bắc là hậu phương lớn, miền Nam là tiền tuyến lớn; hai nhiệm vụ hỗ trợ lẫn nhau.",
+          "claimId": "d09-implementation-claim"
+        },
+        {
+          "id": "d09-result",
+          "lane": "result",
+          "label": "Hậu phương vững, tiền tuyến mạnh",
+          "explanation": "Miền Bắc trở thành hậu phương vững chắc; cách mạng miền Nam chuyển sang thế tiến công.",
+          "claimId": "d09-result-claim"
+        },
+        {
+          "id": "d09-lesson",
+          "lane": "lesson",
+          "label": "Thống nhất lãnh đạo, linh hoạt phương thức",
+          "explanation": "Một Đảng lãnh đạo thống nhất nhưng phương thức phải phù hợp với điều kiện từng miền.",
+          "claimId": "d09-lesson-claim"
+        }
+      ],
       "review": {
         "aiAssistance": {
           "used": true,
-          "role": "metadata planning only"
+          "role": "AI-assisted academic Draft for human review; not reviewed or published"
         }
       },
-      "sourceRefs": []
+      "sourceRefs": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương II - Một Đảng lãnh đạo hai nhiệm vụ chiến lược"
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000015",
+          "locator": "Slides 3-18"
+        }
+      ]
     },
     {
       "id": "20000000-0000-0000-0000-000000000010",
+      "versionId": "30000000-0000-0000-0000-000000000010",
       "slug": "tu-doi-dau-cuc-bo-den-toan-thang",
       "chapter": "chapter_2",
       "orderIndex": 10,
       "title": "Từ đối đầu cục bộ đến toàn thắng",
-      "centralQuestion": "Những điều chỉnh nào tạo ra thế và lực cho quyết định kết thúc chiến tranh?",
+      "centralQuestion": "Làm thế nào đánh bại ý chí xâm lược của đế quốc Mỹ và giành thắng lợi hoàn toàn?",
       "status": "draft",
+      "experience": {
+        "briefing": {
+          "period": "1965-1975",
+          "context": [
+            "Sau thất bại của 'Chiến tranh đặc biệt', Mỹ chuyển sang 'Chiến tranh cục bộ' với quân viễn chinh Mỹ trực tiếp tham chiến và mở rộng chiến tranh phá hoại miền Bắc.",
+            "Tương quan lực lượng thay đổi qua từng chiến lược chiến tranh của Mỹ: từ 'Chiến tranh cục bộ' sang 'Việt Nam hóa chiến tranh'."
+          ],
+          "centralContradiction": "Yêu cầu đánh bại ý chí xâm lược của đế quốc Mỹ và giành độc lập, thống nhất đối lập với sức mạnh quân sự vượt trội và các chiến lược chiến tranh leo thang của Mỹ.",
+          "objective": "Từng bước làm thất bại các chiến lược chiến tranh của Mỹ, buộc Mỹ rút quân và đánh đổ chính quyền Sài Gòn, hoàn thành giải phóng miền Nam, thống nhất đất nước.",
+          "constraints": [
+            "Mỹ có ưu thế tuyệt đối về hỏa lực, không quân và hải quân.",
+            "Cần kết hợp đấu tranh quân sự, chính trị, ngoại giao để tạo sức mạnh tổng hợp."
+          ]
+        },
+        "evidence": [
+          {
+            "id": "d10-e1",
+            "label": "Chiến tranh cục bộ và phá hoại miền Bắc",
+            "kind": "event",
+            "summary": "Mỹ đưa quân viễn chinh vào miền Nam, đồng thời mở chiến tranh phá hoại bằng không quân và hải quân đối với miền Bắc.",
+            "sourceIds": [
+              "10000000-0000-0000-0000-000000000016"
+            ],
+            "isDistractor": false
+          },
+          {
+            "id": "d10-e2",
+            "label": "Tổng tiến công Tết Mậu Thân 1968",
+            "kind": "event",
+            "summary": "Cuộc Tổng tiến công và nổi dậy Tết Mậu Thân làm lung lay ý chí xâm lược của Mỹ, buộc Mỹ xuống thang chiến tranh và chấp nhận đàm phán tại Paris.",
+            "sourceIds": [
+              "10000000-0000-0000-0000-000000000016"
+            ],
+            "isDistractor": false
+          },
+          {
+            "id": "d10-e3",
+            "label": "Hiệp định Paris 1973",
+            "kind": "document",
+            "summary": "Hiệp định buộc Mỹ rút hết quân, công nhận độc lập, chủ quyền, thống nhất và toàn vẹn lãnh thổ Việt Nam, nhưng chính quyền Sài Gòn vẫn tồn tại.",
+            "sourceIds": [
+              "10000000-0000-0000-0000-000000000017"
+            ],
+            "isDistractor": false
+          },
+          {
+            "id": "d10-e4",
+            "label": "Miền Bắc chống chiến tranh phá hoại và chi viện",
+            "kind": "data",
+            "summary": "Miền Bắc vừa chiến đấu chống chiến tranh phá hoại, vừa sản xuất và chi viện tối đa cho miền Nam, thể hiện vai trò hậu phương lớn.",
+            "sourceIds": [
+              "10000000-0000-0000-0000-000000000016"
+            ],
+            "isDistractor": false
+          },
+          {
+            "id": "d10-e5",
+            "label": "Tổng tiến công mùa Xuân 1975",
+            "kind": "event",
+            "summary": "Chiến dịch Tây Nguyên, Huế-Đà Nẵng và Hồ Chí Minh lịch sử giải phóng hoàn toàn miền Nam trong 55 ngày đêm.",
+            "sourceIds": [
+              "10000000-0000-0000-0000-000000000017"
+            ],
+            "isDistractor": false
+          },
+          {
+            "id": "d10-e6",
+            "label": "Chỉ dựa vào đàm phán, hạn chế đấu tranh vũ trang",
+            "kind": "assessment",
+            "summary": "Ưu tiên đàm phán có thể giảm tổn thất nhưng không tạo được sức ép quân sự đủ mạnh để buộc đối phương nhượng bộ thực chất.",
+            "sourceIds": [
+              "10000000-0000-0000-0000-000000000017"
+            ],
+            "isDistractor": true
+          }
+        ],
+        "decision": {
+          "prompt": "Chọn phương án kết hợp các mặt trận để đánh bại ý chí xâm lược của Mỹ và giành thắng lợi cuối cùng.",
+          "requiredEvidenceCount": 4,
+          "options": [
+            {
+              "id": "combined-strategy",
+              "label": "Kết hợp quân sự-chính trị-ngoại giao, đánh từng bước, tiến tới tổng tiến công",
+              "rationale": "Vừa đánh vừa đàm, tạo sức ép tổng hợp, từng bước làm thay đổi tương quan lực lượng và kết thúc chiến tranh."
+            },
+            {
+              "id": "military-only",
+              "label": "Chỉ dựa vào đấu tranh quân sự thuần túy",
+              "rationale": "Tập trung sức mạnh quân sự nhưng bỏ qua mặt trận chính trị-ngoại giao, khó tạo đột phá chiến lược."
+            },
+            {
+              "id": "negotiation-only",
+              "label": "Ưu tiên đàm phán, hạn chế đấu tranh vũ trang",
+              "rationale": "Giảm tổn thất nhưng thiếu sức ép quân sự để buộc đối phương nhượng bộ thực chất."
+            }
+          ]
+        },
+        "projectedConsequences": [
+          {
+            "optionId": "combined-strategy",
+            "steps": [
+              "Đánh bại từng chiến lược chiến tranh của Mỹ.",
+              "Buộc Mỹ rút quân qua Hiệp định Paris.",
+              "Tận dụng thời cơ tổng tiến công giành toàn thắng."
+            ]
+          },
+          {
+            "optionId": "military-only",
+            "steps": [
+              "Tổn thất lớn trong đối đầu trực diện.",
+              "Thiếu đòn bẩy chính trị-ngoại giao.",
+              "Khó tạo được sự đồng thuận quốc tế."
+            ]
+          },
+          {
+            "optionId": "negotiation-only",
+            "steps": [
+              "Đối phương không chịu sức ép quân sự thực sự.",
+              "Đàm phán kéo dài không kết quả.",
+              "Mất thời cơ khi tương quan lực lượng thay đổi."
+            ]
+          }
+        ],
+        "historicalComparison": {
+          "actualDecision": "Đảng kiên trì đường lối kết hợp đấu tranh quân sự, chính trị và ngoại giao; từng bước đánh bại các chiến lược chiến tranh của Mỹ; ký Hiệp định Paris buộc Mỹ rút quân; và tổ chức Tổng tiến công mùa Xuân 1975 giải phóng hoàn toàn miền Nam.",
+          "implementation": [
+            "Đánh bại 'Chiến tranh cục bộ' với đỉnh cao Tổng tiến công Tết Mậu Thân 1968.",
+            "Đánh bại 'Việt Nam hóa chiến tranh', kết hợp đàm phán tại Paris.",
+            "Ký Hiệp định Paris 1973, buộc Mỹ rút quân.",
+            "Tổ chức Tổng tiến công và nổi dậy mùa Xuân 1975 với ba chiến dịch lớn."
+          ],
+          "results": [
+            "Giải phóng hoàn toàn miền Nam, thống nhất đất nước.",
+            "Hoàn thành cuộc cách mạng dân tộc dân chủ nhân dân trên phạm vi cả nước."
+          ],
+          "limitations": [
+            "Chiến tranh kéo dài gây tổn thất lớn về người và của.",
+            "Hậu quả chiến tranh để lại nhiều vấn đề kinh tế-xã hội cần giải quyết sau thống nhất."
+          ]
+        },
+        "lessons": [
+          "Kết hợp chặt chẽ ba mặt trận quân sự-chính trị-ngoại giao tạo sức mạnh tổng hợp đánh bại đế quốc mạnh.",
+          "Nắm vững thời cơ chiến lược, chuyển từ tiến công chiến lược sang tổng tiến công khi tương quan lực lượng có lợi."
+        ],
+        "sources": [
+          {
+            "id": "10000000-0000-0000-0000-000000000001",
+            "title": "Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên",
+            "authorOrIssuer": "Bộ Giáo dục và Đào tạo",
+            "publicationYear": 2021,
+            "locator": "Chương II - Kháng chiến chống Mỹ và thống nhất đất nước",
+            "url": null,
+            "sourceType": "textbook",
+            "rightsNote": "Tài liệu chính của môn học",
+            "verificationStatus": "verified"
+          },
+          {
+            "id": "10000000-0000-0000-0000-000000000016",
+            "title": "VNR202 Session 16 - Các chiến lược chiến tranh của Mỹ và vai trò hậu phương miền Bắc",
+            "authorOrIssuer": "Bộ môn VNR202, FPT University",
+            "publicationYear": 2026,
+            "locator": "Slides 3-20",
+            "url": null,
+            "sourceType": "course_slide",
+            "rightsNote": "Học liệu nội bộ; sản phẩm chỉ diễn giải và ghi locator, không phân phối lại slide",
+            "verificationStatus": "verified"
+          },
+          {
+            "id": "10000000-0000-0000-0000-000000000017",
+            "title": "VNR202 Session 17 - Hiệp định Paris và Tổng tiến công 1975",
+            "authorOrIssuer": "Bộ môn VNR202, FPT University",
+            "publicationYear": 2026,
+            "locator": "Slides 3-18",
+            "url": null,
+            "sourceType": "course_slide",
+            "rightsNote": "Học liệu nội bộ; sản phẩm chỉ diễn giải và ghi locator, không phân phối lại slide",
+            "verificationStatus": "verified"
+          },
+          {
+            "id": "10000000-0000-0000-0000-000000000018",
+            "title": "VNR202 Session 18 - Ý nghĩa, hạn chế và kinh nghiệm lãnh đạo 1945-1975",
+            "authorOrIssuer": "Bộ môn VNR202, FPT University",
+            "publicationYear": 2026,
+            "locator": "Slides 3-12",
+            "url": null,
+            "sourceType": "course_slide",
+            "rightsNote": "Học liệu nội bộ; sản phẩm chỉ diễn giải và ghi locator, không phân phối lại slide",
+            "verificationStatus": "verified"
+          }
+        ]
+      },
+      "claims": [
+        {
+          "id": "d10-context-claim",
+          "category": "context",
+          "statement": "Mỹ leo thang chiến tranh với 'Chiến tranh cục bộ', đưa quân viễn chinh vào miền Nam và mở rộng chiến tranh phá hoại miền Bắc, tạo ra thách thức lớn nhất cho cách mạng Việt Nam.",
+          "sourceLinks": [
+            {
+              "sourceId": "10000000-0000-0000-0000-000000000016",
+              "locator": "Slides 3-10",
+              "supportScope": "Hỗ trợ bối cảnh Mỹ leo thang chiến tranh và các chiến lược chiến tranh."
+            }
+          ]
+        },
+        {
+          "id": "d10-basis-claim",
+          "category": "basis",
+          "statement": "Để đánh bại ý chí xâm lược của Mỹ, cần kết hợp đấu tranh quân sự, chính trị và ngoại giao, từng bước làm thay đổi tương quan lực lượng.",
+          "sourceLinks": [
+            {
+              "sourceId": "10000000-0000-0000-0000-000000000016",
+              "locator": "Slides 10-18",
+              "supportScope": "Hỗ trợ căn cứ kết hợp ba mặt trận đấu tranh."
+            },
+            {
+              "sourceId": "10000000-0000-0000-0000-000000000017",
+              "locator": "Slides 3-8",
+              "supportScope": "Hỗ trợ căn cứ đàm phán Paris và chuyển giai đoạn chiến lược."
+            }
+          ]
+        },
+        {
+          "id": "d10-implementation-claim",
+          "category": "implementation",
+          "statement": "Ta đánh bại 'Chiến tranh cục bộ' với đỉnh cao Tết Mậu Thân 1968, đánh bại 'Việt Nam hóa chiến tranh', ký Hiệp định Paris buộc Mỹ rút quân, và tổ chức Tổng tiến công mùa Xuân 1975.",
+          "sourceLinks": [
+            {
+              "sourceId": "10000000-0000-0000-0000-000000000016",
+              "locator": "Slides 12-20",
+              "supportScope": "Hỗ trợ đánh bại Chiến tranh cục bộ và Tết Mậu Thân."
+            },
+            {
+              "sourceId": "10000000-0000-0000-0000-000000000017",
+              "locator": "Slides 8-18",
+              "supportScope": "Hỗ trợ Hiệp định Paris và Tổng tiến công 1975."
+            }
+          ]
+        },
+        {
+          "id": "d10-result-claim",
+          "category": "result",
+          "statement": "Miền Nam hoàn toàn giải phóng, đất nước thống nhất, hoàn thành cuộc cách mạng dân tộc dân chủ nhân dân trên phạm vi cả nước.",
+          "sourceLinks": [
+            {
+              "sourceId": "10000000-0000-0000-0000-000000000017",
+              "locator": "Slides 15-18",
+              "supportScope": "Hỗ trợ kết quả Tổng tiến công 1975 và ý nghĩa thắng lợi."
+            },
+            {
+              "sourceId": "10000000-0000-0000-0000-000000000018",
+              "locator": "Slides 3-8",
+              "supportScope": "Hỗ trợ ý nghĩa lịch sử của thắng lợi 1975."
+            }
+          ]
+        },
+        {
+          "id": "d10-limitation-claim",
+          "category": "limitation",
+          "statement": "Chiến tranh kéo dài 21 năm gây tổn thất lớn về người và của; hậu quả chiến tranh để lại nhiều vấn đề kinh tế-xã hội cần giải quyết sau thống nhất.",
+          "sourceLinks": [
+            {
+              "sourceId": "10000000-0000-0000-0000-000000000018",
+              "locator": "Slides 6-12",
+              "supportScope": "Hỗ trợ đánh giá hạn chế, tổn thất và thách thức sau chiến tranh."
+            }
+          ]
+        },
+        {
+          "id": "d10-lesson-claim",
+          "category": "lesson",
+          "statement": "Kết hợp chặt chẽ ba mặt trận quân sự-chính trị-ngoại giao tạo sức mạnh tổng hợp; nắm vững thời cơ chiến lược để chuyển sang tổng tiến công khi điều kiện chín muồi.",
+          "sourceLinks": [
+            {
+              "sourceId": "10000000-0000-0000-0000-000000000018",
+              "locator": "Slides 8-12",
+              "supportScope": "Hỗ trợ bài học về kết hợp ba mặt trận và nghệ thuật nắm thời cơ."
+            }
+          ]
+        }
+      ],
+      "causalNodes": [
+        {
+          "id": "d10-context",
+          "lane": "context",
+          "label": "Mỹ leo thang chiến tranh 1965",
+          "explanation": "Mỹ đưa quân viễn chinh vào miền Nam và mở chiến tranh phá hoại miền Bắc, tạo thách thức lớn nhất.",
+          "claimId": "d10-context-claim"
+        },
+        {
+          "id": "d10-contradiction",
+          "lane": "contradiction",
+          "label": "Đánh bại ý chí xâm lược đối lập với sức mạnh quân sự Mỹ",
+          "explanation": "Yêu cầu giành thắng lợi cuối cùng đối lập với ưu thế quân sự vượt trội của Mỹ.",
+          "claimId": "d10-basis-claim"
+        },
+        {
+          "id": "d10-force",
+          "lane": "force",
+          "label": "Sức mạnh tổng hợp ba mặt trận",
+          "explanation": "Quân sự-chính trị-ngoại giao kết hợp, hậu phương miền Bắc chi viện cho tiền tuyến miền Nam.",
+          "claimId": "d10-implementation-claim"
+        },
+        {
+          "id": "d10-decision",
+          "lane": "decision",
+          "label": "Kết hợp đánh-đàm, tiến tới tổng tiến công",
+          "explanation": "Vừa đánh vừa đàm, từng bước thay đổi tương quan, ký Hiệp định Paris và tổ chức Tổng tiến công 1975.",
+          "claimId": "d10-implementation-claim"
+        },
+        {
+          "id": "d10-result",
+          "lane": "result",
+          "label": "Toàn thắng 1975, thống nhất đất nước",
+          "explanation": "Giải phóng hoàn toàn miền Nam, hoàn thành cách mạng dân tộc dân chủ nhân dân.",
+          "claimId": "d10-result-claim"
+        },
+        {
+          "id": "d10-lesson",
+          "lane": "lesson",
+          "label": "Ba mặt trận và thời cơ chiến lược",
+          "explanation": "Kết hợp quân sự-chính trị-ngoại giao và nắm vững thời cơ là chìa khóa thắng lợi.",
+          "claimId": "d10-lesson-claim"
+        }
+      ],
       "review": {
         "aiAssistance": {
           "used": true,
-          "role": "metadata planning only"
+          "role": "AI-assisted academic Draft for human review; not reviewed or published"
         }
       },
-      "sourceRefs": []
+      "sourceRefs": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương II - Kháng chiến chống Mỹ và thống nhất đất nước"
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000016",
+          "locator": "Slides 3-20"
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000017",
+          "locator": "Slides 3-18"
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000018",
+          "locator": "Slides 3-12"
+        }
+      ]
     },
     {
       "id": "20000000-0000-0000-0000-000000000011",

@@ -1,16 +1,285 @@
 {
   "id": "20000000-0000-0000-0000-000000000008",
+  "versionId": "30000000-0000-0000-0000-000000000008",
   "slug": "tao-the-cho-quyet-chien",
   "chapter": "chapter_2",
   "orderIndex": 8,
   "title": "Tạo thế cho quyết chiến",
-  "centralQuestion": "Làm thế nào chuyển từ cầm cự sang chủ động chiến lược và kết thúc chiến tranh?",
+  "centralQuestion": "Làm thế nào chuyển từ phòng ngự cầm cự sang phản công và kết thúc chiến tranh bằng một thắng lợi quyết định?",
   "status": "draft",
+  "experience": {
+    "briefing": {
+      "period": "1950-1954",
+      "context": [
+        "Sau chiến thắng Biên giới 1950, cuộc kháng chiến chống Pháp chuyển sang giai đoạn mới: ta giành quyền chủ động chiến lược trên chiến trường chính.",
+        "Đế quốc Mỹ can thiệp sâu hơn, viện trợ cho Pháp và tìm cách kéo dài, mở rộng chiến tranh Đông Dương."
+      ],
+      "centralContradiction": "Yêu cầu kết thúc chiến tranh bằng thắng lợi quân sự quyết định đối lập với việc đối phương tăng cường lực lượng và tìm cách giành lại thế chủ động.",
+      "objective": "Tạo lập thế trận có lợi nhất để đánh bại kế hoạch quân sự cuối cùng của đối phương, buộc họ phải chấp nhận một giải pháp chính trị có lợi cho ta.",
+      "constraints": [
+        "Đối phương còn ưu thế về hỏa lực, không quân và hậu cần.",
+        "Cần chọn địa bàn và thời điểm quyết chiến mà ở đó ta phát huy được sở trường, hạn chế được sở trường của địch."
+      ]
+    },
+    "evidence": [
+      {
+        "id": "d08-e1",
+        "label": "Chiến thắng Biên giới 1950",
+        "kind": "event",
+        "summary": "Chiến dịch Biên giới khai thông biên giới Việt-Trung, phá vỡ thế bao vây của địch và đưa cuộc kháng chiến sang giai đoạn chủ động phản công.",
+        "sourceIds": ["10000000-0000-0000-0000-000000000013"],
+        "isDistractor": false
+      },
+      {
+        "id": "d08-e2",
+        "label": "Đại hội II của Đảng (1951)",
+        "kind": "document",
+        "summary": "Đại hội quyết định đưa Đảng ra hoạt động công khai, thông qua Chính cương và Điều lệ mới, tăng cường sự lãnh đạo toàn diện đối với kháng chiến.",
+        "sourceIds": ["10000000-0000-0000-0000-000000000013"],
+        "isDistractor": false
+      },
+      {
+        "id": "d08-e3",
+        "label": "Kế hoạch Nava và tập đoàn cứ điểm Điện Biên Phủ",
+        "kind": "event",
+        "summary": "Pháp-Mỹ triển khai Kế hoạch Nava với hy vọng chuyển bại thành thắng trong 18 tháng, xây dựng Điện Biên Phủ thành tập đoàn cứ điểm mạnh nhất Đông Dương.",
+        "sourceIds": ["10000000-0000-0000-0000-000000000014"],
+        "isDistractor": false
+      },
+      {
+        "id": "d08-e4",
+        "label": "Quyết định chọn Điện Biên Phủ làm điểm quyết chiến",
+        "kind": "event",
+        "summary": "Bộ Chính trị và Tổng Quân ủy quyết định chấp nhận khiêu chiến tại Điện Biên Phủ, tập trung lực lượng để tiêu diệt tập đoàn cứ điểm.",
+        "sourceIds": ["10000000-0000-0000-0000-000000000014"],
+        "isDistractor": false
+      },
+      {
+        "id": "d08-e5",
+        "label": "Hậu cần và dân công phục vụ chiến dịch",
+        "kind": "data",
+        "summary": "Hàng vạn dân công, thanh niên xung phong bảo đảm hậu cần, kéo pháo, mở đường, vận chuyển lương thực vũ khí lên Điện Biên Phủ.",
+        "sourceIds": ["10000000-0000-0000-0000-000000000014"],
+        "isDistractor": false
+      },
+      {
+        "id": "d08-e6",
+        "label": "Tránh quyết chiến, kéo dài đàm phán",
+        "kind": "assessment",
+        "summary": "Tránh đối đầu trực tiếp có thể giảm tổn thất trước mắt nhưng để đối phương có thời gian củng cố và thay đổi tương quan có lợi cho họ.",
+        "sourceIds": ["10000000-0000-0000-0000-000000000014"],
+        "isDistractor": true
+      }
+    ],
+    "decision": {
+      "prompt": "Chọn phương án tạo thế và kết thúc chiến tranh có lợi nhất cho cách mạng Việt Nam.",
+      "requiredEvidenceCount": 4,
+      "options": [
+        {
+          "id": "dien-bien-phu",
+          "label": "Tập trung lực lượng quyết chiến tại Điện Biên Phủ",
+          "rationale": "Chấp nhận khiêu chiến tại địa bàn ta có thể tập trung ưu thế, tiêu diệt lực lượng tinh nhuệ nhất của địch, tạo đòn quyết định cho đàm phán."
+        },
+        {
+          "id": "avoid-decisive",
+          "label": "Tránh quyết chiến, tiếp tục chiến tranh du kích rộng khắp",
+          "rationale": "Giảm rủi ro tổn thất lớn nhưng kéo dài chiến tranh, để đối phương có thời gian tăng viện và thay đổi cục diện."
+        },
+        {
+          "id": "negotiate-early",
+          "label": "Ưu tiên đàm phán, chấp nhận giải pháp chia cắt tạm thời",
+          "rationale": "Sớm chấm dứt chiến sự nhưng có thể không đạt được mục tiêu độc lập, thống nhất trọn vẹn."
+        }
+      ]
+    },
+    "projectedConsequences": [
+      {
+        "optionId": "dien-bien-phu",
+        "steps": [
+          "Huy động tổng lực cho một chiến dịch quyết định.",
+          "Tiêu diệt tập đoàn cứ điểm, làm sụp đổ ý chí tiếp tục chiến tranh của đối phương.",
+          "Tạo ưu thế tuyệt đối trên bàn đàm phán Geneve."
+        ]
+      },
+      {
+        "optionId": "avoid-decisive",
+        "steps": [
+          "Chiến tranh kéo dài, đối phương được tăng viện.",
+          "Mỹ can thiệp sâu hơn vào Đông Dương.",
+          "Cơ hội kết thúc chiến tranh bị trì hoãn."
+        ]
+      },
+      {
+        "optionId": "negotiate-early",
+        "steps": [
+          "Đạt được ngừng bắn sớm.",
+          "Có thể phải chấp nhận vĩ tuyến chia cắt bất lợi hơn.",
+          "Chưa phát huy hết thắng lợi quân sự đã đạt được."
+        ]
+      }
+    ],
+    "historicalComparison": {
+      "actualDecision": "Bộ Chính trị quyết định chọn Điện Biên Phủ làm điểm quyết chiến chiến lược, tập trung đại bộ phận chủ lực, huy động tối đa hậu cần tại chỗ, thực hiện phương châm 'đánh chắc, tiến chắc' và giành toàn thắng.",
+      "implementation": [
+        "Tập trung 4 đại đoàn chủ lực và toàn bộ pháo binh, công binh cho chiến dịch.",
+        "Huy động hơn 260.000 dân công, thanh niên xung phong bảo đảm hậu cần.",
+        "Thay đổi phương châm từ 'đánh nhanh, thắng nhanh' sang 'đánh chắc, tiến chắc'."
+      ],
+      "results": [
+        "Tiêu diệt hoàn toàn tập đoàn cứ điểm Điện Biên Phủ sau 56 ngày đêm.",
+        "Buộc Pháp ký Hiệp định Geneve, chấm dứt chiến tranh, công nhận độc lập, chủ quyền, thống nhất và toàn vẹn lãnh thổ ba nước Đông Dương."
+      ],
+      "limitations": [
+        "Hiệp định Geneve mới giải phóng được miền Bắc, miền Nam tạm thời đặt dưới sự kiểm soát của chính quyền Sài Gòn.",
+        "Đất nước tạm thời bị chia cắt hai miền với hai chế độ chính trị khác nhau."
+      ]
+    },
+    "lessons": [
+      "Thắng lợi quân sự quyết định là cơ sở cho thắng lợi trên bàn đàm phán; 'đánh cho Mỹ cút, đánh cho ngụy nhào' là nguyên lý xuyên suốt.",
+      "Phát huy sức mạnh tổng hợp của chiến tranh nhân dân, kết hợp quân sự-chính trị-hậu cần-ngoại giao trong một chiến dịch quyết định."
+    ]
+  },
+  "claims": [
+    {
+      "id": "d08-context-claim",
+      "category": "context",
+      "statement": "Sau chiến thắng Biên giới 1950, ta giành quyền chủ động chiến lược, nhưng Pháp-Mỹ tăng cường lực lượng và triển khai Kế hoạch Nava hòng chuyển bại thành thắng.",
+      "sourceLinks": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000013",
+          "locator": "Slides 3-10",
+          "supportScope": "Hỗ trợ bối cảnh chuyển giai đoạn kháng chiến và sự can thiệp của Mỹ."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000014",
+          "locator": "Slides 3-6",
+          "supportScope": "Hỗ trợ bối cảnh Kế hoạch Nava và tập đoàn cứ điểm Điện Biên Phủ."
+        }
+      ]
+    },
+    {
+      "id": "d08-basis-claim",
+      "category": "basis",
+      "statement": "Cần một thắng lợi quân sự quyết định để làm sụp đổ ý chí tiếp tục chiến tranh của đối phương và tạo ưu thế tuyệt đối trên bàn đàm phán.",
+      "sourceLinks": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000014",
+          "locator": "Slides 6-10",
+          "supportScope": "Hỗ trợ căn cứ lựa chọn quyết chiến chiến lược và mối quan hệ với đàm phán."
+        }
+      ]
+    },
+    {
+      "id": "d08-implementation-claim",
+      "category": "implementation",
+      "statement": "Ta tập trung lực lượng chủ lực, huy động hậu cần tại chỗ quy mô lớn, thay đổi phương châm tác chiến và tổ chức chiến dịch Điện Biên Phủ với phương châm 'đánh chắc, tiến chắc'.",
+      "sourceLinks": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000014",
+          "locator": "Slides 8-16",
+          "supportScope": "Hỗ trợ tổ chức thực hiện chiến dịch Điện Biên Phủ."
+        }
+      ]
+    },
+    {
+      "id": "d08-result-claim",
+      "category": "result",
+      "statement": "Chiến thắng Điện Biên Phủ buộc Pháp ký Hiệp định Geneve, chấm dứt chiến tranh, công nhận độc lập, chủ quyền, thống nhất và toàn vẹn lãnh thổ Việt Nam.",
+      "sourceLinks": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000014",
+          "locator": "Slides 12-16",
+          "supportScope": "Hỗ trợ kết quả chiến dịch và Hiệp định Geneve."
+        }
+      ]
+    },
+    {
+      "id": "d08-limitation-claim",
+      "category": "limitation",
+      "statement": "Hiệp định Geneve mới giải phóng được miền Bắc, đất nước tạm thời bị chia cắt, miền Nam tiếp tục là chiến trường của cuộc đấu tranh giải phóng dân tộc.",
+      "sourceLinks": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000014",
+          "locator": "Slides 14-16",
+          "supportScope": "Hỗ trợ đánh giá hạn chế của Hiệp định Geneve và tình hình sau 1954."
+        }
+      ]
+    },
+    {
+      "id": "d08-lesson-claim",
+      "category": "lesson",
+      "statement": "Thắng lợi quân sự quyết định là cơ sở cho thắng lợi ngoại giao; kết hợp chặt chẽ giữa đấu tranh quân sự, chính trị và ngoại giao tạo sức mạnh tổng hợp kết thúc chiến tranh.",
+      "sourceLinks": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000014",
+          "locator": "Slides 12-16",
+          "supportScope": "Hỗ trợ bài học về mối quan hệ quân sự-ngoại giao và nghệ thuật kết thúc chiến tranh."
+        }
+      ]
+    }
+  ],
+  "causalNodes": [
+    {
+      "id": "d08-context",
+      "lane": "context",
+      "label": "Chủ động chiến lược sau Biên giới 1950",
+      "explanation": "Chiến thắng Biên giới khai thông biên giới, phá thế bao vây và đưa kháng chiến sang giai đoạn mới.",
+      "claimId": "d08-context-claim"
+    },
+    {
+      "id": "d08-contradiction",
+      "lane": "contradiction",
+      "label": "Yêu cầu kết thúc chiến tranh đối lập với Kế hoạch Nava",
+      "explanation": "Ta cần thắng lợi quyết định trong khi đối phương tăng cường lực lượng và tìm cách giành lại thế chủ động.",
+      "claimId": "d08-basis-claim"
+    },
+    {
+      "id": "d08-force",
+      "lane": "force",
+      "label": "Chủ lực tinh nhuệ và hậu cần nhân dân",
+      "explanation": "Các đại đoàn chủ lực và hàng vạn dân công tạo nên sức mạnh tổng hợp cho chiến dịch quyết định.",
+      "claimId": "d08-implementation-claim"
+    },
+    {
+      "id": "d08-decision",
+      "lane": "decision",
+      "label": "Chọn Điện Biên Phủ làm điểm quyết chiến",
+      "explanation": "Bộ Chính trị quyết định chấp nhận khiêu chiến, tập trung lực lượng tiêu diệt tập đoàn cứ điểm.",
+      "claimId": "d08-implementation-claim"
+    },
+    {
+      "id": "d08-result",
+      "lane": "result",
+      "label": "Toàn thắng Điện Biên Phủ và Hiệp định Geneve",
+      "explanation": "Chiến thắng quân sự quyết định buộc Pháp ký Hiệp định, chấm dứt chiến tranh.",
+      "claimId": "d08-result-claim"
+    },
+    {
+      "id": "d08-lesson",
+      "lane": "lesson",
+      "label": "Quân sự-Ngoại giao kết hợp",
+      "explanation": "Thắng lợi quân sự tạo cơ sở cho thắng lợi ngoại giao; hai mặt trận hỗ trợ lẫn nhau.",
+      "claimId": "d08-lesson-claim"
+    }
+  ],
   "review": {
     "aiAssistance": {
       "used": true,
-      "role": "metadata planning only"
+      "role": "AI-assisted academic Draft for human review; not reviewed or published"
     }
   },
-  "sourceRefs": []
+  "sourceRefs": [
+    {
+      "sourceId": "10000000-0000-0000-0000-000000000001",
+      "locator": "Chương II - Kháng chiến chống Pháp và Điện Biên Phủ"
+    },
+    {
+      "sourceId": "10000000-0000-0000-0000-000000000013",
+      "locator": "Slides 3-15"
+    },
+    {
+      "sourceId": "10000000-0000-0000-0000-000000000014",
+      "locator": "Slides 3-16"
+    }
+  ]
 }
