@@ -2036,7 +2036,68 @@
       "sourceRefs": []
     }
   ],
-  "causalLinks": [],
+  "causalLinks": [
+    {
+      "id": "ch1-path-to-unification",
+      "sourceDossierId": "20000000-0000-0000-0000-000000000001",
+      "sourceNodeId": "d01-lesson",
+      "targetDossierId": "20000000-0000-0000-0000-000000000002",
+      "targetNodeId": "hop-nhat-de-mo-duong:context",
+      "relation": "condition",
+      "explanation": "Việc xác lập con đường cách mạng vô sản và chuẩn bị tư tưởng, chính trị, tổ chức tạo điều kiện cho yêu cầu thống nhất các tổ chức cộng sản.",
+      "claimId": "d01-lesson-claim",
+      "sourceId": "10000000-0000-0000-0000-000000000003",
+      "locator": "Slides 15-19"
+    },
+    {
+      "id": "ch1-unification-to-movement",
+      "sourceDossierId": "20000000-0000-0000-0000-000000000002",
+      "sourceNodeId": "hop-nhat-de-mo-duong:decision",
+      "targetDossierId": "20000000-0000-0000-0000-000000000003",
+      "targetNodeId": "d03-context",
+      "relation": "condition",
+      "explanation": "Sự ra đời của tổ chức lãnh đạo thống nhất và cương lĩnh đầu tiên tạo điều kiện tổ chức phong trào cách mạng 1930-1931.",
+      "claimId": "d03-context-claim",
+      "sourceId": "10000000-0000-0000-0000-000000000005",
+      "locator": "Slides 3-9"
+    },
+    {
+      "id": "ch1-movement-to-democratic-window",
+      "sourceDossierId": "20000000-0000-0000-0000-000000000003",
+      "sourceNodeId": "d03-lesson",
+      "targetDossierId": "20000000-0000-0000-0000-000000000004",
+      "targetNodeId": "d04-force",
+      "relation": "lesson",
+      "explanation": "Kinh nghiệm tổ chức quần chúng và khôi phục lực lượng giúp Đảng sử dụng linh hoạt hình thức công khai, nửa công khai và hợp pháp trong giai đoạn 1936-1939.",
+      "claimId": "d03-lesson-claim",
+      "sourceId": "10000000-0000-0000-0000-000000000006",
+      "locator": "Slides 6-10"
+    },
+    {
+      "id": "ch1-democratic-window-to-strategic-shift",
+      "sourceDossierId": "20000000-0000-0000-0000-000000000004",
+      "sourceNodeId": "d04-lesson",
+      "targetDossierId": "20000000-0000-0000-0000-000000000005",
+      "targetNodeId": "d05-contradiction",
+      "relation": "response",
+      "explanation": "Khi chiến tranh thế giới bùng nổ và không gian dân chủ khép lại, nhiệm vụ trước mắt phải chuyển từ dân sinh, dân chủ sang giải phóng dân tộc.",
+      "claimId": "d04-lesson-claim",
+      "sourceId": "10000000-0000-0000-0000-000000000007",
+      "locator": "Slides 3-10"
+    },
+    {
+      "id": "ch1-strategic-shift-to-opportunity",
+      "sourceDossierId": "20000000-0000-0000-0000-000000000005",
+      "sourceNodeId": "d05-decision",
+      "targetDossierId": "20000000-0000-0000-0000-000000000005",
+      "targetNodeId": "d05-result",
+      "relation": "outcome",
+      "explanation": "Sự chuẩn bị lực lượng gắn với quyết định phát động Tổng khởi nghĩa đúng thời cơ dẫn đến việc giành chính quyền trên phạm vi cả nước.",
+      "claimId": "d05-result-claim",
+      "sourceId": "10000000-0000-0000-0000-000000000009",
+      "locator": "Slides 8-12"
+    }
+  ],
   "publicationManifest": {
     "schemaVersion": 1,
     "publications": [

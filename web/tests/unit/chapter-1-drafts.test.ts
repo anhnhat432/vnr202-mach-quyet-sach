@@ -86,4 +86,20 @@ describe("Chapter 1 Draft dossiers", () => {
       ]),
     );
   });
+
+  it("links the four new drafts into the approved Chapter 1 decision chain", () => {
+    const registry = JSON.parse(
+      fs.readFileSync(path.join(root, "docs/sdd/content/causal-links.json"), "utf8"),
+    );
+    const ids = new Set(registry.links.map((link: { id: string }) => link.id));
+    expect(ids).toEqual(
+      new Set([
+        "ch1-path-to-unification",
+        "ch1-unification-to-movement",
+        "ch1-movement-to-democratic-window",
+        "ch1-democratic-window-to-strategic-shift",
+        "ch1-strategic-shift-to-opportunity",
+      ]),
+    );
+  });
 });
