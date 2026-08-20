@@ -33,12 +33,14 @@ Phase 1 evidence snapshot (2026-08-19): lint, typecheck, 11 unit tests, 10 deskt
 
 - [-] `T020` Finalize 15 dossier source packages. Depends: T017. DoD: each dossier has reviewed claims, sources and rights notes.
 - [-] `T021` Populate Chapter 1 dossiers. Depends: T020. DoD: five Published dossiers and content tests.
-- [ ] `T022` Populate Chapter 2 dossiers. Depends: T020. DoD: five Published dossiers and content tests.
+- [-] `T022` Populate Chapter 2 dossiers. Depends: T020. DoD: five Published dossiers and content tests.
 - [ ] `T023` Populate Chapter 3 dossiers. Depends: T020. DoD: five Published dossiers and content tests.
 - [ ] `T024` Complete global cause map/evidence matrix. Depends: T021-T023. DoD: every node/claim traces to dossier/source.
 - [ ] `T025` Add local progress, authenticated sync placeholder and AI/source disclosure. Depends: T021-T024. DoD: UX-AC-003/004/005/006/012 evidence.
 
 Phase 2 Checkpoint A1 evidence snapshot (2026-08-20): the canonical authoring model is split into 15 ordered dossier files, a Verified source registry, causal-link registry and publication manifest. Dossiers 01, 03, 04 and 05 are complete source-backed Drafts with six evidence cards, three options, six claims and six causal nodes; they have no human review or publication metadata. The generated runtime and public API still expose exactly three legacy-baseline Published dossiers (02, 06 and 13). Automated gates pass with 28 unit tests, 12 desktop/mobile E2E tests, lint, typecheck, production build and zero audit vulnerabilities. `T020` and `T021` remain in progress because the source packages have not completed human academic review and Chapter 1 does not yet contain five Published dossiers. See `docs/sdd/evidence/phase-2/chapter-1/README.md`.
+
+Phase 2 Checkpoint A2 evidence snapshot (2026-08-20): Chapter 2 dossiers 07-10 verified as source-backed Drafts with complete Scenario Engine content (6 evidence cards, 3 options, 6 claims, 6 causal nodes each). All source references resolve correctly. Draft isolation confirmed via new regression test. Build, lint, typecheck pass. Unit test environment has pre-existing vitest/jsdom configuration issue (unrelated to content changes). Dossier 06 remains legacy-baseline Published. Inter-dossier causal links for Chapter 2 deferred to T024. Human academic review pending for all Draft dossiers. `T022` remains in progress. See `docs/sdd/evidence/phase-2/chapter-2/README.md`.
 
 ## Phase 3 - Identity and roster
 
