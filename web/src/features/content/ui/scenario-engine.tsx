@@ -1,5 +1,6 @@
 "use client";
 
+import { motion, useReducedMotion } from "motion/react";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
@@ -49,6 +50,7 @@ export function ScenarioEngine({
   experience: DossierExperience;
 }) {
   const storageKey = `vnr202:dossier:${dossierId}:v1`;
+  const reduceMotion = useReducedMotion();
   const [stage, setStage] = useState<ScenarioStage>("briefing");
   const [selectedEvidence, setSelectedEvidence] = useState<string[]>([]);
   const [selectedDecision, setSelectedDecision] = useState("");
@@ -220,7 +222,12 @@ export function ScenarioEngine({
         )}
 
         {isRestored && stage === "consequences" && consequence && (
-          <div className="scenario-panel scenario-panel--night">
+          <motion.div
+            className="scenario-panel scenario-panel--night"
+            initial={reduceMotion ? false : { opacity: 0, scale: 0.98, y: 14 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          >
             <p className="scenario-kicker">Chặng 4 · Mô phỏng Hệ quả</p>
             <h2>Hướng đi dự phóng</h2>
             <p className="scenario-note">Đây là chuỗi hệ quả dùng để học và thảo luận, không khẳng định lịch sử chắc chắn sẽ diễn ra như vậy.</p>
@@ -235,7 +242,7 @@ export function ScenarioEngine({
             <button className="scenario-action" type="button" onClick={() => setStage("comparison")}>
               Đối chiếu lịch sử
             </button>
-          </div>
+          </motion.div>
         )}
 
         {isRestored && stage === "comparison" && (

@@ -1,4 +1,9 @@
+"use client";
+
+import { motion, useReducedMotion } from "motion/react";
 import Link from "next/link";
+
+const MotionLink = motion.create(Link);
 
 const chapterSignals = [
   { number: "01", years: "1919-1945", label: "Tìm đường và giành chính quyền", href: "/ho-so#chapter-1" },
@@ -6,11 +11,47 @@ const chapterSignals = [
   { number: "03", years: "1975-nay", label: "Đổi mới và phát triển", href: "/ho-so#chapter-3" },
 ] as const;
 
+const portals = [
+  {
+    index: "A",
+    href: "/mach-nguyen-nhan",
+    title: "Mạch Nguyên Nhân",
+    body: "Đọc sáu lớp quan hệ từ bối cảnh đến bài học, thay vì một dòng thời gian phẳng.",
+    action: "Kích hoạt mạch →",
+    className: undefined as string | undefined,
+  },
+  {
+    index: "B",
+    href: "/ma-tran-bang-chung",
+    title: "Ma trận Bằng chứng",
+    body: "Kiểm tra luận điểm nào được nguồn nào hỗ trợ và phần nào còn cần xác minh.",
+    action: "Mở ma trận →",
+    className: undefined,
+  },
+  {
+    index: "LIVE",
+    href: "/live-arena",
+    title: "Live Arena",
+    body: "Chơi thử game xếp dòng thời gian ngay, và tranh hai bảng xếp hạng realtime khi cuộc thi mở.",
+    action: "Vào Live Arena →",
+    className: "home-portal__arena",
+  },
+] as const;
+
 export default function Home() {
+  const reduceMotion = useReducedMotion();
+  const fadeUp = reduceMotion
+    ? {}
+    : {
+        initial: { opacity: 0, y: 16 },
+        animate: { opacity: 1, y: 0 },
+        transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] as const },
+      };
+
   return (
     <div className="home-shell">
       <section className="home-hero" aria-labelledby="home-title">
-        <div className="home-hero__copy">
+        <motion.div className="home-hero__copy" {...fadeUp}>
           <p className="eyebrow">Bộ môn VNR202 · FPT University · trước 1930-nay</p>
           <h1 id="home-title">Mạch Quyết Sách</h1>
           <p className="home-hero__lead">
@@ -24,16 +65,23 @@ export default function Home() {
               Cách đọc một quyết sách
             </Link>
           </div>
-        </div>
+        </motion.div>
         <div className="signal-field" aria-label="Ba chương lịch sử">
           <div className="signal-field__axis" aria-hidden="true" />
-          {chapterSignals.map((chapter) => (
-            <Link className="signal-node" href={chapter.href} key={chapter.number}>
+          {chapterSignals.map((chapter, index) => (
+            <MotionLink
+              className="signal-node"
+              href={chapter.href}
+              key={chapter.number}
+              initial={reduceMotion ? false : { opacity: 0, x: 12 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={reduceMotion ? undefined : { duration: 0.45, delay: 0.15 + index * 0.12 }}
+            >
               <span className="signal-node__pulse" aria-hidden="true" />
               <span className="signal-node__number">CH.{chapter.number}</span>
               <strong>{chapter.label}</strong>
               <span>{chapter.years}</span>
-            </Link>
+            </MotionLink>
           ))}
         </div>
       </section>
@@ -52,24 +100,22 @@ export default function Home() {
       </section>
 
       <section className="home-portal" aria-label="Các phân hệ chính">
-        <Link href="/mach-nguyen-nhan">
-          <span className="home-portal__index">A</span>
-          <h2>Mạch Nguyên Nhân</h2>
-          <p>Đọc sáu lớp quan hệ từ bối cảnh đến bài học, thay vì một dòng thời gian phẳng.</p>
-          <span className="home-portal__action">Kích hoạt mạch →</span>
-        </Link>
-        <Link href="/ma-tran-bang-chung">
-          <span className="home-portal__index">B</span>
-          <h2>Ma trận Bằng chứng</h2>
-          <p>Kiểm tra luận điểm nào được nguồn nào hỗ trợ và phần nào còn cần xác minh.</p>
-          <span className="home-portal__action">Mở ma trận →</span>
-        </Link>
-        <Link className="home-portal__arena" href="/live-arena">
-          <span className="home-portal__index">LIVE</span>
-          <h2>Live Arena</h2>
-          <p>Hai game, hai lượt độc lập và hai bảng xếp hạng realtime cho cả lớp.</p>
-          <span className="home-portal__action">Xem trạng thái cuộc thi →</span>
-        </Link>
+        {portals.map((portal, index) => (
+          <MotionLink
+            key={portal.index}
+            href={portal.href}
+            className={portal.className}
+            initial={reduceMotion ? false : { opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={reduceMotion ? undefined : { duration: 0.45, delay: index * 0.1 }}
+          >
+            <span className="home-portal__index">{portal.index}</span>
+            <h2>{portal.title}</h2>
+            <p>{portal.body}</p>
+            <span className="home-portal__action">{portal.action}</span>
+          </MotionLink>
+        ))}
       </section>
     </div>
   );
