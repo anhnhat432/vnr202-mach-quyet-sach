@@ -67,10 +67,7 @@ export default function Home() {
           <h1 id="home-title">Mạch Quyết Sách</h1>
           <p className="home-hero__lead">
             Lịch sử không chỉ là điều đã xảy ra. Đó là chuỗi dữ kiện, sức ép và lựa chọn đã đổi hướng cả một thời đại.
-          </p>
-          <p className="home-hero__howto">
-            Cách dùng: chọn một hồ sơ, đọc dữ kiện có thật, tự ra quyết định — rồi đối chiếu với lịch sử đã chọn. Không
-            cần đăng nhập.
+            Ngồi vào ghế người ra quyết định — chơi ngay, không cần đăng nhập.
           </p>
           <div className="home-hero__actions">
             <Link className="command-button" href="/khoanh-khac">

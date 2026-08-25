@@ -38,11 +38,10 @@ body {
   min-height: 100vh;
   margin: 0;
   background:
-    radial-gradient(circle at 12% 8%, rgba(214, 146, 46, 0.1), transparent 22rem),
-    linear-gradient(rgba(20, 33, 43, 0.045) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(20, 33, 43, 0.045) 1px, transparent 1px),
+    radial-gradient(circle at 88% -5%, rgba(214, 146, 46, 0.14), transparent 30rem),
+    radial-gradient(circle at 8% 4%, rgba(177, 40, 46, 0.06), transparent 26rem),
     var(--paper);
-  background-size: auto, 32px 32px, 32px 32px, auto;
+  background-attachment: fixed;
   color: var(--ink);
   font-family: var(--font-body), sans-serif;
 }
@@ -290,19 +289,12 @@ main {
   isolation: isolate;
 }
 
-.signal-field::before,
-.signal-field::after {
+.signal-field::before {
   content: "";
   position: absolute;
-  inset: 10% 8%;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  transform: skewY(-7deg);
+  inset: 0;
+  background: radial-gradient(circle at 78% 26%, rgba(214, 146, 46, 0.18), transparent 55%);
   z-index: -1;
-}
-
-.signal-field::after {
-  inset: 20% -10%;
-  transform: skewY(9deg);
 }
 
 .signal-field__axis {
