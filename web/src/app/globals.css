@@ -580,12 +580,12 @@ main {
 }
 
 .page-intro__metric {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line);
 }
 
 .page-intro__metric strong {
