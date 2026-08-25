@@ -240,7 +240,7 @@ main {
 .home-hero h1 {
   max-width: 7ch;
   margin: 0;
-  font: 700 clamp(4.5rem, 9vw, 9rem)/0.78 var(--font-display), sans-serif;
+  font: 700 clamp(4.5rem, 9vw, 9rem)/0.95 var(--font-display), sans-serif;
   letter-spacing: -0.045em;
   text-transform: uppercase;
 }
@@ -570,7 +570,7 @@ main {
 .page-intro h1,
 .dossier-detail__header h1 {
   margin: 0 0 1.25rem;
-  font: 700 clamp(3.2rem, 7vw, 7rem)/0.88 var(--font-display), sans-serif;
+  font: 700 clamp(3.2rem, 7vw, 7rem)/0.98 var(--font-display), sans-serif;
   letter-spacing: -0.035em;
   text-transform: uppercase;
 }
