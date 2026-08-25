@@ -2882,3 +2882,174 @@ main {
   color: var(--ink-soft);
   font-size: clamp(1rem, 1.6vw, 1.25rem) !important;
 }
+
+.giog__join-panel {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  margin-bottom: 1.25rem;
+  padding: 0.9rem 1.1rem;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--paper-light);
+}
+
+.giog__qr {
+  flex-shrink: 0;
+  padding: 0.4rem;
+  background: #ffffff;
+  border-radius: 10px;
+  line-height: 0;
+}
+
+.giog__join-title {
+  margin: 0 0 0.25rem;
+  font-weight: 700;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.giog__join-sub {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
+.giog__join-sub b {
+  font-family: var(--font-mono, monospace);
+  color: var(--evidence-teal);
+}
+
+.giog__live {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+
+.giog__live.is-on {
+  color: var(--evidence-teal);
+}
+
+/* ---- Trang bỏ phiếu trên điện thoại (/gio-g/vote) ---- */
+
+.vote-page {
+  max-width: 34rem;
+}
+
+.vote-msg {
+  margin: 2rem 0;
+  color: var(--ink-soft);
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.vote-shell {
+  padding-top: 1rem;
+}
+
+.vote-room {
+  margin: 0 0 0.75rem;
+  color: var(--command-red);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+}
+
+.vote-title {
+  margin: 0 0 0.5rem;
+  font: 700 clamp(1.8rem, 7vw, 2.4rem)/1 var(--font-display), sans-serif;
+}
+
+.vote-prompt {
+  margin: 0 0 1.25rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.vote-choices {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.vote-choice {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 1.15rem 1.15rem;
+  border: 2px solid var(--line);
+  border-radius: 16px;
+  background: var(--paper-light);
+  color: var(--ink);
+  font: 600 1.05rem var(--font-body), sans-serif;
+  text-align: left;
+  cursor: pointer;
+}
+
+.vote-choice:disabled {
+  cursor: default;
+}
+
+.vote-choice[data-mine="true"] {
+  border-color: var(--command-red);
+  box-shadow: inset 0 0 0 1px var(--command-red);
+}
+
+.vote-choice[data-history="true"] {
+  border-color: var(--evidence-teal);
+  box-shadow: inset 0 0 0 2px var(--evidence-teal);
+}
+
+.vote-choice__glyph {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.vote-choice__mine,
+.vote-choice__history {
+  margin-left: auto;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.vote-choice__mine {
+  background: rgba(177, 40, 46, 0.14);
+  color: var(--command-red);
+}
+
+.vote-choice__history {
+  background: var(--evidence-teal);
+  color: #ffffff;
+}
+
+.vote-status {
+  margin: 1.25rem 0 0;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+.vote-reveal {
+  margin-top: 1.25rem;
+  padding: 1.1rem 1.2rem;
+  border-left: 4px solid var(--signal-amber);
+  border-radius: 0 12px 12px 0;
+  background: rgba(214, 146, 46, 0.12);
+}
+
+.vote-reveal p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+@media (max-width: 520px) {
+  .giog__join-panel {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
