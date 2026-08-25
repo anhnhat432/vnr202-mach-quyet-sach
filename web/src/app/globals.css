@@ -1893,3 +1893,289 @@ main {
     margin-left: auto;
   }
 }
+
+/* ==== Warm & friendly refinements ==== */
+:root {
+  --radius: 16px;
+  --radius-sm: 12px;
+  --radius-pill: 999px;
+  --shadow-soft: 0 1px 2px rgba(20, 33, 43, 0.04), 0 10px 26px rgba(20, 33, 43, 0.07);
+  --warm-tint: rgba(214, 146, 46, 0.07);
+}
+
+/* Softer, lifted surfaces */
+.signal-field,
+.mission-strip,
+.home-portal > a,
+.dossier-rail,
+.scenario,
+.arena-games article,
+.arena-leaderboards article,
+.timeline-game,
+.timeline-game__result,
+.relation-panel,
+.claim-card,
+.source-note {
+  border-radius: var(--radius);
+}
+
+.home-portal > a,
+.dossier-rail,
+.arena-games article,
+.arena-leaderboards article,
+.timeline-game,
+.claim-card {
+  box-shadow: var(--shadow-soft);
+}
+
+.home-portal > a,
+.dossier-rail,
+.claim-card {
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.home-portal > a:hover,
+.dossier-rail:hover,
+.claim-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 2px 4px rgba(20, 33, 43, 0.05), 0 16px 34px rgba(20, 33, 43, 0.1);
+}
+
+/* Rounded controls read friendlier than hard rectangles */
+.command-button,
+.scenario-action,
+.timeline-card__controls button,
+.evidence-card,
+.decision-options label,
+.mission-strip li,
+.cause-lane button,
+.relation-panel__links button,
+.arena-status {
+  border-radius: var(--radius-sm);
+}
+
+.signal-node {
+  border-radius: var(--radius-sm);
+}
+
+.timeline-card {
+  border-radius: var(--radius-sm);
+}
+
+.command-button {
+  border-radius: var(--radius-pill);
+  padding-inline: 1.6rem;
+}
+
+/* Warm the paper cards a touch so panels feel inviting, not clinical */
+.mission-strip li,
+.evidence-card,
+.claim-card {
+  background: linear-gradient(var(--warm-tint), var(--warm-tint)), var(--paper-light);
+}
+
+/* Soften the pure-dark panels toward a warm charcoal */
+:root {
+  --night-panel: #1d272c;
+}
+
+/* ==== Evidence board (claim cards) ==== */
+.evidence-board {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.evidence-board__hint {
+  max-width: 60rem;
+  color: var(--ink-soft);
+  line-height: 1.65;
+}
+
+.evidence-board__hint strong {
+  color: var(--ink);
+}
+
+.claim-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+  gap: 1rem;
+}
+
+.claim-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  border: 1px solid var(--line);
+  padding: 1.4rem;
+}
+
+.claim-card__head small {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--command-red);
+  font: 700 0.72rem var(--font-display), sans-serif;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.claim-card__head strong {
+  font-weight: 600;
+  font-size: 1.02rem;
+  line-height: 1.45;
+}
+
+.claim-card__sources {
+  margin-top: auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+}
+
+.claim-card__label {
+  color: var(--ink-soft);
+  font: 700 0.68rem var(--font-display), sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.source-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid var(--evidence-teal);
+  border-radius: var(--radius-pill);
+  background: rgba(13, 107, 102, 0.08);
+  color: var(--ink);
+  padding: 0.45rem 0.85rem;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s ease;
+}
+
+.source-chip:hover,
+.source-chip[aria-pressed="true"] {
+  background: rgba(13, 107, 102, 0.16);
+}
+
+.source-chip__dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: var(--evidence-teal);
+  flex: none;
+}
+
+.source-chip b {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.source-chip small {
+  color: var(--ink-soft);
+  font-size: 0.78rem;
+}
+
+.source-chip--empty {
+  border: 1px dashed var(--line);
+  background: transparent;
+  color: var(--ink-soft);
+  cursor: default;
+  font-size: 0.82rem;
+}
+
+.source-drawer__close {
+  align-self: flex-end;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  padding: 0.4rem 0.75rem;
+  cursor: pointer;
+}
+
+/* ==== Homepage imagery + onboarding ==== */
+.home-hero__howto {
+  max-width: 39rem;
+  margin: -0.5rem 0 2rem;
+  padding: 0.9rem 1.1rem;
+  border-left: 3px solid var(--signal-amber);
+  background: var(--warm-tint);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  color: var(--ink-soft);
+  font-size: 0.98rem;
+  line-height: 1.6;
+}
+
+.signal-field__art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+/* Keep the abstract skew lines subtle over the artwork */
+.signal-field::before,
+.signal-field::after {
+  opacity: 0.5;
+}
+
+.signal-node {
+  position: relative;
+  z-index: 1;
+  background: rgba(24, 33, 38, 0.55);
+  backdrop-filter: blur(3px);
+}
+
+.signal-node__emblem {
+  display: grid;
+  place-items: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 50%;
+  background: rgba(214, 146, 46, 0.18);
+  color: var(--signal-amber);
+}
+
+.signal-node__emblem svg {
+  width: 1.3rem;
+  height: 1.3rem;
+}
+
+/* ==== Cause map clarity ==== */
+.cause-map__hint {
+  max-width: 60rem;
+  margin-bottom: 1.75rem;
+  padding: 0.9rem 1.1rem;
+  border-left: 3px solid var(--evidence-teal);
+  background: rgba(13, 107, 102, 0.06);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+
+.cause-map__hint strong {
+  color: var(--ink);
+}
+
+.cause-lane button {
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+
+.cause-lane button:hover {
+  transform: translateY(-2px);
+  border-color: var(--evidence-teal);
+}
+
+.cause-lane button[aria-pressed="true"] {
+  border-color: var(--command-red);
+  box-shadow: inset 0 0 0 1px var(--command-red);
+}

@@ -3,6 +3,8 @@
 import { motion, useReducedMotion } from "motion/react";
 import Link from "next/link";
 
+import { ChapterEmblem, HeroArtwork } from "@/features/brand/artwork";
+
 const MotionLink = motion.create(Link);
 
 const chapterSignals = [
@@ -17,7 +19,7 @@ const portals = [
     href: "/mach-nguyen-nhan",
     title: "Mạch Nguyên Nhân",
     body: "Đọc sáu lớp quan hệ từ bối cảnh đến bài học, thay vì một dòng thời gian phẳng.",
-    action: "Kích hoạt mạch →",
+    action: "Xem quan hệ nhân – quả →",
     className: undefined as string | undefined,
   },
   {
@@ -25,7 +27,7 @@ const portals = [
     href: "/ma-tran-bang-chung",
     title: "Ma trận Bằng chứng",
     body: "Kiểm tra luận điểm nào được nguồn nào hỗ trợ và phần nào còn cần xác minh.",
-    action: "Mở ma trận →",
+    action: "Xem luận điểm & nguồn →",
     className: undefined,
   },
   {
@@ -57,6 +59,10 @@ export default function Home() {
           <p className="home-hero__lead">
             Lịch sử không chỉ là điều đã xảy ra. Đó là chuỗi dữ kiện, sức ép và lựa chọn đã đổi hướng cả một thời đại.
           </p>
+          <p className="home-hero__howto">
+            Cách dùng: chọn một hồ sơ, đọc dữ kiện có thật, tự ra quyết định — rồi đối chiếu với lịch sử đã chọn. Không
+            cần đăng nhập.
+          </p>
           <div className="home-hero__actions">
             <Link className="command-button" href="/ho-so">
               Mở kho hồ sơ <span aria-hidden="true">→</span>
@@ -67,7 +73,7 @@ export default function Home() {
           </div>
         </motion.div>
         <div className="signal-field" aria-label="Ba chương lịch sử">
-          <div className="signal-field__axis" aria-hidden="true" />
+          <HeroArtwork className="signal-field__art" />
           {chapterSignals.map((chapter, index) => (
             <MotionLink
               className="signal-node"
@@ -77,7 +83,9 @@ export default function Home() {
               animate={{ opacity: 1, x: 0 }}
               transition={reduceMotion ? undefined : { duration: 0.45, delay: 0.15 + index * 0.12 }}
             >
-              <span className="signal-node__pulse" aria-hidden="true" />
+              <span className="signal-node__emblem" aria-hidden="true">
+                <ChapterEmblem chapter={(index + 1) as 1 | 2 | 3} />
+              </span>
               <span className="signal-node__number">CH.{chapter.number}</span>
               <strong>{chapter.label}</strong>
               <span>{chapter.years}</span>
@@ -106,8 +114,7 @@ export default function Home() {
             href={portal.href}
             className={portal.className}
             initial={reduceMotion ? false : { opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={reduceMotion ? undefined : { duration: 0.45, delay: index * 0.1 }}
           >
             <span className="home-portal__index">{portal.index}</span>
