@@ -388,7 +388,7 @@ main {
 
 .home-portal {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   border: 1px solid var(--ink);
 }
 
@@ -2178,4 +2178,707 @@ main {
 .cause-lane button[aria-pressed="true"] {
   border-color: var(--command-red);
   box-shadow: inset 0 0 0 1px var(--command-red);
+}
+
+/* ============================================================
+   Khoảnh Khắc Quyết Sách — lối chơi "Bạn sẽ quyết sao?"
+   ============================================================ */
+
+.moment-page {
+  max-width: 52rem;
+}
+
+.moment-stage {
+  margin-top: 0.5rem;
+}
+
+.moment-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.moment-progress {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+  max-width: 22rem;
+}
+
+.moment-progress__count {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.moment-progress__track {
+  flex: 1;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: var(--line);
+  overflow: hidden;
+}
+
+.moment-progress__fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--evidence-teal);
+  transition: width 0.4s ease;
+}
+
+.moment-menu-hint {
+  margin: 0 0 1.1rem;
+  color: var(--ink-soft);
+  font-size: 1.05rem;
+}
+
+.moment-menu {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.moment-menu__card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  align-items: flex-start;
+  text-align: left;
+  padding: 1.35rem;
+  border: 2px solid var(--line);
+  border-radius: 16px;
+  background: var(--paper-light);
+  color: var(--ink);
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.moment-menu__card:hover {
+  transform: translateY(-2px);
+  border-color: var(--command-red);
+  box-shadow: 0 12px 24px -18px rgba(177, 40, 46, 0.8);
+}
+
+.moment-menu__glyph {
+  font-size: 1.9rem;
+  line-height: 1;
+}
+
+.moment-menu__card strong {
+  font-size: 1.05rem;
+}
+
+.moment-menu__card small {
+  color: var(--ink-soft);
+}
+
+@media (max-width: 560px) {
+  .moment-menu {
+    grid-template-columns: 1fr;
+  }
+}
+
+.moment-badge-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(214, 146, 46, 0.16);
+  color: #8a5a12;
+  font-size: 0.85rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.moment-card {
+  background: var(--paper-light);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  box-shadow: 0 18px 40px -32px rgba(20, 33, 43, 0.6);
+}
+
+.moment-kicker {
+  margin: 0 0 0.6rem;
+  color: var(--command-red);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.moment-title {
+  margin: 0 0 0.75rem;
+  font: 700 clamp(1.9rem, 5vw, 2.9rem)/1.02 var(--font-display), sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.moment-setup {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: clamp(1rem, 1.6vw, 1.15rem);
+  line-height: 1.65;
+}
+
+.moment-ask {
+  margin-top: 1.75rem;
+}
+
+.moment-prompt {
+  margin: 0 0 1rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.moment-choices {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.moment-choice {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  padding: 1.1rem 1.25rem;
+  border: 2px solid var(--line);
+  border-radius: 16px;
+  background: var(--paper);
+  color: var(--ink);
+  font: 600 1.05rem var(--font-body), sans-serif;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.moment-choice:hover {
+  transform: translateY(-2px);
+  border-color: var(--command-red);
+  box-shadow: 0 12px 24px -18px rgba(177, 40, 46, 0.8);
+}
+
+.moment-choice:active {
+  transform: translateY(0) scale(0.99);
+}
+
+.moment-choice__glyph {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.moment-hint {
+  margin: 1rem 0 0;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
+.moment-reveal {
+  margin-top: 1.75rem;
+}
+
+.moment-verdict {
+  margin: 0 0 1.1rem;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.moment-verdict[data-match="true"] {
+  color: var(--evidence-teal);
+}
+
+.moment-verdict[data-match="false"] {
+  color: var(--signal-amber);
+}
+
+.moment-bars {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.moment-bars__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.95rem;
+}
+
+.moment-bars__head strong {
+  font-variant-numeric: tabular-nums;
+}
+
+.moment-tag {
+  margin-left: 0.5rem;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  vertical-align: middle;
+}
+
+.moment-tag--history {
+  background: rgba(13, 107, 102, 0.16);
+  color: var(--evidence-teal);
+}
+
+.moment-tag--mine {
+  background: rgba(20, 33, 43, 0.1);
+  color: var(--ink-soft);
+}
+
+.moment-bars__track {
+  height: 0.7rem;
+  border-radius: 999px;
+  background: var(--line);
+  overflow: hidden;
+}
+
+.moment-bars__fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--ink-soft);
+}
+
+.moment-bars li[data-history="true"] .moment-bars__fill {
+  background: var(--evidence-teal);
+}
+
+.moment-bars li[data-mine="true"][data-history="false"] .moment-bars__fill {
+  background: var(--signal-amber);
+}
+
+.moment-bars__note {
+  margin: 0.6rem 0 0;
+  color: var(--ink-soft);
+  font-size: 0.8rem;
+}
+
+.moment-fact {
+  margin-top: 1.4rem;
+  padding: 1.15rem 1.25rem;
+  border-left: 4px solid var(--signal-amber);
+  border-radius: 0 12px 12px 0;
+  background: rgba(214, 146, 46, 0.1);
+}
+
+.moment-fact p {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.moment-more {
+  margin-top: 1.1rem;
+  border: 0;
+  background: none;
+  color: var(--command-red);
+  font: 700 0.95rem var(--font-body), sans-serif;
+  cursor: pointer;
+  padding: 0.25rem 0;
+}
+
+.moment-why {
+  margin-top: 0.75rem;
+  padding: 1rem 1.15rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--paper);
+}
+
+.moment-why p {
+  margin: 0;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+
+.moment-source {
+  margin-top: 0.6rem !important;
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+}
+
+.moment-reveal__actions,
+.moment-summary__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.6rem;
+}
+
+.moment-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.95rem 1.5rem;
+  border-radius: 14px;
+  border: 2px solid transparent;
+  font: 700 1rem var(--font-body), sans-serif;
+  cursor: pointer;
+}
+
+.moment-btn--go {
+  background: var(--command-red);
+  color: white;
+}
+
+.moment-btn--go:hover {
+  background: #9a2126;
+}
+
+.moment-btn--ghost {
+  background: transparent;
+  border-color: var(--line);
+  color: var(--ink);
+}
+
+.moment-btn--ghost:hover {
+  border-color: var(--command-red);
+}
+
+.moment-summary {
+  text-align: center;
+  background: var(--paper-light);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: clamp(2rem, 6vw, 3.5rem);
+}
+
+.moment-summary__spark {
+  font-size: 3rem;
+}
+
+.moment-summary h2 {
+  margin: 0.5rem 0 0.75rem;
+  font: 700 clamp(2rem, 6vw, 3rem)/1 var(--font-display), sans-serif;
+}
+
+.moment-summary__badges {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+.moment-summary__badges b {
+  color: var(--command-red);
+  font-size: 1.6rem;
+}
+
+.moment-summary__note {
+  max-width: 30rem;
+  margin: 1rem auto 0;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+
+.moment-summary__actions {
+  justify-content: center;
+}
+
+/* ============================================================
+   Giờ G — chế độ dẫn cả lớp / máy chiếu
+   ============================================================ */
+
+.giog-page {
+  max-width: 68rem;
+}
+
+.giog__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--paper-light);
+}
+
+.giog__nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.giog__nav button {
+  width: 2.2rem;
+  height: 2.2rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--paper);
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.giog__nav button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.giog__join {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+.giog__join b {
+  color: var(--evidence-teal);
+  font-family: var(--font-mono, monospace);
+}
+
+.giog__tools {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.giog__count {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.giog__reset {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--paper);
+  padding: 0.45rem 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.giog__stage {
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: var(--paper-light);
+  padding: clamp(1.5rem, 4vw, 3rem);
+  box-shadow: 0 24px 60px -44px rgba(20, 33, 43, 0.7);
+}
+
+.giog__eyebrow {
+  margin: 0 0 0.6rem;
+  color: var(--command-red);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: clamp(0.85rem, 1.4vw, 1rem);
+}
+
+.giog__title {
+  margin: 0 0 0.75rem;
+  font: 700 clamp(2.2rem, 6vw, 4rem)/1 var(--font-display), sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.giog__setup {
+  margin: 0 0 1rem;
+  color: var(--ink-soft);
+  font-size: clamp(1.1rem, 2vw, 1.6rem);
+  line-height: 1.5;
+}
+
+.giog__prompt {
+  margin: 0 0 1.5rem;
+  font-size: clamp(1.15rem, 2.2vw, 1.9rem);
+  font-weight: 700;
+}
+
+.giog__choices {
+  display: grid;
+  gap: 1rem;
+}
+
+.giog__choice {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto auto 1fr auto;
+  grid-template-areas:
+    "key glyph label count"
+    "key glyph bar   pct";
+  align-items: center;
+  gap: 0.4rem 1rem;
+  width: 100%;
+  padding: 1.1rem 1.35rem;
+  border: 2px solid var(--line);
+  border-radius: 18px;
+  background: var(--paper);
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.12s ease, border-color 0.15s ease, opacity 0.25s ease, box-shadow 0.15s ease;
+}
+
+.giog__choice:hover {
+  transform: translateY(-2px);
+  border-color: var(--command-red);
+}
+
+.giog__choice:active {
+  transform: scale(0.995);
+}
+
+.giog__choice__key {
+  grid-area: key;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  border-radius: 10px;
+  background: rgba(20, 33, 43, 0.08);
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+.giog__choice__glyph {
+  grid-area: glyph;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  line-height: 1;
+}
+
+.giog__choice__label {
+  grid-area: label;
+  font-size: clamp(1.05rem, 1.8vw, 1.5rem);
+  font-weight: 600;
+}
+
+.giog__choice__count {
+  grid-area: count;
+  font-size: clamp(1.4rem, 3vw, 2.4rem);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  justify-self: end;
+}
+
+.giog__choice__bar {
+  grid-area: bar;
+  height: 0.6rem;
+  border-radius: 999px;
+  background: var(--line);
+  overflow: hidden;
+}
+
+.giog__choice__fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--signal-amber);
+}
+
+.giog__choice__pct {
+  grid-area: pct;
+  justify-self: end;
+  font-weight: 700;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.giog__choice[data-history="true"] {
+  border-color: var(--evidence-teal);
+  box-shadow: inset 0 0 0 2px var(--evidence-teal), 0 16px 32px -24px rgba(13, 107, 102, 0.9);
+}
+
+.giog__choice[data-history="true"] .giog__choice__fill {
+  background: var(--evidence-teal);
+}
+
+.giog__choice[data-dim="true"] {
+  opacity: 0.5;
+}
+
+.giog__choice__flag {
+  position: absolute;
+  top: -0.7rem;
+  right: 1rem;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  background: var(--evidence-teal);
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.giog__choice__minus {
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.6rem;
+  width: 1.7rem;
+  height: 1.7rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: rgba(20, 33, 43, 0.06);
+  color: var(--ink-soft);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.giog__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.85rem;
+  margin-top: 1.5rem;
+}
+
+.giog__reveal {
+  border: 2px solid transparent;
+  border-radius: 14px;
+  background: var(--command-red);
+  color: white;
+  padding: 1rem 1.8rem;
+  font: 700 clamp(1rem, 1.8vw, 1.3rem) var(--font-body), sans-serif;
+  cursor: pointer;
+}
+
+.giog__reveal:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.giog__reveal--ghost {
+  background: transparent;
+  border-color: var(--line);
+  color: var(--ink);
+}
+
+.giog__hint {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
+.giog__fact {
+  margin-top: 1.5rem;
+  padding: 1.35rem 1.5rem;
+  border-left: 5px solid var(--signal-amber);
+  border-radius: 0 14px 14px 0;
+  background: rgba(214, 146, 46, 0.12);
+}
+
+.giog__fact p {
+  margin: 0;
+  font-size: clamp(1.1rem, 1.9vw, 1.5rem);
+  line-height: 1.55;
+}
+
+.giog__why {
+  margin-top: 0.75rem !important;
+  color: var(--ink-soft);
+  font-size: clamp(1rem, 1.6vw, 1.25rem) !important;
 }

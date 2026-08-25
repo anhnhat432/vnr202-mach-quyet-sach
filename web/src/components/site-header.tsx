@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useState } from "react";
 
 const navigation = [
+  { href: "/khoanh-khac", label: "Chơi ngay", desc: "Chạm chọn một quyết định lịch sử — vui, nhẹ, không cần đăng nhập" },
+  { href: "/gio-g", label: "Giờ G", desc: "Chế độ dẫn cả lớp cùng chơi trên máy chiếu" },
   { href: "/ho-so", label: "Hồ sơ", desc: "15 tình huống lịch sử để bạn ra quyết định" },
   { href: "/mach-nguyen-nhan", label: "Mạch nguyên nhân", desc: "Bản đồ quan hệ nhân – quả giữa các sự kiện" },
   { href: "/ma-tran-bang-chung", label: "Bằng chứng", desc: "Luận điểm nào được nguồn nào xác minh" },

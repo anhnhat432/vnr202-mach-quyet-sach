@@ -15,28 +15,36 @@ const chapterSignals = [
 
 const portals = [
   {
-    index: "A",
-    href: "/mach-nguyen-nhan",
-    title: "Mạch Nguyên Nhân",
-    body: "Đọc sáu lớp quan hệ từ bối cảnh đến bài học, thay vì một dòng thời gian phẳng.",
-    action: "Xem quan hệ nhân – quả →",
+    index: "01",
+    href: "/khoanh-khac",
+    title: "Khoảnh khắc Quyết Sách",
+    body: "Chạm chọn một quyết định lịch sử, rồi lật bài xem bạn có nghĩ giống lịch sử không. Vui, nhẹ, không cần đăng nhập.",
+    action: "Chơi ngay →",
     className: undefined as string | undefined,
   },
   {
-    index: "B",
-    href: "/ma-tran-bang-chung",
-    title: "Ma trận Bằng chứng",
-    body: "Kiểm tra luận điểm nào được nguồn nào hỗ trợ và phần nào còn cần xác minh.",
-    action: "Xem luận điểm & nguồn →",
+    index: "GIỜ G",
+    href: "/gio-g",
+    title: "Giờ G · cả lớp cùng chơi",
+    body: "Chiếu một khoảnh khắc lên màn hình, cả lớp bỏ phiếu, rồi cùng lật bài so với lịch sử.",
+    action: "Vào Giờ G →",
+    className: "home-portal__arena",
+  },
+  {
+    index: "02",
+    href: "/ho-so",
+    title: "Kho 15 Hồ sơ",
+    body: "Đào sâu từng quyết sách với bằng chứng có nguồn và sáu chặng phân tích.",
+    action: "Mở kho hồ sơ →",
     className: undefined,
   },
   {
-    index: "LIVE",
-    href: "/live-arena",
-    title: "Live Arena",
-    body: "Chơi thử game xếp dòng thời gian ngay, và tranh hai bảng xếp hạng realtime khi cuộc thi mở.",
-    action: "Vào Live Arena →",
-    className: "home-portal__arena",
+    index: "03",
+    href: "/mach-nguyen-nhan",
+    title: "Mạch Nguyên Nhân",
+    body: "Bản đồ quan hệ nhân – quả nối các sự kiện, thay cho một dòng thời gian phẳng.",
+    action: "Xem quan hệ →",
+    className: undefined,
   },
 ] as const;
 
@@ -64,11 +72,11 @@ export default function Home() {
             cần đăng nhập.
           </p>
           <div className="home-hero__actions">
-            <Link className="command-button" href="/ho-so">
-              Mở kho hồ sơ <span aria-hidden="true">→</span>
+            <Link className="command-button" href="/khoanh-khac">
+              Chơi ngay <span aria-hidden="true">→</span>
             </Link>
-            <Link className="text-link" href="/phong-phuong-phap">
-              Cách đọc một quyết sách
+            <Link className="text-link" href="/ho-so">
+              Hoặc mở kho 15 hồ sơ
             </Link>
           </div>
         </motion.div>
