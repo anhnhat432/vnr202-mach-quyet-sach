@@ -62,6 +62,7 @@ export default function Home() {
     <div className="home-shell">
       <section className="home-hero" aria-labelledby="home-title">
         <motion.div className="home-hero__copy" {...fadeUp}>
+          <span className="hero-poster-star" aria-hidden="true">★</span>
           <p className="eyebrow">Bộ môn VNR202 · FPT University · trước 1930-nay</p>
           <h1 id="home-title">Mạch Quyết Sách</h1>
           <p className="home-hero__lead">

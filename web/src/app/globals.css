@@ -3112,3 +3112,100 @@ main {
     align-items: flex-start;
   }
 }
+
+/* ============================================================
+   Làm mới "Áp phích cách mạng" — Trang chủ (hero)
+   ============================================================ */
+
+.home-hero__copy {
+  position: relative;
+  overflow: hidden;
+}
+
+.home-hero__copy > * {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-poster-star {
+  position: absolute;
+  z-index: 0;
+  top: -2.5rem;
+  right: -1rem;
+  font-size: clamp(9rem, 20vw, 17rem);
+  line-height: 1;
+  color: var(--command-red);
+  opacity: 0.08;
+  pointer-events: none;
+  user-select: none;
+}
+
+.home-hero__copy .eyebrow {
+  display: inline-block;
+  margin-bottom: 1.5rem;
+  padding: 0.42rem 0.85rem;
+  background: var(--command-red);
+  color: #fff;
+  letter-spacing: 0.14em;
+  clip-path: polygon(0 0, 100% 0, calc(100% - 0.7rem) 100%, 0 100%);
+}
+
+.home-hero h1 {
+  position: relative;
+}
+
+.home-hero h1::after {
+  content: "";
+  display: block;
+  width: 6rem;
+  height: 0.6rem;
+  margin-top: 1.2rem;
+  background: var(--signal-amber);
+  transform: skewX(-20deg);
+}
+
+/* Mission strip — big poster step numerals */
+.mission-strip li span {
+  margin-bottom: 1.1rem;
+  font-size: clamp(1.5rem, 2.6vw, 2.1rem) !important;
+  letter-spacing: -0.02em;
+}
+
+.mission-strip li {
+  border-left: 3px solid var(--command-red);
+}
+
+/* Portals — bolder index + gold top-bar sweep on hover */
+.home-portal__index {
+  font-size: clamp(1.15rem, 2vw, 1.5rem);
+}
+
+.home-portal > a {
+  position: relative;
+  transition: transform 0.18s ease, background 0.18s ease;
+}
+
+.home-portal > a::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 0.4rem;
+  background: var(--signal-amber);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.22s ease;
+}
+
+.home-portal > a:hover::before {
+  transform: scaleX(1);
+}
+
+.home-portal > a:hover .home-portal__action {
+  color: var(--command-red);
+}
+
+.home-portal__arena:hover .home-portal__action {
+  color: var(--signal-amber);
+}
