@@ -68,8 +68,7 @@ export default function Home() {
             Mạch <span className="home-title-accent">Quyết</span> Sách
           </h1>
           <p className="home-hero__lead">
-            Lịch sử không chỉ là điều đã xảy ra. Đó là chuỗi dữ kiện, sức ép và lựa chọn đã đổi hướng cả một thời đại.
-            Ngồi vào ghế người ra quyết định — chơi ngay, không cần đăng nhập.
+            Lịch sử là chuỗi dữ kiện, sức ép và lựa chọn. Ngồi vào ghế người ra quyết định — chơi ngay, không cần đăng nhập.
           </p>
           <div className="home-hero__actions">
             <Link className="command-button" href="/khoanh-khac">
