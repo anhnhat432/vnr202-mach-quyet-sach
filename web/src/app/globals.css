@@ -239,8 +239,8 @@ main {
 .home-hero h1 {
   max-width: 7ch;
   margin: 0;
-  font: 700 clamp(4.5rem, 9vw, 9rem)/0.95 var(--font-display), sans-serif;
-  letter-spacing: -0.045em;
+  font: 700 clamp(3rem, 6vw, 6rem)/0.95 var(--font-display), sans-serif;
+  letter-spacing: -0.04em;
   text-transform: uppercase;
 }
 
@@ -506,7 +506,7 @@ main {
   }
 
   .home-hero h1 {
-    font-size: clamp(4rem, 23vw, 6rem);
+    font-size: clamp(2.6rem, 10vw, 4rem);
   }
 
   .signal-field {
@@ -3154,6 +3154,10 @@ main {
   margin-top: 1.2rem;
   background: var(--signal-amber);
   transform: skewX(-20deg);
+}
+
+.home-title-accent {
+  color: var(--command-red);
 }
 
 /* Mission strip — big poster step numerals */

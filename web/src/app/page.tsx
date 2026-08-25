@@ -64,7 +64,9 @@ export default function Home() {
         <motion.div className="home-hero__copy" {...fadeUp}>
           <span className="hero-poster-star" aria-hidden="true">★</span>
           <p className="eyebrow">Bộ môn VNR202 · FPT University · trước 1930-nay</p>
-          <h1 id="home-title">Mạch Quyết Sách</h1>
+          <h1 id="home-title">
+            Mạch <span className="home-title-accent">Quyết</span> Sách
+          </h1>
           <p className="home-hero__lead">
             Lịch sử không chỉ là điều đã xảy ra. Đó là chuỗi dữ kiện, sức ép và lựa chọn đã đổi hướng cả một thời đại.
             Ngồi vào ghế người ra quyết định — chơi ngay, không cần đăng nhập.
