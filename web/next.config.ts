@@ -1,13 +1,26 @@
 import type { NextConfig } from "next";
 
 const isDevelopment = process.env.NODE_ENV === "development";
+
+// Cho phép kết nối tới đúng project Supabase đã cấu hình (REST + Realtime WebSocket),
+// dùng cho Giờ G bỏ phiếu trực tiếp. Không cấu hình thì connect-src giữ nguyên 'self'.
+const supabaseConnectSources: string[] = [];
+if (process.env.NEXT_PUBLIC_SUPABASE_URL) {
+  try {
+    const host = new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).host;
+    supabaseConnectSources.push(`https://${host}`, `wss://${host}`);
+  } catch {
+    // URL không hợp lệ — bỏ qua, giữ CSP mặc định.
+  }
+}
+
 const contentSecurityPolicy = [
   "default-src 'self'",
   `script-src 'self' 'unsafe-inline'${isDevelopment ? " 'unsafe-eval'" : ""}`,
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' blob: data:",
   "font-src 'self' data:",
-  "connect-src 'self'",
+  ["connect-src 'self'", ...supabaseConnectSources].join(" "),
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",

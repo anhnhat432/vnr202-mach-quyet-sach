@@ -9,46 +9,55 @@ export function EvidenceMatrix({ sources, claims }: { sources: PublicSource[]; c
   const [selectedClaimId, setSelectedClaimId] = useState<string | null>(null);
   const selectedClaim = claims.find((claim) => claim.id === selectedClaimId);
   const selectedSource = sources.find((source) => source.id === selectedClaim?.sourceId);
+  const verifiedCount = claims.filter((claim) => sources.some((source) => source.id === claim.sourceId)).length;
 
   return (
-    <div className="matrix-wrap">
-      <div className="evidence-matrix" role="table" aria-label="Ma trận luận điểm và nguồn">
-        <div className="matrix-row matrix-row--header" role="row">
-          <span role="columnheader">Luận điểm</span>
-          {sources.map((source, index) => <span role="columnheader" key={source.id}>N{index + 1}</span>)}
-        </div>
-        {claims.map((claim) => (
-          <div className="matrix-row" role="row" key={claim.id}>
-            <span role="rowheader">
-              <small>{claim.category} · {claim.dossierTitle}</small>
-              <strong>{claim.statement}</strong>
-            </span>
-            {sources.map((source) =>
-              source.id === claim.sourceId ? (
-                <button
-                  type="button"
-                  key={source.id}
-                  aria-pressed={selectedClaimId === claim.id}
-                  aria-label={`Xem nguồn: ${source.title} hỗ trợ luận điểm ${claim.statement}`}
-                  onClick={() => setSelectedClaimId(claim.id)}
-                >
-                  <span aria-hidden="true">●</span>
-                </button>
-              ) : <span className="matrix-empty" aria-label="Không gắn nguồn" key={source.id}>·</span>,
-            )}
-          </div>
-        ))}
-      </div>
+    <div className="evidence-board">
+      <p className="evidence-board__hint">
+        Mỗi thẻ là một luận điểm rút ra từ hồ sơ. Chạm vào nguồn bên dưới để xem nó được tài liệu nào xác minh và phạm
+        vi hỗ trợ tới đâu. <strong>{verifiedCount}/{claims.length}</strong> luận điểm đã gắn nguồn đã xác minh.
+      </p>
 
-      <ol className="source-legend" aria-label="Danh sách nguồn">
-        {sources.map((source, index) => (
-          <li key={source.id}><span>N{index + 1}</span><strong>{source.title}</strong><small>{source.locator}</small></li>
-        ))}
+      <ol className="claim-list" aria-label="Danh sách luận điểm và nguồn">
+        {claims.map((claim) => {
+          const supporting = sources.filter((source) => source.id === claim.sourceId);
+          return (
+            <li className="claim-card" key={claim.id}>
+              <div className="claim-card__head">
+                <small>{claim.category} · {claim.dossierTitle}</small>
+                <strong>{claim.statement}</strong>
+              </div>
+              <div className="claim-card__sources">
+                <span className="claim-card__label">Nguồn xác minh</span>
+                {supporting.length ? (
+                  supporting.map((source) => (
+                    <button
+                      type="button"
+                      key={source.id}
+                      className="source-chip"
+                      aria-pressed={selectedClaimId === claim.id}
+                      aria-label={`Xem nguồn ${source.title} hỗ trợ luận điểm: ${claim.statement}`}
+                      onClick={() => setSelectedClaimId(selectedClaimId === claim.id ? null : claim.id)}
+                    >
+                      <span aria-hidden="true" className="source-chip__dot" />
+                      <b>{source.title}</b>
+                      <small>{source.authorOrIssuer} · {source.publicationYear}</small>
+                    </button>
+                  ))
+                ) : (
+                  <span className="source-chip source-chip--empty">Chưa gắn nguồn</span>
+                )}
+              </div>
+            </li>
+          );
+        })}
       </ol>
 
       {selectedClaim && selectedSource && (
         <aside className="source-drawer" aria-live="polite">
-          <button type="button" onClick={() => setSelectedClaimId(null)}>Đóng ×</button>
+          <button type="button" className="source-drawer__close" onClick={() => setSelectedClaimId(null)}>
+            Đóng ×
+          </button>
           <p className="eyebrow">Nguồn đã xác minh</p>
           <h2>{selectedSource.title}</h2>
           <dl>

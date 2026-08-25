@@ -24,6 +24,10 @@ export function CauseMap({ nodes, edges }: { nodes: CauseNode[]; edges: CauseEdg
 
   return (
     <div className="cause-map">
+      <p className="cause-map__hint">
+        Đọc từ trên xuống: mỗi cột là một giai đoạn, sáu hàng là sáu lớp quan hệ (bối cảnh → mâu thuẫn → lực lượng →
+        quyết sách → kết quả → bài học). <strong>Chạm vào một ô</strong> để xem giải thích và các quan hệ nối tới nó.
+      </p>
       <div className="cause-map__desktop" aria-label="Sáu lớp mạch nguyên nhân">
         {(Object.keys(laneLabels) as CauseLane[]).map((lane) => (
           <section className="cause-lane" key={lane}>
