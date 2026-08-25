@@ -17,10 +17,10 @@ export default async function DossierIndexPage() {
   return (
     <div className="page-shell dossier-index">
       <header className="page-intro">
-        <p className="eyebrow">Kho dữ liệu · 15 hồ sơ trong lộ trình</p>
+        <p className="eyebrow">Kho chuyên sâu · có nguồn dẫn</p>
         <h1>Hồ sơ Quyết sách</h1>
-        <p>Ba hồ sơ đại diện đã qua kiểm tra nguồn đang mở. Mỗi hồ sơ là một tình thế để bạn đọc dữ kiện, chọn hướng đi và đối chiếu với lịch sử thực tế.</p>
-        <div className="page-intro__metric"><strong>03</strong><span>hồ sơ đã xuất bản<br />trong Phase 1</span></div>
+        <p>Ba hồ sơ chuyên sâu đã mở với đầy đủ nguồn dẫn — đọc dữ kiện, chọn hướng đi và đối chiếu với lịch sử thực tế. Muốn chơi nhanh cả 15 khoảnh khắc, hãy vào &ldquo;Chơi ngay&rdquo;.</p>
+        <div className="page-intro__metric"><strong>03</strong><span>hồ sơ chuyên sâu<br />đã mở, có nguồn</span></div>
       </header>
       {chapters.map((chapter) => {
         const chapterDossiers = dossiers.filter((item) => item.chapter === chapter.id);

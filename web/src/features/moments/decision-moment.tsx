@@ -127,7 +127,7 @@ export function DecisionMomentPlayer() {
         <p className="moment-menu-hint">Chọn một chương để chơi nhanh — hoặc chơi tất cả.</p>
         <div className="moment-menu">
           {CHAPTERS.map((item) => (
-            <button key={String(item.scope)} type="button" className="moment-menu__card" onClick={() => start(item.scope)}>
+            <button key={String(item.scope)} type="button" className="moment-menu__card" data-scope={String(item.scope)} onClick={() => start(item.scope)}>
               <span className="moment-menu__glyph" aria-hidden="true">{item.glyph}</span>
               <strong>{item.title}</strong>
               <small>{item.note}</small>
