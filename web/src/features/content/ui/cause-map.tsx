@@ -14,77 +14,93 @@ const laneLabels: Record<CauseLane, string> = {
   lesson: "Bài học",
 };
 
+const laneOrder: CauseLane[] = ["context", "contradiction", "force", "decision", "result", "lesson"];
+
+type CauseCase = { slug: string; title: string; period: string; nodes: CauseNode[] };
+
 export function CauseMap({ nodes, edges }: { nodes: CauseNode[]; edges: CauseEdge[] }) {
-  const [selectedId, setSelectedId] = useState(nodes[0]?.id ?? "");
-  const selected = nodes.find((node) => node.id === selectedId) ?? nodes[0];
-  const relations = useMemo(
-    () => edges.filter((edge) => edge.sourceId === selectedId || edge.targetId === selectedId),
-    [edges, selectedId],
-  );
+  const cases = useMemo<CauseCase[]>(() => {
+    const map = new Map<string, CauseCase>();
+    for (const node of nodes) {
+      const existing = map.get(node.dossierSlug);
+      if (existing) {
+        existing.nodes.push(node);
+      } else {
+        map.set(node.dossierSlug, { slug: node.dossierSlug, title: node.dossierTitle, period: node.period, nodes: [node] });
+      }
+    }
+    for (const item of map.values()) {
+      item.nodes.sort((a, b) => laneOrder.indexOf(a.lane) - laneOrder.indexOf(b.lane));
+    }
+    return [...map.values()];
+  }, [nodes]);
+
+  const relationInto = useMemo(() => {
+    const map = new Map<string, string>();
+    for (const edge of edges) map.set(edge.targetId, edge.relation);
+    return map;
+  }, [edges]);
+
+  const [activeSlug, setActiveSlug] = useState(cases[0]?.slug ?? "");
+  const active = cases.find((item) => item.slug === activeSlug) ?? cases[0];
+
+  if (!active) return null;
 
   return (
     <div className="cause-map">
       <p className="cause-map__hint">
-        Đọc từ trên xuống: mỗi cột là một giai đoạn, sáu hàng là sáu lớp quan hệ (bối cảnh → mâu thuẫn → lực lượng →
-        quyết sách → kết quả → bài học). <strong>Chạm vào một ô</strong> để xem giải thích và các quan hệ nối tới nó.
+        Chọn một <strong>trường hợp</strong> bên dưới, rồi đọc chuỗi nhân – quả sáu lớp từ bối cảnh đến bài học. Mỗi mũi
+        tên là một quan hệ dẫn tới lớp tiếp theo.
       </p>
-      <div className="cause-map__desktop" aria-label="Sáu lớp mạch nguyên nhân">
-        {(Object.keys(laneLabels) as CauseLane[]).map((lane, laneIndex) => (
-          <section className="cause-lane" data-lane={lane} key={lane}>
-            <h2>
-              <span className="cause-lane__num" aria-hidden="true">{String(laneIndex + 1).padStart(2, "0")}</span>
-              {laneLabels[lane]}
-            </h2>
-            <div>
-              {nodes.filter((node) => node.lane === lane).map((node) => (
-                <button
-                  key={node.id}
-                  type="button"
-                  aria-pressed={selectedId === node.id}
-                  onClick={() => setSelectedId(node.id)}
-                >
-                  <span className="cause-cell__period">{node.period}</span>
-                  <span className="cause-cell__text">{node.explanation}</span>
-                </button>
-              ))}
-            </div>
-          </section>
+
+      <div className="cause-cases" role="tablist" aria-label="Chọn trường hợp lịch sử">
+        {cases.map((item, index) => (
+          <button
+            key={item.slug}
+            type="button"
+            role="tab"
+            aria-selected={item.slug === active.slug}
+            className="cause-case"
+            data-active={item.slug === active.slug}
+            onClick={() => setActiveSlug(item.slug)}
+          >
+            <span className="cause-case__index" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
+            <span className="cause-case__body">
+              <span className="cause-case__period">{item.period}</span>
+              <strong>{item.title}</strong>
+            </span>
+          </button>
         ))}
       </div>
 
-      <div className="cause-map__mobile">
-        <label>
-          Chọn lát cắt
-          <select value={selectedId} onChange={(event) => setSelectedId(event.target.value)}>
-            {nodes.map((node) => <option key={node.id} value={node.id}>{node.period} · {node.label}</option>)}
-          </select>
-        </label>
-      </div>
+      <ol className="cause-chain" aria-label={`Chuỗi nhân quả: ${active.title}`}>
+        {active.nodes.map((node, index) => {
+          const relation = index > 0 ? relationInto.get(node.id) : null;
+          return (
+            <li key={node.id} className="cause-step" data-lane={node.lane}>
+              {relation && (
+                <span className="cause-step__rel" aria-hidden="true">
+                  {relation}
+                  <span className="cause-step__arrow">↓</span>
+                </span>
+              )}
+              <div className="cause-step__card">
+                <p className="cause-step__head">
+                  <span className="cause-step__num">{String(index + 1).padStart(2, "0")}</span>
+                  <span className="cause-step__lane">{laneLabels[node.lane]}</span>
+                </p>
+                <p className="cause-step__text">{node.explanation}</p>
+              </div>
+            </li>
+          );
+        })}
+      </ol>
 
-      {selected && (
-        <aside className="relation-panel">
-          <div>
-            <p className="eyebrow">Quan hệ đang chọn</p>
-            <h2>{selected.label}</h2>
-            <p>{selected.explanation}</p>
-            <Link href={`/ho-so/${selected.dossierSlug}`}>Mở hồ sơ</Link>
-          </div>
-          <div className="relation-panel__links">
-            <h3>Quan hệ</h3>
-            {relations.length ? relations.map((edge) => {
-              const otherId = edge.sourceId === selected.id ? edge.targetId : edge.sourceId;
-              const other = nodes.find((node) => node.id === otherId);
-              return (
-                <button type="button" key={edge.id} onClick={() => other && setSelectedId(other.id)}>
-                  <span>{edge.relation}</span>
-                  <strong>{other?.label}</strong>
-                  <small>{edge.explanation}</small>
-                </button>
-              );
-            }) : <p>Đây là điểm đầu hoặc cuối của lát cắt hiện tại.</p>}
-          </div>
-        </aside>
-      )}
+      <div className="cause-chain__foot">
+        <Link className="cause-chain__open" href={`/ho-so/${active.slug}`}>
+          Mở hồ sơ đầy đủ <span aria-hidden="true">→</span>
+        </Link>
+      </div>
     </div>
   );
 }
