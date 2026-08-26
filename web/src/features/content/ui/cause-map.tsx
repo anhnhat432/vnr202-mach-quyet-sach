@@ -29,9 +29,12 @@ export function CauseMap({ nodes, edges }: { nodes: CauseNode[]; edges: CauseEdg
         quyết sách → kết quả → bài học). <strong>Chạm vào một ô</strong> để xem giải thích và các quan hệ nối tới nó.
       </p>
       <div className="cause-map__desktop" aria-label="Sáu lớp mạch nguyên nhân">
-        {(Object.keys(laneLabels) as CauseLane[]).map((lane) => (
-          <section className="cause-lane" key={lane}>
-            <h2>{laneLabels[lane]}</h2>
+        {(Object.keys(laneLabels) as CauseLane[]).map((lane, laneIndex) => (
+          <section className="cause-lane" data-lane={lane} key={lane}>
+            <h2>
+              <span className="cause-lane__num" aria-hidden="true">{String(laneIndex + 1).padStart(2, "0")}</span>
+              {laneLabels[lane]}
+            </h2>
             <div>
               {nodes.filter((node) => node.lane === lane).map((node) => (
                 <button
@@ -40,8 +43,8 @@ export function CauseMap({ nodes, edges }: { nodes: CauseNode[]; edges: CauseEdg
                   aria-pressed={selectedId === node.id}
                   onClick={() => setSelectedId(node.id)}
                 >
-                  <span>{node.period}</span>
-                  <strong>{node.label}</strong>
+                  <span className="cause-cell__period">{node.period}</span>
+                  <span className="cause-cell__text">{node.explanation}</span>
                 </button>
               ))}
             </div>

@@ -1024,7 +1024,9 @@ main {
 }
 
 .cause-map {
-  border: 1px solid var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  overflow: hidden;
   background: var(--paper-light);
 }
 
@@ -1033,54 +1035,85 @@ main {
 }
 
 .cause-lane {
-  min-width: 70rem;
+  min-width: 56rem;
   display: grid;
-  grid-template-columns: 8rem 1fr;
+  grid-template-columns: 9.5rem 1fr;
   border-bottom: 1px solid var(--line);
+  border-left: 4px solid transparent;
+}
+
+.cause-lane:last-child {
+  border-bottom: 0;
 }
 
 .cause-lane h2 {
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  align-items: flex-start;
+  justify-content: center;
   border-right: 1px solid var(--line);
-  padding: 1rem;
-  font: 700 0.86rem var(--font-display), sans-serif;
-  letter-spacing: 0.08em;
+  padding: 0.9rem 0.9rem;
+  font: 700 0.76rem var(--font-display), sans-serif;
   text-transform: uppercase;
+}
+
+.cause-lane__num {
+  font: 700 1.5rem/1 var(--font-display), sans-serif;
+  color: var(--ink-soft);
 }
 
 .cause-lane > div {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-  padding: 0.75rem 1rem;
+  gap: 0.7rem;
+  padding: 0.7rem 0.85rem;
 }
 
 .cause-lane button {
-  display: grid;
-  gap: 0.35rem;
-  min-height: 4.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  min-height: 5.4rem;
   border: 1px solid var(--line);
-  background: transparent;
+  background: var(--paper);
   color: var(--ink);
-  padding: 0.75rem;
+  padding: 0.7rem 0.8rem;
   text-align: left;
   cursor: pointer;
 }
 
-.cause-lane button[aria-pressed="true"] {
-  border-color: var(--command-red);
-  background: rgba(177, 40, 46, 0.08);
-}
-
-.cause-lane button span {
-  color: var(--ink-soft);
-  font-size: 0.7rem;
-}
-
-.cause-lane button strong {
-  font: 600 1rem var(--font-display), sans-serif;
+.cause-cell__period {
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
+  color: var(--ink-soft);
 }
+
+.cause-cell__text {
+  font-size: 0.84rem;
+  line-height: 1.4;
+  color: var(--ink);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Lane accents encode the causal arc: tension → the pivotal decision → outcome → lesson */
+.cause-lane[data-lane="context"] { border-left-color: rgba(20, 33, 43, 0.28); }
+.cause-lane[data-lane="contradiction"] { border-left-color: rgba(177, 40, 46, 0.55); }
+.cause-lane[data-lane="force"] { border-left-color: rgba(214, 146, 46, 0.55); }
+.cause-lane[data-lane="decision"] { border-left-color: var(--command-red); background: rgba(177, 40, 46, 0.035); }
+.cause-lane[data-lane="result"] { border-left-color: var(--evidence-teal); }
+.cause-lane[data-lane="lesson"] { border-left-color: var(--signal-amber); }
+
+.cause-lane[data-lane="contradiction"] .cause-lane__num { color: var(--command-red); }
+.cause-lane[data-lane="decision"] .cause-lane__num { color: var(--command-red); }
+.cause-lane[data-lane="result"] .cause-lane__num { color: var(--evidence-teal); }
+.cause-lane[data-lane="lesson"] .cause-lane__num { color: var(--signal-amber); }
 
 .cause-map__mobile {
   display: none;
@@ -2171,10 +2204,12 @@ main {
 .cause-lane button:hover {
   transform: translateY(-2px);
   border-color: var(--evidence-teal);
+  box-shadow: var(--shadow-soft);
 }
 
 .cause-lane button[aria-pressed="true"] {
   border-color: var(--command-red);
+  background: rgba(177, 40, 46, 0.09);
   box-shadow: inset 0 0 0 1px var(--command-red);
 }
 
