@@ -1566,25 +1566,158 @@ main {
 }
 
 .arena-status {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
-  border-block: 1px solid var(--ink);
-  padding: 1rem 0;
+  gap: 0.55rem;
+  margin: 1.25rem 0 0;
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  background: rgba(214, 146, 46, 0.15);
+  color: #8a5a12;
   font-weight: 700;
-}
-
-.arena-status small {
-  margin-left: auto;
-  color: var(--ink-soft);
-  font-weight: 400;
+  font-size: 0.9rem;
 }
 
 .arena-status__dot {
-  width: 0.75rem;
-  height: 0.75rem;
+  width: 0.6rem;
+  height: 0.6rem;
   border-radius: 50%;
   background: var(--signal-amber);
+  box-shadow: 0 0 0 0.28rem rgba(214, 146, 46, 0.22);
+}
+
+/* ---- Live Arena: paired game + leaderboard columns ---- */
+.arena-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+
+.arena-col {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--paper-light);
+  box-shadow: var(--shadow-soft);
+}
+
+.arena-col[data-playable="true"] {
+  border-color: rgba(177, 40, 46, 0.4);
+}
+
+.arena-col__game {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: 1.4rem 1.5rem;
+  flex: 1;
+}
+
+.arena-col__tag {
+  color: var(--command-red);
+  font: 700 0.72rem var(--font-display), sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.arena-col__game h2 {
+  margin: 0.15rem 0 0.25rem;
+  font: 700 clamp(1.4rem, 2.4vw, 2rem)/1.14 var(--font-display), sans-serif;
+  text-transform: uppercase;
+}
+
+.arena-col__game p {
+  margin: 0;
+  color: var(--ink-soft);
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+.arena-col__cta {
+  align-self: flex-start;
+  margin-top: 0.7rem;
+  padding: 0.6rem 1.15rem;
+  border-radius: 12px;
+  font-weight: 700;
+}
+
+.arena-col[data-playable="true"] .arena-col__cta {
+  background: var(--command-red);
+  color: #fff;
+}
+
+.arena-col[data-playable="false"] .arena-col__cta {
+  border: 1px solid var(--border-strong, var(--line));
+  color: var(--ink);
+}
+
+.arena-col__board {
+  border-top: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.arena-col__board header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.7rem 1.1rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.arena-col__board header span {
+  color: var(--ink-soft);
+  font: 700 0.7rem var(--font-display), sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.arena-col__board header strong {
+  padding: 0.12rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(214, 146, 46, 0.16);
+  color: #8a5a12;
+  font-size: 0.66rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.arena-col__board ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.arena-col__board li {
+  display: grid;
+  grid-template-columns: 1.7rem 1fr auto;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.6rem 1.1rem;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.92rem;
+}
+
+.arena-col__board li span {
+  color: var(--ink-soft);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.arena-col__board li b {
+  color: var(--command-red);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.arena-col__note {
+  margin: 0;
+  padding: 0.65rem 1.1rem;
+  color: var(--ink-soft);
+  font-size: 0.78rem;
 }
 
 .arena-games,
