@@ -13,10 +13,7 @@ export default function GioGPage() {
       <header className="page-intro page-intro--wide">
         <p className="eyebrow">Giờ G · chế độ dẫn cả lớp · máy chiếu</p>
         <h1>Đấu trường Quyết Sách</h1>
-        <p>
-          Chiếu một khoảnh khắc lịch sử lên màn hình lớn, để cả lớp bỏ phiếu, rồi cùng bấm lật bài xem lớp mình có
-          nghĩ giống lịch sử không. Người dẫn điều khiển bằng chuột hoặc phím 1/2/3 · R · ←/→.
-        </p>
+        <p>Chiếu một khoảnh khắc lên màn hình, cả lớp bỏ phiếu, rồi cùng lật bài — xem lớp có nghĩ giống lịch sử không.</p>
       </header>
       <GioGHost />
     </div>
