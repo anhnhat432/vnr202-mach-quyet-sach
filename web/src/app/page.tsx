@@ -15,20 +15,28 @@ const chapterSignals = [
 
 const portals = [
   {
-    index: "01",
-    href: "/khoanh-khac",
-    title: "Khoảnh khắc Quyết Sách",
-    body: "Chạm chọn một quyết định lịch sử, rồi lật bài xem bạn có nghĩ giống lịch sử không. Vui, nhẹ, không cần đăng nhập.",
-    action: "Chơi ngay →",
-    className: undefined as string | undefined,
+    index: "★ TÂM ĐIỂM",
+    href: "/ngan-can",
+    title: "Ngàn Cân Treo Sợi Tóc",
+    body: "Lèo lái chính quyền cách mạng non trẻ mùa đông 1945–46 qua sáu khủng hoảng có thật. Ba thanh trạng thái, hậu quả dây chuyền — cuối cùng đối chiếu với quyết định thật của Đảng. Bạn có giữ được nước không?",
+    action: "Vào cuộc →",
+    className: "home-portal__flagship",
   },
   {
     index: "GIỜ G",
     href: "/gio-g",
     title: "Giờ G · cả lớp cùng chơi",
-    body: "Chiếu một khoảnh khắc lên màn hình, cả lớp bỏ phiếu, rồi cùng lật bài so với lịch sử.",
+    body: "Chiếu một khoảnh khắc lên màn hình, cả lớp bỏ phiếu trên điện thoại, rồi cùng lật bài so với lịch sử.",
     action: "Vào Giờ G →",
     className: "home-portal__arena",
+  },
+  {
+    index: "01",
+    href: "/khoanh-khac",
+    title: "Chơi nhanh · 15 khoảnh khắc",
+    body: "Chạm chọn một quyết định lịch sử, rồi lật bài xem bạn có nghĩ giống lịch sử không. Nhẹ, nhanh, không cần đăng nhập.",
+    action: "Chơi nhanh →",
+    className: undefined as string | undefined,
   },
   {
     index: "02",
@@ -68,11 +76,12 @@ export default function Home() {
             Mạch <span className="home-title-accent">Quyết</span> Sách
           </h1>
           <p className="home-hero__lead">
-            Lịch sử là chuỗi dữ kiện, sức ép và lựa chọn. Ngồi vào ghế người ra quyết định — chơi ngay, không cần đăng nhập.
+            Lịch sử là chuỗi quyết định dưới sức ép. Ngồi vào ghế người lãnh đạo mùa đông 1945 — giữ nước qua sáu
+            khủng hoảng, hay để ngàn cân đứt?
           </p>
           <div className="home-hero__actions">
-            <Link className="command-button" href="/khoanh-khac">
-              Chơi ngay <span aria-hidden="true">→</span>
+            <Link className="command-button" href="/ngan-can">
+              Vào cuộc <span aria-hidden="true">→</span>
             </Link>
             <Link className="text-link" href="/ho-so">
               Hoặc mở kho 15 hồ sơ
