@@ -239,8 +239,8 @@ main {
 .home-hero h1 {
   max-width: 7ch;
   margin: 0;
-  font: 700 clamp(3rem, 6vw, 6rem)/0.95 var(--font-display), sans-serif;
-  letter-spacing: -0.04em;
+  font: 700 clamp(2.3rem, 4.3vw, 3.7rem)/1.14 var(--font-display), sans-serif;
+  letter-spacing: -0.01em;
   text-transform: uppercase;
 }
 
@@ -357,7 +357,7 @@ main {
 .mission-strip h2,
 .home-portal h2 {
   margin: 0;
-  font: 700 clamp(2rem, 4vw, 3.6rem)/0.95 var(--font-display), sans-serif;
+  font: 700 clamp(1.5rem, 2.6vw, 2.4rem)/1.14 var(--font-display), sans-serif;
   text-transform: uppercase;
 }
 
@@ -508,7 +508,7 @@ main {
   }
 
   .home-hero h1 {
-    font-size: clamp(2.6rem, 10vw, 4rem);
+    font-size: clamp(2rem, 8vw, 3.1rem);
   }
 
   .signal-field {
@@ -564,8 +564,8 @@ main {
 .page-intro h1,
 .dossier-detail__header h1 {
   margin: 0 0 1.25rem;
-  font: 700 clamp(3.2rem, 7vw, 7rem)/0.98 var(--font-display), sans-serif;
-  letter-spacing: -0.035em;
+  font: 700 clamp(1.85rem, 3.6vw, 3.1rem)/1.14 var(--font-display), sans-serif;
+  letter-spacing: -0.01em;
   text-transform: uppercase;
 }
 
@@ -740,7 +740,7 @@ main {
 .scenario-panel h2 {
   max-width: 18ch;
   margin: 0 0 2rem;
-  font: 700 clamp(2.5rem, 5vw, 5rem)/0.94 var(--font-display), sans-serif;
+  font: 700 clamp(1.7rem, 3vw, 2.8rem)/1.14 var(--font-display), sans-serif;
   text-transform: uppercase;
 }
 
@@ -1432,7 +1432,7 @@ main {
 .arena-games h2,
 .arena-leaderboards h2 {
   margin: auto 0 1rem;
-  font: 700 clamp(2.4rem, 5vw, 4.5rem)/0.92 var(--font-display), sans-serif;
+  font: 700 clamp(1.6rem, 3vw, 2.6rem)/1.14 var(--font-display), sans-serif;
   text-transform: uppercase;
 }
 
@@ -2732,7 +2732,7 @@ main {
 
 .giog__title {
   margin: 0 0 0.75rem;
-  font: 700 clamp(2.2rem, 6vw, 4rem)/1 var(--font-display), sans-serif;
+  font: 700 clamp(1.8rem, 4vw, 3rem)/1.14 var(--font-display), sans-serif;
   letter-spacing: -0.02em;
 }
 
@@ -3231,4 +3231,30 @@ main {
 
 .home-portal__arena:hover .home-portal__action {
   color: var(--signal-amber);
+}
+
+/* ============================================================
+   Vietnamese display type — stacked diacritics (Ế Ấ Ể Ộ Ệ Ọ…) need
+   vertical room, so every big heading gets a calm line-height and
+   eased tracking. This overrides the line-height packed into the
+   shorthand `font:` declarations above.
+   ============================================================ */
+.home-hero h1,
+.page-intro h1,
+.dossier-detail__header h1,
+.mission-strip h2,
+.home-portal h2,
+.scenario-panel h2,
+.disclosure-page h2,
+.arena-leaderboards h2,
+.arena-games h2,
+.login-shell h1,
+.giog__title,
+.vote-title,
+.moment-title,
+.moment-summary h2,
+.cause-lane h2,
+.relation-panel h2 {
+  line-height: 1.2 !important;
+  letter-spacing: 0 !important;
 }
