@@ -1,0 +1,441 @@
+"use client";
+
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import Link from "next/link";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+
+import { MeterGlyph } from "@/features/brand/artwork";
+import { createSound, type CrisisSound } from "@/features/crisis/crisis-audio";
+
+import {
+  CLAMP_MAX,
+  CLAMP_MIN,
+  LESSON,
+  METERS,
+  ROUNDS,
+  type CrisisChoice,
+  type MeterId,
+} from "@/features/crisis/crisis-scenario";
+
+type Phase = "intro" | "round" | "consequence" | "ending";
+type Meters = Record<MeterId, number>;
+type Pick = { roundId: string; choice: CrisisChoice };
+
+const startMeters = (): Meters =>
+  METERS.reduce((acc, meter) => {
+    acc[meter.id] = meter.start;
+    return acc;
+  }, {} as Meters);
+
+const clamp = (value: number) => Math.max(CLAMP_MIN, Math.min(CLAMP_MAX, value));
+
+function meterState(value: number): "ok" | "warn" | "dead" {
+  if (value <= 0) return "dead";
+  if (value <= 18) return "warn";
+  return "ok";
+}
+
+const ease = [0.22, 1, 0.36, 1] as const;
+
+function CrisisHud({
+  meters,
+  big = false,
+  flash = null,
+  tick = 0,
+  reduceMotion,
+}: {
+  meters: Meters;
+  big?: boolean;
+  flash?: Partial<Record<MeterId, number>> | null;
+  tick?: number;
+  reduceMotion: boolean | null;
+}) {
+  return (
+    <div className={`crisis-hud${big ? " crisis-hud--big" : ""}`} aria-label="Trạng thái đất nước">
+      {METERS.map((meter) => {
+        const value = meters[meter.id];
+        const status = meterState(value);
+        const delta = flash?.[meter.id] ?? 0;
+        return (
+          <div className="crisis-meter" data-meter={meter.id} data-status={status} key={meter.id}>
+            <span className="crisis-meter__label">
+              <MeterGlyph id={meter.id} className="meter-glyph" /> {meter.label}
+            </span>
+            <span className="crisis-meter__numrow">
+              <motion.span
+                key={value}
+                className="crisis-meter__value"
+                initial={reduceMotion ? false : { scale: 1.35, filter: "brightness(1.8)" }}
+                animate={{ scale: 1, filter: "brightness(1)" }}
+                transition={{ duration: 0.3, ease }}
+              >
+                {value}
+              </motion.span>
+              <AnimatePresence>
+                {delta !== 0 && (
+                  <motion.span
+                    key={`${tick}-${meter.id}`}
+                    className="crisis-meter__delta"
+                    data-dir={delta > 0 ? "up" : "down"}
+                    initial={reduceMotion ? { opacity: 1 } : { opacity: 0, y: 4 }}
+                    animate={reduceMotion ? { opacity: 1 } : { opacity: [0, 1, 1, 0], y: -20 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 1.2, ease }}
+                  >
+                    {delta > 0 ? `+${delta}` : delta}
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </span>
+            <span className="crisis-meter__track">
+              <span className="crisis-meter__fill" style={{ width: `${value}%` }} />
+            </span>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+export function CrisisGame() {
+  const reduceMotion = useReducedMotion();
+  const [phase, setPhase] = useState<Phase>("intro");
+  const [roundIndex, setRoundIndex] = useState(0);
+  const [meters, setMeters] = useState<Meters>(startMeters);
+  const [picks, setPicks] = useState<Pick[]>([]);
+  const [collapsed, setCollapsed] = useState<MeterId | null>(null);
+  const [shaking, setShaking] = useState(false);
+  const [redFlash, setRedFlash] = useState(0);
+  const shakeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const [soundOn, setSoundOn] = useState(false);
+  const soundOnRef = useRef(false);
+  const soundRef = useRef<CrisisSound | null>(null);
+
+  const toggleSound = useCallback(() => {
+    if (!soundRef.current) soundRef.current = createSound();
+    soundRef.current.resume();
+    soundOnRef.current = !soundOnRef.current;
+    setSoundOn(soundOnRef.current);
+  }, []);
+
+  const round = ROUNDS[roundIndex];
+  const lastPick = picks[picks.length - 1] ?? null;
+  const historicalCount = useMemo(() => picks.filter((p) => p.choice.historical).length, [picks]);
+  const danger = METERS.some((m) => meters[m.id] <= 18);
+
+  const reset = useCallback(() => {
+    setMeters(startMeters());
+    setPicks([]);
+    setCollapsed(null);
+    setRoundIndex(0);
+    setShaking(false);
+  }, []);
+
+  const start = useCallback(() => {
+    reset();
+    setPhase("round");
+  }, [reset]);
+
+  const choose = useCallback(
+    (choice: CrisisChoice) => {
+      if (soundOnRef.current) soundRef.current?.tick();
+      let causedZero = false;
+      setMeters((current) => {
+        const next = { ...current };
+        let firstDead: MeterId | null = null;
+        for (const meter of METERS) {
+          const delta = choice.effects[meter.id] ?? 0;
+          next[meter.id] = clamp(current[meter.id] + delta);
+          if (next[meter.id] <= 0 && current[meter.id] > 0) causedZero = true;
+          if (next[meter.id] <= 0 && firstDead === null) firstDead = meter.id;
+        }
+        if (firstDead) setCollapsed((prev) => prev ?? firstDead);
+        return next;
+      });
+      setPicks((prev) => [...prev, { roundId: round.id, choice }]);
+      setPhase("consequence");
+      if (causedZero) {
+        if (soundOnRef.current) soundRef.current?.thud();
+        setRedFlash((n) => n + 1);
+        setShaking(true);
+        if (shakeTimer.current) clearTimeout(shakeTimer.current);
+        shakeTimer.current = setTimeout(() => setShaking(false), 520);
+      }
+    },
+    [round],
+  );
+
+  const advance = useCallback(() => {
+    if (roundIndex + 1 >= ROUNDS.length) {
+      setPhase("ending");
+      return;
+    }
+    setRoundIndex((value) => value + 1);
+    setPhase("round");
+  }, [roundIndex]);
+
+  // Tiếp nối từ teaser trang chủ: nước đã chọn ở đó thành Vòng 1 thật → vào thẳng Vòng 2.
+  // Đồng bộ một lần từ external store (sessionStorage) sau khi mount — server không có
+  // sessionStorage, nên phải đặt trong effect (đọc lúc render sẽ vỡ hydration).
+  useEffect(() => {
+    let id: string | null = null;
+    try {
+      id = sessionStorage.getItem("nc_warmup");
+      if (id) sessionStorage.removeItem("nc_warmup");
+    } catch {
+      return;
+    }
+    if (!id) return;
+    const first = ROUNDS[0];
+    const choice = first.choices.find((c) => c.id === id);
+    if (!choice) return;
+
+    const seeded = startMeters();
+    let dead: MeterId | null = null;
+    for (const meter of METERS) {
+      seeded[meter.id] = clamp(seeded[meter.id] + (choice.effects[meter.id] ?? 0));
+      if (seeded[meter.id] <= 0 && dead === null) dead = meter.id;
+    }
+    /* eslint-disable react-hooks/set-state-in-effect -- one-time hydration-safe seed from sessionStorage */
+    setMeters(seeded);
+    setPicks([{ roundId: first.id, choice }]);
+    if (dead) setCollapsed(dead);
+    setRoundIndex(1);
+    setPhase("round");
+    /* eslint-enable react-hooks/set-state-in-effect */
+  }, []);
+
+  // Âm thanh payoff khi tới màn kết cục (chỉ khi người dùng đã bật).
+  useEffect(() => {
+    if (phase !== "ending" || !soundOnRef.current || !soundRef.current) return;
+    const survived = collapsed === null && METERS.every((m) => meters[m.id] > 0);
+    if (survived) soundRef.current.win();
+    else soundRef.current.lose();
+  }, [phase, collapsed, meters]);
+
+  const enter = reduceMotion
+    ? {}
+    : { initial: { opacity: 0, y: 16 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.4, ease } };
+
+  // ---------- Màn mở đầu ----------
+  if (phase === "intro") {
+    return (
+      <section className="crisis" aria-label="Ngàn cân treo sợi tóc — mở đầu">
+        <motion.div className="crisis-intro" {...enter}>
+          <p className="crisis-eyebrow">Mô phỏng · Mùa đông 1945 – 1946</p>
+          <h1 className="crisis-intro__title">Ngàn cân treo sợi tóc</h1>
+          <p className="crisis-intro__lead">
+            <b>Sáu vòng khủng hoảng có thật.</b> Mỗi quyết định dịch chuyển ba thanh dưới đây — để một
+            thanh chạm đáy là chính quyền sụp. Cuối cùng, đối chiếu từng nước với quyết sách thật của Đảng.
+          </p>
+
+          <div className="crisis-intro__meters">
+            {METERS.map((meter) => (
+              <div className="crisis-intro__meter" key={meter.id} data-meter={meter.id}>
+                <span className="crisis-intro__meter-name">
+                  <MeterGlyph id={meter.id} className="meter-glyph" /> {meter.label}
+                  <b>{meter.start}</b>
+                </span>
+                <span className="crisis-intro__meter-blurb">{meter.blurb}</span>
+              </div>
+            ))}
+          </div>
+
+          <div className="crisis-intro__controls">
+            <button type="button" className="crisis-btn crisis-btn--go" onClick={start}>
+              Bắt đầu — Vòng 1 →
+            </button>
+            <button type="button" className="crisis-sound" onClick={toggleSound} aria-pressed={soundOn}>
+              <svg viewBox="0 0 24 24" width="1.05em" height="1.05em" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M4 9v6h4l5 4V5L8 9H4Z" />
+                {soundOn && <path d="M16 9.5a3.5 3.5 0 0 1 0 5" />}
+              </svg>
+              {soundOn ? "Âm thanh: Bật" : "Bật âm thanh"}
+            </button>
+          </div>
+          <p className="crisis-intro__foot">Bối cảnh có thật 1945–1946 · Giáo trình Lịch sử Đảng, Chương 2</p>
+        </motion.div>
+      </section>
+    );
+  }
+
+  // ---------- Màn kết cục ----------
+  if (phase === "ending") {
+    const survived = collapsed === null && METERS.every((m) => meters[m.id] > 0);
+    const rank = !survived
+      ? { tag: "Suýt mất nước", tone: "fail" as const }
+      : historicalCount >= 5
+        ? { tag: "Bản lĩnh 1946", tone: "gold" as const }
+        : historicalCount >= 3
+          ? { tag: "Giữ được nước", tone: "ok" as const }
+          : { tag: "Về đích trong gang tấc", tone: "thin" as const };
+    const deadMeter = collapsed ? METERS.find((m) => m.id === collapsed) : null;
+
+    return (
+      <section className="crisis" aria-label="Kết cục">
+        <motion.div className="crisis-ending" data-tone={rank.tone} {...enter}>
+          <p className="crisis-eyebrow">Kết cục · sau sáu quyết định</p>
+          <h2 className="crisis-ending__verdict">{survived ? "Giữ được nước" : "Ngàn cân đã đứt"}</h2>
+          <p className="crisis-ending__rank">
+            <span className="crisis-ending__badge" data-tone={rank.tone}>{rank.tag}</span>
+            <span>Khớp đường lối lịch sử: <b>{historicalCount}/{ROUNDS.length}</b></span>
+          </p>
+
+          {survived ? (
+            <p className="crisis-ending__note">
+              Chính quyền non trẻ đứng vững qua giai đoạn hiểm nghèo nhất — đúng như lịch sử đã làm được.
+              {historicalCount < 5 && " Nhưng con đường của bạn chệch đôi chỗ so với quyết sách thật."}
+            </p>
+          ) : (
+            <p className="crisis-ending__note">
+              <b>{deadMeter?.label}</b> đã sụp xuống đáy — chính quyền lẽ ra đã đổ ở đây. Trong lịch sử, Đảng
+              tránh được kết cục này bằng những nước cờ mềm dẻo mà kiên định.
+            </p>
+          )}
+
+          <CrisisHud meters={meters} big reduceMotion={reduceMotion} />
+
+          <ol className="crisis-recap" aria-label="Đối chiếu từng vòng với lịch sử">
+            {picks.map((pick, index) => {
+              const source = ROUNDS[index];
+              const historicalChoice = source.choices.find((c) => c.historical);
+              return (
+                <li key={pick.roundId} className="crisis-recap__row" data-match={pick.choice.historical}>
+                  <span className="crisis-recap__turn">{source.turn}</span>
+                  <span className="crisis-recap__threat">{source.threat}</span>
+                  <span className="crisis-recap__pick">
+                    <span aria-hidden="true">{pick.choice.glyph}</span> {pick.choice.label}
+                  </span>
+                  {pick.choice.historical ? (
+                    <span className="crisis-recap__tag crisis-recap__tag--ok">Khớp lịch sử ✓</span>
+                  ) : (
+                    <span className="crisis-recap__tag crisis-recap__tag--diff">
+                      Đảng đã chọn: {historicalChoice?.label}
+                    </span>
+                  )}
+                </li>
+              );
+            })}
+          </ol>
+
+          <div className="crisis-lesson">
+            <p className="crisis-lesson__kicker">Bài học lịch sử</p>
+            <p className="crisis-lesson__title">“{LESSON.title}”</p>
+            <p className="crisis-lesson__body">{LESSON.body}</p>
+          </div>
+
+          <div className="crisis-ending__actions">
+            <button type="button" className="crisis-btn crisis-btn--go" onClick={start}>Chơi lại ↻</button>
+            <Link className="crisis-btn crisis-btn--ghost" href="/ho-so/giu-chinh-quyen-giua-vong-vay">Đọc hồ sơ 1945–46 →</Link>
+            <Link className="crisis-btn crisis-btn--ghost" href="/gio-g">Chơi cả lớp ở Giờ G →</Link>
+          </div>
+        </motion.div>
+      </section>
+    );
+  }
+
+  // ---------- Màn chơi ----------
+  const flash = phase === "consequence" && lastPick ? lastPick.choice.effects : null;
+
+  return (
+    <section className="crisis crisis--play" data-shaking={shaking} data-danger={danger} aria-label="Ngàn cân treo sợi tóc">
+      <div className="crisis-vignette" aria-hidden="true" data-on={danger} />
+      <AnimatePresence>
+        {redFlash > 0 && (
+          <motion.div
+            key={redFlash}
+            className="crisis-redflash"
+            aria-hidden="true"
+            initial={{ opacity: 0.72 }}
+            animate={{ opacity: 0 }}
+            transition={{ duration: 0.65, ease: "easeOut" }}
+          />
+        )}
+      </AnimatePresence>
+
+      <div className="crisis-hud-wrap">
+        <CrisisHud meters={meters} flash={flash} tick={picks.length} reduceMotion={reduceMotion} />
+        <div className="crisis-thread" data-danger={danger} aria-hidden="true" />
+      </div>
+
+      <div className="crisis-progress" aria-label={`Vòng ${roundIndex + 1} trên ${ROUNDS.length}`}>
+        {ROUNDS.map((item, index) => (
+          <span key={item.id} className="crisis-progress__dot" data-done={index < roundIndex} data-active={index === roundIndex} />
+        ))}
+      </div>
+
+      <motion.article
+        key={`${round.id}-${phase}`}
+        className="crisis-scene"
+        data-mood={round.mood}
+        initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, ease }}
+      >
+        <span className="crisis-scene__ghost" aria-hidden="true">{round.threat}</span>
+        <p className="crisis-scene__meta">
+          <span className="crisis-scene__kicker">{round.threat}</span>
+          {round.turn} · {round.date}
+        </p>
+        <h2 className="crisis-scene__title">{round.title}</h2>
+
+        {phase === "round" && (
+          <>
+            <p className="crisis-scene__hook">{round.hook}</p>
+            <details className="crisis-detail">
+              <summary>＋ bối cảnh đầy đủ</summary>
+              <p>{round.situation}</p>
+            </details>
+            <p className="crisis-scene__question">{round.question}</p>
+            <div className="crisis-choices">
+              {round.choices.map((choice) => (
+                <button key={choice.id} type="button" className="crisis-choice" onClick={() => choose(choice)}>
+                  <span className="crisis-choice__glyph" aria-hidden="true">{choice.glyph}</span>
+                  <span className="crisis-choice__label">{choice.label}</span>
+                  <span className="crisis-choice__go" aria-hidden="true">→</span>
+                </button>
+              ))}
+            </div>
+          </>
+        )}
+
+        {phase === "consequence" && lastPick && (
+          <motion.div
+            className="crisis-result"
+            initial={reduceMotion ? false : { opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, ease }}
+            aria-live="polite"
+          >
+            <p className="crisis-result__choice" data-history={lastPick.choice.historical}>
+              <span aria-hidden="true">{lastPick.choice.glyph}</span> {lastPick.choice.label}
+              {lastPick.choice.historical && <b className="crisis-result__flag">Đảng đã chọn ✓</b>}
+            </p>
+            <p className="crisis-result__line">{lastPick.choice.result}</p>
+
+            {(collapsed || danger) && (
+              <p className="crisis-result__warn">
+                {collapsed
+                  ? `⚠ ${METERS.find((m) => m.id === collapsed)?.label} đã chạm đáy — chính quyền lung lay tận gốc.`
+                  : `⚠ ${METERS.filter((m) => meterState(meters[m.id]) === "warn").map((m) => m.label).join(", ")} đang nguy hiểm.`}
+              </p>
+            )}
+
+            <p className="crisis-result__note">
+              <span className="crisis-result__note-tag">Sử thật</span> {lastPick.choice.note}
+            </p>
+            <details className="crisis-detail">
+              <summary>＋ chi tiết</summary>
+              <p>{lastPick.choice.outcome}</p>
+            </details>
+
+            <button type="button" className="crisis-btn crisis-btn--go" onClick={advance}>
+              {roundIndex + 1 >= ROUNDS.length ? "Xem kết cục →" : `Vòng ${roundIndex + 2} →`}
+            </button>
+          </motion.div>
+        )}
+      </motion.article>
+    </section>
+  );
+}

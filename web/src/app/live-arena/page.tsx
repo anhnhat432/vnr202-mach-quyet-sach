@@ -31,49 +31,41 @@ const games = [
 export default function LiveArenaPage() {
   return (
     <div className="page-shell arena-page">
-      <header className="page-intro page-intro--wide">
+      <header className="page-intro">
         <p className="eyebrow">Live Arena · Chế độ khách</p>
         <h1>Hai nhịp chơi. Hai bảng xếp hạng.</h1>
-        <p>
-          Khách có thể chơi thử chế độ luyện tập và xem bảng công khai. Cuộc thi chính thức với một lượt duy nhất cho mỗi
-          game và bảng xếp hạng realtime dành cho tài khoản sinh viên.
+        <p>Chơi thử chế độ luyện tập ngay. Cuộc thi tính điểm với một lượt duy nhất mở theo lịch giảng viên.</p>
+        <p className="arena-status">
+          <span className="arena-status__dot" />
+          Chế độ luyện tập đang mở · chơi thử tự do
         </p>
       </header>
-      <div className="arena-status">
-        <span className="arena-status__dot" />
-        Chế độ luyện tập đang mở · chơi thử tự do
-        <small>Cuộc thi tính điểm chính thức mở theo lịch của giảng viên</small>
-      </div>
-      <section className="arena-games">
-        {games.map((game) => (
-          <article key={game.title} data-playable={game.playable}>
-            <span>{game.tag}</span>
-            <h2>{game.title}</h2>
-            <p>{game.body}</p>
-            <Link href={game.href}>{game.cta}</Link>
-          </article>
-        ))}
-      </section>
-      <section className="arena-leaderboards">
-        {["Dòng Chảy Lịch Sử", "Phòng Quyết Sách"].map((game, gameIndex) => (
-          <article key={game}>
-            <header>
-              <div>
-                <span>Bảng {gameIndex + 1}</span>
-                <h2>{game}</h2>
-              </div>
-              <strong>Mẫu</strong>
-            </header>
-            <ol>
-              {sampleRanks.map(([rank, name, score]) => (
-                <li key={`${game}-${rank}`}>
-                  <span>{rank}</span>
-                  <strong>{name}</strong>
-                  <b>{Number(score) - gameIndex * 120} điểm</b>
-                </li>
-              ))}
-            </ol>
-            <p className="arena-leaderboards__note">Bảng minh họa · dữ liệu thật cập nhật khi cuộc thi chính thức mở</p>
+
+      <section className="arena-grid">
+        {games.map((game, gameIndex) => (
+          <article className="arena-col" data-playable={game.playable} key={game.title}>
+            <div className="arena-col__game">
+              <span className="arena-col__tag">{game.tag}</span>
+              <h2>{game.title}</h2>
+              <p>{game.body}</p>
+              <Link className="arena-col__cta" href={game.href}>{game.cta}</Link>
+            </div>
+            <div className="arena-col__board">
+              <header>
+                <span>Bảng xếp hạng</span>
+                <strong>Mẫu</strong>
+              </header>
+              <ol>
+                {sampleRanks.map(([rank, name, score]) => (
+                  <li key={`${game.title}-${rank}`}>
+                    <span>{rank}</span>
+                    <strong>{name}</strong>
+                    <b>{Number(score) - gameIndex * 120} điểm</b>
+                  </li>
+                ))}
+              </ol>
+              <p className="arena-col__note">Dữ liệu thật cập nhật khi cuộc thi chính thức mở</p>
+            </div>
           </article>
         ))}
       </section>

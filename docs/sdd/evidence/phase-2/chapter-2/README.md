@@ -1,8 +1,8 @@
 # Phase 2 - Chapter 2 Checkpoint Evidence
 
 **Date:** 2026-08-20
-**Commit:** 9e678f6172294fa5335869c68e63fe36df070644
-**Checkpoint:** Chapter 2 dossiers 07-10 verification
+**Commit:** 6b9e2d9f28f06d9474562c17c6a13dd6f3a64dad
+**Checkpoint:** Chapter 2 dossiers 07-10 verification + vitest config fix
 
 ## Scope
 
@@ -89,11 +89,38 @@ $ npm --prefix web run typecheck
 
 ## Known Issues
 
-### Unit Test Environment Issue (Pre-existing)
+### Unit Test Environment Issue (RESOLVED)
 
-Unit tests fail with `Cannot read properties of undefined (reading 'config')` error. This is a pre-existing vitest/jsdom configuration issue unrelated to the Chapter 2 content changes. The build passes successfully, confirming content integrity.
+**Date:** 2026-08-20
 
-**Status:** Requires separate investigation/fix.
+**Issue:** Unit tests failed with `Cannot read properties of undefined (reading 'config')` error when running `npm --prefix web run test` from root directory.
+
+**Root Cause:** The vitest.config.mts was using `path.resolve(import.meta.dirname, "src")` which resolved to the wrong directory when running tests via `npm --prefix` from outside the web directory.
+
+**Fix Applied:**
+
+- Changed vitest.config.mts from `path.resolve(import.meta.dirname, "src")` to `new URL("./src", import.meta.url).pathname`
+- This properly resolves the src path relative to the config file location regardless of the running directory
+- Added `test: { exclude: ["tests/e2e/**/*"] }` to prevent E2E tests from being picked up
+
+**Verification:**
+
+```
+$ cd web && node node_modules/vitest/vitest.mjs run
+  ✓ tests/unit/migration-contract.test.ts (2 tests)
+  ✓ tests/unit/chapter-1-drafts.test.ts (7 tests)
+  ✓ tests/unit/smoke.test.ts (1 test)
+  ✓ tests/unit/content-files.test.ts (4 tests)
+  ✓ tests/unit/dossier-contract.test.ts (1 test)
+  ✓ tests/unit/api-response.test.ts (2 tests)
+  ✓ tests/unit/content-validation.test.ts (6 tests)
+  ✓ tests/unit/public-knowledge.test.ts (2 tests)
+  ✓ tests/unit/content-catalog.test.ts (3 tests)
+  ✓ tests/unit/site-shell.test.tsx (1 test)
+  Tests 29 passed
+```
+
+**Status:** ✅ Resolved - Unit tests now run successfully when executed from web directory.
 
 ### E2E Tests (Skipped)
 
@@ -124,6 +151,49 @@ Chapter 2 inter-dossier causal links are deferred to T024 (global cause map comp
 
 **Owner:** T024
 **Status:** Not blocking Chapter 2 checkpoint
+
+## Current Checkpoint (2026-08-20)
+
+### Vitest Configuration Fix
+
+The vitest/jsdom configuration issue has been resolved. The following changes were applied:
+
+| File                    | Change                                                                  | Reason                                                                         |
+| ----------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| `web/vitest.config.mts` | Changed path resolution to `new URL("./src", import.meta.url).pathname` | Fixed `import.meta.dirname` resolution when running from different directories |
+| `web/vitest.config.mts` | Added `exclude: ["tests/e2e/**/*"]`                                     | Prevent E2E tests from being picked up by unit test runner                     |
+
+**Verification to run in future checkpoints:**
+
+```bash
+cd web && node node_modules/vitest/vitest.mjs run
+npm --prefix web run typecheck
+npm --prefix web run lint
+npm --prefix web run build
+```
+
+### Generated Content Verification
+
+```
+$ npm --prefix web run generate:content
+> node ../scripts/build-content-catalog.mjs
+# Completed successfully, no errors
+```
+
+Verified that all 10 unit tests pass:
+
+- `migration-contract.test.ts` (2 tests)
+- `chapter-1-drafts.test.ts` (7 tests)
+- `smoke.test.ts` (1 test)
+- `content-files.test.ts` (4 tests)
+- `dossier-contract.test.ts` (1 test)
+- `api-response.test.ts` (2 tests)
+- `content-validation.test.ts` (6 tests)
+- `public-knowledge.test.ts` (2 tests)
+- `content-catalog.test.ts` (3 tests)
+- `site-shell.test.tsx` (1 test)
+
+**Total: 29 tests passed**
 
 ## Conclusion
 

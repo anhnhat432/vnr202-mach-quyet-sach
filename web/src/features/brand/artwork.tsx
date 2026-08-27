@@ -2,6 +2,8 @@
 // These are decorative illustrations, not factual maps. Swap in licensed photos later
 // via the `.photo-slot` figure if desired.
 
+import type { ReactNode } from "react";
+
 /**
  * Warm layered hero illustration: strata of history rising toward a guiding star.
  * Evokes "history as layers of decisions" without making any factual claim.
@@ -81,6 +83,126 @@ const emblems = {
     <path d="M5 25 L13 17 L18 21 L27 8 M27 8 L20 8 M27 8 L27 15" fill="none" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
   ),
 } as const;
+
+// Deterministic integer pseudo-jitter — no floats, so server and client render
+// byte-identical SVG coordinates (no hydration mismatch).
+function wobble(seed: number, spread: number) {
+  const h = (Math.imul(seed + 1, 2654435761) >>> 0) % 1000;
+  return Math.round((h / 1000) * spread);
+}
+
+function CrowdRow({ count, gap, headR, bodyW, baseY, topY, fill, poles }: {
+  count: number;
+  gap: number;
+  headR: number;
+  bodyW: number;
+  baseY: number;
+  topY: number;
+  fill: string;
+  poles?: boolean;
+}) {
+  return (
+    <g fill={fill}>
+      {Array.from({ length: count }).map((_, i) => {
+        const cx = 30 + i * gap + wobble(i + count, gap * 0.4);
+        const t = topY + Math.abs(wobble(i * 2 + 1, headR * 1.2));
+        return (
+          <g key={i}>
+            {poles && i % 3 === 1 && (
+              <>
+                <rect x={cx - 1} y={t - 44} width="2" height={baseY - (t - 44)} fill="rgba(244,236,221,0.45)" />
+                <path
+                  d={`M${cx} ${t - 54} l3.4 6.9 7.6 .7 -5.7 5 1.7 7.4 -7 -3.9 -7 3.9 1.7 -7.4 -5.7 -5 7.6 -.7 Z`}
+                  fill="#d6922e"
+                />
+              </>
+            )}
+            <circle cx={cx} cy={t} r={headR} />
+            <rect x={cx - bodyW / 2} y={t + headR * 0.85} width={bodyW} height={baseY - (t + headR * 0.85)} rx={bodyW / 2} />
+          </g>
+        );
+      })}
+    </g>
+  );
+}
+
+/**
+ * Original crowd silhouette for the cold-open hero — "lòng dân" massed under the
+ * fragile thread. Purely decorative vector art (no third-party imagery).
+ */
+export function HeroCrowd({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 1200 240" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+      <CrowdRow count={24} gap={49} headR={7} bodyW={17} baseY={240} topY={96} fill="rgba(13,107,102,0.55)" />
+      <CrowdRow count={17} gap={70} headR={10} bodyW={25} baseY={240} topY={132} fill="#0c1418" poles />
+    </svg>
+  );
+}
+
+// Line-glyph cho ba thanh trạng thái — đồng bộ ngôn ngữ với ChapterEmblem,
+// thay cho emoji ❤️🏛️⚙️ để giữ tông "đẳng cấp" xuyên suốt.
+const gearTeeth: Array<[number, number, number, number]> = [
+  [22.8, 16, 25.2, 16],
+  [20.8, 20.8, 22.5, 22.5],
+  [16, 22.8, 16, 25.2],
+  [11.2, 20.8, 9.5, 22.5],
+  [9.2, 16, 6.8, 16],
+  [11.2, 11.2, 9.5, 9.5],
+  [16, 9.2, 16, 6.8],
+  [20.8, 11.2, 22.5, 9.5],
+];
+
+const meterGlyphs: Record<"longDan" | "theNuoc" | "thucLuc", ReactNode> = {
+  // Trái tim — lòng dân
+  longDan: (
+    <path d="M16 26.2 C 8.6 20.8, 4.6 15.4, 4.6 11.2 C 4.6 8.1, 7 5.9, 9.9 5.9 C 12.5 5.9, 14.7 7.6, 16 9.9 C 17.3 7.6, 19.5 5.9, 22.1 5.9 C 25 5.9, 27.4 8.1, 27.4 11.2 C 27.4 15.4, 23.4 20.8, 16 26.2 Z" />
+  ),
+  // Đền đài — thế nước, chủ quyền
+  theNuoc: (
+    <g>
+      <path d="M4.5 12 L16 5 L27.5 12" />
+      <path d="M6 12.4 H26" />
+      <path d="M9.5 14 V23.5 M16 14 V23.5 M22.5 14 V23.5" />
+      <path d="M6 24.5 H26" />
+    </g>
+  ),
+  // Bánh răng — thực lực
+  thucLuc: (
+    <g>
+      <circle cx="16" cy="16" r="5.4" />
+      <circle cx="16" cy="16" r="1.9" />
+      {gearTeeth.map(([x1, y1, x2, y2], i) => (
+        <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} />
+      ))}
+    </g>
+  ),
+};
+
+/** SVG glyph cho một thanh trạng thái (longDan | theNuoc | thucLuc). */
+export function MeterGlyph({
+  id,
+  className,
+}: {
+  id: "longDan" | "theNuoc" | "thucLuc";
+  className?: string;
+}) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 32 32"
+      width="1em"
+      height="1em"
+      aria-hidden="true"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.1"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      {meterGlyphs[id]}
+    </svg>
+  );
+}
 
 /** Small line emblem per chapter (1, 2, 3). */
 export function ChapterEmblem({ chapter, className }: { chapter: 1 | 2 | 3; className?: string }) {
