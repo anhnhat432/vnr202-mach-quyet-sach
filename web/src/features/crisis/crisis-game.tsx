@@ -2,7 +2,10 @@
 
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import Link from "next/link";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+
+import { MeterGlyph } from "@/features/brand/artwork";
+import { createSound, type CrisisSound } from "@/features/crisis/crisis-audio";
 
 import {
   CLAMP_MAX,
@@ -56,7 +59,7 @@ function CrisisHud({
         return (
           <div className="crisis-meter" data-meter={meter.id} data-status={status} key={meter.id}>
             <span className="crisis-meter__label">
-              <span aria-hidden="true">{meter.glyph}</span> {meter.label}
+              <MeterGlyph id={meter.id} className="meter-glyph" /> {meter.label}
             </span>
             <span className="crisis-meter__numrow">
               <motion.span
@@ -105,6 +108,17 @@ export function CrisisGame() {
   const [redFlash, setRedFlash] = useState(0);
   const shakeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const [soundOn, setSoundOn] = useState(false);
+  const soundOnRef = useRef(false);
+  const soundRef = useRef<CrisisSound | null>(null);
+
+  const toggleSound = useCallback(() => {
+    if (!soundRef.current) soundRef.current = createSound();
+    soundRef.current.resume();
+    soundOnRef.current = !soundOnRef.current;
+    setSoundOn(soundOnRef.current);
+  }, []);
+
   const round = ROUNDS[roundIndex];
   const lastPick = picks[picks.length - 1] ?? null;
   const historicalCount = useMemo(() => picks.filter((p) => p.choice.historical).length, [picks]);
@@ -125,6 +139,7 @@ export function CrisisGame() {
 
   const choose = useCallback(
     (choice: CrisisChoice) => {
+      if (soundOnRef.current) soundRef.current?.tick();
       let causedZero = false;
       setMeters((current) => {
         const next = { ...current };
@@ -141,6 +156,7 @@ export function CrisisGame() {
       setPicks((prev) => [...prev, { roundId: round.id, choice }]);
       setPhase("consequence");
       if (causedZero) {
+        if (soundOnRef.current) soundRef.current?.thud();
         setRedFlash((n) => n + 1);
         setShaking(true);
         if (shakeTimer.current) clearTimeout(shakeTimer.current);
@@ -159,6 +175,45 @@ export function CrisisGame() {
     setPhase("round");
   }, [roundIndex]);
 
+  // Tiếp nối từ teaser trang chủ: nước đã chọn ở đó thành Vòng 1 thật → vào thẳng Vòng 2.
+  // Đồng bộ một lần từ external store (sessionStorage) sau khi mount — server không có
+  // sessionStorage, nên phải đặt trong effect (đọc lúc render sẽ vỡ hydration).
+  useEffect(() => {
+    let id: string | null = null;
+    try {
+      id = sessionStorage.getItem("nc_warmup");
+      if (id) sessionStorage.removeItem("nc_warmup");
+    } catch {
+      return;
+    }
+    if (!id) return;
+    const first = ROUNDS[0];
+    const choice = first.choices.find((c) => c.id === id);
+    if (!choice) return;
+
+    const seeded = startMeters();
+    let dead: MeterId | null = null;
+    for (const meter of METERS) {
+      seeded[meter.id] = clamp(seeded[meter.id] + (choice.effects[meter.id] ?? 0));
+      if (seeded[meter.id] <= 0 && dead === null) dead = meter.id;
+    }
+    /* eslint-disable react-hooks/set-state-in-effect -- one-time hydration-safe seed from sessionStorage */
+    setMeters(seeded);
+    setPicks([{ roundId: first.id, choice }]);
+    if (dead) setCollapsed(dead);
+    setRoundIndex(1);
+    setPhase("round");
+    /* eslint-enable react-hooks/set-state-in-effect */
+  }, []);
+
+  // Âm thanh payoff khi tới màn kết cục (chỉ khi người dùng đã bật).
+  useEffect(() => {
+    if (phase !== "ending" || !soundOnRef.current || !soundRef.current) return;
+    const survived = collapsed === null && METERS.every((m) => meters[m.id] > 0);
+    if (survived) soundRef.current.win();
+    else soundRef.current.lose();
+  }, [phase, collapsed, meters]);
+
   const enter = reduceMotion
     ? {}
     : { initial: { opacity: 0, y: 16 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.4, ease } };
@@ -171,15 +226,15 @@ export function CrisisGame() {
           <p className="crisis-eyebrow">Mô phỏng · Mùa đông 1945 – 1946</p>
           <h1 className="crisis-intro__title">Ngàn cân treo sợi tóc</h1>
           <p className="crisis-intro__lead">
-            Bạn vừa tuyên bố độc lập. Ba tuần sau, <b>giặc đói, giặc dốt, giặc ngoại xâm</b> ập đến cùng lúc.
-            Sáu quyết định. Ba thứ phải giữ. <b>Bạn có giữ được nước không?</b>
+            <b>Sáu vòng khủng hoảng có thật.</b> Mỗi quyết định dịch chuyển ba thanh dưới đây — để một
+            thanh chạm đáy là chính quyền sụp. Cuối cùng, đối chiếu từng nước với quyết sách thật của Đảng.
           </p>
 
           <div className="crisis-intro__meters">
             {METERS.map((meter) => (
               <div className="crisis-intro__meter" key={meter.id} data-meter={meter.id}>
                 <span className="crisis-intro__meter-name">
-                  <span aria-hidden="true">{meter.glyph}</span> {meter.label}
+                  <MeterGlyph id={meter.id} className="meter-glyph" /> {meter.label}
                   <b>{meter.start}</b>
                 </span>
                 <span className="crisis-intro__meter-blurb">{meter.blurb}</span>
@@ -187,9 +242,18 @@ export function CrisisGame() {
             ))}
           </div>
 
-          <button type="button" className="crisis-btn crisis-btn--go" onClick={start}>
-            Bắt đầu — Vòng 1 →
-          </button>
+          <div className="crisis-intro__controls">
+            <button type="button" className="crisis-btn crisis-btn--go" onClick={start}>
+              Bắt đầu — Vòng 1 →
+            </button>
+            <button type="button" className="crisis-sound" onClick={toggleSound} aria-pressed={soundOn}>
+              <svg viewBox="0 0 24 24" width="1.05em" height="1.05em" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M4 9v6h4l5 4V5L8 9H4Z" />
+                {soundOn && <path d="M16 9.5a3.5 3.5 0 0 1 0 5" />}
+              </svg>
+              {soundOn ? "Âm thanh: Bật" : "Bật âm thanh"}
+            </button>
+          </div>
           <p className="crisis-intro__foot">Bối cảnh có thật 1945–1946 · Giáo trình Lịch sử Đảng, Chương 2</p>
         </motion.div>
       </section>
