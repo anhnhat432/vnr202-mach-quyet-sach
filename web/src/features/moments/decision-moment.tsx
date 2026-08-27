@@ -4,6 +4,7 @@ import { motion, useReducedMotion } from "motion/react";
 import Link from "next/link";
 import { useCallback, useMemo, useRef, useState } from "react";
 
+import { ChapterEmblem } from "@/features/brand/artwork";
 import { MOMENTS, type DecisionMoment } from "@/features/moments/moments";
 
 const VOTES_KEY = "vnr202:moments:votes:v1";
@@ -128,7 +129,18 @@ export function DecisionMomentPlayer() {
         <div className="moment-menu">
           {CHAPTERS.map((item) => (
             <button key={String(item.scope)} type="button" className="moment-menu__card" data-scope={String(item.scope)} onClick={() => start(item.scope)}>
-              <span className="moment-menu__glyph" aria-hidden="true">{item.glyph}</span>
+              <span className="moment-menu__glyph" aria-hidden="true">
+                {item.scope === "all" ? (
+                  <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="5" y="5" width="9" height="9" rx="1.6" />
+                    <rect x="18" y="5" width="9" height="9" rx="1.6" />
+                    <rect x="5" y="18" width="9" height="9" rx="1.6" />
+                    <rect x="18" y="18" width="9" height="9" rx="1.6" />
+                  </svg>
+                ) : (
+                  <ChapterEmblem chapter={item.scope} />
+                )}
+              </span>
               <strong>{item.title}</strong>
               <small>{item.note}</small>
             </button>
