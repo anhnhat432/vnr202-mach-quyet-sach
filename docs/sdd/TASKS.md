@@ -42,36 +42,50 @@ Phase 2 Checkpoint A1 evidence snapshot (2026-08-20): the canonical authoring mo
 
 Phase 2 Checkpoint A2 evidence snapshot (2026-08-20): Chapter 2 dossiers 07-10 verified as source-backed Drafts with complete Scenario Engine content (6 evidence cards, 3 options, 6 claims, 6 causal nodes each). All source references resolve correctly. Draft isolation confirmed via new regression test. Build, lint, typecheck pass. Unit test environment has pre-existing vitest/jsdom configuration issue (unrelated to content changes). Dossier 06 remains legacy-baseline Published. Inter-dossier causal links for Chapter 2 deferred to T024. Human academic review pending for all Draft dossiers. `T022` remains in progress. See `docs/sdd/evidence/phase-2/chapter-2/README.md`.
 
+## Live Arena V1.0 re-scope - Stage A (documentation)
+
+- [-] `T090` Write `live-arena-game-spec.md` with coded rules, EARS criteria, trial parameters and open items. Depends: owner decisions Q1-Q14. DoD: every owner decision mapped to a rule ID with a status tag; owner approval recorded.
+- [-] `T091` Amend `core-platform-spec.md` (v1.1, §16), `product-experience-spec.md` and `figma-make-brief.md`. Depends: T090. DoD: every superseded or amended v1.0 rule marked inline and listed in §16; owner approval recorded.
+- [-] `T092` Write ADR-004. Depends: T090. DoD: decisions, alternatives and consequences recorded; owner approval recorded.
+- [-] `T093` Update data model, API, realtime and security contracts. Depends: T090-T092. DoD: no contract still references `timeline`/`decision_room`, grace pause, 8-second feedback or forced password change; owner approval recorded.
+- [-] `T094` Update PLAN, TASKS and traceability matrix. Depends: T090-T093. DoD: every `LA-*`, `MINE-*`, `RACE-*` rule traced to a task and planned test; owner approval recorded.
+- [-] `T095` Game 1 balance simulation baseline. Depends: T090. DoD: reproducible seeded run and report in `docs/sdd/evidence/live-arena/balance-baseline.md`; owner reviews P6 thresholds.
+
+Re-scope snapshot (2026-10-29): stage A documents are drafted and awaiting owner approval. No migration, API or gameplay code has been written for Live Arena V1.0. Tasks T030-T058 below were re-scoped from the v1.0 games to Bãi Mìn Tri Thức and Đường Đua Lịch Sử; tasks blocked by open items O1-O14 are noted per task.
+
 ## Phase 3 - Identity and roster
 
-- [ ] `T030` Add profiles/roles/Auth SSR migration and clients. Depends: T014. DoD: anon/student/admin actor tests pass.
-- [ ] `T031` Implement student ID sign-in and first-password change. Depends: T030. DoD: synthetic email hidden and protected routes enforce flag.
-- [ ] `T032` Implement roster CSV preview/apply/compensation. Depends: T030. DoD: malformed/duplicate atomic and valid import audited.
-- [ ] `T033` Implement admin password reset and session revocation. Depends: T031,T032. DoD: reset requires new change and old gameplay session fails.
-- [ ] `T034` Implement Student Passport and progress sync. Depends: T025,T031. DoD: profile, 15 markers and result-card states render.
-- [ ] `T035` Identity security/RLS/E2E gate. Depends: T030-T034. DoD: ACC/ACCESS and security acceptance tests pass.
+- [ ] `T030` Add profiles/roles/Auth SSR migration and clients. Depends: T014. DoD: anon/student/admin actor tests pass on local Supabase.
+- [ ] `T031` Implement student ID sign-in with the shared default password and server-side password derivation (`LA-ACC-003..008`). Depends: T030. DoD: sign-in with MSSV + default password reaches Live Arena with no password-change step; synthetic email hidden; pepper/default password absent from bundle, logs and repository; generic errors; classroom-NAT rate limit. Verify Supabase short-password behaviour (O13). Partly blocked: O9.
+- [ ] `T032` Implement roster `.xlsx`/`.csv` preview/apply/compensation (`LA-ACC-001/002/010/011`). Depends: T030. DoD: duplicate (file and roster), missing and malformed rows reported in preview; nothing written before apply; valid import audited; XLSX library chosen after audit (O12). Partly blocked: O9 (re-import policy).
+- [ ] `T033` Implement admin reset-to-default and session revocation. Depends: T031,T032. DoD: reset revokes the active gameplay session and the old session cannot act.
+- [ ] `T034` Implement Student Passport and progress sync. Depends: T025,T031. DoD: profile, 15 markers and two result cards with provisional/official labels and review availability.
+- [ ] `T035` Identity security/RLS/E2E gate. Depends: T030-T034. DoD: ACC/ACCESS/LA-ACC and security acceptance tests pass on Supabase, not only on plain PostgreSQL.
 
 ## Phase 4 - Competition and Core games
 
-- [ ] `T040` Implement competition schema/state machine/readiness/snapshots. Depends: T014,T035. DoD: legal transitions and insufficient-pool blocking tests.
-- [ ] `T041` Implement balanced allocation and one-attempt RPC. Depends: T040. DoD: concurrent start creates exactly one immutable attempt/allocation.
-- [ ] `T042` Implement timer, heartbeat, disconnect grace and resume. Depends: T041. DoD: boundary/gap/cumulative grace tests pass.
-- [ ] `T043` Implement device transfer/session version. Depends: T042. DoD: old device invalid immediately and new device resumes state.
-- [ ] `T044` Implement Dòng Chảy scoring. Depends: T041-T043. DoD: normalized 1000, idempotency and tie-break tests.
-- [ ] `T045` Implement Phòng Quyết Sách scoring. Depends: T041-T043. DoD: 10% problem + 25% evidence + 35% decision + 20% consequence + 10% speed and staged feedback tests.
-- [ ] `T046` Implement leaderboard projection/version/finalization. Depends: T044,T045. DoD: two independent deterministic ranks retained by competition.
-- [ ] `T047` Core concurrency/state integration gate. Depends: T040-T046. DoD: TRY/ATT/SESSION/SCORE/EVT traceability passes.
+- [ ] `T040` Implement competition schema/state machine/readiness/snapshots. Depends: T014,T035,T048. DoD: legal transitions; readiness blocks insufficient blueprint coverage and fixtures in official competitions (`LA-AC-021`). Partly blocked: O7.
+- [ ] `T041` Implement allocation, Game 1 board generation and start/resume RPC. Depends: T040. DoD: concurrent start creates exactly one attempt; second game blocked while one is active (`LA-AC-001..003`); board composition and first-open rule (`LA-AC-006/007`); immutable allocation and option order.
+- [ ] `T042` Implement absolute question deadlines, latency allowance and reconcile/timeout. Depends: T041. DoD: boundary tests at deadline, within allowance and after; F5/transfer never resets a deadline (`LA-AC-004`, `LA-AC-009`). Blocked: O1, O2.
+- [ ] `T043` Implement device transfer/session version. Depends: T042. DoD: old device invalid immediately for answers and cell opens; new device resumes the same interaction (`LA-AC-005`).
+- [ ] `T044` Implement Bãi Mìn Tri Thức event ledger and scoring. Depends: T041-T043. DoD: §7.1 formulas, items, bombs, floor at 0, idempotent cell opens (`LA-AC-008`, `LA-AC-017`). Blocked: O1, O10.
+- [ ] `T045` Implement Đường Đua Lịch Sử scoring. Depends: T041-T043. DoD: combo, sprint ordering and timeouts (`LA-AC-010`, `LA-AC-017`). Partly blocked: O2.
+- [ ] `T046` Implement leaderboard projection/version/finalization. Depends: T044,T045. DoD: two independent boards, per-game tie-breakers with shared ranks, provisional/official standing, personal gap (`LA-AC-011`, `LA-AC-013`). Blocked: O3, O5.
+- [ ] `T047` Implement gameplay API routes, OpenAPI and Core integration gate. Depends: T040-T046,T049. DoD: TRY/SESSION/LA-TIME/LA-IDEM/LA-LB traceability passes on pgTAP and on local Supabase; no answer leaves the server before finalization (`LA-AC-014`, `LA-AC-020`).
+- [ ] `T048` Build question bank pipeline and isolated fixtures. Depends: T020. DoD: validator (2-3 options, defuse A/B, sources, reviewer required for Published), review pack, seed generator, `origin = fixture` separation, bundle-leak test. No question marked Published without a human reviewer (`LA-CONTENT-003/004`). Partly blocked: O11.
+- [ ] `T049` Build TypeScript reference model and SQL parity tests. Depends: T044,T045. DoD: scripted scenarios give identical ledgers in TypeScript and SQL; balance simulation runs as a test.
 
 ## Phase 5 - Live UI and admin
 
-- [ ] `T050` Implement Arena Lobby and attempt/resume/transfer UX. Depends: T034,T047. DoD: UX-AC-007 and all connection states.
-- [ ] `T051` Implement Dòng Chảy desktop/mobile gameplay. Depends: T044,T050. DoD: 15-question flow, accessible drag/tap/keyboard and feedback.
-- [ ] `T052` Implement Phòng Quyết Sách desktop/mobile gameplay. Depends: T045,T050. DoD: six scenarios/four stages and feedback pause.
-- [ ] `T053` Implement Broadcast subscriber/resync and two web leaderboards. Depends: T046,T050. DoD: version validation, missed-event recovery and separation.
-- [ ] `T054` Implement two projector leaderboards. Depends: T053. DoD: 1920x1080 top 10/live/final views.
-- [ ] `T055` Implement question/dossier governance admin. Depends: T032,T040. DoD: Draft-Reviewed-Published and source validation.
-- [ ] `T056` Implement competition admin/monitor/audit viewer. Depends: T040,T046. DoD: schedule, readiness, transitions, attempts and audit visible.
-- [ ] `T057` Live Arena E2E and realtime outage gate. Depends: T051-T056. DoD: complete two-game rehearsal and convergence tests.
+- [ ] `T050` Implement Arena Lobby and attempt/resume/transfer UX. Depends: T034,T047. DoD: UX-AC-007, one-active-attempt messaging, all connection states without grace pause. Partly blocked: O4.
+- [ ] `T051` Implement Bãi Mìn Tri Thức laptop/mobile gameplay. Depends: T044,T050. DoD: 4x5 board, overlay question, HUD, keyboard, sound toggle, reduced motion, 0.8-1 s feedback without answers.
+- [ ] `T052` Implement Đường Đua Lịch Sử laptop/mobile gameplay. Depends: T045,T050. DoD: 15 questions, track, combo, sprint transition, rank-up feedback, keyboard.
+- [ ] `T053` Implement Broadcast subscriber/resync, two web leaderboards and personal standing. Depends: T046,T050. DoD: version validation, missed-event recovery, board separation, gap display (`UX-AC-014`).
+- [ ] `T054` Implement projector leaderboards. Depends: T053. DoD: both Top 10 side by side at 1920x1080, single-game zoom, completed count, overtake notices, provisional/official labels (`LA-AC-012`, `LA-AC-015`).
+- [ ] `T055` Implement question governance admin. Depends: T032,T040,T048. DoD: Draft-Reviewed-Published with source validation; AI cannot review/publish. Partly blocked: O8.
+- [ ] `T056` Implement competition admin/monitor/audit viewer and incident actions. Depends: T040,T046. DoD: schedule, readiness, transitions, attempts, audited incident actions, no automatic new attempt (`LA-ADMIN-*`). Blocked: O6.
+- [ ] `T057` Live Arena E2E and realtime outage gate. Depends: T051-T056,T058. DoD: complete two-game rehearsal, reconnect/transfer flows and convergence tests.
+- [ ] `T058` Implement post-finalization review and relabel Dòng Chảy as free practice. Depends: T047. DoD: review available only after finalization (`LA-AC-014`); practice page has no Game 01 label and no leaderboard (`UX-AC-017`).
 
 ## Phase 6 - Hardening and public deployment
 
@@ -81,3 +95,5 @@ Phase 2 Checkpoint A2 evidence snapshot (2026-08-20): Chapter 2 dossiers 07-10 v
 - [ ] `T063` Production Supabase/Vercel environments and migration runbook. Depends: T060-T062. DoD: preview isolated, production secrets configured, cron protected.
 - [ ] `T064` Public deploy and production smoke test. Depends: T063. DoD: public URL, auth, one test competition and both leaderboards verified.
 - [ ] `T065` Demo/content evidence pack and final traceability closure. Depends: T020-T025,T064. DoD: four validation layers complete with no required Pending row.
+- [ ] `T066` Measure classroom latency and lock `latency_allowance`. Depends: T057. DoD: p50/p95/p99 RTT for cell open and answer on classroom Wi-Fi; value chosen within 300-500 ms or escalated (spec §11 P2).
+- [ ] `T067` Classroom rehearsal for trial parameters. Depends: T057,T066. DoD: report on durations, feedback timing, reveal offset, AI-lookup effectiveness, question length and Game 1 luck with real data (spec §11 P1, P3-P6, P8); owner decides any change.

@@ -93,28 +93,35 @@ Thiết kế trọn luồng cho hồ sơ `Giữ chính quyền giữa vòng vây
 - Hai game có hai thẻ trạng thái riêng và hai leaderboard entry riêng.
 - Tạo variants: chưa mở, có thể bắt đầu, đang chơi cần resume, đã hoàn thành và hết hạn.
 
-### Dòng Chảy Lịch Sử
+Sửa đổi 2026-10-29: hai game thi đấu được thay theo `live-arena-game-spec.md`. Dòng Chảy Lịch Sử chỉ còn là chế độ luyện tập; Phòng Quyết Sách chỉ còn trong hồ sơ.
 
-- Thiết kế desktop và mobile cho câu sắp xếp sự kiện.
-- Có timer, tiến độ 15 câu, trạng thái kết nối, vùng kéo thả và phương án tap-to-place.
-- Tạo feedback đúng/sai và cập nhật thứ hạng sau câu trả lời.
+### Bãi Mìn Tri Thức
 
-### Phòng Quyết Sách
+- Thiết kế laptop và mobile cho bàn cờ 4 × 5 và overlay câu hỏi.
+- Variants ô: chưa mở, focus bàn phím, câu hỏi Dễ/Trung bình/Khó, bom (gỡ thành công / thất bại / khiên đỡ), x2, khiên, rương.
+- HUD: điểm, khiên, x2 đang chờ, tiến độ /10, đồng hồ toàn trận, thứ hạng và khoảng cách điểm.
+- Feedback đúng/sai và điểm trong khoảng 0,8–1 giây, không hiển thị đáp án đúng.
 
-- Thiết kế desktop và mobile cho bốn bước của một tình huống.
-- Tạo micro-feedback và thay đổi thứ hạng sau từng bước được server chấm mà không tiết lộ đáp án của bước tiếp theo.
-- Tạo panel đối chiếu lịch sử sau tình huống và trạng thái pause tối đa 8 giây.
+### Đường Đua Lịch Sử
+
+- Thiết kế laptop và mobile cho một câu mỗi màn hình với ba dạng: A/B/C, trước–sau, chọn cặp đúng.
+- Đường đua tiến độ 15 câu, đồng hồ câu, đồng hồ toàn trận, chuỗi combo, chuyển cảnh nước rút và phản hồi tăng hạng.
+- Feedback đúng/sai và điểm trong khoảng 0,8–1 giây, không hiển thị đáp án đúng.
+
+### Xem lại sau khi cuộc thi chốt
+
+- Màn xem lại từng câu: đề, lựa chọn, đáp án đúng, giải thích và nguồn; trạng thái "chưa mở" khi cuộc thi chưa Finalized.
 
 ### Bảng xếp hạng
 
 - Hai bảng xếp hạng phải có nhận diện game khác nhau nhưng cùng hệ thống component.
 - Tạo web view và projector view 1920x1080.
-- Projector view có top 10, người hoàn thành, hoạt động gần nhất, trạng thái live/final và timestamp đồng bộ.
+- Projector view hiển thị song song Top 10 của cả hai game, người hoàn thành, thông báo vượt hạng, nhãn tạm thời/chính thức và timestamp đồng bộ; có chế độ phóng lớn Top 10 của một game.
 
 ## 8. Student và Auth bắt buộc
 
 - Login bằng mã sinh viên và mật khẩu.
-- First-login password change.
+- Không có bước đổi mật khẩu lần đầu trong V1 (`LA-ACC-004`); màn đăng nhập có ghi chú dùng mật khẩu do giảng viên cung cấp.
 - Student Passport có tiến độ 15 hồ sơ và hai kết quả độc lập theo cuộc thi.
 - Resume flow sau mất mạng.
 - Device transfer confirmation cho phiên chơi đang hoạt động.

@@ -1,6 +1,6 @@
 # Đặc tả trải nghiệm sản phẩm: VNR202 - Mạch Quyết Sách
 
-Trạng thái: Approved  
+Trạng thái: Approved; sửa đổi v1.1 cho Live Arena V1.0 (2026-10-29) chờ duyệt văn bản — luật game chi tiết nằm ở `live-arena-game-spec.md`  
 Phương pháp: Hybrid SDD + ADD  
 Độ sâu: Standard cho trải nghiệm công khai, Light cho phong cách thị giác  
 Phạm vi: Website công khai, 15 Hồ sơ Quyết sách, Mạch Nguyên Nhân, Ma trận Bằng chứng, Student Passport và vỏ giao diện Live Arena
@@ -37,18 +37,20 @@ Live Arena là một phân hệ nổi bật nhưng không thay thế phần tr�
 - `Mạch Nguyên Nhân`: đồ thị thời gian liên kết bối cảnh, mâu thuẫn, chủ trương, tổ chức thực hiện, kết quả và bài học.
 - `Ma trận Bằng chứng`: đối chiếu luận điểm với nguồn, loại bằng chứng và phần nội dung mà nguồn hỗ trợ.
 - `Live Arena`: trạng thái cuộc thi, hai game, hai bảng xếp hạng và chế độ trình chiếu.
+- `Luyện tập Dòng Chảy Lịch Sử`: chế độ luyện tập tự do, không đăng nhập, không tính điểm, không thuộc cuộc thi (`LA-SCOPE-002`).
 - `Giới thiệu nguồn và AI`: danh mục học liệu, nguyên tắc kiểm chứng và nhật ký AI ở mức phù hợp để giải trình sản phẩm.
 
 ### 3.2 Khu vực cần đăng nhập
 
 - `Student Passport`: hồ sơ học tập, tiến độ hồ sơ đã hoàn thành, trạng thái lượt chơi và kết quả của hai game theo từng cuộc thi.
-- `Game Dòng Chảy Lịch Sử`: 15 câu, mặc định 6 phút.
-- `Game Phòng Quyết Sách`: 6 tình huống, mặc định 9 phút.
-- `Kết quả cá nhân`: chi tiết độ chính xác, thời gian chủ động, điểm và thứ hạng; không cho phép bắt đầu lượt thứ hai.
+- `Game 1 – Bãi Mìn Tri Thức`: bàn cờ 20 ô, 10 câu chính, thử nghiệm 3:00 (`MINE-*`).
+- `Game 2 – Đường Đua Lịch Sử`: 15 câu, combo và nước rút, thử nghiệm 2:30 (`RACE-*`).
+- `Kết quả cá nhân`: điểm, thứ hạng, số câu đúng, số câu Khó đúng và thời gian hoàn thành; không cho phép bắt đầu lượt thứ hai. Phần xem lại đáp án, giải thích và nguồn chỉ mở sau khi cuộc thi Finalized (`LA-FB-004`).
 
 ### 3.3 Khu vực quản trị
 
-- Quản lý lớp, tài khoản tạm và đặt lại mật khẩu.
+- Nhập lớp từ `.xlsx` hoặc `.csv` có bản xem trước; tài khoản dùng mật khẩu mặc định chung (`LA-ACC-001..006`).
+- Thao tác xử lý sự cố có ghi audit, không tự động tạo lượt mới (`LA-ADMIN-*`).
 - Quản lý câu hỏi theo Draft -> Reviewed -> Published.
 - Quản lý 15 hồ sơ, nguồn và liên kết nhân - quả.
 - Tạo, kiểm tra điều kiện, lên lịch, theo dõi, chốt và lưu trữ cuộc thi.
@@ -133,34 +135,44 @@ Ma trận Bằng chứng giúp giảng viên và sinh viên kiểm chứng cách
 
 ## 8. Live Arena trong tổng thể website
 
-### Dòng Chảy Lịch Sử
+Sửa đổi v1.1: hai game thi đấu là Bãi Mìn Tri Thức và Đường Đua Lịch Sử (`LA-SCOPE-001`). Mô tả Dòng Chảy Lịch Sử và Phòng Quyết Sách dạng game thi đấu của v1.0 đã bị thay thế; Dòng Chảy còn là chế độ luyện tập tự do, Phòng Quyết Sách còn là chặng trong hồ sơ công khai.
 
-- Ngôn ngữ thị giác là một dải tín hiệu thời gian có các nút sự kiện, quan hệ nguyên nhân - hệ quả và vùng thả rõ ràng.
-- Sau mỗi câu được chấm, người chơi thấy kết quả, giải thích, thay đổi điểm và thứ hạng hiện tại.
-- Màn hình không hiển thị đáp án của câu chưa làm và không để hiệu ứng bảng xếp hạng che nội dung câu hỏi.
+### Nguyên tắc chung cho hai game
 
-### Phòng Quyết Sách
+- Người chơi hiểu cách chơi trong khoảng 10 giây; câu hỏi ngắn, tối đa ba đáp án, một lần nhấn để trả lời.
+- Đồng hồ câu và đồng hồ toàn trận lấy từ server; F5 hoặc đổi thiết bị không làm mới thời gian (`LA-TIME-*`).
+- Phản hồi sau mỗi tương tác chỉ có đúng/sai, điểm nhận được và hiệu ứng ngắn khoảng 0,8–1 giây; không hiển thị đáp án đúng hay giải thích khi cuộc thi chưa chốt (`LA-FB-001..003`).
+- Hiệu ứng không che câu hỏi và không lấy thời gian trả lời; có tắt âm thanh và giảm chuyển động.
 
-- Mỗi tình huống lần lượt mở Briefing, Chọn bằng chứng, Chọn quyết định và Sắp xếp hệ quả.
-- Sau mỗi bước được chấm, hệ thống xác nhận kết quả của riêng bước đó, cập nhật điểm và thứ hạng; phản hồi không được tiết lộ đáp án cần dùng cho một bước chưa thực hiện.
-- Sau tình huống, hệ thống đối chiếu lịch sử và nguồn trong tối đa 8 giây pause hoặc đến khi người chơi tiếp tục.
-- Tỷ trọng mỗi tình huống: nhận diện vấn đề 10%, chọn bằng chứng 25%, chọn quyết định 35%, sắp xếp hệ quả 20% và tốc độ 10%.
-- Điểm thành phần phải được giải thích sau khi hoàn thành game, không tiết lộ công thức có thể bị lợi dụng trong lúc chơi.
+### Bãi Mìn Tri Thức
+
+- Bàn cờ 4 × 5 là trung tâm màn hình; ô chưa mở giống nhau, ô đã mở hiện loại (câu hỏi kèm độ khó, bom, x2, khiên, rương).
+- Khi mở ô câu hỏi hoặc bom, câu hỏi phủ lên bàn cờ với đồng hồ đếm ngược lớn và hai hoặc ba nút đáp án lớn.
+- Thanh trạng thái hiển thị điểm, số khiên, x2 đang chờ, số câu chính đã xử lý /10, đồng hồ toàn trận và thứ hạng cá nhân.
+- Bàn phím: phím mũi tên di chuyển giữa các ô, Enter để mở, 1/2/3 hoặc A/B/C để trả lời.
+
+### Đường Đua Lịch Sử
+
+- Một câu mỗi màn hình; đường đua thể hiện tiến độ 15 câu của chính người chơi.
+- Đồng hồ câu, đồng hồ toàn trận, điểm, chuỗi combo và thứ hạng luôn nhìn thấy.
+- Ba câu cuối chuyển sang giai đoạn nước rút với hiệu ứng ngắn; có thể hiển thị mốc điểm tham chiếu của hạng 1 và hạng 10 nhưng không giả lập người khác đang chạy cùng lúc.
+- Khi tăng hạng, có phản hồi ngắn và rõ.
 
 ### Hai bảng xếp hạng
 
-- Hai game có hai bảng độc lập trong mọi trạng thái: live, final và archive.
-- Bảng công khai chỉ hiển thị họ tên đầy đủ, điểm, độ chính xác hoặc tiến độ phù hợp và xu hướng thay đổi hạng; không hiển thị mã sinh viên.
-- Người chơi thấy hàng của mình được ghim hoặc làm nổi bật mà không làm thay đổi thứ tự dữ liệu.
-- Chế độ projector 1920x1080 ưu tiên top 10, hoạt động gần nhất và số người đã hoàn thành; chuyển động đổi hạng phải rõ nhưng không gây nhấp nháy.
+- Hai game có hai bảng độc lập trong mọi trạng thái: tạm thời, chính thức và lưu trữ. Không có bảng tổng hợp hai game.
+- Bảng được gắn nhãn `Tạm thời` cho tới khi cuộc thi Finalized, sau đó là `Chính thức` (`LA-LB-007`).
+- Bảng công khai chỉ hiển thị họ tên đầy đủ, điểm, trạng thái (đang chơi, đã hoàn thành, hết giờ) và xu hướng thay đổi hạng; không hiển thị mã sinh viên.
+- Người chơi thấy hàng của mình được ghim hoặc làm nổi bật mà không làm thay đổi thứ tự dữ liệu; thấy khoảng cách điểm tới người ngay trên, hoặc tới hạng 10 nếu ở ngoài Top 10 (`LA-LB-005`).
+- Chế độ trình chiếu 1920x1080 hiển thị song song Top 10 của cả hai game, số người đã hoàn thành, thông báo vượt hạng và có chế độ phóng lớn Top 10 của một game; chuyển động đổi hạng phải rõ nhưng không gây nhấp nháy.
 
 ## 9. Student Passport
 
-- Hiển thị họ tên, lớp, trạng thái đổi mật khẩu và lịch sử cuộc thi.
+- Hiển thị họ tên, lớp và lịch sử cuộc thi (V1 không có bước đổi mật khẩu bắt buộc, `LA-ACC-004`).
 - Hiển thị 15 dấu hồ sơ theo ba chương; tiến độ hồ sơ không cộng vào điểm game.
 - Mỗi cuộc thi có hai thẻ kết quả độc lập, thể hiện `Chưa bắt đầu`, `Đang chơi`, `Đã hoàn thành` hoặc `Hết giờ`.
 - Nếu lượt đang hoạt động, nút chính là `Tiếp tục lượt chơi`; không xuất hiện nút tạo lượt mới.
-- Với lượt đã kết thúc, hiển thị điểm, thứ hạng, độ chính xác, thời gian chủ động và liên kết xem giải thích đã được phép công bố.
+- Với lượt đã kết thúc, hiển thị điểm, thứ hạng (gắn nhãn tạm thời hoặc chính thức), số câu đúng, số câu Khó đúng và thời gian hoàn thành; liên kết xem lại đáp án và giải thích chỉ xuất hiện sau khi cuộc thi Finalized.
 
 ## 10. Hướng thị giác và cảm xúc
 
@@ -211,10 +223,10 @@ Mọi chuyển động phải có biến thể reduced-motion.
 ## 12. Trạng thái giao diện bắt buộc
 
 - Loading, empty, partial content, content unavailable và retry.
-- Chưa đăng nhập, cần đổi mật khẩu, sai thông tin đăng nhập và phiên hết hạn.
+- Chưa đăng nhập, sai thông tin đăng nhập và phiên hết hạn.
 - Cuộc thi chưa mở, đang mở, đã đóng nhận lượt, đang chốt và đã kết thúc.
-- Chưa chơi, đang chơi, mất kết nối, đang dùng grace pause, đồng hồ đã chạy lại, chuyển thiết bị, đã hoàn thành và hết giờ.
-- Bảng xếp hạng chưa có dữ liệu, đang live, mất realtime nhưng còn dữ liệu cache, đang đồng bộ lại và đã final.
+- Chưa chơi, đang chơi, đang có lượt ở game kia, mất kết nối (đồng hồ vẫn chạy), đang đồng bộ lại, phiên bị thu hồi do chuyển thiết bị, đã hoàn thành và hết giờ.
+- Bảng xếp hạng chưa có dữ liệu, tạm thời đang live, mất realtime nhưng còn dữ liệu cache, đang đồng bộ lại và chính thức.
 - Hồ sơ thiếu nguồn hoặc chưa được Published phải không xuất hiện công khai.
 
 ## 13. Tiêu chí chấp nhận EARS
@@ -231,6 +243,11 @@ Mọi chuyển động phải có biến thể reduced-motion.
 - `UX-AC-010`: IF realtime bị gián đoạn, THEN THE SYSTEM SHALL báo trạng thái đồng bộ và khôi phục bảng từ dữ liệu có thẩm quyền mà không giả vờ dữ liệu vẫn live.
 - `UX-AC-011`: WHEN reduced-motion được bật, THE SYSTEM SHALL thay các chuyển động boot, vẽ mạch, so sánh và đổi hạng bằng chuyển trạng thái không gây chuyển động lớn.
 - `UX-AC-012`: WHEN một hồ sơ chưa Published hoặc thiếu nguồn bắt buộc, THE SYSTEM SHALL không hiển thị hồ sơ đó trong khu vực công khai.
+- `UX-AC-013`: WHEN chế độ trình chiếu mở ở 1920x1080, THE SYSTEM SHALL hiển thị song song Top 10 của hai game, số người đã hoàn thành và nhãn tạm thời/chính thức.
+- `UX-AC-014`: WHEN một sinh viên đang chơi, THE SYSTEM SHALL hiển thị thứ hạng hiện tại và khoảng cách điểm tới người ngay trên, hoặc tới hạng 10 nếu ở ngoài Top 10.
+- `UX-AC-015`: WHILE cuộc thi chưa Finalized, THE SYSTEM SHALL chỉ phản hồi đúng/sai và điểm sau mỗi câu, SHALL NOT hiển thị đáp án đúng hoặc giải thích.
+- `UX-AC-016`: WHEN người chơi mới vào một game, THE SYSTEM SHALL trình bày luật trong một màn hình đọc được trong khoảng 10 giây.
+- `UX-AC-017`: WHEN một khách mở chế độ luyện tập Dòng Chảy Lịch Sử, THE SYSTEM SHALL cho chơi không cần đăng nhập và SHALL NOT ghi kết quả vào bảng xếp hạng cuộc thi.
 
 ## 14. Ngoài phạm vi trải nghiệm đầu tiên
 
@@ -245,13 +262,13 @@ Mọi chuyển động phải có biến thể reduced-motion.
 - Có foundations, token, typography, grid và component states.
 - Có luồng desktop và mobile cho Trang chủ, Kho Hồ sơ, một Hồ sơ hoàn chỉnh, Mạch Nguyên Nhân, Ma trận Bằng chứng, Live Arena, hai game, Student Passport và đăng nhập.
 - Có projector mode cho hai bảng xếp hạng.
-- Có trạng thái mất kết nối, resume, chuyển thiết bị, đổi mật khẩu lần đầu và realtime resync.
+- Có trạng thái mất kết nối, resume, chuyển thiết bị và realtime resync (không có bước đổi mật khẩu lần đầu trong V1).
 - Prototype thể hiện bốn chuyển động chủ đạo và reduced-motion.
 - Nội dung mẫu lấy từ ít nhất một hồ sơ của mỗi chương; không dùng lorem ipsum cho màn hình đánh giá chính.
 
 ## 16. Ràng buộc triển khai
 
-- Thiết kế Figma không được tự ý thay đổi luật Core trong `core-platform-spec.md`.
+- Thiết kế Figma không được tự ý thay đổi luật Core trong `core-platform-spec.md` và `live-arena-game-spec.md`.
 - Scenario Engine, Mạch Nguyên Nhân và Ma trận Bằng chứng phải dùng cùng mô hình nội dung để tránh ba bộ dữ liệu mâu thuẫn.
 - Mọi điểm, thời gian, lượt chơi, quyền truy cập và bảng xếp hạng đều lấy từ server/database có thẩm quyền.
 - Hình ảnh, trích dẫn và tài liệu chỉ được đưa vào bản công khai khi có nguồn và quyền sử dụng phù hợp.
