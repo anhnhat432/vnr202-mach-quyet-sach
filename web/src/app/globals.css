@@ -4527,3 +4527,11 @@ main {
   letter-spacing: -0.005em;
 }
 
+
+.login-message { min-height: 1.5rem; margin: 0.75rem 0 0; color: var(--ink-soft); }
+.roster-import table { width: 100%; border-collapse: collapse; margin-block: 1rem; font-size: 0.95rem; }
+.roster-import th, .roster-import td { border: 1px solid var(--ink); padding: 0.4rem 0.6rem; text-align: left; vertical-align: top; }
+.roster-import tr[data-status="error"] { background: rgba(177, 40, 46, 0.12); }
+.roster-import tr[data-status="warning"] { background: rgba(214, 146, 46, 0.18); }
+.roster-import label { display: grid; gap: 0.3rem; margin-top: 0.75rem; font-weight: 700; }
+.roster-import input, .roster-import button { min-height: 2.5rem; border: 1px solid var(--ink); background: transparent; color: var(--ink); padding: 0.4rem 0.6rem; font: inherit; }

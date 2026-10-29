@@ -51,7 +51,9 @@ Một mô hình tham chiếu TypeScript thuần (không I/O) được phép tồ
 
 ### 7. Nhập lớp từ `.xlsx` và `.csv`
 
-Hỗ trợ cả hai định dạng theo yêu cầu. Đánh giá công việc: phần đọc `.xlsx` cần thêm một thư viện phía server nhưng không làm tăng đáng kể khối lượng (cùng một bước chuẩn hóa hàng, xem trước và áp dụng như CSV). Lựa chọn thư viện được chốt ở Giai đoạn B sau khi kiểm tra bảo trì và `npm audit`; ứng viên: `read-excel-file` (nhẹ, chỉ đọc), `exceljs`. Không dùng gói `xlsx` trên npm (bản 0.18.x không còn được cập nhật trên npm registry). Ràng buộc: chỉ đọc sheet đầu tiên, đọc văn bản hiển thị của ô (không đánh giá công thức), giới hạn 1 MiB và số hàng cấu hình được, chạy phía server. MSSV luôn là chuỗi, giữ số 0 đầu; ô MSSV kiểu số sinh cảnh báo. Mẫu định dạng MSSV và giới hạn số hàng chỉ được chốt sau khi xem tệp danh sách thật (`LA-ACC-011..014`).
+Hỗ trợ cả hai định dạng theo yêu cầu. Đánh giá công việc: phần đọc `.xlsx` cần thêm một thư viện phía server nhưng không làm tăng đáng kể khối lượng (cùng một bước chuẩn hóa hàng, xem trước và áp dụng như CSV). Lựa chọn thư viện được chốt ở Giai đoạn B sau khi kiểm tra bảo trì và `npm audit`; ứng viên: `read-excel-file` (nhẹ, chỉ đọc), `exceljs`. Không dùng gói `xlsx` trên npm (bản 0.18.x không còn được cập nhật trên npm registry). **Quyết định N9 (Giai đoạn B):** dùng `fflate@0.8.3` cộng bộ đọc XML tối giản tự viết thay vì thư viện Excel đầy đủ (`exceljs` không còn cập nhật từ 2024-12, gói `xlsx` trên npm dừng ở 0.18.5, `read-excel-file` đổi phiên bản liên tục và kéo thêm phụ thuộc). Đánh đổi: tự bảo trì bộ đọc, chỉ hỗ trợ `.xlsx` đơn giản. Chi tiết và giới hạn: `docs/sdd/evidence/phase-3/README.md` §6.
+
+Ràng buộc: chỉ đọc sheet đầu tiên, đọc văn bản hiển thị của ô (không đánh giá công thức), giới hạn 1 MiB và số hàng cấu hình được, chạy phía server. MSSV luôn là chuỗi, giữ số 0 đầu; ô MSSV kiểu số sinh cảnh báo. Mẫu định dạng MSSV và giới hạn số hàng chỉ được chốt sau khi xem tệp danh sách thật (`LA-ACC-011..014`).
 
 ### 8. Tách dữ liệu giả lập
 

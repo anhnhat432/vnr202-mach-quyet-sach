@@ -25,3 +25,41 @@ jobs:
       - run: npm run typecheck
       - run: npm run test
       - run: npm run build
+
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.14.0
+      - run: node scripts/security/scan-secrets.mjs
+
+  # Real Supabase stack (Postgres, Auth, REST). Written for the Supabase CLI path that could not be
+  # exercised in the authoring sandbox (registry limits); first CI run must confirm it.
+  database:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.14.0
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: npm ci --ignore-scripts
+      - uses: supabase/setup-cli@v1
+        with:
+          version: 2.115.0
+      - run: supabase start -x studio,imgproxy,storage-api,edge-runtime,logflare,vector,mailpit,realtime
+        working-directory: .
+      - run: supabase test db
+        working-directory: .
+      - name: Integration tests against the Supabase stack
+        working-directory: web
+        run: |
+          eval "$(supabase status -o env --workdir .. | sed 's/^/export /')"
+          export SUPABASE_URL="$API_URL" SUPABASE_ANON_KEY="$ANON_KEY" SUPABASE_SERVICE_ROLE_KEY="$SERVICE_ROLE_KEY"
+          npm run test:integration
