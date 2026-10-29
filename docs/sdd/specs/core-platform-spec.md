@@ -180,7 +180,7 @@ Only Published content may be copied into an immutable competition question snap
 
 ### Public leaderboard privacy
 
-- `PRV-001`: A public leaderboard SHALL display the student's full name.
+- `PRV-001`: A public leaderboard SHALL display the student's full name. **[v1.1: Proposed amendment `LA-PRV-003` (classroom display name) pending owner approval; this rule stays in force until approved]**
 - `PRV-002`: A public leaderboard SHALL NOT display the student ID.
 - `PRV-003`: Authorized administrators MAY view full name, student ID, and detailed attempt information.
 - `PRV-004`: Duplicate full names SHALL remain separate internal identities without exposing student IDs publicly.
@@ -325,5 +325,7 @@ This amendment is explicit, not silent: every affected v1.0 rule is marked inlin
 
 New rule families with no v1.0 equivalent: `LA-TRY-003` (one active attempt across games), `LA-LB-003..007` (projector Top 10, personal gap, provisional/official labels), `LA-ANTI-*`, `LA-IDEM-*`, `LA-ADMIN-*`, `LA-CONTENT-005/006` (fixture separation, rehearsal competition).
 
-Retained without change: `ACC-002`, `ACC-004`, `ACC-005`, `ACCESS-001..003`, `SCOPE-*`, `EVT-001..003`, `EVT-005`, `TRY-*`, `ATT-001`, `ATT-002`, `ATT-005`, `SESSION-*`, `CFG-002`, `ALLOC-001`, `ALLOC-003`, `CONTENT-001/002/004/005/006`, `PRV-*`, `NFR-RT-*`, and acceptance criteria not listed above.
+Pending proposal (not yet in force): `PRV-001` and `AC-PRV-001` would be amended by `LA-PRV-003` (classroom display name instead of full name on public boards) and `LA-PRV-004` (anonymous viewers see Top 10 only). Until the owner approves, `PRV-001` remains in force.
+
+Retained without change: `ACC-002`, `ACC-004`, `ACC-005`, `ACCESS-001..003`, `SCOPE-*`, `EVT-001..003`, `EVT-005`, `TRY-*`, `ATT-001`, `ATT-002`, `ATT-005`, `SESSION-*`, `CFG-002`, `ALLOC-001`, `ALLOC-003`, `CONTENT-001/002/004/005/006`, `PRV-001..004` (with the pending proposal above), `NFR-RT-*`, and acceptance criteria not listed above.
 

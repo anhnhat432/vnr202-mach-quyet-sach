@@ -1,6 +1,6 @@
 # Realtime Contracts
 
-Trạng thái: Approved for planning; sửa đổi v1.1 cho Live Arena V1.0 (2026-10-29) chờ duyệt văn bản  
+Trạng thái: Approved for planning; sửa đổi v1.1 cho Live Arena V1.0 (2026-10-29, bản sửa 1) chờ duyệt văn bản  
 Nguyên tắc: event là notification, REST/RPC projection là nguồn chân lý
 
 ## 1. Channel taxonomy
@@ -100,7 +100,7 @@ Old client phải khóa input ngay, dừng heartbeat và GET attempt projection.
 
 ### `attempt.state_changed`
 
-Data chỉ gồm state, attemptVersion và serverTime; remaining time phải refetch hoặc lấy từ HTTP response để tránh client tự tin vào event trễ. Không event nào mang nội dung câu hỏi hay đáp án.
+Data chỉ gồm state, attemptVersion và serverTime; remaining time phải refetch hoặc lấy từ HTTP response để tránh client tự tin vào event trễ. Không event nào mang nội dung câu hỏi hay đáp án; nội dung câu chỉ được lấy qua HTTP sau `available_at` (`LA-TIME-013`).
 
 ## 6. Connection state UX
 

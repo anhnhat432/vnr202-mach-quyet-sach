@@ -1,10 +1,10 @@
 # Live Arena Game Specification V1.0
 
-Trạng thái: Chờ duyệt văn bản (Giai đoạn A, 2026-10-29). Các quyết định Q1–Q14 đã được chủ dự án phê duyệt; văn bản này ghi lại các quyết định đó thành luật có mã.  
+Trạng thái: Giai đoạn A được duyệt có điều kiện; **bản sửa 1 (2026-10-29)** chờ duyệt. Bản sửa này áp dụng quyết định O1–O14 và các yêu cầu chỉnh A–F của chủ dự án.  
 Rủi ro: High  
 Độ sâu: Full (Core)  
 Thay thế: một phần `core-platform-spec.md` v1.0 — xem `core-platform-spec.md` §16 (Amendment v1.1) và ADR-004.  
-Nguồn quyết định: "VNR202 – Live Arena Game Design Specification V1.0" và phản hồi Q1–Q14 của chủ dự án ngày 2026-10-29.
+Nguồn quyết định: "VNR202 – Live Arena Game Design Specification V1.0", phản hồi Q1–Q14 và phản hồi O1–O14 kèm yêu cầu chỉnh A–F của chủ dự án ngày 2026-10-29.
 
 ## 1. Bối cảnh và mục tiêu
 
@@ -15,7 +15,7 @@ Nguyên tắc thiết kế:
 1. Người chơi hiểu cách chơi trong khoảng 10 giây.
 2. Câu hỏi ngắn, thao tác chủ yếu là một lần nhấn chọn.
 3. Có cảm giác hồi hộp, tăng điểm, vượt hạng và tranh Top 1.
-4. Hạn chế tra cứu AI bằng thời hạn ngắn và kiểm soát hoàn toàn từ máy chủ.
+4. **Hạn chế** (không loại trừ) tra cứu AI và chia sẻ đáp án bằng thời hạn ngắn, kiểm soát từ máy chủ, phân bổ riêng và hạn chế lặp câu. Hệ thống không tuyên bố chống tra cứu hoặc chia sẻ đáp án tuyệt đối (§5.10, `LA-FB-007`).
 5. Điểm phản ánh kiến thức là chính; may rủi không được quyết định hoàn toàn kết quả.
 6. Chỉ dùng nội dung lịch sử đã được người duyệt và có nguồn.
 
@@ -26,15 +26,16 @@ Nguyên tắc thiết kế:
 | `[CHỐT]` | Chủ dự án đã quyết định. Không được thay đổi nếu không có phê duyệt mới. |
 | `[CHỐT V0.1]` | Thiết kế ban đầu của Game 2 đã được duyệt làm cấu hình khởi điểm; chỉ tinh chỉnh sau kiểm thử và có phê duyệt. |
 | `[THỬ NGHIỆM]` | Giá trị cấu hình thử nghiệm, chưa được coi là kết quả kiểm thử. Có tiêu chí đo ở §11. |
-| `[ĐỀ XUẤT]` | Đề xuất kỹ thuật để lấp khoảng trống của đặc tả; chờ chủ dự án duyệt trước khi triển khai phần liên quan. |
+| `[ĐỀ XUẤT]` | Đề xuất để lấp khoảng trống của đặc tả; chờ chủ dự án duyệt trước khi triển khai phần liên quan. |
 | `[MỞ]` | Chưa có quyết định; liệt kê ở §12. |
 
-Luật `[ĐỀ XUẤT]` và `[MỞ]` không được triển khai như hành vi Core cho tới khi được duyệt (CONSTITUTION, "Agent rules").
+Luật `[ĐỀ XUẤT]` và `[MỞ]` không được triển khai như hành vi Core cho tới khi được duyệt (CONSTITUTION, "Agent rules"). Bảng tổng hợp nhãn nằm ở §12.3.
 
 ## 3. Phạm vi và thứ tự ưu tiên
 
-- Tài liệu này là nguồn chân lý cho hai game Live Arena, thời gian, phản hồi, bảng xếp hạng và tài khoản thi đua.
+- Tài liệu này là nguồn chân lý cho hai game Live Arena, thời gian, phản hồi, bảng xếp hạng, quyền riêng tư của bảng xếp hạng và tài khoản thi đua.
 - Khi mâu thuẫn với `core-platform-spec.md` v1.0, luật ở đây thắng đối với các rule được liệt kê trong Core §16. Các rule Core không bị liệt kê vẫn giữ nguyên hiệu lực (ví dụ `TRY-*`, `SESSION-*`, `CONTENT-*`, `PRV-*`, `EVT-001..003/005`, `NFR-RT-*`).
+- Luật `[ĐỀ XUẤT]` có ảnh hưởng tới rule Core (ví dụ `LA-PRV-003` với `PRV-001`) chưa thay thế rule Core cho tới khi được duyệt.
 - CONSTITUTION không thay đổi. Kiến trúc tuân thủ ADR-001 và ADR-004.
 
 ## 4. Thuật ngữ
@@ -44,33 +45,40 @@ Luật `[ĐỀ XUẤT]` và `[MỞ]` không được triển khai như hành vi 
 - **Câu gỡ bom:** câu A/B xuất hiện khi mở ô bom ở Game 1; không cộng điểm, không tính vào 10 câu chính.
 - **Sự kiện điểm:** mọi thay đổi điểm đã được server commit: trả lời câu chính, mở rương, phạt bom, thưởng combo.
 - **Đồng hồ toàn trận:** thời lượng của lượt thi, bắt đầu khi server commit lượt và không bao giờ tạm dừng.
-- **Thời hạn câu:** thời điểm hết hạn của một câu đã hiển thị, do server ghi một lần.
-- **Độ trễ cho phép:** khoảng dung sai server cộng thêm sau thời hạn câu để bù độ trễ mạng.
+- **Nội dung câu:** đề và các lựa chọn đáp án của một câu.
+- **Mốc thời gian của câu:** `presented_at`, `available_at`, `content_released_at`, `deadline_at`, `effective_deadline`, định nghĩa ở §5.4.1.
+- **Độ trễ cho phép (`latency_allowance`):** dung sai server cộng thêm sau thời hạn hiệu lực để bù độ trễ mạng.
 - **Bảng tạm thời / bảng chính thức:** thứ hạng trong khi cuộc thi chưa chốt / sau khi cuộc thi ở trạng thái Finalized.
+- **Câu đã lộ đáp án:** câu đã được phân bổ trong một cuộc thi đã Finalized, nên đáp án đã có thể được xem lại (`LA-FB-004`).
 
 ## 5. Luật nghiệp vụ
 
 ### 5.1 Phạm vi sản phẩm
 
-- `LA-SCOPE-001` `[CHỐT]` Game 1 của cuộc thi là **Bãi Mìn Tri Thức** (`minefield`); Game 2 là **Đường Đua Lịch Sử** (`race`). Thay thế Dòng Chảy Lịch Sử và Phòng Quyết Sách trong vai trò game thi đấu.
+- `LA-SCOPE-001` `[CHỐT]` Game 1 của cuộc thi là **Bãi Mìn Tri Thức** (`minefield`); Game 2 là **Đường Đua Lịch Sử** (`race`). Thay thế Dòng Chảy Lịch Sử và Phòng Quyết Sách trong vai trò game thi đấu. Không có game thi đấu thứ ba.
 - `LA-SCOPE-002` `[CHỐT]` Dòng Chảy Lịch Sử hiện có được giữ làm **chế độ luyện tập tự do** công khai, không đăng nhập, không tính điểm, không có bảng xếp hạng, không được gắn nhãn "Game 01".
 - `LA-SCOPE-003` `[CHỐT]` Giữ nguyên các trải nghiệm học lịch sử công khai: 15 hồ sơ và Scenario Engine (bao gồm chặng Phòng Quyết Sách trong hồ sơ), Mạch Nguyên Nhân, Ma trận Bằng chứng, Ngàn Cân Treo Sợi Tóc, Khoảnh khắc và Giờ G.
 - `LA-SCOPE-004` `[CHỐT]` Giờ G và các chế độ luyện tập là trải nghiệm không tính điểm, tách biệt hoàn toàn với cuộc thi (dữ liệu, kênh realtime, nhãn giao diện).
 - `LA-SCOPE-005` `[CHỐT]` Không có bảng xếp hạng tổng hợp điểm hai game.
 
-### 5.2 Tài khoản và đăng nhập
+### 5.2 Tài khoản, đăng nhập và danh sách lớp
 
 - `LA-ACC-001` `[CHỐT]` Quản trị viên nhập danh sách lớp từ tệp `.xlsx` hoặc `.csv`. MSSV là định danh tài khoản.
-- `LA-ACC-002` `[CHỐT]` Trước khi nhập chính thức, hệ thống hiển thị bản xem trước gồm số hàng hợp lệ và lỗi theo từng hàng: MSSV trùng trong tệp, MSSV đã tồn tại, thiếu MSSV, thiếu họ tên, MSSV sai định dạng. Không ghi tài khoản nào trước bước xác nhận.
-- `LA-ACC-003` `[CHỐT]` Tất cả tài khoản sinh viên dùng chung mật khẩu mặc định do chủ dự án quyết định là `1`. Giá trị được cấu hình phía server (biến môi trường server-only); không hard-code trong mã nguồn, seed, test fixture hoặc client.
+- `LA-ACC-002` `[CHỐT]` Trước khi nhập chính thức, hệ thống hiển thị bản xem trước gồm số hàng hợp lệ, lỗi và cảnh báo theo từng hàng: MSSV trùng trong tệp, MSSV đã tồn tại, thiếu MSSV, thiếu họ tên, MSSV không khớp mẫu đã cấu hình (nếu có, `LA-ACC-013`), ô MSSV kiểu số (`LA-ACC-012`). Không ghi tài khoản nào trước bước xác nhận.
+- `LA-ACC-003` `[CHỐT]` Tất cả tài khoản sinh viên dùng chung mật khẩu mặc định do chủ dự án quyết định là `1`, chỉ cho cuộc thi lớp học. Giá trị được cấu hình phía server (biến môi trường server-only `ROSTER_DEFAULT_PASSWORD`); không hard-code trong mã nguồn, seed, test fixture hoặc client.
 - `LA-ACC-004` `[CHỐT]` V1 **không** bắt buộc đổi mật khẩu ở lần đăng nhập đầu. Đây là ngoại lệ có ghi nhận đối với Core `ACC-003` và Security Spec §3.
 - `LA-ACC-005` `[CHỐT]` Nếu Supabase Auth không chấp nhận mật khẩu một ký tự, server chuyển mật khẩu người dùng nhập thành mật khẩu nội bộ: `providerPassword = base64url(HMAC-SHA256(AUTH_PASSWORD_PEPPER, normalizedStudentId + ":" + enteredPassword))`. `AUTH_PASSWORD_PEPPER` là bí mật server-only; không xuất hiện ở client, repository, log hoặc response. Supabase Auth vẫn băm và lưu mật khẩu nội bộ; ứng dụng không lưu mật khẩu dạng rõ.
 - `LA-ACC-006` `[CHỐT]` Mật khẩu chung **không bảo đảm danh tính**: người biết MSSV có thể đăng nhập thay và sử dụng lượt của người khác. Mức bảo mật này chỉ được chấp nhận cho thi đua lớp học giá trị thấp; không dùng cho cuộc thi có giá trị cao (điểm học phần, giải thưởng). Giao diện quản trị phải hiển thị lời cảnh báo này khi tạo cuộc thi.
-- `LA-ACC-007` `[CHỐT]` Đăng nhập nhận MSSV (chuẩn hóa: bỏ khoảng trắng, chữ in hoa) và mật khẩu. Thông báo lỗi luôn chung chung, không xác nhận MSSV có tồn tại.
-- `LA-ACC-008` `[ĐỀ XUẤT]` Giới hạn đăng nhập: 5 lần sai/10 phút theo MSSV-hash; giới hạn theo IP-hash phải đủ cao cho cả lớp dùng chung một địa chỉ NAT Wi-Fi (đề xuất 300 yêu cầu/10 phút/IP).
-- `LA-ACC-009` `[ĐỀ XUẤT]` Server ghi sự kiện đăng nhập và chuyển thiết bị (thời gian, MSSV, nhãn thiết bị đã băm) để quản trị viên xử lý tranh chấp mạo danh. Sinh viên không thấy dữ liệu của người khác.
-- `LA-ACC-010` `[ĐỀ XUẤT]` Khi nhập lại, MSSV đã tồn tại được báo "đã tồn tại" và không bị sửa; sửa họ tên làm qua thao tác quản trị riêng có audit.
-- `LA-ACC-011` `[CHỐT]` Định dạng MSSV mặc định `^[A-Z]{2,4}\d{5,8}$` (cấu hình được). Tệp tối đa 1 MiB và 100 hàng dữ liệu.
+- `LA-ACC-007` `[CHỐT]` Đăng nhập nhận MSSV và mật khẩu; MSSV được chuẩn hóa theo `LA-ACC-011`. Thông báo lỗi luôn chung chung, không xác nhận MSSV có tồn tại.
+- `LA-ACC-008` `[THỬ NGHIỆM]` Giới hạn đăng nhập ban đầu: 5 lần sai/10 phút theo MSSV-hash; 300 yêu cầu/10 phút theo IP-hash để cả lớp dùng chung một NAT Wi-Fi không bị chặn. Đo lại khi nhiều sinh viên dùng chung NAT (§11, P10).
+- `LA-ACC-009` `[CHỐT]` Server ghi sự kiện đăng nhập và chuyển thiết bị (thời gian, tài khoản, nhãn thiết bị đã băm, IP đã băm) để quản trị viên xử lý tranh chấp mạo danh. Sinh viên không thấy dữ liệu của người khác.
+- `LA-ACC-010` `[CHỐT]` Khi nhập lại, MSSV đã tồn tại được báo "đã tồn tại" và không bị sửa; sửa họ tên làm qua thao tác quản trị riêng có audit.
+- `LA-ACC-011` `[CHỐT]` MSSV luôn được xử lý là **chuỗi ký tự**: giữ nguyên số 0 đầu, không ép kiểu số, không định dạng số khoa học hoặc dấu phân cách hàng nghìn. Chuẩn hóa chỉ gồm bỏ khoảng trắng đầu/cuối và chuyển chữ cái Latin sang in hoa.
+- `LA-ACC-012` `[CHỐT]` Với `.xlsx`, hệ thống đọc văn bản hiển thị của ô MSSV. Ô MSSV có kiểu số được đánh dấu cảnh báo trong bản xem trước (Excel có thể đã làm mất số 0 đầu); quản trị viên phải sửa tệp hoặc xác nhận từng hàng trước khi nhập.
+- `LA-ACC-013` `[ĐỀ XUẤT]` Mẫu định dạng MSSV là cấu hình và **chỉ được xác định sau khi xem tệp danh sách lớp thật**. Ví dụ `^[A-Z]{2,4}\d{5,8}$` chỉ để tham khảo, không phải luật. Khi chưa cấu hình mẫu, chỉ kiểm tra: không rỗng, ≤ 32 ký tự, không chứa ký tự điều khiển, không bắt đầu bằng ký tự công thức (`=`, `+`, `-`, `@`).
+- `LA-ACC-014` `[THỬ NGHIỆM]` Giới hạn tệp: 1 MiB. Số hàng tối đa là cấu hình an toàn, đề xuất ban đầu 200 hàng, xác định lại theo tệp thật.
+- `LA-ACC-015` `[ĐỀ XUẤT]` Email nội bộ cho Supabase Auth được dẫn xuất từ MSSV đã chuẩn hóa bằng mã hóa an toàn cho mọi ký tự (ví dụ hex của UTF-8) cộng `INTERNAL_AUTH_EMAIL_DOMAIN`, không hiển thị cho người dùng.
+- `LA-ACC-016` `[CHỐT]` Hành vi Supabase Auth với mật khẩu ngắn **phải được xác minh trên một project Supabase thực tế** (không chỉ môi trường local) trước khi chọn có dùng ánh xạ `LA-ACC-005` hay không; kết quả được ghi vào evidence.
 
 ### 5.3 Cuộc thi và lượt thi
 
@@ -82,20 +90,50 @@ Luật `[ĐỀ XUẤT]` và `[MỞ]` không được triển khai như hành vi 
 - `LA-TRY-006` `[CHỐT]` Chuyển thiết bị tuân theo `SESSION-001..005`: phiên mới nhận quyền điều khiển, phiên cũ bị vô hiệu ngay, server từ chối thao tác từ phiên cũ.
 - `LA-TRY-007` `[CHỐT]` Hết hạn bắt đầu (`EVT-002`) từ chối tạo lượt mới; lượt đã bắt đầu trước hạn được chơi đủ thời lượng toàn trận.
 
-### 5.4 Thời gian
+### 5.4 Thời gian và phát hành nội dung câu
 
 - `LA-TIME-001` `[CHỐT]` Đồng hồ toàn trận bắt đầu khi server commit lượt thi và **không tạm dừng** vì mất mạng, đóng tab hoặc chuyển thiết bị. Thay thế Core `ATT-003`, `ATT-004`, `AC-DISC-001`, `AC-DISC-002`.
 - `LA-TIME-002` `[THỬ NGHIỆM]` Thời lượng toàn trận: Game 1 = 180 000 ms (3:00); Game 2 = 150 000 ms (2:30). Quản trị viên chỉ được đổi trước khi cuộc thi mở (`CFG-001/002`).
-- `LA-TIME-003` `[CHỐT]` Mỗi câu khi được hiển thị có một thời hạn duy nhất do server ghi **một lần** (`deadline_at`). F5, chuyển tab, đăng nhập lại hoặc chuyển thiết bị không làm mới thời hạn.
+- `LA-TIME-003` `[CHỐT]` Mỗi câu có các mốc thời gian do server ghi **một lần** (§5.4.1). F5, chuyển tab, đăng nhập lại, chuyển thiết bị hoặc gọi lại API không làm mới bất kỳ mốc nào.
 - `LA-TIME-004` `[CHỐT]` Thời hạn câu: Game 1 câu Dễ 6 s, Trung bình 8 s, Khó 10 s, gỡ bom 5 s; Game 2 câu Dễ 5 s, Trung bình 7 s, Khó 9 s.
-- `LA-TIME-005` `[CHỐT]` Server chấp nhận câu trả lời khi thời điểm server nhận ≤ `deadline_at + latency_allowance`. Thời gian do trình duyệt gửi không bao giờ được dùng để quyết định.
+- `LA-TIME-005` `[CHỐT]` Server chấp nhận câu trả lời khi thời điểm server nhận `received_at ≤ effective_deadline + latency_allowance`. Thời gian do trình duyệt gửi không bao giờ được dùng để quyết định.
 - `LA-TIME-006` `[THỬ NGHIỆM]` `latency_allowance` là cấu hình theo cuộc thi; thử nghiệm trong khoảng 300–500 ms và chỉ khóa sau khi đo độ trễ thực tế trên Wi-Fi lớp học (§11, P2). Không khóa cứng 1 000 ms.
-- `LA-TIME-007` `[CHỐT]` Đồng hồ hiển thị ở client chỉ để hiển thị, tính từ `remainingMs` server trả về lúc nhận phản hồi.
+- `LA-TIME-007` `[CHỐT]` Đồng hồ hiển thị ở client chỉ để hiển thị, tính từ `remainingMs` server trả về lúc nhận phản hồi. Client không quyết định thời điểm bắt đầu hay kết thúc hạn.
 - `LA-TIME-008` `[CHỐT]` Câu hết hạn trong lúc mất mạng được tính là hết giờ: 0 điểm, tiêu hao x2 nếu đang có, đặt lại combo, và với câu gỡ bom thì tính là gỡ thất bại.
-- `LA-TIME-009` `[ĐỀ XUẤT]` Thời hạn hiệu lực của một câu là `min(deadline_at, attempt_ends_at)`. Khi đồng hồ toàn trận hết lúc một câu gỡ bom đang mở, câu đó được xử lý như gỡ thất bại (khiên hoặc −100) trước khi lượt kết thúc, để không khuyến khích chờ hết giờ.
-- `LA-TIME-010` `[ĐỀ XUẤT]` Mốc bắt đầu tính thời hạn câu là `available_at = thời điểm commit + offset`, với offset là thời gian hiệu ứng lật ô (Game 1, ≤ 600 ms `[THỬ NGHIỆM]`) hoặc thời gian phản hồi câu trước (Game 2, 800–1 000 ms `[THỬ NGHIỆM]`). `deadline_at = available_at + thời hạn câu`. Client không hiển thị câu hỏi và đáp án trước `available_at`. Phương án thay thế: client gọi riêng để lấy câu tiếp theo sau phản hồi (thêm một vòng mạng mỗi câu).
+- `LA-TIME-009` `[CHỐT]` Thời hạn hiệu lực của một câu là `effective_deadline = min(deadline_at, attempt_ends_at)`. Khi đồng hồ toàn trận hết lúc một câu gỡ bom đang mở hoặc đã được tạo, câu đó được xử lý là gỡ thất bại (khiên hoặc −100) trước khi lượt kết thúc.
+- `LA-TIME-010` `[CHỐT]` Thời gian hiệu ứng (lật ô, phản hồi câu trước) không tính vào thời gian đọc câu: `available_at = presented_at + offset`, `deadline_at = available_at + thời hạn câu`, cả hai do server tính khi commit thao tác tạo ra câu.
 - `LA-TIME-011` `[CHỐT]` Thời điểm kết thúc hợp lệ muộn nhất của một lượt = `start_deadline_at + thời lượng toàn trận + latency_allowance` (sửa Core `EVT-004`, không còn 120 s).
 - `LA-TIME-012` `[CHỐT]` Heartbeat chỉ dùng để hiển thị trạng thái kết nối và giám sát; không ảnh hưởng đồng hồ (sửa Core `ATT-006`).
+- `LA-TIME-013` `[CHỐT]` **Nội dung câu không được gửi tới client trước `available_at`**, qua bất kỳ kênh nào: response mở ô, response trả lời, projection khi F5, sự kiện realtime hay endpoint khác. Trước `available_at`, client chỉ nhận định danh câu, vai trò, độ khó (Game 1 sau khi mở ô) và `availableInMs`.
+- `LA-TIME-014` `[CHỐT]` Client lấy nội dung câu bằng một yêu cầu riêng. Nếu yêu cầu tới trước `available_at`, server không trả nội dung. Cơ chế cụ thể ở `LA-TIME-017`.
+- `LA-TIME-015` `[CHỐT]` Thời điểm client lấy nội dung không ảnh hưởng thời hạn: lấy nội dung muộn (do mạng chậm, F5, chuyển thiết bị) không kéo dài `deadline_at`. Server ghi `content_released_at` lần đầu nội dung được trả ra để audit.
+- `LA-TIME-016` `[CHỐT]` Nếu `available_at ≥ attempt_ends_at`, nội dung câu không bao giờ được phát hành; câu được xử lý là hết giờ khi lượt kết thúc (câu chính: 0 điểm; câu gỡ bom: gỡ thất bại).
+- `LA-TIME-017` `[ĐỀ XUẤT]` Cơ chế lấy nội dung: client gửi yêu cầu ngay khi biết câu tiếp theo; server **giữ yêu cầu** tới `available_at` (tối đa bằng offset, ≤ 1 000 ms) rồi trả nội dung (long-poll), để không tốn thêm một chiều mạng. Nếu không giữ được (ví dụ yêu cầu tới quá sớm hơn offset), server trả `425 too_early` kèm `availableInMs`, không kèm nội dung. Phương án thay thế: luôn trả `425` và để client gọi lại đúng giờ (mất thêm một vòng mạng mỗi câu).
+- `LA-TIME-018` `[THỬ NGHIỆM]` Offset: lật ô Game 1 ≤ 600 ms; phản hồi Game 2 800–1 000 ms (bằng `LA-FB-002`); câu đầu tiên của Game 2 ≤ 1 000 ms sau khi bắt đầu lượt.
+
+#### 5.4.1 Mô hình mốc thời gian của một câu
+
+Mọi mốc dùng đồng hồ của database (`now()` trong transaction), không dùng thời gian client.
+
+| Mốc | Do ai đặt | Định nghĩa |
+|---|---|---|
+| `started_at` | Server, khi commit tạo lượt | Bắt đầu đồng hồ toàn trận |
+| `attempt_ends_at` | Server, cùng lúc | `started_at + thời lượng toàn trận` |
+| `presented_at` | Server, khi commit thao tác tạo ra câu | Game 1: commit mở ô câu hỏi/bom. Game 2: commit câu trả lời trước (hoặc commit tạo lượt với câu đầu) |
+| `available_at` | Server, cùng lúc | `presented_at + offset` (`LA-TIME-010`, `LA-TIME-018`) |
+| `content_released_at` | Server | Lần đầu nội dung được trả ra; luôn `≥ available_at` (`LA-TIME-013`) |
+| `deadline_at` | Server, cùng lúc với `presented_at` | `available_at + thời hạn câu`; không bao giờ cập nhật |
+| `effective_deadline` | Tính khi chấm | `min(deadline_at, attempt_ends_at)` (`LA-TIME-009`) |
+| `received_at` | Server, khi nhận yêu cầu trả lời | Thời điểm database nhận câu trả lời |
+| Chấp nhận | — | `received_at ≤ effective_deadline + latency_allowance` |
+| Hết giờ | Server, ở mọi thao tác đọc/ghi sau thời điểm này | `now() > effective_deadline + latency_allowance` mà chưa có câu trả lời hợp lệ |
+| Lượt kết thúc | Server | Xử lý đủ câu chính, hoặc `now() > attempt_ends_at + latency_allowance` sau khi xử lý câu dở dang |
+
+Bất biến: `presented_at ≤ available_at ≤ content_released_at`; `available_at < deadline_at`; `deadline_at` và `available_at` không đổi sau khi ghi; mỗi câu có tối đa một câu trả lời được chấp nhận.
+
+Ảnh hưởng của mạng: thời gian người chơi thực sự nhìn thấy câu ≈ thời hạn câu − (độ trễ nhận nội dung) − (độ trễ gửi câu trả lời). `latency_allowance` bù phần gửi câu trả lời; cơ chế long-poll (`LA-TIME-017`) giảm phần nhận nội dung xuống một chiều mạng. Cả hai phần được đo ở P2.
+
+Thứ tự gửi lại: nếu yêu cầu trả lời đầu tiên đã tới server, mọi lần gửi lại cùng `Idempotency-Key` nhận kết quả đã commit. Nếu yêu cầu đầu không tới server, lần gửi lại được chấm theo `received_at` của chính nó.
 
 ### 5.5 Phân bổ câu hỏi
 
@@ -103,9 +141,11 @@ Luật `[ĐỀ XUẤT]` và `[MỞ]` không được triển khai như hành vi 
 - `LA-ALLOC-002` `[CHỐT]` Blueprint Game 1: 10 câu chính (3 Dễ, 4 Trung bình, 3 Khó) và 3 câu gỡ bom A/B. Blueprint Game 2: 15 câu (5 Dễ, 7 Trung bình, 3 Khó). Thay thế Core `ALLOC-002` (blueprint theo chương).
 - `LA-ALLOC-003` `[CHỐT]` Thứ tự đáp án được đảo cho từng lượt khi loại câu cho phép, và được lưu cùng phân bổ.
 - `LA-ALLOC-004` `[CHỐT]` Phân bổ câu, bàn cờ và độ khó gắn với ô được tạo một lần khi bắt đầu lượt và không thay đổi sau F5, đăng nhập lại hay chuyển thiết bị.
-- `LA-ALLOC-005` `[CHỐT]` Server chỉ gửi một câu khi câu đó được hiển thị; không gửi toàn bộ đề xuống trình duyệt.
+- `LA-ALLOC-005` `[CHỐT]` Server chỉ phát hành nội dung một câu theo `LA-TIME-013`; không gửi toàn bộ đề xuống trình duyệt.
 - `LA-ALLOC-006` `[CHỐT]` Ngân hàng của hai game tách riêng; một phiên bản câu hỏi không xuất hiện hai lần trong cùng một lượt.
 - `LA-ALLOC-007` `[ĐỀ XUẤT]` Khi ngân hàng đủ, phân bổ trải đều câu hỏi qua ba chương; đây là mục tiêu mềm, không chặn mở cuộc thi.
+- `LA-ALLOC-008` `[ĐỀ XUẤT]` Trong mỗi ô blueprint, câu được rút với trọng số nghịch với số lần đã xuất hiện trong cuộc thi hiện tại, để số người thấy mỗi câu đều nhau và thấp nhất có thể (`LA-CONTENT-010`).
+- `LA-ALLOC-009` `[CHỐT]` Câu đã lộ đáp án không được phân bổ trong cuộc thi `official`, trừ khi quản trị viên xác nhận rõ ràng theo `LA-CONTENT-009`.
 
 ### 5.6 Game 1 – Bãi Mìn Tri Thức
 
@@ -115,12 +155,12 @@ Trải nghiệm: mở ô bí ẩn, trả lời câu hỏi, gỡ bom, nhận vậ
 
 - `MINE-BOARD-001` `[CHỐT]` Bàn cờ 4 × 5, đúng 20 ô: 10 câu hỏi, 3 bom, 1 x2, 2 khiên, 4 rương (+40).
 - `MINE-BOARD-002` `[CHỐT]` Vị trí ô được server xáo trộn riêng cho từng lượt bằng nguồn ngẫu nhiên an toàn và lưu lại.
-- `MINE-BOARD-003` `[CHỐT]` Ô đầu tiên được mở không phải bom. Cơ chế `[ĐỀ XUẤT]`: nếu ô đầu tiên người chơi chọn chứa bom, server đổi nội dung ô đó với một ô không phải bom chưa mở được chọn ngẫu nhiên, trong cùng transaction, và ghi vào nhật ký sự kiện của lượt.
+- `MINE-BOARD-003` `[CHỐT]` Ô đầu tiên được mở không phải bom. Nếu ô đầu tiên người chơi chọn chứa bom, server đổi nội dung ô đó với một ô không phải bom chưa mở được chọn ngẫu nhiên, trong cùng transaction, và ghi vào nhật ký sự kiện của lượt.
 - `MINE-BOARD-004` `[CHỐT]` Độ khó của 10 ô câu hỏi (3 Dễ, 4 Trung bình, 3 Khó) được gán ngẫu nhiên khi tạo bàn cờ, cùng với câu hỏi cụ thể. Độ khó chỉ hiện khi mở ô.
 - `MINE-BOARD-005` `[CHỐT]` Nội dung ô chưa mở không bao giờ được gửi xuống client.
 - `MINE-BOARD-006` `[CHỐT]` Không có gợi ý kiểu Minesweeper (số bom lân cận) trong V1.
 - `MINE-BOARD-007` `[CHỐT]` Mỗi ô chỉ được mở một lần. Yêu cầu mở lại trả về kết quả đã có, không tạo hiệu ứng điểm lần hai.
-- `MINE-BOARD-008` `[ĐỀ XUẤT]` Khi đang có câu chính hoặc câu gỡ bom chưa xử lý, server từ chối mở ô khác (`409 interaction_pending`).
+- `MINE-BOARD-008` `[CHỐT]` Khi đang có câu chính hoặc câu gỡ bom chưa xử lý, server từ chối mở ô khác (`409 interaction_pending`).
 
 #### Câu hỏi chính
 
@@ -154,7 +194,7 @@ Trải nghiệm: mở ô bí ẩn, trả lời câu hỏi, gỡ bom, nhận vậ
 - `MINE-END-001` `[CHỐT]` Lượt kết thúc khi đã xử lý đủ 10 câu chính hoặc hết đồng hồ toàn trận, tùy điều kiện nào đến trước.
 - `MINE-END-002` `[CHỐT]` Sau khi kết thúc, không được mở thêm ô.
 - `MINE-END-003` `[CHỐT]` Điểm tối đa lý thuyết **2 460** = 2 000 (10 câu chính) + 300 (x2 rơi vào câu Khó) + 160 (4 rương).
-- `MINE-END-004` `[CHỐT]` Cơ cấu 20 ô và điểm tối đa không được thay đổi nếu chưa có phê duyệt mới. Ảnh hưởng của thứ tự mở ô được theo dõi bằng mô phỏng và kiểm thử (§11, P6).
+- `MINE-END-004` `[CHỐT]` Cơ cấu 20 ô, luật điểm và điểm tối đa không được thay đổi nếu chưa có phê duyệt mới. Các phương án cân bằng B1/B2 **không áp dụng** (quyết định O14). Ảnh hưởng của thứ tự mở ô và áp lực thời gian được tiếp tục đo (§11, P6).
 
 ### 5.7 Game 2 – Đường Đua Lịch Sử
 
@@ -183,10 +223,11 @@ Trải nghiệm: trả lời nhanh, tích combo, tăng tốc và cạnh tranh th
 
 - `LA-FB-001` `[CHỐT]` Khi cuộc thi chưa ở trạng thái Finalized, phản hồi sau mỗi tương tác chỉ gồm đúng/sai (hoặc hết giờ), điểm nhận được và hiệu ứng tương ứng. **Không** công bố đáp án đúng hay giải thích. Thay thế Core `LEARN-001`, `LEARN-002`, `LEARN-003`, `LEARN-005`.
 - `LA-FB-002` `[THỬ NGHIỆM]` Phản hồi kéo dài khoảng 800–1 000 ms, không chặn thao tác quá thời gian này, không che câu hỏi tiếp theo.
-- `LA-FB-003` `[CHỐT]` Mọi response API trong lúc cuộc thi chưa Finalized không chứa đáp án đúng, rubric hoặc giải thích, kể cả với câu đã trả lời.
-- `LA-FB-004` `[CHỐT]` Sau khi cuộc thi Finalized, sinh viên sở hữu lượt được xem lại từng câu của mình: đề, lựa chọn đã chọn, đáp án đúng, giải thích và nguồn. Trước đó, yêu cầu xem lại trả `409 review_not_available`.
-- `LA-FB-005` `[CHỐT]` Thông tin trên vẫn là riêng tư: không có trang công khai liệt kê đáp án.
+- `LA-FB-003` `[CHỐT]` Mọi response API và sự kiện realtime khi cuộc thi chưa Finalized không chứa đáp án đúng, rubric hoặc giải thích, kể cả với câu đã trả lời.
+- `LA-FB-004` `[CHỐT]` Sau khi cuộc thi Finalized, sinh viên sở hữu lượt được xem lại từng câu của mình: đề, lựa chọn đã chọn, đáp án đúng, giải thích và nguồn. Trước đó, yêu cầu xem lại trả `409 review_not_available`. Mọi câu của cuộc thi đó được đánh dấu đã lộ đáp án (`LA-CONTENT-009`).
+- `LA-FB-005` `[CHỐT]` Thông tin xem lại là riêng tư: không có trang công khai liệt kê đáp án.
 - `LA-FB-006` `[CHỐT]` Hiệu ứng ngắn, không chiếm thời gian trả lời; có tùy chọn tắt âm thanh và tôn trọng reduced-motion.
+- `LA-FB-007` `[CHỐT]` **Rủi ro còn lại được ghi nhận:** phản hồi đúng/sai làm lộ hoàn toàn đáp án của câu hai lựa chọn (câu gỡ bom A/B, dạng trước–sau) và thu hẹp đáp án của câu ba lựa chọn. Người chơi trước có thể chia sẻ nội dung câu và đáp án suy ra cho người chơi sau. Biện pháp giảm thiểu là phân bổ riêng (`LA-ALLOC-001`), đảo thứ tự đáp án (`LA-ALLOC-003`, chữ cái A/B/C không mang nghĩa giữa các lượt), trải đều và hạn chế số người thấy mỗi câu (`LA-ALLOC-008`, `LA-CONTENT-010/011`), không tái sử dụng âm thầm câu đã lộ (`LA-CONTENT-009`). Tài liệu, giao diện và báo cáo **không được** tuyên bố hệ thống chống tra cứu hoặc chia sẻ đáp án tuyệt đối.
 
 ### 5.9 Hai bảng xếp hạng
 
@@ -194,29 +235,29 @@ Trải nghiệm: trả lời nhanh, tích combo, tăng tốc và cạnh tranh th
 - `LA-LB-002` `[CHỐT]` Điểm và thứ hạng tạm thời cập nhật realtime sau mỗi sự kiện điểm hợp lệ đã được server commit (sửa Core `SCORE-004`, `LEARN-004`).
 - `LA-LB-003` `[CHỐT]` Chế độ trình chiếu song song hiển thị **Top 10** của từng game; có chế độ phóng lớn Top 10 của một game.
 - `LA-LB-004` `[CHỐT]` Có hiệu ứng tăng/giảm hạng, thông báo vượt hạng và số người đã hoàn thành.
-- `LA-LB-005` `[CHỐT]` Trên laptop người chơi: hiển thị thứ hạng hiện tại và khoảng cách điểm tới người ngay trên; người ngoài Top 10 thấy khoảng cách tới hạng 10. `[ĐỀ XUẤT]` Người đang hạng 1 thấy khoảng cách dẫn trước hạng 2.
+- `LA-LB-005` `[CHỐT]` Trên laptop người chơi: hiển thị thứ hạng hiện tại và khoảng cách điểm tới người ngay trên; người ngoài Top 10 thấy khoảng cách tới hạng 10. Người hạng 1 thấy khoảng cách dẫn trước hạng 2; nếu chưa có hạng 2 thì hiển thị "Đang dẫn đầu" không kèm khoảng cách; nếu đồng hạng 1 thì hiển thị "Đồng hạng 1".
 - `LA-LB-006` `[CHỐT]` Phân biệt trạng thái từng người: đang chơi, đã hoàn thành, hết giờ.
-- `LA-LB-007` `[CHỐT]` Bảng được gắn nhãn **Tạm thời** cho tới khi cuộc thi Finalized; chỉ sau khi mọi lượt hợp lệ đã kết thúc hoặc quá thời điểm kết thúc hợp lệ muộn nhất và server đã đối soát, bảng được gắn nhãn **Chính thức**. API trả trường `standing: "provisional" | "official"`.
+- `LA-LB-007` `[CHỐT]` Bảng được gắn nhãn **Tạm thời** cho tới khi cuộc thi Finalized; chỉ sau khi mọi lượt hợp lệ đã kết thúc hoặc quá thời điểm kết thúc hợp lệ muộn nhất và server đã đối soát, bảng được gắn nhãn **Chính thức**. API trả trường `standing: "provisional" | "official"`. Cuộc thi diễn tập không bao giờ có nhãn Chính thức (`LA-CONTENT-006`).
 - `LA-LB-008` `[CHỐT]` Phân định hòa:
   - Game 1: điểm → số câu chính đúng → số câu Khó đúng → thời gian hoàn thành.
   - Game 2: điểm → số câu đúng → số câu Khó đúng → thời gian hoàn thành.
   - Nếu vẫn bằng nhau: đồng hạng (xếp hạng kiểu 1, 2, 2, 4). Thứ tự hiển thị giữa những người đồng hạng ổn định nhưng không mang ý nghĩa xếp hạng.
-  
+
   Thay thế Core `SCORE-005`.
-- `LA-LB-009` `[ĐỀ XUẤT]` "Thời gian hoàn thành" = thời lượng từ lúc bắt đầu lượt tới lúc lượt kết thúc theo đồng hồ server (không phải giờ đồng hồ trong ngày, vì mọi người bắt đầu khác thời điểm). Lượt hết giờ có thời gian hoàn thành bằng thời lượng toàn trận.
+- `LA-LB-009` `[CHỐT]` "Thời gian hoàn thành" = thời lượng từ `started_at` tới lúc lượt kết thúc theo đồng hồ server. Lượt hết giờ có thời gian hoàn thành bằng thời lượng toàn trận.
 - `LA-LB-010` `[CHỐT]` Chỉ người đã bắt đầu lượt mới xuất hiện trong bảng của game đó.
-- `LA-LB-011` `[CHỐT]` Bảng công khai hiển thị họ tên đầy đủ, điểm, trạng thái; không hiển thị MSSV (giữ `PRV-001..004`).
-- `LA-LB-012` `[ĐỀ XUẤT]` Khi trùng họ tên, hiển thị hậu tố trung tính "(2)", "(3)" theo thứ tự ổn định; không suy ra từ MSSV.
+- `LA-LB-011` `[CHỐT]` Bảng xếp hạng tuân theo §5.15 (quyền riêng tư); không bao giờ hiển thị MSSV.
+- `LA-LB-012` `[CHỐT]` Khi trùng tên hiển thị, thêm hậu tố trung tính "(2)", "(3)" theo thứ tự ổn định (thứ tự nhập lớp); không suy ra từ MSSV.
 
 ### 5.10 Hạn chế tra cứu AI và gian lận
 
 - `LA-ANTI-001` `[CHỐT]` Câu hỏi ngắn, rõ, tối đa ba đáp án (câu gỡ bom đúng hai đáp án).
-- `LA-ANTI-002` `[CHỐT]` Áp dụng `LA-ALLOC-001..005` và `LA-TIME-003..008`.
+- `LA-ANTI-002` `[CHỐT]` Áp dụng `LA-ALLOC-001..006`, `LA-ALLOC-009` và `LA-TIME-003..016`.
 - `LA-ANTI-003` `[CHỐT]` Server xác nhận đáp án, điểm, vật phẩm, trạng thái bàn cờ và lượt thi. Client không gửi điểm, độ đúng, thời gian hay trạng thái vật phẩm; nếu có, server bỏ qua.
 - `LA-ANTI-004` `[CHỐT]` Server từ chối thao tác gửi trùng (trả kết quả cũ), gửi muộn (hết giờ, 0 điểm) và từ phiên không hợp lệ.
 - `LA-ANTI-005` `[CHỐT]` Không tự động kết luận gian lận chỉ vì sinh viên chuyển tab. V1 không ghi nhận sự kiện chuyển tab.
-- `LA-ANTI-006` `[CHỐT]` Giới hạn thời gian không ngăn tuyệt đối việc dùng AI hoặc thiết bị khác; hiệu quả phải được đo (§11, P5).
-- `LA-ANTI-007` `[CHỐT]` Đáp án, ngân hàng đề và MSSV đầy đủ không xuất hiện trong API công khai, client bundle, sự kiện realtime hay bảng xếp hạng.
+- `LA-ANTI-006` `[CHỐT]` Giới hạn thời gian và các biện pháp trên chỉ **hạn chế**, không ngăn tuyệt đối việc dùng AI, thiết bị khác hoặc chia sẻ đáp án (xem `LA-FB-007`); hiệu quả phải được đo (§11, P5).
+- `LA-ANTI-007` `[CHỐT]` Đáp án, ngân hàng đề và MSSV không xuất hiện trong API công khai, client bundle, sự kiện realtime hay bảng xếp hạng.
 
 ### 5.11 An toàn khi gửi trùng và kết nối lại
 
@@ -229,20 +270,35 @@ Trải nghiệm: trả lời nhanh, tích combo, tăng tốc và cạnh tranh th
 
 - `LA-ADMIN-001` `[CHỐT]` Quản trị viên có thể xử lý sự cố đặc biệt bằng thao tác có ghi audit (người làm, thời điểm, lý do, trước/sau). Hệ thống **không bao giờ tự động** tạo lượt mới.
 - `LA-ADMIN-002` `[CHỐT]` Quản trị viên không được sửa trực tiếp điểm, thứ hạng hoặc thời gian của lượt.
-- `LA-ADMIN-003` `[ĐỀ XUẤT]` Bộ thao tác sự cố V1: (a) thu hồi phiên chơi / khóa tạm tài khoản; (b) ghi chú sự cố vào lượt; (c) vô hiệu lượt (lượt bị loại khỏi bảng chính thức nhưng được lưu lại).
-- `LA-ADMIN-004` `[MỞ]` Có cho phép quản trị viên cấp thủ công một lượt thay thế khi sự cố đã được xác minh (ví dụ server ngừng hoạt động) hay không. Mặc định V1: không.
+- `LA-ADMIN-003` `[CHỐT]` Bộ thao tác sự cố V1: (a) thu hồi phiên chơi / khóa tạm tài khoản; (b) ghi chú sự cố vào lượt; (c) vô hiệu lượt (lượt bị loại khỏi bảng chính thức nhưng được lưu lại).
+- `LA-ADMIN-004` `[CHỐT]` V1 **không** có thao tác cấp lượt thay thế, kể cả khi sự cố đã được xác minh.
 
 ### 5.13 Ngân hàng câu hỏi
 
-- `LA-CONTENT-001` `[CHỐT]` Mục tiêu 87 câu Published: Game 1 gồm 9 Dễ, 12 Trung bình, 9 Khó và 12 câu gỡ bom; Game 2 gồm 15 Dễ, 21 Trung bình, 9 Khó.
+- `LA-CONTENT-001` `[CHỐT]` Mục tiêu ban đầu cho phát triển là 87 câu Published: Game 1 gồm 9 Dễ, 12 Trung bình, 9 Khó và 12 câu gỡ bom; Game 2 gồm 15 Dễ, 21 Trung bình, 9 Khó. Con số này **không** bảo đảm chống chia sẻ đáp án cho lớp khoảng 60 người: với 87 câu, mỗi câu được khoảng 20 người thấy trong cùng một cuộc thi (§5.13.1).
 - `LA-CONTENT-002` `[CHỐT]` Mỗi câu có: game, chương, chủ đề, dạng, độ khó, đề, 2–3 đáp án, đáp án đúng, giải thích, nguồn, người duyệt và trạng thái (giữ `CONTENT-001..006`; danh sách dạng câu của Core `CONTENT-003` được thay bằng `single_choice`, `before_after`, `pair_choice`, `defuse_ab`).
-- `LA-CONTENT-003` `[CHỐT]` Chỉ câu Published do người duyệt học thuật đánh dấu mới được dùng trong cuộc thi thật. AI có thể soạn nháp nhưng không được đánh dấu Reviewed/Published.
+- `LA-CONTENT-003` `[CHỐT]` Chỉ câu Published do người duyệt học thuật đánh dấu mới được dùng trong cuộc thi thật. AI có thể soạn nháp nhưng **không được** đánh dấu Reviewed/Published.
 - `LA-CONTENT-004` `[CHỐT]` Chưa có người duyệt học thuật chính thức, nên không câu nào được đánh dấu Published ở thời điểm này.
-- `LA-CONTENT-005` `[CHỐT]` Dữ liệu giả lập dùng cho phát triển và kiểm thử nằm trong không gian riêng (`origin = fixture`), có nội dung đánh dấu rõ là giả lập, không bao giờ được seed vào môi trường production và không được dùng trong cuộc thi thật. Kiểm tra sẵn sàng của cuộc thi thật từ chối mọi câu `fixture`.
-- `LA-CONTENT-006` `[ĐỀ XUẤT]` Cuộc thi có thuộc tính `kind: official | rehearsal`. Cuộc thi diễn tập được dùng câu `fixture`, bảng xếp hạng gắn nhãn "Diễn tập" và không xuất hiện trong lịch sử kết quả chính thức.
-- `LA-CONTENT-007` `[CHỐT]` Cuộc thi chỉ mở được khi mỗi ô blueprint có ít nhất số câu bằng nhu cầu của một lượt (giữ `AC-CONTENT-001`); mức mục tiêu gấp 3 lần là `LA-CONTENT-001`.
-- `LA-CONTENT-008` `[ĐỀ XUẤT]` Giới hạn độ dài: đề ≤ 120 ký tự, mỗi đáp án ≤ 60 ký tự `[THỬ NGHIỆM]` (đo khả năng đọc trong 5 s, §11, P8).
-- `LA-CONTENT-009` `[MỞ]` Chính sách tái sử dụng câu hỏi đã được công bố đáp án sau một cuộc thi Finalized (`LA-FB-004`). Đề xuất mặc định: theo dõi số lần xuất hiện và cảnh báo trong kiểm tra sẵn sàng.
+- `LA-CONTENT-005` `[CHỐT]` Dữ liệu giả lập dùng cho phát triển và kiểm thử nằm trong không gian riêng (`origin = fixture`), có nội dung đánh dấu rõ là giả lập, không bao giờ được seed vào môi trường production và không được dùng trong cuộc thi `official`. Kiểm tra sẵn sàng của cuộc thi `official` từ chối mọi câu `fixture`.
+- `LA-CONTENT-006` `[CHỐT]` Cuộc thi có thuộc tính `kind: official | rehearsal`. Cuộc thi diễn tập được dùng câu `fixture`, có bảng xếp hạng riêng gắn nhãn "Diễn tập", không bao giờ có nhãn Chính thức, không xuất hiện trong lịch sử kết quả chính thức hay Student Passport, và không đánh dấu câu ngân hàng là đã lộ trừ khi câu đó thực sự được dùng.
+- `LA-CONTENT-007` `[CHỐT]` Cuộc thi chỉ mở được khi mỗi ô blueprint có ít nhất số câu bằng nhu cầu của một lượt (giữ `AC-CONTENT-001`).
+- `LA-CONTENT-008` `[THỬ NGHIỆM]` Giới hạn độ dài thử nghiệm: đề ≤ 80 ký tự, mỗi đáp án ≤ 40 ký tự. Đo khả năng đọc trong 5–10 s trước khi khóa (§11, P8).
+- `LA-CONTENT-009` `[CHỐT]` Khi một cuộc thi Finalized, mọi phiên bản câu đã được phân bổ trong cuộc thi đó được đánh dấu **đã lộ đáp án** (kèm cuộc thi gây lộ). Kiểm tra sẵn sàng của cuộc thi `official` liệt kê các câu đã lộ trong ngân hàng khả dụng; mặc định loại chúng khỏi phân bổ. Muốn dùng lại, quản trị viên phải xác nhận rõ ràng cho từng cuộc thi (danh sách câu và lý do), có audit. Không có đường tái sử dụng âm thầm.
+- `LA-CONTENT-010` `[CHỐT]` Hệ thống theo dõi số lần xuất hiện của mỗi phiên bản câu theo từng cuộc thi và lũy kế; báo cáo sẵn sàng hiển thị số người dự kiến thấy mỗi câu theo kích thước ngân hàng hiện có.
+- `LA-CONTENT-011` `[ĐỀ XUẤT]` Mục tiêu ngân hàng cho cuộc thi `official` được đặt theo số người tối đa thấy mỗi câu trong một cuộc thi (bảng §5.13.1). Đề xuất: không quá 10 người mỗi câu, tức khoảng 168 câu Published chưa lộ cho mỗi cuộc thi.
+- `LA-CONTENT-012` `[ĐỀ XUẤT]` Giới hạn tỷ lệ câu hai lựa chọn (`before_after`) trong ngân hàng Game 2 ở mức ≤ 1/3 mỗi ô blueprint, vì đáp án của chúng bị lộ hoàn toàn qua phản hồi đúng/sai (`LA-FB-007`).
+
+#### 5.13.1 Số người thấy mỗi câu trong một cuộc thi
+
+Với 60 người chơi và phân bổ đều, mỗi câu được thấy bởi khoảng `60 × nhu cầu mỗi lượt / số câu trong ô`. Tổng nhu cầu mỗi lượt là 28 câu (10 câu chính và 3 câu gỡ bom ở Game 1, 15 câu ở Game 2), nên tổng ngân hàng ≈ `60 × 28 / số người tối đa mỗi câu`.
+
+| Số người tối đa thấy mỗi câu | Game 1 (Dễ / TB / Khó / gỡ bom) | Game 2 (Dễ / TB / Khó) | Tổng |
+|---:|---|---|---:|
+| ~20 (mục tiêu phát triển) | 9 / 12 / 9 / 12 | 15 / 21 / 9 | 87 |
+| 10 | 18 / 24 / 18 / 18 | 30 / 42 / 18 | 168 |
+| 5 | 36 / 48 / 36 / 36 | 60 / 84 / 36 | 336 |
+
+Câu gỡ bom chỉ hiện khi người chơi mở trúng bom, nên số người thực sự thấy câu gỡ bom thấp hơn bảng. Cuộc thi sau dùng lại câu đã lộ làm tăng rủi ro theo `LA-CONTENT-009`.
 
 ### 5.14 Giao diện và hiệu ứng
 
@@ -250,27 +306,35 @@ Trải nghiệm: trả lời nhanh, tích combo, tăng tốc và cạnh tranh th
 - `LA-UX-002` `[CHỐT]` Máy chiếu ưu tiên hai bảng Top 10 song song, chữ lớn, đổi hạng mượt, trạng thái trận và sự kiện nổi bật; đọc rõ ở 1920 × 1080.
 - `LA-UX-003` `[CHỐT]` Có tùy chọn tắt âm thanh (mặc định tắt) và giảm chuyển động.
 - `LA-UX-004` `[CHỐT]` Responsive; hỗ trợ bàn phím (phím mũi tên và Enter trên bàn cờ, phím 1/2/3 hoặc A/B/C để trả lời), màn hình laptop thông dụng và máy chiếu Full HD.
-- `LA-UX-005` `[CHỐT]` Màn giới thiệu luật của mỗi game đọc được trong khoảng 10 giây (tối đa ba ý, có biểu tượng).
-- `LA-UX-006` `[CHỐT]` Trạng thái kết nối: đã kết nối, chập chờn (realtime mất nhưng API còn), mất mạng, đang đồng bộ lại, phiên bị thu hồi. Không có trạng thái "grace pause".
+- `LA-UX-005` `[CHỐT]` Màn giới thiệu luật của mỗi game đọc được trong khoảng 10 giây (tối đa ba ý, có biểu tượng) và hiển thị **trước** khi bắt đầu lượt, không tính vào đồng hồ toàn trận.
+- `LA-UX-006` `[CHỐT]` Trạng thái kết nối: đã kết nối, chập chờn (realtime mất nhưng API còn), mất mạng, đang đồng bộ lại, phiên bị thu hồi. Không có trạng thái "grace pause"; khi mất mạng, giao diện báo rõ đồng hồ vẫn chạy.
+
+### 5.15 Quyền riêng tư của bảng xếp hạng và danh sách lớp
+
+- `LA-PRV-001` `[CHỐT]` MSSV không xuất hiện trong API công khai, màn trình chiếu, sự kiện realtime, client bundle hay URL công khai. Chỉ quản trị viên xem được MSSV và danh sách lớp đầy đủ; sinh viên chỉ xem thông tin của chính mình.
+- `LA-PRV-002` `[CHỐT]` Không có endpoint công khai nào liệt kê danh sách lớp. Bảng xếp hạng chỉ chứa người đã bắt đầu lượt của game đó (`LA-LB-010`); số liệu tổng hợp công khai chỉ gồm số người đang chơi và đã hoàn thành.
+- `LA-PRV-003` `[ĐỀ XUẤT]` Bảng xếp hạng công khai và màn trình chiếu dùng **tên hiển thị lớp học** thay cho họ tên đầy đủ: tên gọi kèm chữ cái đầu của họ và tên đệm (ví dụ "Nguyễn Văn An" → "An N.V."). Tên hiển thị được tạo khi nhập lớp và quản trị viên sửa được trong bản xem trước. Họ tên đầy đủ chỉ quản trị viên và chính sinh viên thấy. Nếu được duyệt, luật này sửa Core `PRV-001`, `UX-AC-009` và ranh giới tương ứng trong `AGENTS.md`; cho tới khi duyệt, `PRV-001` (họ tên đầy đủ) vẫn có hiệu lực.
+- `LA-PRV-004` `[ĐỀ XUẤT]` Khách không đăng nhập chỉ nhận Top 10 của mỗi game và số liệu tổng hợp; sinh viên đã đăng nhập nhận thêm hàng của chính mình và khoảng cách điểm; danh sách đầy đủ chỉ dành cho quản trị viên. Mục đích: bảng công khai không trở thành bản sao danh sách người tham gia.
+- `LA-PRV-005` `[CHỐT]` Tên hiển thị được chụp lại khi lượt bắt đầu (`display_name_snapshot`) để bảng lịch sử không đổi khi hồ sơ được sửa.
 
 ## 6. Mô hình trạng thái
 
 ### 6.1 Cuộc thi
 
-Giữ nguyên Core §5.1: `Draft -> Scheduled -> Open -> StartClosed -> Settling -> Finalized -> Archived`.
+Giữ nguyên Core §5.1: `Draft -> Scheduled -> Open -> StartClosed -> Settling -> Finalized -> Archived`. Thuộc tính `kind` (`official | rehearsal`) cố định từ khi tạo.
 
 ### 6.2 Lượt thi
 
-`NotStarted -> Active -> Completed | TimedOut`
+`NotStarted -> Active -> Completed | TimedOut`, và `Active | Completed | TimedOut -> Voided` chỉ do quản trị viên (`LA-ADMIN-003`), có audit.
 
 - Không còn `GracePaused` và `DisconnectedRunning` (thay Core §5.2).
-- `[ĐỀ XUẤT]` Trạng thái bổ sung `Voided` chỉ do quản trị viên đặt (`LA-ADMIN-003`), có audit; lượt `Voided` không xuất hiện trong bảng chính thức.
+- Lượt `Voided` không xuất hiện trong bảng chính thức nhưng được lưu lại.
 
 ### 6.3 Tương tác trong lượt
 
-- Game 1: `Board -> QuestionOpen -> Board` và `Board -> DefuseOpen -> Board`. Mở rương, khiên, x2 trả ngay về `Board`. Khi đang `QuestionOpen` hoặc `DefuseOpen`, không mở được ô khác.
-- Game 2: `QuestionOpen(i) -> QuestionOpen(i+1)` cho tới câu 15.
-- Mọi trạng thái kết thúc khi đồng hồ toàn trận hết (`LA-TIME-009`).
+- Game 1: `Board -> QuestionPending -> QuestionReleased -> Board` và `Board -> DefusePending -> DefuseReleased -> Board`. `*Pending` là khoảng `presented_at … available_at`, khi nội dung chưa được phát hành. Mở rương, khiên, x2 trả ngay về `Board`. Khi đang có câu chưa xử lý, không mở được ô khác.
+- Game 2: `QuestionPending(i) -> QuestionReleased(i) -> QuestionPending(i+1)` cho tới câu 15.
+- Mọi trạng thái kết thúc khi đồng hồ toàn trận hết (`LA-TIME-009`, `LA-TIME-016`).
 
 ## 7. Công thức điểm
 
@@ -296,85 +360,121 @@ Với mỗi sự kiện theo thứ tự commit:
 
 ## 8. Tiêu chí chấp nhận (EARS)
 
-Bảng dưới ánh xạ 12 yêu cầu kiểm thử bắt buộc của đặc tả gốc (cột "Gốc") và bổ sung.
+Cột "Gốc" ánh xạ 12 yêu cầu kiểm thử bắt buộc của đặc tả gốc.
 
 | Mã | Gốc | Tiêu chí |
 |---|---|---|
 | `LA-AC-001` | 1 | WHEN cùng một MSSV gửi đồng thời nhiều yêu cầu bắt đầu cùng một game trong một cuộc thi, THE SYSTEM SHALL tạo đúng một lượt và trả lượt đó cho mọi yêu cầu. |
 | `LA-AC-002` | 2 | WHEN sinh viên hoàn thành lượt Game 1, THE SYSTEM SHALL cho phép bắt đầu lượt Game 2 riêng và hai lượt không chia sẻ điểm, câu hỏi hay trạng thái. |
 | `LA-AC-003` | 2 | IF sinh viên đang có lượt chưa kết thúc ở một game, THEN THE SYSTEM SHALL từ chối bắt đầu game còn lại với `another_attempt_active`. |
-| `LA-AC-004` | 3 | WHEN sinh viên F5, mất mạng rồi kết nối lại, hoặc đăng nhập trên thiết bị khác, THE SYSTEM SHALL tiếp tục cùng lượt với cùng câu đang mở và cùng `deadline_at`. |
+| `LA-AC-004` | 3 | WHEN sinh viên F5, mất mạng rồi kết nối lại, hoặc đăng nhập trên thiết bị khác, THE SYSTEM SHALL tiếp tục cùng lượt với cùng câu đang mở và cùng `available_at`, `deadline_at`. |
 | `LA-AC-005` | 3 | WHEN sinh viên chuyển thiết bị, THE SYSTEM SHALL từ chối mọi thao tác từ phiên cũ ngay cả khi phiên cũ chưa nhận sự kiện thu hồi. |
 | `LA-AC-006` | 4 | WHEN một lượt Game 1 bắt đầu, THE SYSTEM SHALL tạo bàn cờ đúng 20 ô với 10 câu (3/4/3 theo độ khó), 3 bom, 1 x2, 2 khiên, 4 rương. |
 | `LA-AC-007` | 5 | WHEN người chơi mở ô đầu tiên ở bất kỳ vị trí nào, THE SYSTEM SHALL không trả về bom. |
 | `LA-AC-008` | 6 | WHEN các sự kiện x2, khiên, rương và gỡ bom xảy ra theo mọi thứ tự, THE SYSTEM SHALL tính điểm đúng §7.1, kể cả điểm sàn 0, x2 bị tiêu hao khi sai, khiên tối đa 2, x2 không bị câu gỡ bom tiêu hao. |
-| `LA-AC-009` | 7 | IF câu trả lời đến server sau `min(deadline_at, attempt_ends_at) + latency_allowance`, THEN THE SYSTEM SHALL ghi hết giờ, không cộng điểm và áp dụng hệ quả hết giờ. |
+| `LA-AC-009` | 7 | IF câu trả lời đến server sau `effective_deadline + latency_allowance`, THEN THE SYSTEM SHALL ghi hết giờ, không cộng điểm và áp dụng hệ quả hết giờ. |
 | `LA-AC-010` | 8 | WHEN người chơi Game 2 trả lời, THE SYSTEM SHALL tính combo +30 ở mỗi bội số 3 của chuỗi, đặt lại chuỗi khi sai hoặc hết giờ, và dùng 3 câu Khó cuối làm nước rút. |
 | `LA-AC-011` | 9 | WHEN một sự kiện điểm được commit ở một game, THE SYSTEM SHALL cập nhật bảng của game đó cho người xem đang kết nối và SHALL NOT thay đổi bảng của game kia. |
 | `LA-AC-012` | 9 | WHEN chế độ trình chiếu mở, THE SYSTEM SHALL hiển thị Top 10 của cả hai game song song, kèm số người hoàn thành và trạng thái từng người. |
-| `LA-AC-013` | 10 | WHILE cuộc thi chưa Finalized, THE SYSTEM SHALL gắn nhãn bảng là "Tạm thời"; WHEN cuộc thi Finalized, THE SYSTEM SHALL gắn nhãn "Chính thức" và khóa thứ hạng. |
+| `LA-AC-013` | 10 | WHILE cuộc thi chưa Finalized, THE SYSTEM SHALL gắn nhãn bảng là "Tạm thời"; WHEN cuộc thi `official` Finalized, THE SYSTEM SHALL gắn nhãn "Chính thức" và khóa thứ hạng. |
 | `LA-AC-014` | 10 | WHILE cuộc thi chưa Finalized, THE SYSTEM SHALL NOT trả đáp án đúng hoặc giải thích trong bất kỳ response hoặc sự kiện nào; WHEN Finalized, THE SYSTEM SHALL cho sinh viên xem lại lượt của chính mình. |
-| `LA-AC-015` | 11 | WHEN bảng trình chiếu hiển thị ở 1920 × 1080, THE SYSTEM SHALL hiển thị đủ hai Top 10 không cuộn, chữ đọc được từ cuối phòng học (kiểm tra bằng ảnh chụp và duyệt thủ công). |
+| `LA-AC-015` | 11 | WHEN bảng trình chiếu hiển thị ở 1920 × 1080, THE SYSTEM SHALL hiển thị đủ hai Top 10 không cuộn, chữ đọc được từ cuối phòng học (ảnh chụp và duyệt thủ công). |
 | `LA-AC-016` | 12 | WHEN 60 người chơi và 200 người xem hoạt động đồng thời, THE SYSTEM SHALL hiển thị thứ hạng đã commit tới người xem trong 1 s ở p95 (giữ `NFR-RT-001..003`). |
 | `LA-AC-017` | — | WHEN cùng một yêu cầu mở ô, trả lời hoặc bắt đầu lượt được gửi lại với cùng `Idempotency-Key` hoặc gửi đồng thời, THE SYSTEM SHALL áp dụng hiệu ứng điểm đúng một lần. |
-| `LA-AC-018` | — | WHEN quản trị viên tải tệp `.xlsx` hoặc `.csv`, THE SYSTEM SHALL hiển thị bản xem trước với lỗi theo hàng và SHALL NOT tạo tài khoản trước khi được xác nhận. |
+| `LA-AC-018` | — | WHEN quản trị viên tải tệp `.xlsx` hoặc `.csv`, THE SYSTEM SHALL hiển thị bản xem trước với lỗi và cảnh báo theo hàng và SHALL NOT tạo tài khoản trước khi được xác nhận. |
 | `LA-AC-019` | — | WHEN sinh viên đăng nhập bằng MSSV và mật khẩu mặc định, THE SYSTEM SHALL cho vào Live Arena mà không yêu cầu đổi mật khẩu. |
 | `LA-AC-020` | — | WHEN response công khai, client bundle hoặc sự kiện realtime được kiểm tra tự động, THE SYSTEM SHALL không chứa MSSV, đáp án đúng, giải thích hay ngân hàng đề. |
-| `LA-AC-021` | — | IF cuộc thi thật được kiểm tra sẵn sàng mà phân bổ có thể dùng câu `fixture` hoặc câu chưa Published, THEN THE SYSTEM SHALL chặn mở cuộc thi. |
+| `LA-AC-021` | — | IF cuộc thi `official` được kiểm tra sẵn sàng mà phân bổ có thể dùng câu `fixture` hoặc câu chưa Published, THEN THE SYSTEM SHALL chặn mở cuộc thi. |
+| `LA-AC-022` | 3, 7 | IF client yêu cầu nội dung câu trước `available_at`, THEN THE SYSTEM SHALL không trả đề hay lựa chọn (giữ yêu cầu tới `available_at` hoặc trả `425 too_early`); và không response mở ô, trả lời, projection hay sự kiện nào chứa nội dung câu trước `available_at`. |
+| `LA-AC-023` | 3, 7 | WHEN client lấy nội dung câu sau `available_at` (muộn do mạng, F5 hoặc chuyển thiết bị), THE SYSTEM SHALL giữ nguyên `deadline_at`. |
+| `LA-AC-024` | 7 | WHEN `deadline_at` của câu đang mở vượt quá `attempt_ends_at`, THE SYSTEM SHALL chấp nhận câu trả lời nhận lúc `attempt_ends_at + latency_allowance` và ghi hết giờ với câu trả lời nhận sau mốc đó 1 ms. |
+| `LA-AC-025` | 7 | WHEN câu trả lời tới đúng `effective_deadline + latency_allowance`, THE SYSTEM SHALL chấp nhận; WHEN tới sau mốc đó 1 ms, THE SYSTEM SHALL ghi hết giờ; IF yêu cầu đầu đã tới server, THEN lần gửi lại cùng khóa nhận kết quả đã commit. |
+| `LA-AC-026` | 7, 12 | WHEN độ trễ mạng được mô phỏng ở 100, 300, 600 và 1 000 ms, THE SYSTEM SHALL chấm theo `received_at` của server, và báo cáo kiểm thử SHALL ghi thời gian nhìn thấy câu thực tế để chọn `latency_allowance` (P2). |
+| `LA-AC-027` | 6, 7 | WHEN đồng hồ toàn trận hết khi câu gỡ bom đang mở hoặc chưa được phát hành, THE SYSTEM SHALL áp dụng gỡ thất bại (khiên hoặc −100, sàn 0) trước khi kết thúc lượt. |
+| `LA-AC-028` | — | WHEN tệp nhập lớp có MSSV bắt đầu bằng số 0 (CSV hoặc ô văn bản XLSX), THE SYSTEM SHALL giữ nguyên chuỗi; WHEN ô MSSV trong XLSX có kiểu số, THE SYSTEM SHALL cảnh báo trong bản xem trước. |
+| `LA-AC-029` | — | IF câu đã lộ đáp án có trong ngân hàng khả dụng của cuộc thi `official`, THEN THE SYSTEM SHALL loại câu đó khỏi phân bổ trừ khi quản trị viên xác nhận rõ ràng, có audit. |
+| `LA-AC-030` | — | WHEN cuộc thi `rehearsal` kết thúc, THE SYSTEM SHALL NOT hiển thị kết quả của nó trong bảng chính thức, lịch sử kết quả chính thức hoặc Student Passport. |
+| `LA-AC-031` | 9 | WHEN người chơi ở hạng 1, THE SYSTEM SHALL hiển thị khoảng cách dẫn trước hạng 2, hoặc "Đang dẫn đầu" khi chưa có hạng 2, hoặc "Đồng hạng 1" khi bằng điểm theo mọi tiêu chí. |
+| `LA-AC-032` | — | WHEN các endpoint công khai được gọi không đăng nhập, THE SYSTEM SHALL NOT trả danh sách lớp, MSSV hay người chưa bắt đầu lượt. |
 
 ## 9. Trường hợp biên cần kiểm thử
 
 - Hai yêu cầu bắt đầu đồng thời cho cùng game; hai yêu cầu bắt đầu đồng thời cho hai game khác nhau.
-- Mở ô đầu tiên chứa bom; mở hai ô đồng thời; mở lại cùng một ô.
-- Trả lời đúng lúc `deadline_at`, trong `latency_allowance` và ngay sau đó.
-- Đồng hồ toàn trận hết khi câu chính hoặc câu gỡ bom đang mở.
+- Mở ô đầu tiên chứa bom; mở hai ô đồng thời; mở lại cùng một ô; mở ô khi đang có câu chưa xử lý.
+- Yêu cầu nội dung câu trước `available_at`, đúng `available_at`, sau `deadline_at`; yêu cầu nội dung từ phiên cũ sau khi chuyển thiết bị.
+- Trả lời đúng lúc `effective_deadline`, trong `latency_allowance`, đúng biên và ngay sau biên 1 ms.
+- `deadline_at` vượt `attempt_ends_at`; `available_at ≥ attempt_ends_at` (câu không được phát hành).
+- Đồng hồ toàn trận hết khi câu chính hoặc câu gỡ bom đang mở hoặc đang chờ phát hành.
+- Độ trễ mạng mô phỏng 100/300/600/1 000 ms cho cả yêu cầu lấy nội dung và gửi câu trả lời; yêu cầu đầu bị mất và gửi lại sau hạn.
 - x2 mở trước câu cuối cùng; x2 mở sau câu chính thứ 10 (bị mất); x2 còn hiệu lực khi gặp bom.
 - Bom khi điểm < 100; ba bom liên tiếp không khiên; hai khiên rồi ba lần gỡ thất bại.
 - Combo bị ngắt ở câu 3, 6, 15; hết giờ toàn trận giữa chuỗi.
 - Chuyển thiết bị khi yêu cầu trả lời đang bay; sự kiện thu hồi đến trễ.
 - Sự kiện realtime trùng, sai thứ tự, giả mạo version cao.
-- Hai người trùng họ tên; đồng hạng ở mọi tiêu chí.
-- Tệp nhập lớp: trùng MSSV trong tệp và với dữ liệu cũ, hàng trống, ô công thức, tệp sai định dạng, tệp vượt giới hạn, nhiều sheet.
-- Cuộc thi mở với ngân hàng thiếu một ô blueprint; cuộc thi thật có câu `fixture`.
+- Hai người trùng tên hiển thị; đồng hạng ở mọi tiêu chí; đồng hạng 1; chỉ có một người chơi.
+- Tệp nhập lớp: trùng MSSV trong tệp và với dữ liệu cũ, MSSV có số 0 đầu, ô MSSV kiểu số, hàng trống, ô công thức, tệp sai định dạng, tệp vượt giới hạn, nhiều sheet.
+- Cuộc thi mở với ngân hàng thiếu một ô blueprint; cuộc thi `official` có câu `fixture`; cuộc thi `official` có câu đã lộ đáp án chưa được xác nhận.
 
 ## 10. Yêu cầu phi chức năng
 
 Giữ `NFR-RT-001..005` (60 người chơi, 200 người xem, 1 s, không phân kỳ khi mất sự kiện, server có thẩm quyền). Bổ sung:
 
 - `LA-NFR-001` `[CHỐT]` Hiệu ứng phản hồi không làm trễ việc hiển thị câu tiếp theo quá `LA-FB-002`.
-- `LA-NFR-002` `[CHỐT]` Thời gian server xử lý một thao tác mở ô hoặc trả lời được đo và báo cáo ở p50/p95 trong kiểm thử tải.
+- `LA-NFR-002` `[CHỐT]` Thời gian server xử lý một thao tác mở ô, lấy nội dung hoặc trả lời được đo và báo cáo ở p50/p95 trong kiểm thử tải.
 
 ## 11. Thông số chờ thử nghiệm và tiêu chí đo
 
 | Mã | Thông số | Giá trị hiện tại | Cách đo | Tiêu chí đề xuất (chờ duyệt) |
 |---|---|---|---|---|
-| P1 | Thời lượng toàn trận | 3:00 / 2:30 | Diễn tập: tỷ lệ người kịp xử lý hết câu; phân bố thời gian dư | ≥ 90 % người chơi tích cực xử lý hết câu trước khi hết giờ |
-| P2 | `latency_allowance` | 300–500 ms | Đo RTT của thao tác mở ô/trả lời trên Wi-Fi lớp học (p50/p95/p99), thời gian xử lý server | Chọn giá trị ≥ p95 RTT trong khoảng 300–500 ms; nếu p95 > 500 ms thì báo lại để quyết định |
-| P3 | Thời gian phản hồi | 800–1 000 ms | Đo cảm nhận và tổng thời gian chiếm dụng | Không người chơi nào mất thời gian câu vì phản hồi (đã đảm bảo bởi `LA-TIME-010`) |
-| P4 | Offset lật ô Game 1 | ≤ 600 ms | Đo thời gian hiệu ứng thực tế | Hiệu ứng kết thúc trước `available_at` |
-| P5 | Hiệu quả chống tra AI | — | Diễn tập có tình nguyện viên được phép dùng AI; so sánh tỷ lệ đúng và thời gian trả lời | Chủ dự án quyết định ngưỡng chấp nhận sau khi có số liệu |
-| P6 | Ảnh hưởng may rủi Game 1 | Mô phỏng nền: `docs/sdd/evidence/live-arena/balance-baseline.md` | Mô phỏng Monte Carlo + so sánh với dữ liệu diễn tập | Spearman ≥ 0,95; trùng Top 10 ≥ 80 %; xác suất người kém hơn một câu Trung bình vượt lên ≤ 10 % |
+| P1 | Thời lượng toàn trận | 3:00 / 2:30 | Ngân sách thời gian tất định (`docs/sdd/evidence/live-arena/time-budget.md`) + diễn tập: tỷ lệ người kịp xử lý hết câu | ≥ 90 % người chơi tích cực xử lý hết câu trước khi hết giờ |
+| P2 | `latency_allowance` | 300–500 ms | Đo RTT của mở ô, lấy nội dung và trả lời trên Wi-Fi lớp học (p50/p95/p99), thời gian xử lý server, thời gian nhìn thấy câu thực tế | Chọn giá trị ≥ p95 độ trễ gửi câu trả lời trong khoảng 300–500 ms; nếu vượt 500 ms thì báo lại |
+| P3 | Thời gian phản hồi | 800–1 000 ms | Đo cảm nhận và tổng thời gian chiếm dụng | Phản hồi không lấy thời gian đọc câu (bảo đảm bởi `LA-TIME-010`) |
+| P4 | Offset lật ô Game 1, câu đầu Game 2 | ≤ 600 ms, ≤ 1 000 ms | Đo thời gian hiệu ứng thực tế | Hiệu ứng kết thúc trước `available_at` |
+| P5 | Hiệu quả hạn chế tra AI và chia sẻ | — | Diễn tập có tình nguyện viên được phép dùng AI; so sánh tỷ lệ đúng và thời gian trả lời; theo dõi tỷ lệ đúng tăng dần theo thời điểm bắt đầu trong cùng cuộc thi (dấu hiệu chia sẻ) | Chủ dự án quyết định ngưỡng sau khi có số liệu |
+| P6 | Ảnh hưởng may rủi Game 1 | Baseline không áp lực thời gian (`balance-baseline.md`) | Mô phỏng có thời gian + dữ liệu diễn tập | Spearman ≥ 0,95; trùng Top 10 ≥ 80 %; xác suất người kém hơn một câu Trung bình vượt lên ≤ 10 % — đo lại khi có áp lực thời gian |
 | P7 | Tải | 60 người chơi + 200 người xem | Kịch bản tải | p95 hiển thị thứ hạng ≤ 1 s |
-| P8 | Độ dài câu hỏi | 120 / 60 ký tự | Diễn tập: tỷ lệ hết giờ ở câu Dễ | Tỷ lệ hết giờ câu Dễ ≤ 10 % |
+| P8 | Độ dài câu hỏi | 80 / 40 ký tự | Diễn tập: tỷ lệ hết giờ và thời gian trả lời theo độ khó | Tỷ lệ hết giờ câu Dễ ≤ 10 % |
+| P9 | Số người thấy mỗi câu | ~20 với 87 câu | Báo cáo sẵn sàng (`LA-CONTENT-010`) | Theo mục tiêu duyệt ở `LA-CONTENT-011` |
+| P10 | Rate limit đăng nhập | `LA-ACC-008` | Thử đăng nhập đồng thời của cả lớp sau một NAT | Không sinh viên hợp lệ nào bị chặn |
 
-## 12. Điểm còn mở
+## 12. Quyết định, điểm còn mở và bảng nhãn
+
+### 12.1 Quyết định O1–O14 (2026-10-29)
+
+| Mã | Quyết định | Luật |
+|---|---|---|
+| O1 | Thời hạn hiệu lực = mốc sớm hơn; gỡ bom dở dang khi hết trận = thất bại | `LA-TIME-009`, `LA-TIME-016` |
+| O2 | Hiệu ứng không tính vào thời gian đọc; nội dung chỉ phát hành từ `available_at` do server kiểm soát | `LA-TIME-010`, `LA-TIME-013..017`, §5.4.1 |
+| O3 | Thời gian phân định hòa = thời lượng lượt theo đồng hồ server | `LA-LB-009` |
+| O4 | Hạng 1 thấy khoảng cách dẫn trước hạng 2; trạng thái phù hợp khi chưa có hạng 2 | `LA-LB-005` |
+| O5 | Hậu tố tên trùng ổn định, không dùng MSSV | `LA-LB-012` |
+| O6 | Bộ thao tác sự cố có audit; không có lượt thay thế trong V1 | `LA-ADMIN-003`, `LA-ADMIN-004` |
+| O7 | Có cuộc thi diễn tập, tách biệt hoàn toàn | `LA-CONTENT-006` |
+| O8 | Theo dõi xuất hiện; câu đã lộ cần xác nhận rõ ràng | `LA-CONTENT-009`, `LA-CONTENT-010`, `LA-ALLOC-009` |
+| O9 | Rate limit ban đầu, đo lại với NAT; nhật ký đăng nhập; chính sách nhập lại | `LA-ACC-008..010` |
+| O10 | Đổi ô đầu nếu trúng bom; chặn mở ô khi tương tác trước chưa xong | `MINE-BOARD-003`, `MINE-BOARD-008` |
+| O11 | Giới hạn thử nghiệm 80/40 ký tự, đo trong 5–10 s | `LA-CONTENT-008` |
+| O12 | Chọn thư viện `.xlsx` ở Giai đoạn B sau đánh giá bảo mật | §12.2 |
+| O13 | Bắt buộc xác minh Supabase Auth trên môi trường thực tế | `LA-ACC-016` |
+| O14 | Giữ nguyên cơ cấu và luật điểm Game 1; không áp dụng B1/B2 | `MINE-END-004` |
+
+### 12.2 Điểm còn mở
 
 | Mã | Nội dung | Mặc định đề xuất | Chặn task |
 |---|---|---|---|
-| O1 | `LA-TIME-009`: thời hạn hiệu lực = min với đồng hồ toàn trận; câu gỡ bom dở dang khi hết giờ tính là thất bại | Như đề xuất | T042, T044 |
-| O2 | `LA-TIME-010`: `available_at` có offset; gửi câu kèm phản hồi hay gọi riêng | Gửi kèm, client chờ `available_at` | T042, T045, T051, T052 |
-| O3 | `LA-LB-009`: định nghĩa thời gian hoàn thành | Thời lượng theo đồng hồ server | T046 |
-| O4 | `LA-LB-005`: hiển thị cho người hạng 1 | Khoảng cách dẫn trước hạng 2 | T050 |
-| O5 | `LA-LB-012`: hiển thị trùng họ tên | Hậu tố "(2)" | T046, T053 |
-| O6 | `LA-ADMIN-003/004`: bộ thao tác sự cố; lượt thay thế thủ công | (a)(b)(c), không có lượt thay thế | T056 |
-| O7 | `LA-CONTENT-006`: cuộc thi diễn tập | Có `kind: rehearsal` | T040, T048 |
-| O8 | `LA-CONTENT-009`: tái sử dụng câu đã công bố đáp án | Theo dõi và cảnh báo | T055 |
-| O9 | `LA-ACC-008/009/010`: rate limit lớp NAT, nhật ký đăng nhập, chính sách nhập lại | Như đề xuất | T031, T032 |
-| O10 | `MINE-BOARD-003` cơ chế đổi ô, `MINE-BOARD-008` chặn mở ô khi đang có câu | Như đề xuất | T044 |
-| O11 | `LA-CONTENT-008`: giới hạn độ dài câu | 120 / 60 ký tự | T048 |
-| O12 | Thư viện đọc `.xlsx` (ADR-004) | Chọn ở Giai đoạn B sau kiểm tra bảo mật | T032 |
-| O13 | Xác minh Supabase Auth thực tế từ chối mật khẩu < 6 ký tự | Giả định là có; dùng `LA-ACC-005` | T031 |
-| O14 | Phương án cân bằng may rủi nếu P6 không đạt | Giữ nguyên; các phương án ở tài liệu mô phỏng | — |
+| N1 | `LA-PRV-003`: tên hiển thị lớp học thay họ tên đầy đủ trên bảng công khai | "An N.V.", sửa được khi nhập lớp | T032, T046, T053, T054 |
+| N2 | `LA-PRV-004`: phạm vi bảng công khai cho khách | Top 10 + số liệu tổng hợp | T046, T053 |
+| N3 | `LA-CONTENT-011`: mục tiêu ngân hàng cho cuộc thi `official` | ≤ 10 người/câu (~168 câu) | T040, T048 |
+| N4 | `LA-CONTENT-012`: giới hạn câu hai lựa chọn | ≤ 1/3 mỗi ô Game 2 | T048 |
+| N5 | `LA-TIME-017`: long-poll hay luôn `425` | Long-poll, ≤ 1 000 ms | T042 |
+| N6 | `LA-ACC-013`, `LA-ACC-014`: mẫu MSSV và số hàng tối đa | Xác định sau khi xem tệp thật | T032 |
+| N7 | `LA-ACC-015`: dẫn xuất email nội bộ | Hex của MSSV chuẩn hóa | T031 |
+| N8 | `LA-ALLOC-007`, `LA-ALLOC-008`: trải chương và trọng số xuất hiện | Như đề xuất | T041 |
+| N9 | O12: thư viện đọc `.xlsx` | Quyết định ở Giai đoạn B | T032 |
+
+### 12.3 Bảng nhãn sau bản sửa 1
+
+Bảng do `tools/sdd/check-live-arena-docs.mjs` sinh và kiểm tra; xem kết quả trong `docs/sdd/evidence/live-arena/consistency-check.md`.
 
 ## 13. Truy vết
 

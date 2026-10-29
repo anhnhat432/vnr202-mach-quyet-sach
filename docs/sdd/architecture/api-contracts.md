@@ -1,6 +1,6 @@
 # API Contracts v1
 
-Trạng thái: Approved for planning; sửa đổi v1.1 cho Live Arena V1.0 (2026-10-29) chờ duyệt văn bản  
+Trạng thái: Approved for planning; sửa đổi v1.1 cho Live Arena V1.0 (2026-10-29, bản sửa 1) chờ duyệt văn bản  
 Base path: `/api/v1`  
 Format: JSON UTF-8, camelCase ở API, snake_case trong PostgreSQL
 
@@ -96,12 +96,16 @@ Idempotent upsert; không thay score hoặc attempt.
 
 ### `GET /competitions/current`
 
-Public response: competition `publicId`, `kind` (`official | rehearsal`, `[ĐỀ XUẤT]`), state, opensAt, startDeadlineAt, `standing` (`provisional | official`), hai game summary (`minefield`, `race`: totalDurationMs, số người đang chơi/đã hoàn thành) và URL bảng xếp hạng. Không trả internal UUID hoặc ngân hàng câu hỏi.
+Public response: competition `publicId`, `kind` (`official | rehearsal`, `LA-CONTENT-006`), state, opensAt, startDeadlineAt, `standing` (`provisional | official`), hai game summary (`minefield`, `race`: totalDurationMs, số người đang chơi/đã hoàn thành) và URL bảng xếp hạng. Không trả internal UUID hoặc ngân hàng câu hỏi.
 
 ### `GET /competitions/{publicId}/games/{game}/leaderboard`
 
-`game`: `minefield | race`. Query `limit` 1-100, default 10 cho trình chiếu, tối đa 100.  
-Response gồm `version`, `serverTime`, `competitionState`, `standing` (`provisional | official`), `completedCount`, `playingCount`, entries: `publicEntryId`, `displayName` (họ tên đầy đủ + hậu tố trùng tên nếu có), `rank`, `score`, `attemptState` (`playing | completed | timed_out`), `rankTrend`.
+`game`: `minefield | race`. Query `limit`: mặc định 10.  
+Response gồm `version`, `serverTime`, `competitionKind`, `competitionState`, `standing` (`provisional | official`; cuộc thi `rehearsal` luôn `provisional` hoặc nhãn "Diễn tập"), `completedCount`, `playingCount`, entries: `publicEntryId`, `displayName`, `rank`, `score`, `attemptState` (`playing | completed | timed_out`), `rankTrend`.
+
+- `displayName`: họ tên đầy đủ kèm hậu tố trùng tên theo Core `PRV-001`; nếu `LA-PRV-003` được duyệt thì là tên hiển thị lớp học. Không bao giờ có MSSV (`LA-PRV-001`).
+- Chỉ chứa người đã bắt đầu lượt của game đó; không endpoint công khai nào trả danh sách lớp (`LA-PRV-002`).
+- `[ĐỀ XUẤT LA-PRV-004]` Khách không đăng nhập: `limit` tối đa 10. Sinh viên đã đăng nhập: Top 10 kèm `me` (hàng của chính mình và khoảng cách). Danh sách đầy đủ chỉ qua route admin. Khi đề xuất chưa duyệt, `limit` tối đa 100 như v1.0.
 
 Không trả student ID, auth user ID, câu trả lời, số câu đúng chi tiết theo câu hoặc trạng thái phiên.
 
@@ -137,8 +141,11 @@ Mọi endpoint gameplay yêu cầu sinh viên đã đăng nhập. Response khôn
     "difficulty": "medium",
     "availableInMs": 0,
     "remainingMs": 5400,
-    "prompt": "string",
-    "options": [{ "id": "a1", "label": "string" }, { "id": "b2", "label": "string" }, { "id": "c3", "label": "string" }]
+    "released": true,
+    "content": {
+      "prompt": "string",
+      "options": [{ "id": "a1", "label": "string" }, { "id": "b2", "label": "string" }, { "id": "c3", "label": "string" }]
+    }
   },
   "standing": { "rank": 7, "label": "provisional", "gapToAbove": 60, "gapToTop10": null }
 }
@@ -146,6 +153,7 @@ Mọi endpoint gameplay yêu cầu sinh viên đã đăng nhập. Response khôn
 
 - `board` chỉ có ở `minefield`; `streak` chỉ có ở `race`.
 - `currentInteraction` là `null` khi không có câu đang mở. `remainingMs` của câu là `min(deadline_at, ends_at) − serverTime`; client chỉ dùng để hiển thị (`LA-TIME-007`).
+- **Phát hành nội dung (`LA-TIME-013`):** khi `serverTime < available_at`, `released = false`, `content` vắng mặt và chỉ có `availableInMs`; `remainingMs` khi đó bằng thời hạn đầy đủ tính từ `available_at`. Projection (kể cả sau F5 hoặc chuyển thiết bị) không bao giờ chứa nội dung câu trước `available_at`.
 - `options` theo thứ tự đã đảo cho lượt (`LA-ALLOC-003`), id đáp án không tiết lộ đáp án đúng.
 
 ### `POST /competitions/{publicId}/games/{game}/attempts`
@@ -179,7 +187,7 @@ Headers `Idempotency-Key`. Body `{ "sessionVersion": 3 }`. `cellIndex` 0–19.
     "event": { "type": "defuse_required", "pointsDelta": 0 },
     "score": 740,
     "items": { "shields": 1, "doubleArmed": false },
-    "currentInteraction": { "allocationId": "uuid", "role": "defuse", "availableInMs": 600, "remainingMs": 5600, "prompt": "string", "options": [{ "id": "a1", "label": "A" }, { "id": "b2", "label": "B" }] },
+    "currentInteraction": { "allocationId": "uuid", "role": "defuse", "availableInMs": 600, "released": false },
     "standing": { "rank": 7, "label": "provisional", "gapToAbove": 60, "gapToTop10": null },
     "leaderboardVersion": 41,
     "attemptVersion": 10,
@@ -189,7 +197,20 @@ Headers `Idempotency-Key`. Body `{ "sessionVersion": 3 }`. `cellIndex` 0–19.
 ```
 
 Mở lại ô đã mở hoặc gửi lại cùng `Idempotency-Key` trả kết quả đã có `200`, không thay đổi điểm (`MINE-BOARD-007`).  
-Errors: `409 interaction_pending` `[ĐỀ XUẤT MINE-BOARD-008]`, `409 stale_session`, `409 stale_attempt`, `410 attempt_terminal`, `422 invalid_cell`.
+Response mở ô **không** chứa nội dung câu; client lấy nội dung bằng endpoint dưới đây (`LA-TIME-013`, `LA-TIME-014`).  
+Errors: `409 interaction_pending` (`MINE-BOARD-008`), `409 stale_session`, `409 stale_attempt`, `410 attempt_terminal`, `422 invalid_cell`.
+
+### `GET /attempts/{attemptId}/interactions/{allocationId}/content`
+
+Owner student, header `X-Session-Version`. Trả nội dung câu khi `now() ≥ available_at`:
+
+```json
+{ "data": { "allocationId": "uuid", "prompt": "string", "options": [{ "id": "a1", "label": "string" }, { "id": "b2", "label": "string" }], "remainingMs": 5550, "serverTime": "2026-11-05T10:01:12.600Z" } }
+```
+
+- `[ĐỀ XUẤT LA-TIME-017]` Nếu yêu cầu tới trước `available_at` không quá offset (≤ 1 000 ms), server giữ yêu cầu tới `available_at` rồi trả nội dung. Nếu tới sớm hơn mức đó, trả `425 too_early` với `availableInMs`, không có nội dung.
+- Không bao giờ chứa đáp án đúng. Gọi lại nhiều lần trả cùng nội dung và cùng `deadline_at`; lấy muộn không kéo dài thời hạn (`LA-TIME-015`). Lần trả đầu tiên ghi `content_released_at`.
+- Errors: `425 too_early`, `409 stale_session`, `409 interaction_not_current`, `410 attempt_terminal` (lượt đã kết thúc hoặc câu đã hết giờ — không trả nội dung).
 
 ### `POST /attempts/{attemptId}/interactions/{allocationId}/submissions`
 
@@ -221,7 +242,7 @@ Response:
 ```
 
 - `outcome`: `correct | incorrect | timed_out`. Response **không** chứa đáp án đúng hay giải thích (`LA-FB-001`, `LA-FB-003`).
-- Với `race`, `nextInteraction` chứa câu tiếp theo kèm `availableInMs` bằng thời gian phản hồi `[ĐỀ XUẤT LA-TIME-010]`; thời hạn câu tính từ `available_at`.
+- Với `race`, `nextInteraction` chỉ chứa `allocationId`, `difficulty`, `availableInMs` (bằng offset phản hồi, `LA-TIME-010`) và `released: false`; **không** chứa nội dung. Client lấy nội dung qua endpoint `content`; thời hạn câu tính từ `available_at` do server đặt.
 - Câu trả lời đến sau `min(deadline_at, ends_at) + latency_allowance` được ghi `timed_out`, 0 điểm (`LA-TIME-005`).
 - Gửi lại cùng `Idempotency-Key` hoặc gửi lần hai cho cùng allocation trả kết quả đã commit `200`, không cộng điểm lần hai.
 
@@ -236,13 +257,14 @@ Errors: `409 review_not_available` khi cuộc thi chưa Finalized.
 
 ### `POST /admin/roster-imports`
 
-Multipart, một tệp `.xlsx` hoặc `.csv` (UTF-8), tối đa 1 MiB, tối đa 100 hàng dữ liệu. Với `.xlsx` chỉ đọc sheet đầu tiên và giá trị ô (không đánh giá công thức).  
+Multipart, một tệp `.xlsx` hoặc `.csv` (UTF-8), tối đa 1 MiB; số hàng tối đa là cấu hình (`[THỬ NGHIỆM LA-ACC-014]`, đề xuất 200). Với `.xlsx` chỉ đọc sheet đầu tiên, đọc văn bản hiển thị của ô, không đánh giá công thức.  
+MSSV luôn được đọc và trả về dạng chuỗi, giữ số 0 đầu (`LA-ACC-011`); ô MSSV kiểu số trong `.xlsx` sinh cảnh báo `numeric_cell` (`LA-ACC-012`). Mẫu định dạng MSSV chỉ áp dụng nếu đã cấu hình (`[ĐỀ XUẤT LA-ACC-013]`).  
 Cột bắt buộc (không phân biệt hoa thường, chấp nhận bí danh): MSSV (`student_id`, `MSSV`, `Mã sinh viên`), họ tên (`full_name`, `Họ và tên`, `Họ tên`). Không có cột mật khẩu (`LA-ACC-003`).  
-Response `201` với bản xem trước: tổng hàng, số hàng hợp lệ, lỗi theo hàng (`duplicate_in_file`, `already_exists`, `missing_student_id`, `missing_full_name`, `invalid_student_id`). Tệp không đọc được trả `422`. Không tạo profile/Auth user ở bước này (`LA-ACC-002`).
+Response `201` với bản xem trước: tổng hàng, số hàng hợp lệ, cảnh báo và lỗi theo hàng (`duplicate_in_file`, `already_exists`, `missing_student_id`, `missing_full_name`, `pattern_mismatch`, `numeric_cell`, `formula_prefix`), kèm `displayName` đề xuất nếu `LA-PRV-003` được duyệt. Tệp không đọc được trả `422`. Không tạo profile/Auth user ở bước này (`LA-ACC-002`).
 
 ### `POST /admin/roster-imports/{id}/apply`
 
-Áp dụng các hàng hợp lệ của một import đã xem trước. Mọi tài khoản dùng mật khẩu mặc định cấu hình phía server. Response `200 applied` hoặc `409 import_not_ready`. Provider failure trả `503 roster_apply_failed`, audit và chạy compensation cho Auth users đã tạo trong batch. `[ĐỀ XUẤT LA-ACC-010]` Hàng `already_exists` không bị sửa.
+Body `{ "confirmedWarningRows": [12, 37] }`. Áp dụng các hàng hợp lệ và các hàng cảnh báo được xác nhận của một import đã xem trước. Mọi tài khoản dùng mật khẩu mặc định cấu hình phía server. Response `200 applied` hoặc `409 import_not_ready`. Provider failure trả `503 roster_apply_failed`, audit và chạy compensation cho Auth users đã tạo trong batch. Hàng `already_exists` không bị sửa (`LA-ACC-010`).
 
 ### `POST /admin/profiles/{profileId}/password-resets`
 
@@ -269,12 +291,18 @@ Transition invalid trả `409 invalid_content_transition`. Publish thiếu sourc
 - `GET /admin/competitions/{id}/monitor`
 - `GET /admin/audit-logs?cursor=...`
 
-Transition body `{ "targetState": "open" }`. Open chỉ thành công khi schedule hợp lệ, đủ Published pool cho từng ô blueprint của cả hai game, cuộc thi `official` không dùng câu `fixture`, và snapshot/config được lock.
+Transition body `{ "targetState": "open" }`. Open chỉ thành công khi schedule hợp lệ, đủ Published pool cho từng ô blueprint của cả hai game, cuộc thi `official` không dùng câu `fixture`, mọi câu đã lộ đáp án trong snapshot đều đã được xác nhận, và snapshot/config được lock.
 
-### Xử lý sự cố `[ĐỀ XUẤT LA-ADMIN-003]`
+Readiness response gồm: thiếu hụt theo ô blueprint, số người dự kiến thấy mỗi câu (`LA-CONTENT-010`), danh sách câu đã lộ đáp án kèm cuộc thi gây lộ (`LA-CONTENT-009`).
+
+### `POST /admin/competitions/{id}/disclosed-question-confirmations`
+
+Body `{ "questionVersionIds": ["uuid"], "reason": "string" }`. Chỉ khi cuộc thi chưa Open. Ghi xác nhận cho từng câu và audit; không có xác nhận ngầm hay hàng loạt cho mọi câu đã lộ (`LA-CONTENT-009`).
+
+### Xử lý sự cố (`LA-ADMIN-003`)
 
 - `POST /admin/attempts/{attemptId}/incidents` body `{ "action": "note | revoke_sessions | lock_account | void_attempt", "reason": "string" }`.
-- Bắt buộc `reason`, ghi audit. Không có action tạo lượt mới (`LA-ADMIN-001`); không action nào sửa điểm, thứ hạng hoặc thời gian (`LA-ADMIN-002`).
+- Bắt buộc `reason`, ghi audit. Không có action tạo lượt mới hoặc cấp lượt thay thế (`LA-ADMIN-001`, `LA-ADMIN-004`); không action nào sửa điểm, thứ hạng hoặc thời gian (`LA-ADMIN-002`).
 
 ## 11. Status codes và stable error codes
 
@@ -286,6 +314,7 @@ Transition body `{ "targetState": "open" }`. Open chỉ thành công khi schedul
 - `410 attempt_terminal`.
 - `422 validation_error`, `422 publication_requirements_failed`, `422 invalid_cell`, `422 invalid_answer_shape`.
 - `423 account_disabled`. (`423 password_change_required` không dùng trong V1, `LA-ACC-004`.)
+- `425 too_early` kèm `availableInMs` (nội dung câu chưa được phát hành).
 - `429 rate_limited` kèm `Retry-After`.
 - `500 internal_error`, `503 temporarily_unavailable`.
 

@@ -1,6 +1,6 @@
 # ADR-004: Thiết kế lại Live Arena V1.0 (Bãi Mìn Tri Thức và Đường Đua Lịch Sử)
 
-Trạng thái: Proposed — quyết định sản phẩm Q1–Q14 đã được chủ dự án phê duyệt ngày 2026-10-29; văn bản ADR chờ duyệt cùng Giai đoạn A  
+Trạng thái: Proposed — Q1–Q14 và O1–O14 đã được chủ dự án quyết định ngày 2026-10-29; Giai đoạn A duyệt có điều kiện, bản sửa 1 chờ duyệt  
 Ngày: 2026-10-29  
 Liên quan: `docs/sdd/specs/live-arena-game-spec.md`, `core-platform-spec.md` §16 (Amendment v1.1), ADR-001
 
@@ -22,12 +22,15 @@ Core Platform Spec v1.0 định nghĩa hai game thi đấu: Dòng Chảy Lịch 
 - Đồng hồ toàn trận không tạm dừng (`disconnect_grace_limit_ms` bị loại bỏ). Mỗi câu có `deadline_at` ghi một lần.
 - Server chấp nhận câu trả lời khi `server_received_at ≤ effective_deadline + latency_allowance`. `latency_allowance` là cấu hình theo cuộc thi, thử nghiệm 300–500 ms.
 - Heartbeat chỉ còn vai trò giám sát và hiển thị trạng thái kết nối.
+- **Phát hành nội dung do server kiểm soát:** khi một câu được tạo, server ghi `presented_at`, `available_at = presented_at + offset` và `deadline_at = available_at + thời hạn` trong cùng transaction. Không response nào (mở ô, trả lời, projection, realtime) chứa đề hay lựa chọn trước `available_at`. Client lấy nội dung qua endpoint riêng; server giữ yêu cầu tới `available_at` (long-poll, đề xuất) hoặc trả `425`. Lấy nội dung muộn không kéo dài `deadline_at`. Chi tiết: `live-arena-game-spec.md` §5.4.1.
 
 Lý do: với trận 150–180 giây, tạm dừng 120 giây cho phép ngắt mạng có chủ đích để tra cứu. Thời hạn tuyệt đối đơn giản hơn để kiểm thử và công bằng hơn với người chơi bắt đầu ở các thời điểm khác nhau.
 
-### 3. Không công bố đáp án trong lúc cuộc thi chưa chốt
+### 3. Không công bố trực tiếp đáp án trong lúc cuộc thi chưa chốt
 
 Phản hồi trong trận chỉ có đúng/sai và điểm. Đáp án, giải thích và nguồn chỉ được trả qua endpoint xem lại khi cuộc thi ở trạng thái Finalized. Lý do: người chơi bắt đầu không đồng thời, nên đáp án công bố sớm có thể bị chia sẻ cho người chơi sau.
+
+Rủi ro còn lại: phản hồi đúng/sai vẫn làm lộ đáp án của câu hai lựa chọn và thu hẹp câu ba lựa chọn. Biện pháp giảm thiểu là phân bổ riêng, đảo đáp án, theo dõi và hạn chế số người thấy mỗi câu, và không tái sử dụng âm thầm câu đã lộ (`LA-FB-007`, `LA-CONTENT-009..012`). Hệ thống không tuyên bố chống chia sẻ đáp án tuyệt đối.
 
 ### 4. Điểm thô và phân định hòa theo từng game
 
@@ -48,11 +51,19 @@ Một mô hình tham chiếu TypeScript thuần (không I/O) được phép tồ
 
 ### 7. Nhập lớp từ `.xlsx` và `.csv`
 
-Hỗ trợ cả hai định dạng theo yêu cầu. Đánh giá công việc: phần đọc `.xlsx` cần thêm một thư viện phía server nhưng không làm tăng đáng kể khối lượng (cùng một bước chuẩn hóa hàng, xem trước và áp dụng như CSV). Lựa chọn thư viện được chốt ở Giai đoạn B sau khi kiểm tra bảo trì và `npm audit`; ứng viên: `read-excel-file` (nhẹ, chỉ đọc), `exceljs`. Không dùng gói `xlsx` trên npm (bản 0.18.x không còn được cập nhật trên npm registry). Ràng buộc: chỉ đọc sheet đầu tiên, đọc giá trị (không đánh giá công thức), giới hạn 1 MiB và 100 hàng, chạy phía server.
+Hỗ trợ cả hai định dạng theo yêu cầu. Đánh giá công việc: phần đọc `.xlsx` cần thêm một thư viện phía server nhưng không làm tăng đáng kể khối lượng (cùng một bước chuẩn hóa hàng, xem trước và áp dụng như CSV). Lựa chọn thư viện được chốt ở Giai đoạn B sau khi kiểm tra bảo trì và `npm audit`; ứng viên: `read-excel-file` (nhẹ, chỉ đọc), `exceljs`. Không dùng gói `xlsx` trên npm (bản 0.18.x không còn được cập nhật trên npm registry). Ràng buộc: chỉ đọc sheet đầu tiên, đọc văn bản hiển thị của ô (không đánh giá công thức), giới hạn 1 MiB và số hàng cấu hình được, chạy phía server. MSSV luôn là chuỗi, giữ số 0 đầu; ô MSSV kiểu số sinh cảnh báo. Mẫu định dạng MSSV và giới hạn số hàng chỉ được chốt sau khi xem tệp danh sách thật (`LA-ACC-011..014`).
 
 ### 8. Tách dữ liệu giả lập
 
-Câu hỏi giả lập có `origin = fixture`, nằm ở vị trí riêng, không seed vào production, và bị chặn bởi kiểm tra sẵn sàng của cuộc thi thật.
+Câu hỏi giả lập có `origin = fixture`, nằm ở vị trí riêng, không seed vào production, và bị chặn bởi kiểm tra sẵn sàng của cuộc thi thật. Cuộc thi `rehearsal` dùng được câu giả lập và tách hoàn toàn khỏi kết quả chính thức.
+
+### 9. Theo dõi xuất hiện và câu đã lộ đáp án
+
+Bảng `question_exposures` ghi số lần xuất hiện theo cuộc thi; khi cuộc thi Finalized, mọi câu đã dùng được đánh dấu đã lộ đáp án. Cuộc thi `official` mặc định loại câu đã lộ; muốn dùng lại phải có xác nhận rõ ràng từng câu, có audit. Ngân hàng 87 câu chỉ là mục tiêu phát triển: mỗi câu được khoảng 20 trên 60 người thấy trong một cuộc thi.
+
+### 10. Quyền riêng tư của bảng xếp hạng (đề xuất)
+
+Đề xuất dùng tên hiển thị lớp học (ví dụ "An N.V.") trên bảng công khai và máy chiếu, và giới hạn khách không đăng nhập ở Top 10 (`LA-PRV-003`, `LA-PRV-004`). Đề xuất này sửa Core `PRV-001` nên chỉ có hiệu lực sau khi chủ dự án duyệt; trước đó bảng vẫn dùng họ tên đầy đủ. MSSV không bao giờ công khai (`LA-PRV-001`).
 
 ## Phương án đã cân nhắc
 
@@ -66,7 +77,7 @@ Câu hỏi giả lập có `origin = fixture`, nằm ở vị trí riêng, khôn
 ### Tích cực
 
 - Luật thời gian đơn giản, kiểm thử được bằng thời gian server; giảm khả năng lợi dụng mất kết nối.
-- Không lộ đáp án trong khung giờ thi.
+- Không công bố trực tiếp đáp án trong khung giờ thi và không phát hành nội dung câu trước giờ được phép đọc.
 - Không cần di chuyển dữ liệu vì Core chưa được triển khai.
 
 ### Đánh đổi
@@ -75,6 +86,9 @@ Câu hỏi giả lập có `origin = fixture`, nằm ở vị trí riêng, khôn
 - Mật khẩu chung cho phép mạo danh; chỉ phù hợp thi đua lớp học.
 - Bàn cờ Game 1 đưa vào yếu tố may rủi có chủ đích; được theo dõi bằng mô phỏng (`docs/sdd/evidence/live-arena/balance-baseline.md`).
 - Thêm một phụ thuộc đọc `.xlsx`.
+- Lấy nội dung câu qua yêu cầu riêng thêm khoảng nửa tới một vòng mạng mỗi câu; được bù bằng `latency_allowance` và đo ở P2.
+- Đồng hồ 3:00 của Game 1 có thể bị chạm bởi người chọn ô chậm (`time-budget.md`), nên tốc độ thao tác cũng ảnh hưởng điểm Game 1.
+- Phản hồi đúng/sai vẫn cho phép suy ra đáp án câu hai lựa chọn; chỉ giảm thiểu, không loại trừ.
 
 ## Kiểm chứng
 

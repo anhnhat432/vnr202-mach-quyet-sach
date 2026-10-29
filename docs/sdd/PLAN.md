@@ -109,7 +109,7 @@ Exit gate: four-layer Hybrid validation passes in production and no required acc
 
 | Stage | Scope | Phase / tasks | Gate |
 | --- | --- | --- | --- |
-| A | Spec, ADR, contracts, plan, tasks and traceability updates; balance simulation baseline | T090–T095 | Owner approves documents and open items O1–O14 |
+| A | Spec, ADR, contracts, plan, tasks and traceability updates; balance and time-budget analyses; consistency check | T090–T098 | Conditionally approved; revision 1 (O1–O14, corrections A–F) awaits owner approval |
 | B | Local Supabase unblock; identity, default password, roster `.xlsx`/`.csv` | T014, T019, T030–T035 | Phase 3 exit gate |
 | C | Question bank pipeline and isolated fixtures | T048 | Validation + review pack; no Published without reviewer |
 | D | Competition and game Core in PostgreSQL (TDD) | T040–T046, T049 | pgTAP + Supabase integration |
@@ -117,7 +117,7 @@ Exit gate: four-layer Hybrid validation passes in production and no required acc
 | F | Player, projector, review and admin UI | T050–T058 | Live Arena E2E |
 | G | Load, latency, rehearsal, hardening | T060–T067 | Phase 6 exit gate |
 
-Stages B–G must not start until stage A is approved. Tasks blocked by open items are listed in `live-arena-game-spec.md` §12.
+Stages B–G must not start until stage A revision 1 is approved. Remaining open items N1–N9 and the tasks they affect are listed in `live-arena-game-spec.md` §12.2.
 
 ## Dependencies and critical path
 
@@ -131,9 +131,11 @@ Phase 2 content production can run after the Scenario Engine contract in Phase 1
 - Timer/disconnect concurrency: implement in PostgreSQL functions with deterministic tests before UI.
 - Auth roster partial failure: stage, validate, audit and compensate Auth users.
 - Public Broadcast spoofing: event contains no authority; validate version, debounce and refetch.
-- Question bank volume (87 reviewed questions) and no appointed academic reviewer yet: build with fixtures, block official competitions until the bank is Published.
+- Question bank volume and no appointed academic reviewer yet: build with fixtures, block official competitions until the bank is Published. 87 questions is a development target only; each question would be seen by about 20 of 60 players per competition, so it does not prevent answer sharing (spec §5.13.1).
+- Correct/incorrect feedback reveals two-option answers: mitigated by allocation, option shuffling, exposure limits and explicit confirmation before reusing disclosed questions; never claimed as absolute protection.
+- Leaderboard privacy: full names stay public under `PRV-001` until the classroom display-name proposal (`LA-PRV-003/004`) is decided.
 - Shared default password allows impersonation: accepted for classroom use, mitigated only by audit and admin incident actions.
-- Game 1 luck: monitored by simulation (`docs/sdd/evidence/live-arena/balance-baseline.md`) and rehearsal data; balancing changes require owner approval.
+- Game 1 luck and time pressure: the balance baseline ignores the 3-minute limit; the time budget shows slow cell selection can hit 3:00. Both are re-measured with a time model and real players (T067); balancing changes require owner approval.
 - One-person schedule: keep each phase demoable and do not add VR, chatbot, social or multi-class scope.
 
 ## Validation commands by phase

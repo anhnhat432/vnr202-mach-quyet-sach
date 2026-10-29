@@ -1,6 +1,6 @@
 # Security and Privacy Specification
 
-Trạng thái: Approved for planning; sửa đổi v1.1 cho Live Arena V1.0 (2026-10-29) chờ duyệt văn bản  
+Trạng thái: Approved for planning; sửa đổi v1.1 cho Live Arena V1.0 (2026-10-29, bản sửa 1) chờ duyệt văn bản  
 Phạm vi: Auth, authorization, PII, API, CSV, content, realtime, secrets và deployment
 
 ## 1. Tài sản cần bảo vệ
@@ -11,7 +11,7 @@ Phạm vi: Auth, authorization, PII, API, CSV, content, realtime, secrets và de
 - Attempt state, score calculations, timer, thời hạn câu và audit records.
 - Admin actions và publication authority.
 
-Full name được phép công khai trên leaderboard theo quyết định sản phẩm; student ID không được công khai.
+Full name được phép công khai trên leaderboard theo Core `PRV-001`; student ID không bao giờ được công khai. Đề xuất `LA-PRV-003/004` (tên hiển thị lớp học, khách chỉ thấy Top 10) đang chờ duyệt; nếu được duyệt, họ tên đầy đủ chỉ quản trị viên và chính sinh viên thấy. Không endpoint công khai nào liệt kê danh sách lớp (`LA-PRV-002`).
 
 ## 2. Threat model tối thiểu
 
@@ -19,7 +19,8 @@ Full name được phép công khai trên leaderboard theo quyết định sản
 - Hai thiết bị cùng gửi answer khi transfer session.
 - Người ngoài đoán student ID, brute-force login hoặc tải roster.
 - **Rủi ro chấp nhận (V1):** người biết MSSV đăng nhập bằng mật khẩu chung và dùng lượt của người khác (`LA-ACC-006`). Biện pháp giảm nhẹ: nhật ký đăng nhập/chuyển thiết bị `[ĐỀ XUẤT LA-ACC-009]` và thao tác sự cố có audit; không có biện pháp ngăn chặn.
-- Người chơi đã xong chia sẻ đáp án cho người chơi sau: phản hồi trong trận không có đáp án đúng (`LA-FB-001`).
+- Người chơi đã xong chia sẻ đáp án cho người chơi sau: phản hồi trong trận không có đáp án đúng (`LA-FB-001`). **Rủi ro còn lại:** đúng/sai làm lộ đáp án câu hai lựa chọn và thu hẹp câu ba lựa chọn; mỗi câu được khoảng 20/60 người thấy với ngân hàng 87 câu. Chỉ giảm thiểu bằng phân bổ riêng, đảo đáp án, hạn chế số người thấy mỗi câu và không tái sử dụng âm thầm câu đã lộ (`LA-FB-007`, `LA-CONTENT-009..012`).
+- Đọc trước nội dung câu (ví dụ qua devtools) trong khoảng hiệu ứng để có thêm thời gian: nội dung chỉ phát hành từ `available_at` (`LA-TIME-013`).
 - Ngắt mạng có chủ đích để kéo dài thời gian tra cứu: đồng hồ không tạm dừng (`LA-TIME-001`).
 - Client gửi Broadcast giả, event cũ hoặc payload làm UI sai.
 - CSV có duplicate, formula injection, encoding lạ hoặc dữ liệu quá lớn.
@@ -71,11 +72,11 @@ Client mutations trực tiếp vào Core tables không có policy.
 - Source URL chỉ cho `https:` trừ local development.
 - Dossier content không nhận raw HTML; Markdown renderer không bật raw HTML.
 - Full name normalize Unicode, trim whitespace, 2-100 ký tự; không render bằng `dangerouslySetInnerHTML`.
-- Student ID uppercase, whitelist pattern do admin cấu hình; release seed dùng pattern `^[A-Z]{2,4}\d{5,8}$`.
+- Student ID là chuỗi: trim, in hoa chữ Latin, giữ số 0 đầu, không ép kiểu số (`LA-ACC-011`). Mẫu định dạng là cấu hình do admin đặt **sau khi xem tệp danh sách thật** (`[ĐỀ XUẤT LA-ACC-013]`); khi chưa cấu hình chỉ kiểm không rỗng, ≤ 32 ký tự, không có ký tự điều khiển hoặc ký tự công thức đầu chuỗi. Ví dụ `^[A-Z]{2,4}\d{5,8}$` không phải luật.
 
 ## 7. Roster file safety (CSV và XLSX)
 
-- Tối đa 1 MiB, 100 hàng dữ liệu; CSV UTF-8; XLSX chỉ sheet đầu tiên.
+- Tối đa 1 MiB; số hàng tối đa là cấu hình (`[THỬ NGHIỆM LA-ACC-014]`, đề xuất 200); CSV UTF-8; XLSX chỉ sheet đầu tiên, đọc văn bản hiển thị, cảnh báo ô MSSV kiểu số (`LA-ACC-012`).
 - Hai cột bắt buộc (MSSV, họ tên) với bí danh tiếng Việt/Anh; không có cột mật khẩu.
 - Reject NUL, duplicate headers và formula-leading characters (`=`, `+`, `-`, `@`) trong identity fields; với XLSX chỉ đọc giá trị ô, không đánh giá công thức, không theo external link, giới hạn kích thước giải nén để chống zip bomb.
 - Parse chạy phía server; thư viện XLSX phải qua `npm audit` và đánh giá bảo trì trước khi thêm (ADR-004).
@@ -98,6 +99,8 @@ Client mutations trực tiếp vào Core tables không có policy.
 - Session version tăng khi transfer/reset; stale session bị từ chối trước evaluate.
 - Server time duy nhất cho deadline, thời hạn câu, độ trễ cho phép và tie-breaker (không có grace pause, `LA-TIME-001`).
 - Correct answer, giải thích và rubric không vào bất kỳ client payload nào khi cuộc thi chưa Finalized, kể cả sau khi câu đã được chấm (`LA-FB-003`).
+- Đề và lựa chọn của một câu không vào bất kỳ payload nào trước `available_at`; endpoint lấy nội dung từ chối hoặc giữ yêu cầu sớm; lấy muộn không kéo dài thời hạn (`LA-TIME-013..017`).
+- Câu đã lộ đáp án không vào snapshot của cuộc thi `official` nếu không có xác nhận rõ ràng của admin, có audit (`LA-CONTENT-009`).
 - Nội dung ô chưa mở và câu chưa hiển thị không vào client payload (`MINE-BOARD-005`, `LA-ALLOC-005`).
 - File nguồn ngân hàng câu hỏi không được import vào `web/src`; build kiểm tra client bundle không chứa đáp án (`LA-AC-020`).
 - Score/rank update trong transaction; client-provided score, elapsed, correctness, deadline hoặc trạng thái vật phẩm bị bỏ qua.
@@ -161,7 +164,8 @@ Audit row ghi actor, action, target, request ID, redacted before/after và serve
 - Không response, sự kiện hay bundle nào chứa đáp án đúng trước khi cuộc thi Finalized; endpoint xem lại từ chối trước Finalized.
 - Câu trả lời sau thời hạn + độ trễ cho phép không được cộng điểm; F5/chuyển thiết bị không làm mới thời hạn.
 - Kiểm thử PostgreSQL cục bộ không thay thế kiểm thử Auth/RLS/Realtime trên Supabase thật; cả hai bắt buộc.
-- Public leaderboard response và event không chứa student ID/auth ID.
+- Public leaderboard response và event không chứa student ID/auth ID; không endpoint công khai nào trả danh sách lớp hoặc người chưa bắt đầu lượt (`LA-AC-032`).
+- Không payload nào chứa đề/lựa chọn trước `available_at` (`LA-AC-022`); lấy nội dung muộn không kéo dài `deadline_at` (`LA-AC-023`).
 - Service role không xuất hiện trong client bundle, source map hoặc logs.
 - Content payload không thực thi script/HTML và malicious URL bị reject.
 - CSRF request từ origin lạ bị `403`.

@@ -1,5 +1,7 @@
 # Bãi Mìn Tri Thức – Mô phỏng cân bằng nền
 
+> **Phạm vi của báo cáo (bản sửa 1, 2026-10-29):** đây là **baseline** chỉ đo may rủi của bàn cờ khi người chơi luôn xử lý đủ 10 câu chính. Kết quả **chưa chứng minh** trò chơi cân bằng khi có giới hạn 3 phút, độ trễ mạng, thời gian chuyển cảnh, và khác biệt tốc độ đọc giữa người chơi. Ngân sách thời gian (`time-budget.md`) cho thấy giới hạn 3:00 có thể bị chạm, nên tốc độ thao tác cũng ảnh hưởng điểm. Giai đoạn kiểm thử phải bổ sung mô phỏng có thời gian và thử nghiệm với người chơi thật (T067).
+
 Ngày: 2026-10-29  
 Liên quan: `LA-SCOPE`, `MINE-*`, `MINE-END-004`, thông số P6 trong `docs/sdd/specs/live-arena-game-spec.md` §11, quyết định Q9.  
 Công cụ: `tools/simulations/minefield-balance.mjs` (phân tích; không phải mã gameplay). Seed cố định `20261029`, chạy lại cho cùng kết quả:
@@ -12,7 +14,7 @@ node tools/simulations/minefield-balance.mjs
 
 - Cơ cấu 20 ô đã chốt: 10 câu (3 Dễ / 4 Trung bình / 3 Khó), 3 bom, 1 x2, 2 khiên, 4 rương +40.
 - Người chơi không có thông tin để chọn ô (không có gợi ý), nên thứ tự mở ô là ngẫu nhiên; ô đầu không phải bom.
-- Người chơi luôn kịp xử lý 10 câu chính trước khi hết giờ. Chưa mô phỏng áp lực thời gian toàn trận; dữ liệu diễn tập sẽ bổ sung.
+- Người chơi luôn kịp xử lý 10 câu chính trước khi hết giờ. **Giả định này không đúng trong mọi trường hợp** (xem `time-budget.md`); áp lực thời gian, độ trễ mạng, chuyển cảnh và tốc độ đọc chưa được mô phỏng.
 - Kết quả trả lời (đúng/sai) được rút trước rồi mới mô phỏng bàn cờ, để tách "kiến thức thể hiện" khỏi "may rủi bàn cờ".
 - Mô hình năng lực là giả định minh họa; chưa được hiệu chỉnh bằng dữ liệu thật.
 
@@ -70,11 +72,11 @@ Phần lớn khả năng "người yếu hơn thắng" đến từ dao động k
 
 ## Nhận định
 
-1. Theo các tiêu chí đề xuất (chờ duyệt), mức ảnh hưởng của may rủi **trong ngưỡng chấp nhận**. Cơ cấu 20 ô được giữ nguyên như quyết định Q9.
+1. Theo các tiêu chí đề xuất (chờ duyệt) và **chỉ trong giả định không có áp lực thời gian**, mức ảnh hưởng của may rủi nằm trong ngưỡng. Đây không phải kết luận cân bằng cuối cùng. Cơ cấu 20 ô được giữ nguyên theo Q9 và O14.
 2. **Điểm cần lưu ý:** trong 91 % lớp mô phỏng có nhiều người cùng đạt điểm câu chính cao nhất. Giữa những người này, **hạng 1 do bàn cờ quyết định** (rương, x2), vì tiêu chí phân định hòa (số câu đúng, câu Khó đúng, thời gian) chỉ áp dụng khi tổng điểm bằng nhau. Tỷ lệ này phụ thuộc mạnh vào độ khó thật của ngân hàng câu hỏi và phải đo lại bằng dữ liệu diễn tập.
-3. Hạn chế của mô phỏng: chưa có áp lực đồng hồ toàn trận, chưa có dữ liệu năng lực thật, chưa xét chất lượng câu hỏi.
+3. Hạn chế của mô phỏng: chưa có áp lực đồng hồ toàn trận, độ trễ mạng, thời gian chuyển cảnh và tốc độ đọc; chưa có dữ liệu năng lực thật; chưa xét chất lượng câu hỏi.
 
-## Phương án cân bằng (chỉ để chủ dự án cân nhắc, **chưa áp dụng**)
+## Phương án cân bằng (đã xem xét, **không áp dụng** theo quyết định O14)
 
 | Mã | Phương án | Tác động | Đánh đổi |
 |---|---|---|---|
@@ -82,4 +84,4 @@ Phần lớn khả năng "người yếu hơn thắng" đến từ dao động k
 | B1 | Lượt chỉ kết thúc khi mở hết 20 ô hoặc hết giờ | Mọi người nhận đủ 4 rương; chỉ còn x2 là may rủi | Đổi luật kết thúc `MINE-END-001`; trận dài hơn |
 | B2 | x2 áp dụng cho câu chính khó nhất còn lại thay vì câu tiếp theo | Giá trị x2 ổn định hơn | Đổi luật `MINE-ITEM-001`; khó giải thích hơn |
 
-Theo quyết định Q9, không phương án nào được áp dụng nếu chủ dự án chưa duyệt.
+Theo quyết định Q9 và O14, cơ cấu 20 ô và luật điểm Game 1 giữ nguyên; B1 và B2 không được áp dụng. Bảng chỉ được giữ để lưu vết.
