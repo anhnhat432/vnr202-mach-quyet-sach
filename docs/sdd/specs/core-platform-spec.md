@@ -1,6 +1,6 @@
 # Core Platform Specification
 
-Status: Approved (v1.0, 2026-08-19); Amendment v1.1 for Live Arena V1.0 (2026-10-29) — owner decisions approved, amended text awaiting review. See §16.
+Status: Approved (v1.0, 2026-08-19); Amendment v1.1 for Live Arena V1.0 (2026-10-29) — owner decisions Q1–Q14, O1–O14 and N1–N9 approved. See §16.
 Risk: High
 Specification depth: Full
 Project: VNR202 - Mach Quyet Sach
@@ -180,10 +180,10 @@ Only Published content may be copied into an immutable competition question snap
 
 ### Public leaderboard privacy
 
-- `PRV-001`: A public leaderboard SHALL display the student's full name. **[v1.1: Proposed amendment `LA-PRV-003` (classroom display name) pending owner approval; this rule stays in force until approved]**
+- `PRV-001`: A public leaderboard SHALL display the student's full name. **[v1.1: Amended by `LA-PRV-003`, `LA-PRV-004` — public leaderboards show only the classroom display name (e.g. "An N.V."), never the full name; anonymous viewers get Top 10 and aggregates only]**
 - `PRV-002`: A public leaderboard SHALL NOT display the student ID.
 - `PRV-003`: Authorized administrators MAY view full name, student ID, and detailed attempt information.
-- `PRV-004`: Duplicate full names SHALL remain separate internal identities without exposing student IDs publicly.
+- `PRV-004`: Duplicate full names SHALL remain separate internal identities without exposing student IDs publicly. **[v1.1: applies equally to duplicate display names, `LA-LB-012`]**
 
 ## 7. Game interaction contracts
 
@@ -259,7 +259,7 @@ Realtime payloads SHALL carry identifiers and version numbers sufficient for a c
 - `AC-RT-001`: WHEN a score is committed under the approved load target, THE SYSTEM SHALL show the new rank to connected viewers within 1 second.
 - `AC-RT-002`: IF a client misses a realtime event, THEN THE SYSTEM SHALL allow it to retrieve and render the current authoritative leaderboard.
 - `AC-CONTENT-001`: IF the Published pool cannot satisfy every allocation category, THEN THE SYSTEM SHALL block competition opening.
-- `AC-PRV-001`: WHEN a public viewer opens a leaderboard, THE SYSTEM SHALL show full names and SHALL NOT expose student IDs.
+- `AC-PRV-001`: WHEN a public viewer opens a leaderboard, THE SYSTEM SHALL show full names and SHALL NOT expose student IDs. **[v1.1: Amended by `LA-AC-032`, `LA-AC-038` — display names only, Top 10 for anonymous viewers]**
 - `AC-FINAL-001`: WHEN every legal attempt is terminal or its maximum legal end time has passed, THE SYSTEM SHALL reconcile, lock, and retain both final leaderboards.
 
 ## 12. Edge cases to test
@@ -272,7 +272,7 @@ Realtime payloads SHALL carry identifiers and version numbers sufficient for a c
 - Multiple brief disconnects that cumulatively reach 120 seconds. **[v1.1: Superseded; see `live-arena-game-spec.md` §9.]**
 - Device transfer while an answer request is in flight.
 - Realtime event delivered out of order or more than once.
-- Duplicate full names on the public leaderboard.
+- Duplicate full names on the public leaderboard. **[v1.1: duplicate display names, `LA-LB-012`]**
 - Published question removed after snapshot creation.
 - Competition opening with an insufficient question pool.
 - Start request exactly at the configured deadline.
@@ -322,10 +322,9 @@ This amendment is explicit, not silent: every affected v1.0 rule is marked inlin
 | `SCORE-003` | Amended | Identical blueprint and theoretical maximum; Game 1 item luck accepted and monitored |
 | `SCORE-005` | Superseded | Per-game tie-breakers with shared ranks (`LA-LB-008`) |
 | `AC-SCORE-001` | Amended | Raw score; `LA-AC-008`, `LA-AC-010`, `LA-AC-017` |
+| `PRV-001`, `AC-PRV-001` | Amended (decision N1/N2) | Classroom display name only, never full name or student ID; anonymous viewers see Top 10 and aggregates (`LA-PRV-003`, `LA-PRV-004`, `LA-AC-032`, `LA-AC-038`). CONSTITUTION and `AGENTS.md` amended accordingly |
 
-New rule families with no v1.0 equivalent: `LA-TRY-003` (one active attempt across games), `LA-LB-003..007` (projector Top 10, personal gap, provisional/official labels), `LA-ANTI-*`, `LA-IDEM-*`, `LA-ADMIN-*`, `LA-CONTENT-005/006` (fixture separation, rehearsal competition).
+New rule families with no v1.0 equivalent: `LA-TRY-003` (one active attempt across games), `LA-LB-003..007` (projector Top 10, personal gap, provisional/official labels), `LA-ANTI-*`, `LA-IDEM-*`, `LA-ADMIN-*`, `LA-CONTENT-005/006` (fixture separation, rehearsal competition), `LA-TIME-019..023` (database clock and lock waits), `LA-ALLOC-010..012` (two-option cap, concurrent balanced allocation, allocated vs displayed counters).
 
-Pending proposal (not yet in force): `PRV-001` and `AC-PRV-001` would be amended by `LA-PRV-003` (classroom display name instead of full name on public boards) and `LA-PRV-004` (anonymous viewers see Top 10 only). Until the owner approves, `PRV-001` remains in force.
-
-Retained without change: `ACC-002`, `ACC-004`, `ACC-005`, `ACCESS-001..003`, `SCOPE-*`, `EVT-001..003`, `EVT-005`, `TRY-*`, `ATT-001`, `ATT-002`, `ATT-005`, `SESSION-*`, `CFG-002`, `ALLOC-001`, `ALLOC-003`, `CONTENT-001/002/004/005/006`, `PRV-001..004` (with the pending proposal above), `NFR-RT-*`, and acceptance criteria not listed above.
+Retained without change: `ACC-002`, `ACC-004`, `ACC-005`, `ACCESS-001..003`, `SCOPE-*`, `EVT-001..003`, `EVT-005`, `TRY-*`, `ATT-001`, `ATT-002`, `ATT-005`, `SESSION-*`, `CFG-002`, `ALLOC-001`, `ALLOC-003`, `CONTENT-001/002/004/005/006`, `PRV-002..004`, `NFR-RT-*`, and acceptance criteria not listed above.
 

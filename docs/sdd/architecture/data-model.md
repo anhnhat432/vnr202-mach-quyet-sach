@@ -1,6 +1,6 @@
 # Mô hình dữ liệu logic
 
-Trạng thái: Approved for planning; sửa đổi v1.1 cho Live Arena V1.0 (2026-10-29, bản sửa 1) chờ duyệt văn bản  
+Trạng thái: Approved for planning; sửa đổi v1.1 cho Live Arena V1.0 (2026-10-29, bản sửa 2)  
 Nguồn: Core Platform Spec (kèm Amendment v1.1), Live Arena Game Spec, Product Experience Spec, ADR-001 và ADR-004
 
 ## Quy ước
@@ -9,7 +9,7 @@ Nguồn: Core Platform Spec (kèm Amendment v1.1), Live Arena Game Spec, Product
 - Timestamps lưu `timestamptz` UTC; giao diện hiển thị `Asia/Ho_Chi_Minh`.
 - Thời lượng lưu integer milliseconds; score lưu integer không âm (tối đa 2 460 cho `minefield`, 2 300 cho `race`), ràng buộc bằng `CHECK`.
 - Mã game: `minefield` (Bãi Mìn Tri Thức) và `race` (Đường Đua Lịch Sử); thay `timeline | decision_room` của v1.0.
-- Mọi thời điểm quyết định (bắt đầu, `presented_at`, `available_at`, `deadline_at`, `received_at`, kết thúc) lấy từ `now()` của database, không lấy từ client.
+- Mọi thời điểm quyết định (bắt đầu, `presented_at`, `available_at`, `deadline_at`, `received_at`, hết giờ, kết thúc) lấy bằng `clock_timestamp()` của database tại câu lệnh quyết định, **không** dùng `now()` (thời điểm bắt đầu transaction) và không lấy từ client (`LA-TIME-019`). `created_at`/`updated_at` thuần audit có thể dùng `now()`.
 - JSONB chỉ dùng cho nội dung có schema version, không thay thế quan hệ cần constraint hoặc truy vấn.
 - Mọi bảng trong schema `public` bật RLS. Bảng chỉ dành cho server không có policy client.
 - PostgreSQL functions `SECURITY DEFINER` phải đặt `search_path` cố định và revoke execute khỏi role không cần thiết.
@@ -29,8 +29,13 @@ Nguồn: Core Platform Spec (kèm Amendment v1.1), Live Arena Game Spec, Product
 - `full_name`, `class_id`, `status` (`active | locked`), timestamps.
 - `must_change_password`: giữ cột cho khả năng mở rộng nhưng V1 luôn `false` với sinh viên (`LA-ACC-004`); không route nào chặn theo cờ này trong V1.
 - `public_entry_id`: UUID ngẫu nhiên dùng trong payload/bảng công khai, không suy ra student ID.
-- `display_name` `[ĐỀ XUẤT LA-PRV-003]`: tên hiển thị lớp học (ví dụ "An N.V."); nếu đề xuất chưa duyệt, cột này bằng `full_name`.
+- `display_name`: tên hiển thị lớp học dạng rút gọn (ví dụ "An N.V."), sinh khi nhập lớp, admin sửa được có audit, 1–40 ký tự (`LA-PRV-003`). Đây là trường duy nhất về tên được dùng trong projection công khai.
 - `display_name_suffix`: số nguyên nullable dùng hiển thị hậu tố trùng tên, gán theo thứ tự nhập lớp (`LA-LB-012`).
+
+### `student_auth_identities` (`LA-ACC-015`)
+
+- `profile_id` PK/FK, `student_id` (unique), `auth_user_id` (unique), `internal_email` (unique; `<uuid v4>@INTERNAL_AUTH_EMAIL_DOMAIN`, sinh một lần, không đổi), `created_at`.
+- Bảng chỉ server: bật RLS, không có policy cho `anon`/`authenticated`, revoke mọi quyền khỏi hai role đó. Chỉ service role đọc để ánh xạ MSSV → email nội bộ khi đăng nhập.
 
 ### `auth_events` (`LA-ACC-009`)
 
@@ -44,7 +49,7 @@ Nguồn: Core Platform Spec (kèm Amendment v1.1), Live Arena Game Spec, Product
 
 ### `roster_import_rows`
 
-- `import_id`, `row_number`, `student_id` (`text`, giữ nguyên chuỗi đọc được), `full_name`, `display_name` `[ĐỀ XUẤT]`, `student_id_cell_type` (`text | number | other`, chỉ với XLSX), `row_status` (`valid | warning | error`), `issues` JSONB (`duplicate_in_file | already_exists | missing_student_id | missing_full_name | pattern_mismatch | numeric_cell | formula_prefix`), `admin_confirmed` (cho hàng `warning`).
+- `import_id`, `row_number`, `student_id` (`text`, giữ nguyên chuỗi đọc được), `full_name`, `display_name` (sinh tự động, admin sửa được trong bản xem trước), `student_id_cell_type` (`text | number | other`, chỉ với XLSX), `row_status` (`valid | warning | error`), `issues` JSONB (`duplicate_in_file | already_exists | missing_student_id | missing_full_name | pattern_mismatch | numeric_cell | formula_prefix`), `admin_confirmed` (cho hàng `warning`).
 - Không có cột mật khẩu (`LA-ACC-003`): mọi tài khoản tạo từ mật khẩu mặc định cấu hình phía server.
 - `created_auth_user_id` phục vụ compensation; xóa staging row sau apply.
 
@@ -104,7 +109,8 @@ Mật khẩu mặc định và mật khẩu nội bộ dẫn xuất (`LA-ACC-005
 
 ### `question_exposures` (`LA-CONTENT-009`, `LA-CONTENT-010`)
 
-- `question_version_id`, `competition_id`, `allocation_count`, `answer_disclosed_at` (đặt khi cuộc thi Finalized).
+- `question_version_id`, `competition_id`, `allocated_count` (tăng trong transaction tạo lượt), `displayed_count` (tăng khi `content_released_at` được ghi lần đầu), `answer_disclosed_at` (đặt khi cuộc thi Finalized và chỉ khi `displayed_count > 0`) (`LA-ALLOC-012`).
+- Cập nhật `allocated_count` diễn ra dưới khóa advisory phạm vi transaction theo `competition_game_id` trong `start_or_resume_attempt` (`LA-ALLOC-011`).
 - Primary key `(question_version_id, competition_id)`. View lũy kế: tổng lần xuất hiện, danh sách cuộc thi đã lộ đáp án.
 
 ### `competition_disclosed_question_confirmations` (`LA-CONTENT-009`)
@@ -190,18 +196,18 @@ Câu `origin = fixture` chỉ tồn tại ở môi trường local/preview và c
 
 Timer không decrement bằng background loop và không tạm dừng.
 
-- `remaining_ms = ends_at − now()`; câu đang mở có `question_remaining_ms = min(deadline_at, ends_at) − now()` và chỉ được trả khi `now() ≥ available_at`.
-- Nội dung câu chỉ được trả khi `now() ≥ available_at` (`LA-TIME-013`); yêu cầu sớm hơn được giữ tới `available_at` hoặc trả `425` (`LA-TIME-017`).
+- `remaining_ms = ends_at − clock_timestamp()`; câu đang mở có `question_remaining_ms = min(deadline_at, ends_at) − clock_timestamp()` và chỉ được trả khi `clock_timestamp() ≥ available_at`.
+- Nội dung câu chỉ được trả khi `clock_timestamp() ≥ available_at` (`LA-TIME-013`); yêu cầu sớm hơn được giữ tới `available_at` hoặc trả `425` (`LA-TIME-017`).
 - Trả lời được chấp nhận khi `received_at ≤ min(deadline_at, ends_at) + latency_allowance_ms`; ngược lại ghi `timed_out` (`LA-TIME-005`, `LA-TIME-009`).
 - Câu có `available_at ≥ ends_at` không được phát hành và được ghi `timed_out` khi lượt kết thúc (`LA-TIME-016`).
-- Mọi RPC đọc/ghi gọi `reconcile_attempt` để xử lý câu quá hạn và chuyển lượt sang `timed_out` khi `now() > ends_at + latency_allowance_ms`.
+- Mọi RPC đọc/ghi gọi `reconcile_attempt` để xử lý câu quá hạn và chuyển lượt sang `timed_out` khi `clock_timestamp() > ends_at + latency_allowance_ms + lock_wait_limit` (`LA-TIME-022`).
 - Heartbeat mặc định 5 giây, chỉ cập nhật `last_heartbeat_at`.
 
 ## 6. Score và leaderboard
 
 ### `leaderboard_entries`
 
-- `competition_game_id`, `profile_id`, `public_entry_id`, `display_name_snapshot` (họ tên đầy đủ theo `PRV-001` cho tới khi `LA-PRV-003` được duyệt; sau đó là tên hiển thị lớp học), `display_name_suffix`.
+- `competition_game_id`, `profile_id`, `public_entry_id`, `display_name_snapshot` (tên hiển thị lớp học, không bao giờ là họ tên đầy đủ), `display_name_suffix`.
 - `score`, `correct_count` (Game 1: số câu chính đúng; Game 2: số câu đúng), `hard_correct`, `completion_duration_ms`, `progress`, `state` (`playing | completed | timed_out`), `excluded` (lượt `voided`), `version`, `updated_at`.
 - Unique `(competition_game_id, profile_id)`.
 - `display_name_snapshot` bảo đảm historical leaderboard không đổi khi profile đổi tên (`LA-PRV-005`).
@@ -227,14 +233,15 @@ Thứ hạng được tính khi đọc bằng `rank() OVER (ORDER BY score DESC,
 
 ## 8. PostgreSQL functions bắt buộc
 
-- `start_or_resume_attempt(competition_public_id, game_type, idempotency_key)`: tạo lượt, allocation, bàn cờ; từ chối nếu có lượt đang hoạt động ở game kia.
+- `start_or_resume_attempt(competition_public_id, game_type, idempotency_key)`: tạo lượt, allocation, bàn cờ; từ chối nếu có lượt đang hoạt động ở game kia. Phân bổ chạy dưới `pg_advisory_xact_lock` theo `competition_game_id`, chọn câu có `allocated_count` nhỏ nhất (phá hòa ngẫu nhiên), áp dụng `LA-ALLOC-007/008/010` (`LA-ALLOC-011`).
+- `submit_answer`: câu lệnh đầu `received_at := clock_timestamp()`, sau đó `SET LOCAL lock_timeout`, rồi `SELECT … FOR UPDATE` lượt (`LA-TIME-020`, `LA-TIME-021`).
 - `transfer_attempt_session(attempt_id, expected_session_version)`.
 - `heartbeat_attempt(attempt_id, session_version)`.
 - `open_minefield_cell(attempt_id, cell_index, idempotency_key, session_version)`.
 - `submit_answer(attempt_id, allocation_id, option_id, idempotency_key, session_version)`.
 - `reconcile_attempt(attempt_id)`.
 - `get_attempt_projection(attempt_id)`: projection đã lược bỏ nội dung chưa được phép (không có nội dung câu trước `available_at`).
-- `get_interaction_content(attempt_id, allocation_id, session_version)`: trả nội dung câu khi `now() ≥ available_at`, ghi `content_released_at`; không bao giờ trả đáp án đúng.
+- `get_interaction_content(attempt_id, allocation_id, session_version)`: trả nội dung câu khi `clock_timestamp() ≥ available_at`, ghi `content_released_at`; không bao giờ trả đáp án đúng.
 - `get_leaderboard(competition_public_id, game_type, limit)` và `get_player_standing(attempt_id)` (hạng, khoảng cách tới người ngay trên hoặc hạng 10, trường hợp hạng 1 theo `LA-LB-005`).
 - `get_attempt_review(attempt_id)`: chỉ trả dữ liệu khi cuộc thi `finalized | archived`.
 - `finalize_competition(competition_id)`.

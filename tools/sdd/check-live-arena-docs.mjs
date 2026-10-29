@@ -86,10 +86,17 @@ for (const doc of [SPEC, TRACE, "docs/sdd/PLAN.md"]) {
   }
 }
 
-// 5. Điểm còn mở N1..Nn phải được gắn vào ít nhất một task.
-const openItems = [...spec.matchAll(/^\| (N\d+) \|/gm)].map((m) => m[1]);
+// 5. Điểm còn mở (bảng §12.2.1) phải được gắn vào ít nhất một task.
+const openSection = spec.slice(spec.indexOf("### 12.2.1"), spec.indexOf("### 12.3"));
+const openItems = [...openSection.matchAll(/^\| `?([A-Z][A-Z0-9-]*\d)`? \|/gm)].map((m) => m[1]);
 for (const n of openItems) {
   if (!new RegExp(String.raw`\b${n}\b`).test(tasksDoc)) fail(`TASKS.md: điểm mở ${n} chưa gắn với task nào`);
+}
+// 5b. Luật được nêu trong bảng quyết định §12.1/§12.2 không còn mang nhãn ĐỀ XUẤT (trừ khi nằm trong §12.2.1).
+const decisionSection = spec.slice(spec.indexOf("### 12.1"), spec.indexOf("### 12.2.1"));
+const openIds = expand(openSection).ids;
+for (const id of expand(decisionSection).ids) {
+  if (rules.get(id) === "ĐỀ XUẤT" && !openIds.has(id)) fail(`${id} đã có quyết định nhưng vẫn mang nhãn ĐỀ XUẤT`);
 }
 // Không còn tham chiếu O1–O14 như điểm chặn trong TASKS (đã quyết định).
 if (/Blocked: O\d|blocked: O\d|Open: O\d/.test(tasksDoc)) fail("TASKS.md: còn chặn bởi O1–O14 đã được quyết định");
@@ -141,6 +148,35 @@ for (const doc of docs) {
   read(doc).replaceAll("*", "").split("\n").forEach((line, i) => {
     if (/chống (tra cứu|chia sẻ)[^.]*tuyệt đối/i.test(line) && !/không (được )?tuyên bố|không tuyên bố|không phải|không được trình bày/i.test(line)) {
       fail(`${doc}:${i + 1}: có thể đang tuyên bố chống tra cứu/chia sẻ tuyệt đối`);
+    }
+  });
+}
+
+// 11. Không tài liệu hiện hành nào còn yêu cầu công khai họ tên đầy đủ (quyết định N1).
+const NEGATION = /không|never|SHALL NOT|not |chỉ quản trị|chỉ cho chính|only to|Amended|previously|v1\.1|Sửa đổi|thay cho|ngoài/i;
+for (const doc of docs) {
+  if (doc.includes("evidence/")) continue;
+  read(doc).replaceAll("*", "").split("\n").forEach((line, i) => {
+    if (/(full names?|họ tên đầy đủ)/i.test(line) && /(public|công khai|leaderboard|bảng xếp hạng|projector|trình chiếu)/i.test(line) && !NEGATION.test(line)) {
+      fail(`${doc}:${i + 1}: có thể còn yêu cầu công khai họ tên đầy đủ — ${line.trim().slice(0, 90)}`);
+    }
+  });
+}
+
+// 12. Không có kết luận thời gian dạng tuyệt đối.
+for (const doc of docs) {
+  read(doc).split("\n").forEach((line, i) => {
+    if (/không bao giờ (chạm|là ràng buộc|bị chạm)|never (reaches|hits) (2:30|3:00)/i.test(line) && !/Không được kết luận/.test(line)) {
+      fail(`${doc}:${i + 1}: kết luận thời gian tuyệt đối`);
+    }
+  });
+}
+
+// 13. `now()` không được dùng làm mốc quyết định trong spec và hợp đồng.
+for (const doc of [SPEC, ...CONTRACTS]) {
+  read(doc).split("\n").forEach((line, i) => {
+    if (/now\(\)/.test(line) && !/clock_timestamp|không dùng|\*\*không\*\* dùng|not use|thuần audit/i.test(line)) {
+      fail(`${doc}:${i + 1}: dùng now() làm mốc quyết định — ${line.trim().slice(0, 90)}`);
     }
   });
 }

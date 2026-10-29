@@ -109,7 +109,7 @@ Exit gate: four-layer Hybrid validation passes in production and no required acc
 
 | Stage | Scope | Phase / tasks | Gate |
 | --- | --- | --- | --- |
-| A | Spec, ADR, contracts, plan, tasks and traceability updates; balance and time-budget analyses; consistency check | T090–T098 | Conditionally approved; revision 1 (O1–O14, corrections A–F) awaits owner approval |
+| A | Spec, ADR, contracts, plan, tasks and traceability updates; balance and time-budget analyses; consistency check | T090–T099 | Approved 2026-10-29 subject to revision 2, which is applied |
 | B | Local Supabase unblock; identity, default password, roster `.xlsx`/`.csv` | T014, T019, T030–T035 | Phase 3 exit gate |
 | C | Question bank pipeline and isolated fixtures | T048 | Validation + review pack; no Published without reviewer |
 | D | Competition and game Core in PostgreSQL (TDD) | T040–T046, T049 | pgTAP + Supabase integration |
@@ -117,7 +117,7 @@ Exit gate: four-layer Hybrid validation passes in production and no required acc
 | F | Player, projector, review and admin UI | T050–T058 | Live Arena E2E |
 | G | Load, latency, rehearsal, hardening | T060–T067 | Phase 6 exit gate |
 
-Stages B–G must not start until stage A revision 1 is approved. Remaining open items N1–N9 and the tasks they affect are listed in `live-arena-game-spec.md` §12.2.
+Stage B is authorized after revision 2. Stage B covers only the database test harness, MSSV sign-in and roster import; gameplay, the official question bank and realtime leaderboards stay in later stages. Remaining open items are listed in `live-arena-game-spec.md` §12.2.1. An acceptance report is required at the end of each stage before the next one starts.
 
 ## Dependencies and critical path
 
@@ -133,7 +133,8 @@ Phase 2 content production can run after the Scenario Engine contract in Phase 1
 - Public Broadcast spoofing: event contains no authority; validate version, debounce and refetch.
 - Question bank volume and no appointed academic reviewer yet: build with fixtures, block official competitions until the bank is Published. 87 questions is a development target only; each question would be seen by about 20 of 60 players per competition, so it does not prevent answer sharing (spec §5.13.1).
 - Correct/incorrect feedback reveals two-option answers: mitigated by allocation, option shuffling, exposure limits and explicit confirmation before reusing disclosed questions; never claimed as absolute protection.
-- Leaderboard privacy: full names stay public under `PRV-001` until the classroom display-name proposal (`LA-PRV-003/004`) is decided.
+- Leaderboard privacy: public boards use classroom display names only and anonymous viewers see Top 10 (`LA-PRV-003/004`); CONSTITUTION, Core `PRV-001` and `AGENTS.md` amended.
+- Database clock: decisions use `clock_timestamp()` with bounded lock waits; verified with concurrent-connection tests in stage D (`LA-AC-033..035`).
 - Shared default password allows impersonation: accepted for classroom use, mitigated only by audit and admin incident actions.
 - Game 1 luck and time pressure: the balance baseline ignores the 3-minute limit; the time budget shows slow cell selection can hit 3:00. Both are re-measured with a time model and real players (T067); balancing changes require owner approval.
 - One-person schedule: keep each phase demoable and do not add VR, chatbot, social or multi-class scope.

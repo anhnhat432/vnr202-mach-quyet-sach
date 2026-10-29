@@ -162,14 +162,15 @@ Sửa đổi v1.1: hai game thi đấu là Bãi Mìn Tri Thức và Đường Đ
 
 - Hai game có hai bảng độc lập trong mọi trạng thái: tạm thời, chính thức và lưu trữ. Không có bảng tổng hợp hai game.
 - Bảng được gắn nhãn `Tạm thời` cho tới khi cuộc thi Finalized, sau đó là `Chính thức` (`LA-LB-007`).
-- Bảng công khai hiển thị họ tên đầy đủ (Core `PRV-001`), điểm, trạng thái (đang chơi, đã hoàn thành, hết giờ) và xu hướng thay đổi hạng; không hiển thị mã sinh viên và không liệt kê người chưa chơi. Đề xuất chờ duyệt: tên hiển thị lớp học thay họ tên đầy đủ, và khách chỉ thấy Top 10 (`LA-PRV-003`, `LA-PRV-004`).
+- Bảng công khai hiển thị **tên hiển thị lớp học** dạng rút gọn (ví dụ "An N.V."), điểm, trạng thái (đang chơi, đã hoàn thành, hết giờ) và xu hướng thay đổi hạng; không hiển thị họ tên đầy đủ, mã sinh viên hay người chưa chơi (`LA-PRV-003`).
+- Khách chưa đăng nhập chỉ xem Top 10 mỗi game và số liệu tổng hợp; sinh viên đăng nhập xem thêm thứ hạng cá nhân (`LA-PRV-004`).
 - Phản hồi đúng/sai không được trình bày như cơ chế chống chia sẻ đáp án tuyệt đối (`LA-FB-007`).
 - Người chơi thấy hàng của mình được ghim hoặc làm nổi bật mà không làm thay đổi thứ tự dữ liệu; thấy khoảng cách điểm tới người ngay trên, hoặc tới hạng 10 nếu ở ngoài Top 10 (`LA-LB-005`).
 - Chế độ trình chiếu 1920x1080 hiển thị song song Top 10 của cả hai game, số người đã hoàn thành, thông báo vượt hạng và có chế độ phóng lớn Top 10 của một game; chuyển động đổi hạng phải rõ nhưng không gây nhấp nháy.
 
 ## 9. Student Passport
 
-- Hiển thị họ tên, lớp và lịch sử cuộc thi (V1 không có bước đổi mật khẩu bắt buộc, `LA-ACC-004`).
+- Hiển thị họ tên (chỉ cho chính sinh viên), tên hiển thị trên bảng xếp hạng, lớp và lịch sử cuộc thi (V1 không có bước đổi mật khẩu bắt buộc, `LA-ACC-004`).
 - Hiển thị 15 dấu hồ sơ theo ba chương; tiến độ hồ sơ không cộng vào điểm game.
 - Mỗi cuộc thi có hai thẻ kết quả độc lập, thể hiện `Chưa bắt đầu`, `Đang chơi`, `Đã hoàn thành` hoặc `Hết giờ`.
 - Nếu lượt đang hoạt động, nút chính là `Tiếp tục lượt chơi`; không xuất hiện nút tạo lượt mới.
@@ -240,7 +241,7 @@ Mọi chuyển động phải có biến thể reduced-motion.
 - `UX-AC-006`: IF thiết bị có chiều rộng nhỏ, THEN THE SYSTEM SHALL chuyển Mạch Nguyên Nhân sang lát cắt dạng thẻ có thể sử dụng mà không cần canvas thu nhỏ.
 - `UX-AC-007`: WHEN một sinh viên đã đăng nhập mở Live Arena, THE SYSTEM SHALL hiển thị riêng trạng thái lượt của từng game và nút bắt đầu hoặc tiếp tục hợp lệ.
 - `UX-AC-008`: WHEN điểm của một game được server xác nhận, THE SYSTEM SHALL cập nhật đúng bảng xếp hạng của game đó mà không thay đổi bảng của game còn lại.
-- `UX-AC-009`: WHEN bảng xếp hạng công khai được hiển thị, THE SYSTEM SHALL hiển thị họ tên và SHALL NOT hiển thị mã sinh viên. (Đề xuất `LA-PRV-003` sẽ đổi "họ tên" thành "tên hiển thị lớp học" nếu được duyệt.)
+- `UX-AC-009`: WHEN bảng xếp hạng công khai được hiển thị, THE SYSTEM SHALL hiển thị tên hiển thị lớp học và SHALL NOT hiển thị họ tên đầy đủ hay mã sinh viên. (Sửa đổi v1.1 theo `LA-PRV-003`.)
 - `UX-AC-010`: IF realtime bị gián đoạn, THEN THE SYSTEM SHALL báo trạng thái đồng bộ và khôi phục bảng từ dữ liệu có thẩm quyền mà không giả vờ dữ liệu vẫn live.
 - `UX-AC-011`: WHEN reduced-motion được bật, THE SYSTEM SHALL thay các chuyển động boot, vẽ mạch, so sánh và đổi hạng bằng chuyển trạng thái không gây chuyển động lớn.
 - `UX-AC-012`: WHEN một hồ sơ chưa Published hoặc thiếu nguồn bắt buộc, THE SYSTEM SHALL không hiển thị hồ sơ đó trong khu vực công khai.

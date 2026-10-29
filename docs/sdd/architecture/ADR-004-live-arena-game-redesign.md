@@ -1,6 +1,6 @@
 # ADR-004: Thiết kế lại Live Arena V1.0 (Bãi Mìn Tri Thức và Đường Đua Lịch Sử)
 
-Trạng thái: Proposed — Q1–Q14 và O1–O14 đã được chủ dự án quyết định ngày 2026-10-29; Giai đoạn A duyệt có điều kiện, bản sửa 1 chờ duyệt  
+Trạng thái: Accepted (2026-10-29) — Q1–Q14, O1–O14 và N1–N9 đã được chủ dự án quyết định; bản sửa 2 hoàn thiện các điểm cuối của Giai đoạn A  
 Ngày: 2026-10-29  
 Liên quan: `docs/sdd/specs/live-arena-game-spec.md`, `core-platform-spec.md` §16 (Amendment v1.1), ADR-001
 
@@ -39,7 +39,7 @@ Bỏ chuẩn hóa 1 000 và thành phần tốc độ. Mỗi bảng dùng điể
 ### 5. Mật khẩu mặc định chung và ánh xạ phía server
 
 - Sinh viên đăng nhập bằng MSSV và mật khẩu mặc định chung (`1`), không bắt buộc đổi mật khẩu.
-- Supabase Auth (giữ nguyên stack) mặc định từ chối mật khẩu dưới 6 ký tự (cần xác minh ở Giai đoạn B). Server dùng mật khẩu nội bộ dẫn xuất `base64url(HMAC-SHA256(AUTH_PASSWORD_PEPPER, MSSV + ":" + matKhauNhap))`. Pepper là bí mật server-only.
+- Supabase Auth (giữ nguyên stack) mặc định từ chối mật khẩu dưới 6 ký tự (cần xác minh ở Giai đoạn B, cả local lẫn project thực tế). Email nội bộ là định danh ngẫu nhiên lưu ổn định phía server, không suy ra từ MSSV (`LA-ACC-015`). Server dùng mật khẩu nội bộ dẫn xuất `base64url(HMAC-SHA256(AUTH_PASSWORD_PEPPER, MSSV + ":" + matKhauNhap))`. Pepper là bí mật server-only.
 - Giá trị mật khẩu mặc định đọc từ biến môi trường server-only `ROSTER_DEFAULT_PASSWORD`; không nằm trong mã, seed hoặc fixture.
 - Rủi ro được chấp nhận và ghi nhận: mật khẩu chung không chứng minh danh tính.
 
@@ -61,9 +61,17 @@ Câu hỏi giả lập có `origin = fixture`, nằm ở vị trí riêng, khôn
 
 Bảng `question_exposures` ghi số lần xuất hiện theo cuộc thi; khi cuộc thi Finalized, mọi câu đã dùng được đánh dấu đã lộ đáp án. Cuộc thi `official` mặc định loại câu đã lộ; muốn dùng lại phải có xác nhận rõ ràng từng câu, có audit. Ngân hàng 87 câu chỉ là mục tiêu phát triển: mỗi câu được khoảng 20 trên 60 người thấy trong một cuộc thi.
 
-### 10. Quyền riêng tư của bảng xếp hạng (đề xuất)
+### 10. Quyền riêng tư của bảng xếp hạng
 
-Đề xuất dùng tên hiển thị lớp học (ví dụ "An N.V.") trên bảng công khai và máy chiếu, và giới hạn khách không đăng nhập ở Top 10 (`LA-PRV-003`, `LA-PRV-004`). Đề xuất này sửa Core `PRV-001` nên chỉ có hiệu lực sau khi chủ dự án duyệt; trước đó bảng vẫn dùng họ tên đầy đủ. MSSV không bao giờ công khai (`LA-PRV-001`).
+Bảng công khai và máy chiếu chỉ dùng tên hiển thị lớp học dạng rút gọn (ví dụ "An N.V."), quản trị viên chỉnh được; khách chưa đăng nhập chỉ nhận Top 10 và số liệu tổng hợp (`LA-PRV-003`, `LA-PRV-004`, quyết định N1/N2). Core `PRV-001`, CONSTITUTION và `AGENTS.md` được sửa tương ứng. Họ tên đầy đủ và MSSV không bao giờ công khai.
+
+### 11. Đồng hồ database và chờ khóa
+
+Mọi mốc quyết định dùng `clock_timestamp()` thay `now()` (thời điểm bắt đầu transaction, có thể cũ). `received_at` được lấy ở câu lệnh đầu của RPC trả lời, trước khi chờ khóa; chờ khóa bị giới hạn bởi `lock_timeout`; đối soát hết giờ cộng thêm giới hạn chờ khóa để không chen trước câu trả lời đúng hạn (`LA-TIME-019..023`).
+
+### 12. Phân bổ cân bằng khi nhiều lượt bắt đầu cùng lúc
+
+Phân bổ trong RPC bắt đầu lượt được tuần tự hóa theo `competition_game` bằng khóa advisory phạm vi transaction, chọn câu có số lần phân bổ ít nhất (phá hòa ngẫu nhiên), tách bộ đếm phân bổ và hiển thị (`LA-ALLOC-008`, `LA-ALLOC-011`, `LA-ALLOC-012`). Đánh đổi: các yêu cầu bắt đầu lượt của cùng một game xếp hàng trong vài mili giây; được đo ở P7.
 
 ## Phương án đã cân nhắc
 

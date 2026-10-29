@@ -1,6 +1,6 @@
 # Security and Privacy Specification
 
-Trạng thái: Approved for planning; sửa đổi v1.1 cho Live Arena V1.0 (2026-10-29, bản sửa 1) chờ duyệt văn bản  
+Trạng thái: Approved for planning; sửa đổi v1.1 cho Live Arena V1.0 (2026-10-29, bản sửa 2)  
 Phạm vi: Auth, authorization, PII, API, CSV, content, realtime, secrets và deployment
 
 ## 1. Tài sản cần bảo vệ
@@ -11,7 +11,7 @@ Phạm vi: Auth, authorization, PII, API, CSV, content, realtime, secrets và de
 - Attempt state, score calculations, timer, thời hạn câu và audit records.
 - Admin actions và publication authority.
 
-Full name được phép công khai trên leaderboard theo Core `PRV-001`; student ID không bao giờ được công khai. Đề xuất `LA-PRV-003/004` (tên hiển thị lớp học, khách chỉ thấy Top 10) đang chờ duyệt; nếu được duyệt, họ tên đầy đủ chỉ quản trị viên và chính sinh viên thấy. Không endpoint công khai nào liệt kê danh sách lớp (`LA-PRV-002`).
+Bảng xếp hạng công khai chỉ hiển thị tên hiển thị lớp học dạng rút gọn (`LA-PRV-003`); họ tên đầy đủ chỉ quản trị viên và chính sinh viên thấy; student ID không bao giờ được công khai. Khách chỉ nhận Top 10 và số liệu tổng hợp (`LA-PRV-004`). Không endpoint công khai nào liệt kê danh sách lớp (`LA-PRV-002`).
 
 ## 2. Threat model tối thiểu
 
@@ -33,7 +33,7 @@ Full name được phép công khai trên leaderboard theo Core `PRV-001`; stude
 - Supabase Auth quản lý password hash và refresh token.
 - Session lưu trong secure, httpOnly, SameSite=Lax cookies qua `@supabase/ssr`; production bắt buộc HTTPS.
 - Không lưu access/refresh token trong localStorage.
-- Login UI nhận student ID; synthetic email chỉ được tạo trong server code.
+- Login UI nhận student ID; synthetic email là định danh ngẫu nhiên (UUID) sinh khi tạo tài khoản, lưu ổn định trong bảng chỉ server truy cập, không suy ra từ MSSV (`LA-ACC-015`). Khi MSSV không tồn tại, server vẫn thực hiện cùng khối lượng tính toán (dẫn xuất mật khẩu, gọi xác thực giả) để thời gian phản hồi không lộ sự tồn tại.
 - Error login luôn là `invalid_credentials`, không xác nhận student ID tồn tại.
 - Supabase Auth rate limit cộng với application rate limit theo IP hash và student ID hash; ngưỡng IP phải chịu được cả lớp sau một NAT (§11).
 - **Ngoại lệ có ghi nhận (`LA-ACC-003..006`, thay Core `ACC-003`):** sinh viên dùng mật khẩu mặc định chung `1`, không bắt buộc đổi ở lần đầu. Chính sách mật khẩu 10–72 ký tự của v1.0 không áp dụng cho tài khoản sinh viên V1. Ngoại lệ chỉ hợp lệ cho thi đua lớp học giá trị thấp; cuộc thi có giá trị cao phải sửa đổi đặc tả trước.
@@ -104,6 +104,7 @@ Client mutations trực tiếp vào Core tables không có policy.
 - Nội dung ô chưa mở và câu chưa hiển thị không vào client payload (`MINE-BOARD-005`, `LA-ALLOC-005`).
 - File nguồn ngân hàng câu hỏi không được import vào `web/src`; build kiểm tra client bundle không chứa đáp án (`LA-AC-020`).
 - Score/rank update trong transaction; client-provided score, elapsed, correctness, deadline hoặc trạng thái vật phẩm bị bỏ qua.
+- Thời điểm quyết định dùng `clock_timestamp()`, không `now()`; `received_at` lấy trước khi chờ khóa; `lock_timeout` giới hạn chờ khóa; đối soát hết giờ không chen trước câu trả lời đúng hạn đang chờ khóa (`LA-TIME-019..022`).
 - Thời hạn câu ghi một lần; answer đến sau `min(deadline_at, ends_at) + latency_allowance` được ghi hết giờ, không có điểm.
 - Câu hỏi `origin = fixture` không được dùng trong cuộc thi `official` và không được seed vào production (`LA-CONTENT-005`).
 
@@ -164,6 +165,8 @@ Audit row ghi actor, action, target, request ID, redacted before/after và serve
 - Không response, sự kiện hay bundle nào chứa đáp án đúng trước khi cuộc thi Finalized; endpoint xem lại từ chối trước Finalized.
 - Câu trả lời sau thời hạn + độ trễ cho phép không được cộng điểm; F5/chuyển thiết bị không làm mới thời hạn.
 - Kiểm thử PostgreSQL cục bộ không thay thế kiểm thử Auth/RLS/Realtime trên Supabase thật; cả hai bắt buộc.
+- Response công khai không chứa họ tên đầy đủ, chỉ tên hiển thị; khách không nhận quá 10 hàng (`LA-AC-032`, `LA-AC-038`).
+- Transaction cũ/chậm và chờ khóa không làm đáp án quá hạn được chấp nhận (`LA-AC-033..035`).
 - Public leaderboard response và event không chứa student ID/auth ID; không endpoint công khai nào trả danh sách lớp hoặc người chưa bắt đầu lượt (`LA-AC-032`).
 - Không payload nào chứa đề/lựa chọn trước `available_at` (`LA-AC-022`); lấy nội dung muộn không kéo dài `deadline_at` (`LA-AC-023`).
 - Service role không xuất hiện trong client bundle, source map hoặc logs.

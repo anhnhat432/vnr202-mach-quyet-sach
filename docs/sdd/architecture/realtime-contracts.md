@@ -1,6 +1,6 @@
 # Realtime Contracts
 
-Trạng thái: Approved for planning; sửa đổi v1.1 cho Live Arena V1.0 (2026-10-29, bản sửa 1) chờ duyệt văn bản  
+Trạng thái: Approved for planning; sửa đổi v1.1 cho Live Arena V1.0 (2026-10-29, bản sửa 2)  
 Nguyên tắc: event là notification, REST/RPC projection là nguồn chân lý
 
 ## 1. Channel taxonomy
@@ -54,7 +54,7 @@ Yêu cầu:
 
 - `eventId` unique.
 - `version` tăng đơn điệu trong từng aggregate.
-- Public event không có full name, student ID, auth ID, answer, đáp án đúng, score chi tiết hoặc attempt ID (`LA-ANTI-007`).
+- Public event không có tên hiển thị, full name, student ID, auth ID, answer, đáp án đúng, score chi tiết hoặc attempt ID (`LA-ANTI-007`).
 - Client bỏ event sai schema, sai topic, version nhỏ hơn hoặc bằng version đang render.
 
 ## 3. Leaderboard flow

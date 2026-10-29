@@ -24,7 +24,7 @@ VNR202 - Mạch Quyết Sách is a public educational history experience with 15
 - At most one active attempt per student across both games; the game clock never pauses and question deadlines are absolute.
 - The shared default student password and its derivation pepper live only in server-side environment variables; never hard-code them in code, seeds or fixtures.
 - No correct answer or explanation leaves the server before the competition is Finalized.
-- Public leaderboard shows full name but never student ID.
+- Public leaderboards and public APIs show only the classroom display name (e.g. "An N.V."), never full name or student ID; anonymous viewers get Top 10 and aggregates only.
 - AI can draft academic content but cannot review or publish it.
 - Never commit secrets, real roster data, temporary passwords or service-role credentials.
 

@@ -116,7 +116,7 @@ Sửa đổi 2026-10-29: hai game thi đấu được thay theo `live-arena-game
 
 - Hai bảng xếp hạng phải có nhận diện game khác nhau nhưng cùng hệ thống component.
 - Tạo web view và projector view 1920x1080.
-- Projector view hiển thị song song Top 10 của cả hai game, người hoàn thành, thông báo vượt hạng, nhãn tạm thời/chính thức và timestamp đồng bộ; có chế độ phóng lớn Top 10 của một game.
+- Projector view hiển thị song song Top 10 của cả hai game bằng tên hiển thị lớp học ("An N.V.", không họ tên đầy đủ, không MSSV), người hoàn thành, thông báo vượt hạng, nhãn tạm thời/chính thức và timestamp đồng bộ; có chế độ phóng lớn Top 10 của một game.
 
 ## 8. Student và Auth bắt buộc
 
