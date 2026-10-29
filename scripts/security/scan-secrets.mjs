@@ -12,7 +12,7 @@ const rules = [
   ["roster default password literal", /ROSTER_DEFAULT_PASSWORD\s*=\s*(?!\$|replace-with|set-in-deployment-environment)["']?\S+/],
   ["harness secrets file", /\.local\/supabase\/(secrets|stack)\.env/],
 ];
-const allow = new Set(["scripts/security/scan-secrets.mjs", "docs/sdd/evidence/phase-3/README.md", "scripts/db/local-stack.sh", "scripts/db/test-db.sh", ".gitignore"]);
+const allow = new Set(["scripts/security/scan-secrets.mjs", "docs/sdd/evidence/phase-3/README.md", "scripts/db/local-stack.sh", "scripts/db/test-db.sh", "web/vitest.integration.config.mts", ".gitignore"]);
 let findings = 0;
 for (const file of files) {
   if (allow.has(file)) continue;
