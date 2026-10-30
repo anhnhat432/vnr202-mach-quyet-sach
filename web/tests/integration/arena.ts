@@ -147,7 +147,7 @@ export type Projection = {
   attempt: { id: string; game: string; state: string; score: number; sessionVersion: number; version: number; remainingMs: number; mainAnswered: number; mainCorrect: number; shields?: number; doubleArmed?: boolean; streak?: number; comboAwards?: number; completionDurationMs: number | null; endsAt: string; startedAt: string };
   competition: { publicId: string; kind: string; state: string; standing: string };
   board: Array<{ index: number; opened: boolean; kind?: string; allocationId?: string; difficulty?: string; outcome?: string | null }> | null;
-  interaction: { allocationId: string; sequence: number; role: string; status: string; contentFetched: boolean; difficulty?: string; availableInMs?: number; remainingMs?: number } | null;
+  interaction: { allocationId: string; sequence: number; role: string; status: string; contentFetched: boolean; difficulty?: string; availableInMs?: number; remainingMs?: number; upcoming?: { allocationId: string; sequence: number; availableInMs: number } } | null;
   lastEvent: { type: string; pointsDelta: number; scoreAfter: number } | null;
 };
 export type Resolved = { result: { allocationId: string; outcome: string; awardedPoints: number; comboBonus: number; doubleApplied: boolean; effect: string; scoreAfter: number }; replayed: boolean; projection: Projection };
