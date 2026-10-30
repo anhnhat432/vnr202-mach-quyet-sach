@@ -2,9 +2,10 @@
 
 import { motion, useReducedMotion } from "motion/react";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import type { DossierExperience } from "@/features/content/contracts/dossier";
+import { ArenaApiError, request } from "@/features/arena/client/api";
 
 type ScenarioStage = "briefing" | "evidence" | "decision" | "consequences" | "comparison" | "connections";
 
@@ -55,10 +56,23 @@ export function ScenarioEngine({
   const [selectedEvidence, setSelectedEvidence] = useState<string[]>([]);
   const [selectedDecision, setSelectedDecision] = useState("");
   const [isRestored, setIsRestored] = useState(false);
+  const [accountSync, setAccountSync] = useState<"loading" | "guest" | "ready" | "error">("loading");
+  const writes = useRef<Promise<void>>(Promise.resolve());
   const stageIndex = stages.findIndex((item) => item.id === stage);
 
   useEffect(() => {
-    const savedState = readSavedState(storageKey);
+    let alive = true;
+    async function restore() {
+    let savedState = readSavedState(storageKey);
+    let sync: "guest" | "ready" | "error" = "guest";
+    try {
+      const rows = await request<Array<{ dossier_id: string; state: SavedScenarioState }>>("GET", "/passport/progress");
+      savedState = rows.find((row) => row.dossier_id === dossierId)?.state ?? { stage: "briefing", selectedEvidence: [], selectedDecision: "" };
+      sync = "ready";
+    } catch (error) {
+      if (!(error instanceof ArenaApiError && error.status === 401)) sync = "error";
+    }
+    if (!alive) return;
     const restoredEvidence = savedState.selectedEvidence.filter((id) =>
       experience.evidence.some((item) => item.id === id),
     );
@@ -73,19 +87,27 @@ export function ScenarioEngine({
       restoredStage = "decision";
     }
 
-    const restoreFrame = window.requestAnimationFrame(() => {
       setStage(restoredStage);
       setSelectedEvidence(restoredEvidence);
       setSelectedDecision(restoredDecision);
+      setAccountSync(sync);
       setIsRestored(true);
-    });
-    return () => window.cancelAnimationFrame(restoreFrame);
-  }, [experience.decision.options, experience.decision.requiredEvidenceCount, experience.evidence, storageKey]);
+    }
+    void restore();
+    return () => { alive = false; };
+  }, [dossierId, experience.decision.options, experience.decision.requiredEvidenceCount, experience.evidence, storageKey]);
 
   useEffect(() => {
     if (!isRestored) return;
     window.localStorage.setItem(storageKey, JSON.stringify({ stage, selectedEvidence, selectedDecision }));
-  }, [isRestored, selectedDecision, selectedEvidence, stage, storageKey]);
+    if (accountSync === "ready") {
+      const state = { stage, selectedEvidence, selectedDecision };
+      writes.current = writes.current.catch(() => undefined).then(async () => {
+        await request("POST", "/passport/progress", { body: { slug: dossierSlug, state } });
+      });
+      void writes.current.catch(() => setAccountSync("error"));
+    }
+  }, [accountSync, dossierSlug, isRestored, selectedDecision, selectedEvidence, stage, storageKey]);
 
   const selectedOption = experience.decision.options.find((option) => option.id === selectedDecision);
   const consequence = useMemo(
@@ -101,6 +123,7 @@ export function ScenarioEngine({
 
   return (
     <section className="scenario" aria-label="Trình mô phỏng hồ sơ quyết sách">
+      {accountSync === "error" ? <p role="status">Không đồng bộ được tiến độ tài khoản. Tiến độ hiện được lưu trên thiết bị này.</p> : null}
       <aside className="scenario__rail" aria-label="Sáu chặng">
         <p className="eyebrow">Scenario Engine · 6 chặng</p>
         <ol>

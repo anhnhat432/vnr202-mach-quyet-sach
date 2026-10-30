@@ -11,6 +11,31 @@ servers:
 security:
   - supabaseSession: []
 paths:
+  /passport/progress:
+    get:
+      summary: Private dossier progress for the authenticated student
+      responses: { "200": { $ref: "#/components/responses/Ok" }, "401": { $ref: "#/components/responses/Error" } }
+    post:
+      summary: Save a validated stage of a Published dossier for the authenticated student
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [slug, state]
+              properties:
+                slug: { type: string, maxLength: 150 }
+                state:
+                  type: object
+                  additionalProperties: false
+                  required: [stage, selectedEvidence, selectedDecision]
+                  properties:
+                    stage: { type: string, enum: [briefing, evidence, decision, consequences, comparison, connections] }
+                    selectedEvidence: { type: array, maxItems: 30, items: { type: string } }
+                    selectedDecision: { type: string, maxLength: 100 }
+      responses: { "200": { $ref: "#/components/responses/Ok" }, "401": { $ref: "#/components/responses/Error" }, "404": { $ref: "#/components/responses/Error" }, "422": { $ref: "#/components/responses/Error" } }
   /arena/lobby:
     get:
       summary: Open competition and the student's per-game attempt state
