@@ -1,7 +1,7 @@
 -- Identity/roster RLS actor matrix and MSSV constraints (T030, T035).
 -- Actors: anon, student A, student B, admin (role in app_metadata), forged admin (role in user_metadata).
 begin;
-select plan(26);
+select plan(30);
 
 insert into auth.users (id, email) values
   ('00000000-0000-4000-8000-00000000000a', 'a@test.invalid'),
@@ -16,6 +16,28 @@ insert into public.profiles (id, role, student_id, full_name, display_name, clas
 insert into public.student_auth_identities (profile_id, internal_email) values
   ('00000000-0000-4000-8000-00000000000a', '6f1c2b8e-0000-4000-8000-000000000001@auth.invalid');
 insert into public.audit_logs (action, target_type, target_id) values ('test', 'profile', 'x');
+
+-- Table privileges are explicit and minimal; they must not depend on the platform's default grants.
+select ok(
+  (select bool_and(has_table_privilege('service_role', 'public.' || t, 'SELECT, INSERT, UPDATE, DELETE'))
+   from unnest(array['classes','profiles','student_auth_identities','auth_events','roster_imports','roster_import_rows','audit_logs','rate_limit_buckets']) t),
+  'service_role has full DML on every identity table'
+);
+select ok(
+  (select bool_and(has_table_privilege('authenticated', 'public.' || t, 'SELECT') and not has_table_privilege('authenticated', 'public.' || t, 'INSERT, UPDATE, DELETE'))
+   from unnest(array['classes','profiles','auth_events','roster_imports','roster_import_rows','audit_logs']) t),
+  'authenticated can only SELECT the policy-protected identity tables'
+);
+select ok(
+  (select not bool_or(has_table_privilege('authenticated', 'public.' || t, 'SELECT, INSERT, UPDATE, DELETE'))
+   from unnest(array['student_auth_identities','rate_limit_buckets']) t),
+  'authenticated has no privilege on server-only tables'
+);
+select ok(
+  (select not bool_or(has_table_privilege('anon', 'public.' || t, 'SELECT, INSERT, UPDATE, DELETE'))
+   from unnest(array['classes','profiles','student_auth_identities','auth_events','roster_imports','roster_import_rows','audit_logs','rate_limit_buckets']) t),
+  'anon has no privilege on any identity table'
+);
 
 -- MSSV stays text and keeps leading zeros (LA-ACC-011); minimal safety checks (LA-ACC-018).
 select is((select student_id from public.profiles where id = '00000000-0000-4000-8000-00000000000a'), 'SE000123', 'MSSV keeps leading zeros as text');

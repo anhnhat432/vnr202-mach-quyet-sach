@@ -13,7 +13,10 @@ export const SIGN_IN_LIMITS = {
   ipRequests: { limit: 300, windowSeconds: 600 }, // whole class behind one NAT
 } as const;
 
+export type SignInLimits = { studentFailures: { limit: number; windowSeconds: number }; ipRequests: { limit: number; windowSeconds: number } };
+
 export type SignInDeps = {
+  limits?: SignInLimits; // test seam; defaults to SIGN_IN_LIMITS
   admin: SupabaseClient; // service role
   auth: SupabaseClient; // client whose session storage writes the response cookies
   env: Pick<ServerEnv, "AUTH_PASSWORD_PEPPER" | "INTERNAL_AUTH_EMAIL_DOMAIN">;
@@ -33,15 +36,16 @@ async function rateLimited(admin: SupabaseClient, key: string, rule: { limit: nu
 
 export async function signInStudent(
   deps: SignInDeps,
-  input: { studentId: string; password: string; ip: string; device: string },
+  input: { studentId: string; password: string; ip: string | null; device: string },
 ): Promise<SignInResult> {
   const { admin, auth, env } = deps;
   const studentId = normalizeStudentId(input.studentId);
   const studentKey = hashIdentifier(env.AUTH_PASSWORD_PEPPER, "rate:sign-in:student", studentId);
-  const ipKey = hashIdentifier(env.AUTH_PASSWORD_PEPPER, "rate:sign-in:ip", input.ip);
+  const limits = deps.limits ?? SIGN_IN_LIMITS;
 
-  if (await rateLimited(admin, ipKey, SIGN_IN_LIMITS.ipRequests, true)) return { ok: false, reason: "rate_limited" };
-  if (await rateLimited(admin, studentKey, SIGN_IN_LIMITS.studentFailures, false)) return { ok: false, reason: "rate_limited" };
+  // Per-IP limit only when a trusted client IP exists (null = no trusted proxy, see clientIp).
+  if (input.ip && (await rateLimited(admin, hashIdentifier(env.AUTH_PASSWORD_PEPPER, "rate:sign-in:ip", input.ip), limits.ipRequests, true))) return { ok: false, reason: "rate_limited" };
+  if (await rateLimited(admin, studentKey, limits.studentFailures, false)) return { ok: false, reason: "rate_limited" };
 
   const { data: profile } = await admin
     .from("profiles")
@@ -59,16 +63,16 @@ export async function signInStudent(
   const { data, error } = await auth.auth.signInWithPassword({ email, password: providerPassword });
 
   if (error || !data.user || !profile || !internalEmail) {
-    await rateLimited(admin, studentKey, SIGN_IN_LIMITS.studentFailures, true);
-    await recordAuthEvent(admin, env.AUTH_PASSWORD_PEPPER, "sign_in_failure", { profileId: profile?.id, studentId, ip: input.ip, device: input.device });
+    await rateLimited(admin, studentKey, limits.studentFailures, true);
+    await recordAuthEvent(admin, env.AUTH_PASSWORD_PEPPER, "sign_in_failure", { profileId: profile?.id, studentId, ip: input.ip ?? undefined, device: input.device });
     return { ok: false, reason: "invalid_credentials" };
   }
   if (profile.status !== "active") {
     await auth.auth.signOut({ scope: "local" });
-    await recordAuthEvent(admin, env.AUTH_PASSWORD_PEPPER, "sign_in_failure", { profileId: profile.id, studentId, ip: input.ip, device: input.device });
+    await recordAuthEvent(admin, env.AUTH_PASSWORD_PEPPER, "sign_in_failure", { profileId: profile.id, studentId, ip: input.ip ?? undefined, device: input.device });
     return { ok: false, reason: "account_disabled" };
   }
-  await recordAuthEvent(admin, env.AUTH_PASSWORD_PEPPER, "sign_in_success", { profileId: profile.id, studentId, ip: input.ip, device: input.device });
+  await recordAuthEvent(admin, env.AUTH_PASSWORD_PEPPER, "sign_in_success", { profileId: profile.id, studentId, ip: input.ip ?? undefined, device: input.device });
   return { ok: true, userId: data.user.id, role: "student", displayName: profile.display_name };
 }
 
@@ -76,14 +80,14 @@ export async function signInStudent(
 // app_metadata (server-controlled) and match an active admin profile.
 export async function signInAdmin(
   deps: SignInDeps,
-  input: { email: string; password: string; ip: string; device: string },
+  input: { email: string; password: string; ip: string | null; device: string },
 ): Promise<SignInResult> {
   const { admin, auth, env } = deps;
   const email = input.email.trim().toLowerCase();
   const accountKey = hashIdentifier(env.AUTH_PASSWORD_PEPPER, "rate:sign-in:admin", email);
-  const ipKey = hashIdentifier(env.AUTH_PASSWORD_PEPPER, "rate:sign-in:ip", input.ip);
-  if (await rateLimited(admin, ipKey, SIGN_IN_LIMITS.ipRequests, true)) return { ok: false, reason: "rate_limited" };
-  if (await rateLimited(admin, accountKey, SIGN_IN_LIMITS.studentFailures, false)) return { ok: false, reason: "rate_limited" };
+  const limits = deps.limits ?? SIGN_IN_LIMITS;
+  if (input.ip && (await rateLimited(admin, hashIdentifier(env.AUTH_PASSWORD_PEPPER, "rate:sign-in:ip", input.ip), limits.ipRequests, true))) return { ok: false, reason: "rate_limited" };
+  if (await rateLimited(admin, accountKey, limits.studentFailures, false)) return { ok: false, reason: "rate_limited" };
 
   const { data, error } = await auth.auth.signInWithPassword({ email, password: input.password });
   const user = data?.user;
@@ -93,10 +97,10 @@ export async function signInAdmin(
   const isAdmin = user?.app_metadata?.role === "admin" && profile?.role === "admin" && profile.status === "active";
   if (error || !user || !isAdmin || !profile) {
     if (user) await auth.auth.signOut({ scope: "local" });
-    await rateLimited(admin, accountKey, SIGN_IN_LIMITS.studentFailures, true);
-    await recordAuthEvent(admin, env.AUTH_PASSWORD_PEPPER, "sign_in_failure", { profileId: profile?.id, ip: input.ip, device: input.device });
+    await rateLimited(admin, accountKey, limits.studentFailures, true);
+    await recordAuthEvent(admin, env.AUTH_PASSWORD_PEPPER, "sign_in_failure", { profileId: profile?.id, ip: input.ip ?? undefined, device: input.device });
     return { ok: false, reason: "invalid_credentials" };
   }
-  await recordAuthEvent(admin, env.AUTH_PASSWORD_PEPPER, "sign_in_success", { profileId: profile.id, ip: input.ip, device: input.device });
+  await recordAuthEvent(admin, env.AUTH_PASSWORD_PEPPER, "sign_in_success", { profileId: profile.id, ip: input.ip ?? undefined, device: input.device });
   return { ok: true, userId: user.id, role: "admin", displayName: profile.display_name };
 }

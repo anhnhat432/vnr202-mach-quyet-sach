@@ -19,7 +19,7 @@ create schema if not exists extensions;
 create extension if not exists pgcrypto with schema extensions;
 grant usage on schema extensions to anon, authenticated, service_role;
 
+-- Matches the current Supabase default: new tables, views and functions in `public` are NOT
+-- auto-granted to the Data API roles (config.toml `auto_expose_new_tables`). Migrations must
+-- GRANT explicitly, so a missing grant fails here exactly as it does on supabase start / hosted.
 grant usage on schema public to anon, authenticated, service_role;
-alter default privileges in schema public grant all on tables to anon, authenticated, service_role;
-alter default privileges in schema public grant all on functions to anon, authenticated, service_role;
-alter default privileges in schema public grant all on sequences to anon, authenticated, service_role;

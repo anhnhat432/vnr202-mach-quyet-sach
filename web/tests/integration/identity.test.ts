@@ -6,6 +6,7 @@ import { signInAdmin, signInStudent, SIGN_IN_LIMITS } from "@/features/auth/serv
 import { resetPasswordToDefault, revokeSessions, setAccountStatus, updateDisplayName } from "@/features/roster/server/admin-accounts";
 import { applyRosterImport, createRosterPreview } from "@/features/roster/server/roster-service";
 import { ApiError } from "@/lib/api/errors";
+import { clientIp } from "@/lib/api/client-info";
 import { anonClient, cleanupClass, clientWithToken, env, serviceClient, stack, utf8 } from "./stack";
 
 const admin = serviceClient();
@@ -286,5 +287,24 @@ describe("RLS with real JWTs through PostgREST (ACCESS-002/003, security-spec §
   it("signs in with the service role key only server-side: the anon key cannot call admin Auth APIs", async () => {
     const response = await fetch(`${stack.url}/auth/v1/admin/users`, { headers: { apikey: stack.anonKey, Authorization: `Bearer ${stack.anonKey}` } });
     expect(response.status).toBeGreaterThanOrEqual(400);
+  });
+});
+
+describe("per-IP sign-in limit cannot be bypassed with a forged X-Forwarded-For (LA-ACC-008)", () => {
+  const tight = { limits: { studentFailures: { limit: 50, windowSeconds: 600 }, ipRequests: { limit: 3, windowSeconds: 600 } } };
+  const attempt = (xff: string, hops: number) =>
+    signInStudent({ admin, auth: anonClient(), env, ...tight }, { studentId: "HE777777", password: "x", ip: clientIp(new Request("https://app.example/x", { headers: { "x-forwarded-for": xff } }), hops), device: "spoof" });
+
+  it("behind one trusted proxy, rotating forged leading entries still shares the real client's bucket", async () => {
+    const real = "198.51.100.77";
+    const outcomes = [];
+    for (let i = 0; i < 5; i += 1) outcomes.push((await attempt(`10.${i}.0.1, ${real}`, 1)) as { ok: false; reason: string });
+    expect(outcomes.map((o) => o.reason)).toEqual(["invalid_credentials", "invalid_credentials", "invalid_credentials", "rate_limited", "rate_limited"]);
+    // A different real client is unaffected.
+    expect((await attempt("10.9.0.1, 198.51.100.78", 1))).toMatchObject({ ok: false, reason: "invalid_credentials" });
+  });
+
+  it("with no trusted proxy the forged header is ignored: no IP bucket exists to exhaust or dodge", async () => {
+    for (let i = 0; i < 6; i += 1) expect(await attempt(`172.16.0.${i}`, 0)).toMatchObject({ reason: "invalid_credentials" });
   });
 });

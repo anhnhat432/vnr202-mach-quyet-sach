@@ -6,6 +6,7 @@ import { deriveProviderPassword } from "@/features/auth/domain/provider-password
 import { recordAudit } from "@/features/auth/server/audit";
 import { assignDisplayNameSuffixes, normalizeDisplayName } from "@/features/roster/domain/display-name";
 import { buildRosterPreview, readRosterFile, type RosterRow } from "@/features/roster/domain/roster-table";
+import { compensateBatch, type CompensationDeps } from "@/features/roster/server/roster-compensation";
 import type { ServerEnv } from "@/lib/config/server-env";
 import { ApiError } from "@/lib/api/errors";
 
@@ -15,6 +16,7 @@ export type RosterDeps = {
   env: Pick<ServerEnv, "AUTH_PASSWORD_PEPPER" | "ROSTER_DEFAULT_PASSWORD" | "INTERNAL_AUTH_EMAIL_DOMAIN" | "ROSTER_STUDENT_ID_PATTERN" | "ROSTER_MAX_ROWS">;
   // Test seam for compensation (provider failure mid-batch).
   createAuthUser?: (attributes: { email: string; password: string }) => Promise<{ id: string }>;
+  compensation?: Omit<CompensationDeps, "admin">;
 };
 
 async function ensureActiveClass(admin: SupabaseClient, code: string, name: string): Promise<string> {
@@ -139,11 +141,13 @@ export async function applyRosterImport(
     });
 
   const created: string[] = [];
+  const attemptedEmails: string[] = [];
   try {
     for (const [index, row] of selected.entries()) {
       if (context.existingStudentIds.has(row.student_id)) throw new Error("student id appeared after preview");
       const email = `${randomUUID()}@${env.INTERNAL_AUTH_EMAIL_DOMAIN}`; // random, not derived from MSSV (LA-ACC-015)
       const password = deriveProviderPassword(env.AUTH_PASSWORD_PEPPER, row.student_id, env.ROSTER_DEFAULT_PASSWORD);
+      attemptedEmails.push(email);
       const user = await createUser({ email, password });
       created.push(user.id);
       const { error: profileError } = await admin.from("profiles").insert({
@@ -162,21 +166,23 @@ export async function applyRosterImport(
     }
   } catch (failure) {
     // Compensation: Auth and profile writes are not one transaction, so undo every account
-    // created by this batch (profiles and identities cascade from auth.users).
-    for (const id of created) await admin.auth.admin.deleteUser(id);
+    // this batch may have created. Each deletion is verified; failures are reported, not hidden.
+    const outcome = await compensateBatch({ admin, ...deps.compensation }, created, attemptedEmails);
+    const reason = failure instanceof Error ? failure.message.slice(0, 200) : "unknown";
+    if (outcome.remaining.length === 0) {
+      await admin
+        .from("roster_imports")
+        .update({ status: "compensated", error_summary: { message: "provider_failure", removedAccounts: outcome.removed.length } })
+        .eq("id", input.importId);
+      await recordAudit(admin, { actorId: input.actorId, action: "roster.apply_compensated", targetType: "roster_import", targetId: input.importId, requestId: input.requestId, after: { removedAccounts: outcome.removed.length, reason } });
+      throw new ApiError(503, "roster_apply_failed", "Không áp dụng được danh sách; không tài khoản nào được tạo.");
+    }
     await admin
       .from("roster_imports")
-      .update({ status: "compensated", error_summary: { message: "provider_failure", createdBeforeFailure: created.length } })
+      .update({ status: "failed", error_summary: { message: "compensation_incomplete", removedAccounts: outcome.removed.length, remainingAuthUserIds: outcome.remaining, lockedProfiles: outcome.locked } })
       .eq("id", input.importId);
-    await recordAudit(admin, {
-      actorId: input.actorId,
-      action: "roster.apply_compensated",
-      targetType: "roster_import",
-      targetId: input.importId,
-      requestId: input.requestId,
-      after: { compensatedAccounts: created.length, reason: failure instanceof Error ? failure.message.slice(0, 200) : "unknown" },
-    });
-    throw new ApiError(503, "roster_apply_failed", "Không áp dụng được danh sách; không tài khoản nào được tạo.");
+    await recordAudit(admin, { actorId: input.actorId, action: "roster.apply_compensation_incomplete", targetType: "roster_import", targetId: input.importId, requestId: input.requestId, after: { removedAccounts: outcome.removed.length, remainingAccounts: outcome.remaining.length, lockedProfiles: outcome.locked, reason } });
+    throw new ApiError(503, "roster_cleanup_incomplete", `Không dọn sạch hoàn toàn: còn ${outcome.remaining.length} tài khoản chưa xóa được (đã khóa). Hãy chạy lại bước dọn dẹp cho bản nhập này.`);
   }
 
   await admin.from("roster_imports").update({ status: "applied", applied_at: new Date().toISOString() }).eq("id", input.importId);
@@ -204,4 +210,22 @@ export async function getRosterImport(admin: SupabaseClient, importId: string) {
     .eq("import_id", importId)
     .order("row_number");
   return { ...importRow, rows: rows ?? [] };
+}
+
+// Retry cleanup for an import whose compensation was incomplete. Only recorded leftovers are touched.
+export async function retryRosterCleanup(deps: RosterDeps, input: { actorId: string; importId: string; requestId?: string }) {
+  const { admin } = deps;
+  const { data: importRow } = await admin.from("roster_imports").select("id, status, error_summary").eq("id", input.importId).maybeSingle();
+  if (!importRow) throw new ApiError(404, "not_found", "Không tìm thấy.");
+  const leftovers = (importRow.error_summary as { remainingAuthUserIds?: string[] } | null)?.remainingAuthUserIds;
+  if (importRow.status !== "failed" || !leftovers?.length) throw new ApiError(409, "import_not_ready", "Bản nhập không có tài khoản cần dọn.");
+  const outcome = await compensateBatch({ admin, ...deps.compensation }, leftovers, []);
+  const done = outcome.remaining.length === 0;
+  await admin
+    .from("roster_imports")
+    .update(done ? { status: "compensated", error_summary: { message: "cleanup_completed", removedAccounts: outcome.removed.length } } : { error_summary: { message: "compensation_incomplete", remainingAuthUserIds: outcome.remaining, lockedProfiles: outcome.locked } })
+    .eq("id", input.importId);
+  await recordAudit(admin, { actorId: input.actorId, action: done ? "roster.cleanup_completed" : "roster.cleanup_incomplete", targetType: "roster_import", targetId: input.importId, requestId: input.requestId, after: { removedAccounts: outcome.removed.length, remainingAccounts: outcome.remaining.length } });
+  if (!done) throw new ApiError(503, "roster_cleanup_incomplete", `Vẫn còn ${outcome.remaining.length} tài khoản chưa xóa được.`);
+  return { removed: outcome.removed.length };
 }

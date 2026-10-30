@@ -7,7 +7,7 @@ import { clientIp, deviceLabel } from "@/lib/api/client-info";
 import { CSRF_COOKIE, isSameOrigin, issueCsrfToken } from "@/lib/api/csrf";
 import { readJson, route } from "@/lib/api/handler";
 import { requestIdFrom } from "@/lib/api/request-id";
-import { getServerEnv } from "@/lib/config/server-env";
+import { getServerEnv, trustedProxyHops } from "@/lib/config/server-env";
 import { createServerClient } from "@/lib/supabase/server";
 import { createServiceRoleClient } from "@/lib/supabase/service-role";
 
@@ -20,7 +20,7 @@ export const POST = route(async (request) => {
   const env = getServerEnv();
   const result = await signInAdmin(
     { admin: createServiceRoleClient(env), auth: await createServerClient(), env },
-    { email: input.email, password: input.password, ip: clientIp(request), device: deviceLabel(request) },
+    { email: input.email, password: input.password, ip: clientIp(request, trustedProxyHops(env)), device: deviceLabel(request) },
   );
   if (!result.ok) {
     if (result.reason === "rate_limited") throw new ApiError(429, "rate_limited", "Thử lại sau ít phút.");
