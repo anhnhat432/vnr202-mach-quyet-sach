@@ -19,7 +19,12 @@ async function signIn(browser: Browser, student: number): Promise<Page> {
 
 test("progress follows the student to a second device and stays private", async ({ browser }) => {
   const first = await signIn(browser, 0);
+  const guestKey = "vnr202:dossier:20000000-0000-0000-0000-000000000002:v1";
+  const guestProgress = JSON.stringify({ stage: "connections", selectedEvidence: ["c1-e1", "c1-e2", "c1-e3"], selectedDecision: "unify" });
+  await first.evaluate(({ key, value }) => localStorage.setItem(key, value), { key: guestKey, value: guestProgress });
   await first.goto("/ho-so/hop-nhat-de-mo-duong");
+  await expect(first.getByRole("heading", { name: "Nhận diện tình thế" })).toBeVisible();
+  expect(await first.evaluate((key) => localStorage.getItem(key), guestKey)).toBe(guestProgress);
   await first.getByRole("button", { name: "Mở phòng dữ kiện" }).click();
   const evidence = first.getByRole("checkbox", { name: /Chọn dữ kiện/ });
   for (let i = 0; i < 3; i++) await evidence.nth(i).click();

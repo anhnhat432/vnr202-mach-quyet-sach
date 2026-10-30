@@ -56,7 +56,7 @@ export function ScenarioEngine({
   const [selectedEvidence, setSelectedEvidence] = useState<string[]>([]);
   const [selectedDecision, setSelectedDecision] = useState("");
   const [isRestored, setIsRestored] = useState(false);
-  const [accountSync, setAccountSync] = useState<"loading" | "guest" | "ready" | "error">("loading");
+  const [accountSync, setAccountSync] = useState<"loading" | "guest" | "ready" | "load-error" | "save-error">("loading");
   const writes = useRef<Promise<void>>(Promise.resolve());
   const stageIndex = stages.findIndex((item) => item.id === stage);
 
@@ -64,13 +64,13 @@ export function ScenarioEngine({
     let alive = true;
     async function restore() {
     let savedState = readSavedState(storageKey);
-    let sync: "guest" | "ready" | "error" = "guest";
+    let sync: "guest" | "ready" | "load-error" = "guest";
     try {
       const rows = await request<Array<{ dossier_id: string; state: SavedScenarioState }>>("GET", "/passport/progress");
       savedState = rows.find((row) => row.dossier_id === dossierId)?.state ?? { stage: "briefing", selectedEvidence: [], selectedDecision: "" };
       sync = "ready";
     } catch (error) {
-      if (!(error instanceof ArenaApiError && error.status === 401)) sync = "error";
+      if (!(error instanceof ArenaApiError && error.status === 401)) sync = "load-error";
     }
     if (!alive) return;
     const restoredEvidence = savedState.selectedEvidence.filter((id) =>
@@ -99,13 +99,14 @@ export function ScenarioEngine({
 
   useEffect(() => {
     if (!isRestored) return;
-    window.localStorage.setItem(storageKey, JSON.stringify({ stage, selectedEvidence, selectedDecision }));
+    // Guest progress is device-local and must not be overwritten by an unrelated account's state.
+    if (accountSync === "guest") window.localStorage.setItem(storageKey, JSON.stringify({ stage, selectedEvidence, selectedDecision }));
     if (accountSync === "ready") {
       const state = { stage, selectedEvidence, selectedDecision };
       writes.current = writes.current.catch(() => undefined).then(async () => {
         await request("POST", "/passport/progress", { body: { slug: dossierSlug, state } });
       });
-      void writes.current.catch(() => setAccountSync("error"));
+      void writes.current.catch(() => setAccountSync("save-error"));
     }
   }, [accountSync, dossierSlug, isRestored, selectedDecision, selectedEvidence, stage, storageKey]);
 
@@ -123,7 +124,8 @@ export function ScenarioEngine({
 
   return (
     <section className="scenario" aria-label="Trình mô phỏng hồ sơ quyết sách">
-      {accountSync === "error" ? <p role="status">Không đồng bộ được tiến độ tài khoản. Tiến độ hiện được lưu trên thiết bị này.</p> : null}
+      {accountSync === "load-error" ? <div role="status"><p>Không tải được tiến độ tài khoản. Hãy tải lại để khôi phục tiến độ; dữ liệu đang thấy chỉ là bản trên thiết bị.</p><button type="button" onClick={() => window.location.reload()}>Tải lại</button></div> : null}
+      {accountSync === "save-error" ? <div role="status"><p>Không đồng bộ được tiến độ tài khoản. Hãy thử lại trước khi rời trang; tải lại có thể khôi phục bản đã lưu trên tài khoản.</p><button type="button" onClick={() => setAccountSync("ready")}>Thử đồng bộ lại</button></div> : null}
       <aside className="scenario__rail" aria-label="Sáu chặng">
         <p className="eyebrow">Scenario Engine · 6 chặng</p>
         <ol>

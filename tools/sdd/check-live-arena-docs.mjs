@@ -155,7 +155,7 @@ for (const doc of docs) {
 // 11. Không tài liệu hiện hành nào còn yêu cầu công khai họ tên đầy đủ (quyết định N1).
 const NEGATION = /không|never|SHALL NOT|not |chỉ quản trị|chỉ cho chính|only to|Amended|previously|v1\.1|Sửa đổi|thay cho|ngoài/i;
 for (const doc of docs) {
-  if (doc.includes("evidence/")) continue;
+  if (doc.replaceAll("\\", "/").includes("evidence/")) continue;
   read(doc).replaceAll("*", "").split("\n").forEach((line, i) => {
     if (/(full names?|họ tên đầy đủ)/i.test(line) && /(public|công khai|leaderboard|bảng xếp hạng|projector|trình chiếu)/i.test(line) && !NEGATION.test(line)) {
       fail(`${doc}:${i + 1}: có thể còn yêu cầu công khai họ tên đầy đủ — ${line.trim().slice(0, 90)}`);

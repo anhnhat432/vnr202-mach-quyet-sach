@@ -54,7 +54,7 @@ export function CompetitionAdmin() {
   const [readiness, setReadiness] = useState<Readiness | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
-  const [form, setForm] = useState({ name: "Diễn tập Live Arena", minutes: 60 });
+  const [form, setForm] = useState<{ name: string; minutes: number; kind: "rehearsal" | "official" }>({ name: "Diễn tập Live Arena", minutes: 60, kind: "rehearsal" });
   const [incidentFor, setIncidentFor] = useState<string | null>(null);
   const [auditTick, setAuditTick] = useState(0);
   const [expectedAttempts, setExpectedAttempts] = useState(60);
@@ -111,12 +111,12 @@ export function CompetitionAdmin() {
     setMessage(null);
     try {
       const c = await request<{ id: string }>("POST", "/admin/competitions", {
-        body: { name: form.name, kind: "rehearsal", opensAt: new Date(Date.now() - 60_000).toISOString(), startDeadlineAt: new Date(Date.now() + form.minutes * 60_000).toISOString() },
+        body: { name: form.name, kind: form.kind, opensAt: new Date(Date.now() - 60_000).toISOString(), startDeadlineAt: new Date(Date.now() + form.minutes * 60_000).toISOString() },
         key: newKey("create"),
       });
       setSelected(c.id);
       await load();
-      setMessage("Đã tạo cuộc thi diễn tập (Nháp).");
+      setMessage(form.kind === "official" ? "Đã tạo cuộc thi chính thức (Nháp)." : "Đã tạo cuộc thi diễn tập (Nháp).");
     } catch (e) {
       setMessage(errorText(e));
     } finally {
@@ -176,7 +176,8 @@ export function CompetitionAdmin() {
           </ul>
         )}
         <form className="adm__create" onSubmit={(e) => { e.preventDefault(); void create(); }}>
-          <h3>Tạo cuộc thi diễn tập</h3>
+          <h3>Tạo cuộc thi</h3>
+          <label>Loại cuộc thi<select value={form.kind} onChange={(e) => { const kind = e.target.value as "rehearsal" | "official"; setForm({ ...form, kind, name: form.name === "Diễn tập Live Arena" || form.name === "Cuộc thi Live Arena" ? (kind === "official" ? "Cuộc thi Live Arena" : "Diễn tập Live Arena") : form.name }); }}><option value="rehearsal">Diễn tập</option><option value="official">Chính thức</option></select></label>
           <label>Tên<input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} minLength={3} maxLength={120} required /></label>
           <label>Nhận lượt mới trong (phút)<input type="number" min={5} max={720} value={form.minutes} onChange={(e) => setForm({ ...form, minutes: Number(e.target.value) })} /></label>
           <p className="adm__hint">Diễn tập dùng câu giả lập [GIẢ LẬP]; không bao giờ có nhãn Chính thức. Cuộc thi chính thức chỉ lên lịch được khi đủ câu Published do người duyệt học thuật duyệt.</p>
@@ -203,6 +204,7 @@ export function CompetitionAdmin() {
               <p>{readiness.ready ? "Ngân hàng câu đủ điều kiện bắt buộc." : `Chưa đủ điều kiện: ${readiness.blockers.join(", ")}`}</p>
               {current.kind === "official" && !readiness.target.meetsTarget ? <>
                 <p>Sĩ số dự kiến {readiness.target.expectedAttempts}: chưa đạt mục tiêu tối đa {readiness.target.maxPerQuestion} lượt phân bổ mỗi câu. Một câu có thể được nhiều sinh viên nhận, tăng rủi ro chia sẻ đáp án.</p>
+                <p>Tổng còn thiếu {Object.values(readiness.games).flatMap((game) => game.slots).reduce((sum, slot) => sum + Math.max(0, Math.ceil(readiness.target.expectedAttempts * slot.needed / readiness.target.maxPerQuestion) - slot.available), 0)} câu theo cơ cấu mục tiêu.</p>
                 <ul>{Object.entries(readiness.games).flatMap(([game, info]) => info.slots.map((slot) => {
                   const missing = Math.max(0, Math.ceil(readiness.target.expectedAttempts * slot.needed / readiness.target.maxPerQuestion) - slot.available);
                   return missing ? <li key={`${game}-${slot.pool}-${slot.difficulty}`}>{game} · {slot.pool} · {slot.difficulty}: thiếu {missing} câu so với mục tiêu; dự kiến {slot.expectedAllocationsPerQuestion ?? "—"} lượt/câu.</li> : null;

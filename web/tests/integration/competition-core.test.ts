@@ -54,6 +54,8 @@ describe("competition state machine and snapshot (T040)", () => {
 
   it("does not permit an acknowledgement to bypass the mandatory official bank rules", async () => {
     const w = await track({ kind: "official", open: false });
+    const privileges = (await pool.query("select has_function_privilege('service_role', 'public.transition_competition_unchecked(uuid,uuid,public.competition_state)', 'execute') as bypass")).rows[0];
+    expect(privileges.bypass).toBe(false);
     await expectError(call("transition_competition_confirmed", [w.competitionId, w.adminId, "scheduled", 60, true, "Chấp nhận rủi ro"], T0), "QA422", "readiness_blocked");
     const { rows } = await pool.query("select state from public.competitions where id = $1", [w.competitionId]);
     expect(rows[0].state).toBe("draft");

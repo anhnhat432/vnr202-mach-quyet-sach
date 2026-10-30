@@ -302,7 +302,7 @@ Trải nghiệm: trả lời nhanh, tích combo, tăng tốc và cạnh tranh th
 - `LA-CONTENT-011` `[CHỐT]` Mục tiêu ngân hàng cho cuộc thi `official` là **168 câu** Published chưa lộ (≤ 10 người được phân bổ mỗi câu với 60 người, bảng §5.13.1). Mục tiêu này **không** chặn triển khai tài khoản (Giai đoạn B) hay phát triển gameplay; nó chỉ áp dụng ở kiểm tra sẵn sàng của cuộc thi `official` theo `LA-CONTENT-013/014`.
 - `LA-CONTENT-012` `[CHỐT]` Ngân hàng Game 2 phải có đủ câu ba lựa chọn trong từng ô độ khó để mọi lượt đều thỏa `LA-ALLOC-010` (tối đa 5 câu hai lựa chọn mỗi lượt) mà vẫn giữ cân bằng phân bổ.
 - `LA-CONTENT-013` `[CHỐT]` Tiêu chí sẵn sàng **bắt buộc** của ngân hàng trước khi mở cuộc thi `official` (không đạt thì chặn mở): (1) mọi câu được phân bổ là Published, có người duyệt học thuật, giải thích và nguồn; (2) không có câu `fixture`; (3) mỗi ô blueprint có ít nhất nhu cầu của một lượt; (4) ràng buộc câu hai lựa chọn `LA-ALLOC-010` thỏa được cho mọi lượt; (5) câu đã lộ đáp án chỉ có mặt khi đã được xác nhận (`LA-CONTENT-009`); (6) mọi câu đạt giới hạn độ dài hiện hành (`LA-CONTENT-008`).
-- `LA-CONTENT-014` `[ĐỀ XUẤT]` Tiêu chí sẵn sàng **mục tiêu**: số người dự kiến được phân bổ mỗi câu ≤ 10 theo sĩ số lớp (≈ 168 câu với 60 người). Nếu chưa đạt, báo cáo sẵn sàng hiển thị "Chưa đạt mục tiêu ngân hàng" kèm số liệu; mở cuộc thi `official` khi đó cần quản trị viên xác nhận rõ ràng, có audit.
+- `LA-CONTENT-014` `[CHỐT]` Tiêu chí sẵn sàng **mục tiêu**: số người dự kiến được phân bổ mỗi câu ≤ 10 theo sĩ số lớp (≈ 168 câu với 60 người). Với cuộc thi `official`, trước khi lập lịch hệ thống phải kiểm tra đầy đủ điều kiện bắt buộc `LA-CONTENT-013`; nếu mục tiêu chưa đạt, báo cáo sĩ số dự kiến, mức thiếu theo blueprint và rủi ro phân bổ lặp. Quản trị viên phải chủ động xác nhận và nhập lý do; audit ghi actor, thời điểm, cuộc thi và kết quả đánh giá. Xác nhận không thay thế bất kỳ điều kiện bắt buộc nào. Cuộc thi `rehearsal` không áp dụng xác nhận này.
 
 #### 5.13.1 Số người thấy mỗi câu trong một cuộc thi
 
@@ -505,7 +505,6 @@ Yêu cầu sửa cuối được ghi thành: đồng hồ database `LA-TIME-019.
 |---|---|---|
 | N6 | `LA-ACC-013`, `LA-ACC-014`: mẫu MSSV và giới hạn số hàng, chờ danh sách lớp thật | T032 (chỉ phần cấu hình mẫu/giới hạn; phần còn lại không bị chặn) |
 | N9 | Thư viện đọc `.xlsx` | T032 |
-| `LA-CONTENT-014` | Đường xác nhận khi ngân hàng chưa đạt mục tiêu 168 câu | T040 (Giai đoạn D) |
 
 ### 12.3 Bảng nhãn sau bản sửa 1
 

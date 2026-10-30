@@ -4,6 +4,12 @@ Trạng thái: Approved for planning; sửa đổi v1.1 cho Live Arena V1.0 (202
 Base path: `/api/v1`  
 Format: JSON UTF-8, camelCase ở API, snake_case trong PostgreSQL
 
+### Student Passport progress (T025/T034)
+
+`GET /passport/progress` trả các hàng tiến độ của chính sinh viên đã xác thực (`dossier_id`, `state`, `completed_at`); `POST /passport/progress` nhận `slug` và `state` gồm `stage`, `selectedEvidence`, `selectedDecision`. Server xác thực, kiểm tra CSRF, chỉ nhận hồ sơ Published và kiểm tra dữ kiện/phương án thuộc hồ sơ cùng điều kiện của chặng. Chặng cuối ghi dấu hoàn thành; không nhận profile ID từ client. Các trường snake_case hiện phản ánh projection lưu trữ; hợp đồng cụ thể nằm trong OpenAPI.
+
+Tiến độ khách lưu tại thiết bị không tự nhập vào tài khoản khi đăng nhập, vì thiết bị có thể dùng chung. Khi lưu tài khoản thất bại, giao diện báo lỗi và cho thử lại trước khi rời trang; hiện chưa có hàng đợi ngoại tuyến bền vững.
+
 ## 1. Envelope
 
 Success:
