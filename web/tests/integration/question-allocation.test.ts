@@ -185,7 +185,7 @@ describe("the 5 two-option cap stays satisfiable when three-option supply is sho
     const competition = crypto.randomUUID();
     const { rows } = await pool.query("select public.question_bank_readiness('rehearsal', $1, 60) as r", [competition]);
     expect(rows[0].r.blockers).toContain("two_option_cap_unsatisfiable:race");
-    await expect(allocate(competition, "race", "rehearsal")).rejects.toMatchObject({ code: "QB001" });
+    await expect(allocate(competition, "race", "rehearsal")).rejects.toMatchObject({ code: "QB002" });
     await clearQuestions();
     await loadFixtures("dev87");
   });

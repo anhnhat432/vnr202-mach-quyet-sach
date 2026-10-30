@@ -262,3 +262,16 @@ Thứ hạng được tính khi đọc bằng `rank() OVER (ORDER BY score DESC,
 - Schema types sinh ra bằng Supabase CLI sau migration và được commit.
 - RLS tests phải chạy bằng anon, student A, student B và admin identities.
 - pgTAP trên PostgreSQL cục bộ không thay thế kiểm thử trên Supabase thật (Auth, RLS, Realtime); cả hai là bắt buộc trước khi đóng các gate Core.
+
+## 11. Stage D implementation notes (2026-10-30)
+
+Migration `202610300003_competition_core.sql` implements §4–§6 and §8 with these deliberate differences:
+
+- **No `attempt_sessions` / `attempt_incidents` tables yet.** Device control is `attempts.session_version` (+ `transfer_key` for idempotent transfers, audit in `auth_events`); admin incident actions (T056) are not part of stage D.
+- `attempt_allocations` and `minefield_cells` carry the stored response of the operation that resolved them (`result`, `open_result`) so a retry with any key returns the committed result (`LA-IDEM-001`). `answer_submissions` keeps the player's choice, receipt time and outcome.
+- `competition_question_snapshots` also holds `question_id`/`option_count` and is created when the competition moves **Draft → Scheduled** (readiness must pass; `config_locked_at` is set at the same time). `competition_pool()` makes allocation read the snapshot when it exists, the live bank otherwise (stage C tests).
+- Clock: every decision time is `arena_clock()` = `clock_timestamp()`. A **transaction-local** GUC pair (`arena.test_clock_enabled='on'`, `arena.test_clock`) overrides it for tests only; only `service_role`-executable RPCs read it, clients cannot set GUCs, and pgTAP asserts no function uses `now()`/`current_timestamp`/`transaction_timestamp()`.
+- All gameplay RPCs take `p_profile_id` and are executable by `service_role` only; the stage E routes derive the profile from the verified session.
+- `question_exposures.competition_id` still has no foreign key (stage C tests use ad-hoc ids); cleanup of a deleted competition's exposure rows is explicit.
+- Error codes: `QA404`, `QA409`, `QA410`, `QA422`, `QA425` (detail `{"availableInMs"}`), `QB001`/`QB002`, `55P03` (lock wait limit; retryable).
+- Leaderboard ranks are computed on read (no stored rank); `get_leaderboard` caps at Top 10; personal standing is `get_player_standing`.

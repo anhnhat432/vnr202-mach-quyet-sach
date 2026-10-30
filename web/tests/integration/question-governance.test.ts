@@ -2,7 +2,7 @@
 import { Pool } from "pg";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
-import { generateFixtures, toDraftArguments, validateQuestionDocument, type AuthoredQuestion } from "../../../scripts/lib/question-bank.mjs";
+import { toDraftArguments, validateQuestionDocument, type AuthoredQuestion } from "../../../scripts/lib/question-bank.mjs";
 import { questionInputSchema } from "@/features/questions/contracts/question";
 import { listQuestions, mapQuestionError, questionBankReadiness, transitionQuestionVersion, upsertQuestionDraft } from "@/features/questions/server/question-service";
 import { ApiError } from "@/lib/api/errors";
