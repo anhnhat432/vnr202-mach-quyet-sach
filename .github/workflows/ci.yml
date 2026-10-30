@@ -67,7 +67,7 @@ jobs:
         working-directory: web
         run: |
           eval "$(supabase status -o env --workdir .. | sed 's/^/export /')"
-          export SUPABASE_URL="$API_URL" SUPABASE_ANON_KEY="$ANON_KEY" SUPABASE_SERVICE_ROLE_KEY="$SERVICE_ROLE_KEY"
+          export SUPABASE_URL="$API_URL" SUPABASE_ANON_KEY="$ANON_KEY" SUPABASE_SERVICE_ROLE_KEY="$SERVICE_ROLE_KEY" SUPABASE_DB_URL="$DB_URL"
           export NEXT_PUBLIC_SUPABASE_URL="$API_URL" NEXT_PUBLIC_SUPABASE_ANON_KEY="$ANON_KEY" NEXT_PUBLIC_SITE_URL=http://127.0.0.1:3000
           # Throwaway values generated for this run only; none is a real secret.
           export AUTH_PASSWORD_PEPPER="$(openssl rand -hex 32)" CSRF_SIGNING_SECRET="$(openssl rand -hex 32)" INTERNAL_AUTH_EMAIL_DOMAIN=auth.invalid

@@ -34,6 +34,20 @@ async function rateLimited(admin: SupabaseClient, key: string, rule: { limit: nu
   return consume ? data === false : data === true;
 }
 
+// LA-TRY-006: signing in on a new device moves control of the student's active attempt to the new Auth
+// session; the old one is refused on its next gameplay call. Nothing is recreated or reset. A failure
+// here must not block sign-in (the student can still resume explicitly), so it is logged and ignored.
+async function claimActiveAttempt(admin: SupabaseClient, profileId: string, accessToken: string | undefined) {
+  try {
+    const sessionId = (JSON.parse(Buffer.from(accessToken?.split(".")[1] ?? "", "base64url").toString("utf8")) as { session_id?: string }).session_id;
+    if (!sessionId) return;
+    const { error } = await admin.rpc("arena_claim_active_attempt", { p_profile_id: profileId, p_auth_session_id: sessionId });
+    if (error) console.error("arena claim failed", { code: error.code });
+  } catch {
+    console.error("arena claim failed", { reason: "token" });
+  }
+}
+
 export async function signInStudent(
   deps: SignInDeps,
   input: { studentId: string; password: string; ip: string | null; device: string },
@@ -73,6 +87,7 @@ export async function signInStudent(
     return { ok: false, reason: "account_disabled" };
   }
   await recordAuthEvent(admin, env.AUTH_PASSWORD_PEPPER, "sign_in_success", { profileId: profile.id, studentId, ip: input.ip ?? undefined, device: input.device });
+  await claimActiveAttempt(admin, profile.id, data.session?.access_token);
   return { ok: true, userId: data.user.id, role: "student", displayName: profile.display_name };
 }
 

@@ -1,7 +1,7 @@
 -- Competition core: access matrix, clock discipline and structural guarantees (T040-T046).
 -- Behaviour (timing, scoring, concurrency) is covered by web/tests/integration/{competition-core,arena-games}.test.ts.
 begin;
-select plan(22);
+select plan(23);
 
 select ok(
   (select bool_and(c.relrowsecurity)
@@ -26,6 +26,12 @@ select ok(
    from pg_proc p join pg_namespace n on n.oid = p.pronamespace
    where n.nspname = 'public' and p.proname in ('create_competition','transition_competition','start_or_resume_attempt','get_attempt_projection','get_interaction_content','open_minefield_cell','submit_answer','heartbeat_attempt','transfer_attempt_session','get_leaderboard','get_player_standing','reconcile_competition','finalize_competition','get_attempt_review','arena_lobby','competition_pool','take_competition_snapshot')),
   'every arena RPC is executable by service_role only'
+);
+select ok(
+  (select bool_and(has_function_privilege('service_role', p.oid, 'EXECUTE') and not has_function_privilege('anon', p.oid, 'EXECUTE') and not has_function_privilege('authenticated', p.oid, 'EXECUTE'))
+   from pg_proc p join pg_namespace n on n.oid = p.pronamespace
+   where n.nspname = 'public' and p.proname in ('arena_bind_session', 'arena_claim_active_attempt')),
+  'session binding RPCs are executable by service_role only'
 );
 select ok(
   (select bool_and(not has_function_privilege('anon', p.oid, 'EXECUTE') and not has_function_privilege('authenticated', p.oid, 'EXECUTE'))

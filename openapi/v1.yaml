@@ -1,0 +1,151 @@
+openapi: 3.1.0
+info:
+  title: VNR202 Live Arena API
+  version: "1.0.0-stage-e"
+  description: >
+    Gameplay and competition-admin endpoints implemented in stage E. All gameplay calls use the profile
+    verified from the Supabase Auth session; no body can name a profile, score, time or correctness.
+    Mutating calls need the `x-csrf-token` header (value returned at sign-in) and a same-origin `Origin`.
+servers:
+  - url: /api/v1
+security:
+  - supabaseSession: []
+paths:
+  /arena/lobby:
+    get:
+      summary: Open competition and the student's per-game attempt state
+      responses: { "200": { $ref: "#/components/responses/Ok" }, "401": { $ref: "#/components/responses/Error" } }
+  /arena/competitions/{publicId}/games/{game}/attempt:
+    post:
+      summary: Start or resume the single attempt for this game (LA-TRY-001..004); resuming takes control of the attempt (LA-TRY-006)
+      parameters: [ { $ref: "#/components/parameters/IdempotencyKey" } ]
+      requestBody: { $ref: "#/components/requestBodies/Empty" }
+      responses: { "200": { description: Resumed }, "201": { description: Started }, "409": { description: another_attempt_active | start_closed }, "503": { description: competition_not_ready } }
+  /arena/attempts/{attemptId}:
+    get:
+      summary: Authoritative projection of the student's own attempt (no question text, no answers, no unopened cells)
+      responses: { "200": { $ref: "#/components/responses/Ok" }, "404": { $ref: "#/components/responses/Error" }, "409": { description: stale_session } }
+  /arena/attempts/{attemptId}/transfer:
+    post:
+      summary: Take control of the attempt from this Auth session (new device); nothing is reset
+      parameters: [ { $ref: "#/components/parameters/IdempotencyKey" } ]
+      requestBody: { $ref: "#/components/requestBodies/Empty" }
+      responses: { "200": { $ref: "#/components/responses/Ok" } }
+  /arena/attempts/{attemptId}/interactions/{allocationId}/content:
+    post:
+      summary: Release the question text (held up to 1 s until available_at, otherwise 425 with availableInMs); counts the display once
+      requestBody: { $ref: "#/components/requestBodies/Empty" }
+      responses: { "200": { $ref: "#/components/responses/Ok" }, "409": { description: stale_session | interaction_not_open | interaction_expired | content_unavailable }, "410": { description: attempt_terminal }, "425": { description: too_early } }
+  /arena/attempts/{attemptId}/cells/{index}/open:
+    post:
+      summary: Game 1 - open one board cell; replays return the recorded result
+      parameters: [ { $ref: "#/components/parameters/IdempotencyKey" } ]
+      requestBody: { $ref: "#/components/requestBodies/Empty" }
+      responses: { "200": { $ref: "#/components/responses/Ok" }, "409": { description: interaction_pending | stale_session }, "410": { description: attempt_terminal | attempt_time_over } }
+  /arena/attempts/{attemptId}/answers:
+    post:
+      summary: Submit a choice; correctness, points and timing are decided by the database
+      parameters: [ { $ref: "#/components/parameters/IdempotencyKey" } ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/AnswerBody" }
+      responses: { "200": { $ref: "#/components/responses/Ok" }, "409": { description: content_not_fetched | interaction_not_open | stale_session }, "410": { description: attempt_terminal }, "422": { $ref: "#/components/responses/Error" } }
+  /arena/attempts/{attemptId}/heartbeat:
+    post:
+      summary: Connection status only; never moves a clock (LA-TIME-012)
+      requestBody: { $ref: "#/components/requestBodies/Empty" }
+      responses: { "200": { $ref: "#/components/responses/Ok" } }
+  /arena/attempts/{attemptId}/standing:
+    get:
+      summary: Own rank, gap to the player above and to 10th place, sole/shared leader labels (LA-LB-005)
+      responses: { "200": { $ref: "#/components/responses/Ok" } }
+  /arena/attempts/{attemptId}/review:
+    get:
+      summary: Answers and explanations of the questions the student saw - only after the competition is Finalized
+      responses: { "200": { $ref: "#/components/responses/Ok" }, "409": { description: review_not_available } }
+  /arena/leaderboards/{publicId}/{game}:
+    get:
+      summary: Public Top 10 and aggregates of one game (display names only)
+      security: []
+      responses: { "200": { $ref: "#/components/responses/Ok" }, "404": { $ref: "#/components/responses/Error" }, "429": { $ref: "#/components/responses/Error" } }
+  /admin/competitions:
+    post:
+      summary: Create a Draft competition with its two games (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CreateCompetition" }
+      responses: { "201": { $ref: "#/components/responses/Ok" } }
+  /admin/competitions/{id}/readiness:
+    get:
+      summary: Question-bank readiness for this competition (admin)
+      responses: { "200": { $ref: "#/components/responses/Ok" } }
+  /admin/competitions/{id}/transitions:
+    post:
+      summary: Draft→Scheduled (readiness + question snapshot) →Open→StartClosed→Settling; Archived after finalization (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object, additionalProperties: false, required: [target], properties: { target: { enum: [scheduled, open, start_closed, settling, archived] } } }
+      responses: { "200": { $ref: "#/components/responses/Ok" }, "409": { description: illegal_transition | another_competition_open }, "422": { description: readiness_blocked } }
+  /admin/competitions/{id}/finalize:
+    post:
+      summary: Settling→Finalized (admin); 409 attempts_still_active until every attempt has ended
+      requestBody: { $ref: "#/components/requestBodies/Empty" }
+      responses: { "200": { $ref: "#/components/responses/Ok" }, "409": { description: attempts_still_active | illegal_transition } }
+  /admin/competitions/{id}/reconcile:
+    post:
+      summary: Settle expired questions and close starts after the deadline; idempotent (admin)
+      requestBody: { $ref: "#/components/requestBodies/Empty" }
+      responses: { "200": { $ref: "#/components/responses/Ok" } }
+components:
+  securitySchemes:
+    supabaseSession: { type: apiKey, in: cookie, name: sb-access-token }
+  parameters:
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      schema: { type: string, pattern: "^[A-Za-z0-9_-]{8,80}$" }
+  requestBodies:
+    Empty:
+      required: true
+      content:
+        application/json:
+          schema: { type: object, additionalProperties: false, maxProperties: 0 }
+  responses:
+    Ok: { description: "Envelope { data, meta: { requestId } }" }
+    Error: { description: "Envelope { error: { code, message, details? }, meta: { requestId } }" }
+  schemas:
+    AnswerBody:
+      type: object
+      additionalProperties: false
+      required: [allocationId, optionId]
+      properties:
+        allocationId: { type: string, format: uuid }
+        optionId: { type: string, pattern: "^[a-z0-9]{1,8}$" }
+    CreateCompetition:
+      type: object
+      additionalProperties: false
+      required: [name, kind, opensAt, startDeadlineAt]
+      properties:
+        name: { type: string, minLength: 3, maxLength: 120 }
+        kind: { enum: [official, rehearsal] }
+        opensAt: { type: string, format: date-time }
+        startDeadlineAt: { type: string, format: date-time }
+        latencyAllowanceMs: { type: integer, minimum: 0, maximum: 1500 }
+        lockWaitLimitMs: { type: integer, minimum: 100, maximum: 10000 }
+        reconcileGraceMs: { type: integer, minimum: 50, maximum: 2000 }
+        minefieldDurationMs: { type: integer, minimum: 10000, maximum: 900000 }
+        raceDurationMs: { type: integer, minimum: 10000, maximum: 900000 }
+        offsets:
+          type: object
+          additionalProperties: false
+          properties:
+            cellFlipMs: { type: integer, minimum: 0, maximum: 600 }
+            raceFirstMs: { type: integer, minimum: 0, maximum: 1000 }
+            raceNextMs: { type: integer, minimum: 800, maximum: 1000 }

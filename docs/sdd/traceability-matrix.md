@@ -70,3 +70,13 @@ Evidence is recorded only for implemented scope. Four new Chapter 1 dossiers are
 | LA-IDEM-*, LA-AC-015 | concurrency cases + 60-player load test |
 | LA-CONTENT-009, LA-FB-004 | "finalization and review" (only displayed questions marked disclosed and reviewable) |
 | Q1 / Q3 | `question-allocation.test.ts` (QB002), `sources-sync.test.ts` |
+
+## Stage E evidence (gameplay API, 2026-10-30)
+
+| Rule family | Test |
+| --- | --- |
+| LA-TRY-006, LA-AC-005 over HTTP; profile from Auth, never from the request | `tests/e2e/arena-api.spec.ts` (second Auth session takes control, old one `409 stale_session`; forged `profileId` → 422), `arena-session.test.ts` |
+| LA-ANTI-003 strict bodies; LA-IDEM-001 Idempotency-Key | `arena-service.test.ts`, e2e replay (`replayed: true`, same result) |
+| LA-FB-001/003 no answer before Finalized | e2e scans every gameplay response for `correctOptionId`/`explanation`; review `409` before Finalized |
+| LA-LB-003/011, LA-PRV-004 public Top 10 | e2e: anonymous board lists classroom display names and none of the identifiers |
+| api-contracts §12 OpenAPI | `openapi-contract.test.ts` |

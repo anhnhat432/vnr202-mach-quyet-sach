@@ -117,6 +117,27 @@ Auth student. Response gồm profile, 15 dossier progress markers, competition h
 
 ## 7. Gameplay
 
+> **Giai đoạn E – đã triển khai (2026-10-30).** `openapi/v1.yaml` là bản công bố của các route dưới đây; test `openapi-contract.test.ts` bảo đảm file route và OpenAPI không lệch. Đường dẫn thực tế (khác bản nháp phía dưới ở tên cuối đường dẫn; luật không đổi):
+>
+> | Method + đường dẫn (`/api/v1`) | Ghi chú |
+> |---|---|
+> | `GET /arena/lobby` | cuộc thi đang mở và trạng thái lượt từng game |
+> | `POST /arena/competitions/{publicId}/games/{game}/attempt` | bắt đầu/tiếp tục; `201` mới, `200` tiếp tục; `Idempotency-Key` bắt buộc; tiếp tục từ phiên Auth mới sẽ nhận quyền điều khiển |
+> | `GET /arena/attempts/{attemptId}` | projection; chỉ phiên đang điều khiển |
+> | `POST /arena/attempts/{attemptId}/transfer` | nhận quyền điều khiển (thiết bị mới), không reset gì |
+> | `POST /arena/attempts/{attemptId}/interactions/{allocationId}/content` | giải phóng nội dung câu (giữ tới 1 s hoặc `425` + `availableInMs`); POST vì ghi lần phát hành đầu |
+> | `POST /arena/attempts/{attemptId}/cells/{index}/open` | Game 1 |
+> | `POST /arena/attempts/{attemptId}/answers` | body chỉ gồm `allocationId`, `optionId` (strict) |
+> | `POST /arena/attempts/{attemptId}/heartbeat` | chỉ hiển thị kết nối |
+> | `GET /arena/attempts/{attemptId}/standing`, `/review` | hạng cá nhân; xem lại chỉ sau Finalized |
+> | `GET /arena/leaderboards/{publicId}/{game}` | công khai, Top 10, chỉ tên hiển thị, giới hạn tần suất theo IP tin cậy |
+> | `POST /admin/competitions`, `GET .../{id}/readiness`, `POST .../{id}/transitions`, `/finalize`, `/reconcile` | quản trị cuộc thi (CSRF, 404 cho người không phải admin) |
+>
+> **Định danh và phiên điều khiển.** Mọi RPC dùng `profile_id` lấy từ Supabase Auth đã xác minh (`getUser`), không bao giờ từ body/query/header do client gửi (body `strict` từ chối `profileId`, `score`, `isCorrect`, thời gian). Quyền điều khiển lượt gắn với claim `session_id` của access token (`attempts.control_auth_session_id`). Đăng nhập sinh viên trên thiết bị mới gọi `arena_claim_active_attempt`; `POST .../attempt` (tiếp tục) và `POST .../transfer` gọi `arena_bind_session(..., take_control => true)`; mọi lời gọi gameplay khác dùng `take_control => false` nên phiên cũ nhận `409 stale_session`. `session_version` chỉ là phiên bản nội bộ truyền cho RPC, client không gửi.
+> **Lỗi cơ sở dữ liệu → mã API ổn định:** `QA404→404`, `QA409→409`, `QA410→410`, `QA422→422`, `QA425→425 too_early` (+`details.availableInMs`), `55P03→503 temporarily_unavailable`, `QB001/QB002→503 competition_not_ready`, `42501→403`; mọi lỗi khác `500 internal_error` không kèm văn bản SQL.
+> **Chưa có trong E:** Realtime Broadcast (T053), `GET /competitions/current` công khai và Passport (dùng `arena/lobby`/leaderboard), xác nhận câu đã lộ qua API (RPC `confirm_disclosed_questions` đã có), thao tác sự cố admin.
+
+
 Mọi endpoint gameplay yêu cầu sinh viên đã đăng nhập. Response không bao giờ chứa đáp án đúng, giải thích, nội dung ô chưa mở hoặc câu chưa hiển thị (`LA-FB-003`, `MINE-BOARD-005`, `LA-ALLOC-005`).
 
 ### Attempt projection (dùng chung)

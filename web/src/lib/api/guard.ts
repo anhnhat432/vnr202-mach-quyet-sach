@@ -30,6 +30,33 @@ export async function requireActor(): Promise<{ actor: Actor; supabase: Awaited<
   return { actor: { userId: data.user.id, role }, supabase };
 }
 
+// The Auth session id travels in the access token's `session_id` claim. The token was just validated
+// by the Auth server (getUser), so reading the claim from the same token is safe.
+function sessionIdFromAccessToken(token: string | undefined): string | null {
+  if (!token) return null;
+  try {
+    const payload = JSON.parse(Buffer.from(token.split(".")[1] ?? "", "base64url").toString("utf8")) as { session_id?: unknown };
+    return typeof payload.session_id === "string" && /^[0-9a-f-]{36}$/i.test(payload.session_id) ? payload.session_id : null;
+  } catch {
+    return null;
+  }
+}
+
+export type StudentContext = RouteContext & { authSessionId: string };
+
+// Gameplay routes: a verified student session. The profile id used for every RPC is the Auth user id,
+// the request cannot name another one. `mutating` routes also require the CSRF token.
+export async function requireStudent(request: Request, options: { mutating: boolean }): Promise<StudentContext> {
+  const { actor, supabase } = await requireActor();
+  if (actor.role !== "student") throw new ApiError(403, "forbidden", "Chỉ sinh viên mới chơi được.");
+  if (options.mutating) await assertCsrf(request, actor.userId);
+  const { data } = await supabase.auth.getSession();
+  const authSessionId = sessionIdFromAccessToken(data.session?.access_token);
+  if (!authSessionId) throw new ApiError(401, "unauthenticated", "Bạn cần đăng nhập.");
+  const env = getServerEnv();
+  return { env, admin: createServiceRoleClient(env), actor, authSessionId };
+}
+
 // Non-admins get 404 so the existence of admin routes is not disclosed (security-spec §4).
 export async function requireAdmin(request: Request): Promise<RouteContext> {
   const { actor } = await requireActor();

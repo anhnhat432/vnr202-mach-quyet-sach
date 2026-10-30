@@ -102,16 +102,14 @@ describe("expired questions hand over quickly and fairly (owner decision on the 
       return { id, alloc };
     }));
     for (const { id, alloc } of trials) {
-      const { rows: [sub] } = await pool.query("select received_at, outcome from public.answer_submissions where allocation_id = $1", [alloc]);
-      const { rows: [al] } = await pool.query("select outcome, deadline_at from public.attempt_allocations where id = $1", [alloc]);
+      // on-time is decided in SQL: JS Dates truncate microseconds and would mis-judge receipts at the exact boundary
+      const { rows: [r] } = await pool.query(
+        `select s.id is not null as submitted, coalesce(s.received_at <= a.deadline_at + interval '1 millisecond' * ${L}, false) as on_time, a.outcome
+           from public.attempt_allocations a left join public.answer_submissions s on s.allocation_id = a.id where a.id = $1`, [alloc]);
       const ev = await counts(id);
       expect(ev.timeouts + ev.answers, "exactly one resolution per question").toBe(1);
-      if (sub) {
-        const onTime = sub.received_at.getTime() <= al.deadline_at.getTime() + L;
-        expect(al.outcome).toBe(onTime ? "correct" : "timed_out"); // judged by receipt, never by who got the lock first
-      } else {
-        expect(al.outcome).toBe("timed_out");
-      }
+      // judged by receipt time, never by who got the lock first
+      expect(r.outcome).toBe(r.submitted && r.on_time ? "correct" : "timed_out");
     }
   }, 30_000);
 
