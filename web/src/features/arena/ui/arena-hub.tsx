@@ -63,6 +63,7 @@ export function ArenaHub() {
       </div>
       <div className="hub__links">
         <Link className="hub__link" href="/live-arena/bang-xep-hang"><Trophy aria-hidden size={16} /> Hai bảng xếp hạng trực tiếp</Link>
+        {signedOut ? null : <Link className="hub__link" href="/live-arena/xem-lai">Xem lại lượt thi của bạn</Link>}
         <Link className="hub__link" href="/live-arena/dong-chay-lich-su">Luyện tập tự do: Dòng Chảy Lịch Sử (không tính điểm)</Link>
       </div>
     </div>

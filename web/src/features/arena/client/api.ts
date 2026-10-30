@@ -26,7 +26,7 @@ export function newKey(prefix: string) {
   return `${prefix}-${crypto.randomUUID()}`;
 }
 
-async function request<T>(method: "GET" | "POST", path: string, options: { body?: unknown; key?: string; signal?: AbortSignal } = {}): Promise<T> {
+export async function request<T>(method: "GET" | "POST", path: string, options: { body?: unknown; key?: string; signal?: AbortSignal } = {}): Promise<T> {
   const headers: Record<string, string> = {};
   if (method === "POST") {
     headers["content-type"] = "application/json";

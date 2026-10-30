@@ -80,3 +80,13 @@ Evidence is recorded only for implemented scope. Four new Chapter 1 dossiers are
 | LA-FB-001/003 no answer before Finalized | e2e scans every gameplay response for `correctOptionId`/`explanation`; review `409` before Finalized |
 | LA-LB-003/011, LA-PRV-004 public Top 10 | e2e: anonymous board lists classroom display names and none of the identifiers |
 | api-contracts §12 OpenAPI | `openapi-contract.test.ts` |
+
+## Stage F evidence (UI, leaderboards, projector, admin, 2026-10-30)
+
+| Rule family | Test |
+| --- | --- |
+| LA-TRY-004/006 (F5, transfer only after confirmation), LA-TIME-007 (display-only clock) | `tests/e2e/arena-ui.spec.ts` (F5 keeps question/score/clock; dialog before transfer; old device locked) |
+| LA-FB-001..003, LA-ANTI-007 in the browser | `arena-ui.spec.ts` response scan; feedback never covers the next question |
+| LA-LB-002/003/004/007, realtime-contracts §3 | `arena-ui.spec.ts` board follows a player without reload, offline/online resync, projector zoom; pgTAP broadcast envelope |
+| LA-PRV-004, LA-LB-011 | board text has display names only (no MSSV, no full name); MSSV only in `/admin/.../monitor` |
+| LA-ADMIN-002, LA-FB-004, LA-CONTENT-003 | `tests/e2e/arena-admin.spec.ts` (finalize refused while an attempt runs; review only after Finalized), `arena-admin.test.ts` |

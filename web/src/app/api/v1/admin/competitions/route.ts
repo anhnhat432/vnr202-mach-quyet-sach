@@ -1,9 +1,11 @@
 import { createCompetitionBody } from "@/features/arena/contracts/arena";
 import { rpc } from "@/features/arena/server/arena-service";
 import { ApiError } from "@/lib/api/errors";
-import { requireAdmin } from "@/lib/api/guard";
+import { requireActor, requireAdmin } from "@/lib/api/guard";
 import { readJson, route } from "@/lib/api/handler";
 import { ok } from "@/lib/api/response";
+import { getServerEnv } from "@/lib/config/server-env";
+import { createServiceRoleClient } from "@/lib/supabase/service-role";
 
 // Create a Draft competition with its two games. Rules fixed by the spec (points, limits, board) are
 // not accepted from the client; only the schedule, the trial timing parameters and the kind.
@@ -18,4 +20,11 @@ export const POST = route(async (request, requestId) => {
     p_offsets: body.offsets ?? null, p_reconcile_grace_ms: body.reconcileGraceMs ?? 250,
   });
   return ok(created, requestId, { status: 201 });
+});
+
+// All competitions with attempt counts (admin). Reads need no CSRF token; non-admins get 404.
+export const GET = route(async (_request, requestId) => {
+  const { actor } = await requireActor();
+  if (actor.role !== "admin") throw new ApiError(404, "not_found", "Không tìm thấy.");
+  return ok(await rpc(createServiceRoleClient(getServerEnv()), "arena_admin_competitions", { p_actor: actor.userId }), requestId);
 });

@@ -65,6 +65,10 @@ paths:
     get:
       summary: Answers and explanations of the questions the student saw - only after the competition is Finalized
       responses: { "200": { $ref: "#/components/responses/Ok" }, "409": { description: review_not_available } }
+  /arena/me/attempts:
+    get:
+      summary: The signed-in student's own attempts and whether their review is open
+      responses: { "200": { $ref: "#/components/responses/Ok" } }
   /arena/competitions/current:
     get:
       summary: Public - the competition the boards and the projector show (open, else most recent closing/settling/finalized)
@@ -76,6 +80,9 @@ paths:
       security: []
       responses: { "200": { $ref: "#/components/responses/Ok" }, "404": { $ref: "#/components/responses/Error" }, "429": { $ref: "#/components/responses/Error" } }
   /admin/competitions:
+    get:
+      summary: All competitions with attempt counts (admin)
+      responses: { "200": { $ref: "#/components/responses/Ok" } }
     post:
       summary: Create a Draft competition with its two games (admin)
       requestBody:
@@ -87,6 +94,10 @@ paths:
   /admin/competitions/{id}/readiness:
     get:
       summary: Question-bank readiness for this competition (admin)
+      responses: { "200": { $ref: "#/components/responses/Ok" } }
+  /admin/competitions/{id}/monitor:
+    get:
+      summary: Live state of every attempt (admin; the only payload with MSSV next to gameplay data)
       responses: { "200": { $ref: "#/components/responses/Ok" } }
   /admin/competitions/{id}/transitions:
     post:
