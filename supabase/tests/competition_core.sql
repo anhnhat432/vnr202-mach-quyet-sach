@@ -114,9 +114,9 @@ select is(
   'leaderboard.changed', 'the event is leaderboard.changed while the competition is not finalized'
 );
 select is(
-  (select array_agg(k order by k) from realtime.messages m, jsonb_object_keys(m.payload) k where m.payload -> 'aggregate' ->> 'version' = '7' and m.topic like 'leaderboard:%:race'),
+  (select array_agg(k order by k) from realtime.messages m, jsonb_object_keys(m.payload - 'id') k where m.payload -> 'aggregate' ->> 'version' = '7' and m.topic like 'leaderboard:%:race'),
   array['aggregate', 'data', 'eventId', 'eventType', 'occurredAt'],
-  'the payload carries only the envelope (no names, scores, answers or ids of people)'
+  'the payload carries only the envelope (no names, scores, answers or ids of people); Realtime adds its own message id'
 );
 
 select * from finish();
