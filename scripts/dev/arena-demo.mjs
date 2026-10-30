@@ -3,14 +3,14 @@
 // watch scoring, timing and the two leaderboards behave. Local databases only; fixtures only.
 //
 //   scripts/db/local-stack.sh up
-//   set -a; source .local/supabase/stack.env; set +a
+//   (export SUPABASE_DB_URL for the local stack; see scripts/db/local-stack.sh env)
 //   node scripts/content/load-question-fixtures.mjs dev87
 //   node scripts/dev/arena-demo.mjs [players=6]
 import crypto from "node:crypto";
 import pg from "../../web/node_modules/pg/lib/index.js";
 
 const url = process.env.SUPABASE_DB_URL;
-if (!url) { console.error("Set SUPABASE_DB_URL (source .local/supabase/stack.env)."); process.exit(1); }
+if (!url) { console.error("Set SUPABASE_DB_URL for the local stack (scripts/db/local-stack.sh env)."); process.exit(1); }
 if (!["127.0.0.1", "localhost"].includes(new URL(url).hostname)) { console.error("Local databases only."); process.exit(2); }
 const players = Number(process.argv[2] ?? 6);
 const pool = new pg.Pool({ connectionString: url, max: 20 });
