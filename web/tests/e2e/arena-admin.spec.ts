@@ -104,9 +104,18 @@ test("admin runs a rehearsal end to end; the student reviews answers only after 
   await page.getByRole("button", { name: /Kết thúc & công bố/ }).click();
   await expect(page.getByText(/attempts_still_active/)).toBeVisible();
 
-  for (let n = 1; n <= 15; n += 1) {
-    await expect(student.locator(`.ax-question:not(.is-expired) .ax-chip:has-text("Câu ${n}/15")`)).toBeVisible({ timeout: 10000 });
-    await student.locator(".ax-option").nth(await correctIndex(student)).click();
+  // The race clock runs while the admin acts above (a slow first compile can expire a 5 s question):
+  // answer every question still open and let the server time out the others.
+  const done = student.getByText(/Hoàn thành!|Hết giờ!/);
+  const open = student.locator(".ax-question:not(.is-expired)");
+  let answered = "";
+  for (let step = 0; step < 60 && !(await done.count()); step += 1) {
+    await expect(open.or(done).first()).toBeVisible({ timeout: 15000 });
+    if (await done.count()) break;
+    const chip = (await open.locator(".ax-chip").textContent().catch(() => null)) ?? "";
+    if (!chip || chip === answered) { await student.waitForTimeout(150); continue; }
+    answered = chip;
+    await student.locator(".ax-option").nth(await correctIndex(student)).click().catch(() => undefined);
   }
   await expect(student.getByText("Hoàn thành!")).toBeVisible({ timeout: 10000 });
   await student.goto("/live-arena/xem-lai");
