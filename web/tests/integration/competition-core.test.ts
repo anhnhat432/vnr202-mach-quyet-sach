@@ -27,11 +27,12 @@ beforeAll(async () => {
 });
 // Only one competition can be open at a time, so every test releases its world.
 afterEach(async () => {
-  while (worlds.length) await worlds.pop()!.cleanup();
   if (bankKeys.length) {
+    await pool.query("delete from public.competitions where id = any($1::uuid[])", [worlds.map((world) => world.competitionId)]);
     const { error } = await serviceClient().from("questions").delete().in("external_key", bankKeys.splice(0));
     if (error) throw error;
   }
+  while (worlds.length) await worlds.pop()!.cleanup();
 });
 afterAll(async () => {
   await clearFixtures();

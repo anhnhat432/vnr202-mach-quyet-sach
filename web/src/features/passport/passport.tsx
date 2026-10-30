@@ -44,7 +44,7 @@ export function Passport({ dossiers }: { dossiers: DossierSummary[] }) {
         <ul>{dossiers.filter((d) => d.chapter === chapter).map((d) => {
           const row = progress.find((item) => item.dossier_id === d.id);
           const available = d.status === "published";
-          return <li key={d.id}>{available ? <Link className="text-link" href={`/ho-so/${d.slug}`}>{d.title}</Link> : d.title} · {row?.completed_at ? "Đã hoàn thành" : !available ? "Chưa sẵn sàng" : row ? "Đang học" : "Chưa bắt đầu"}</li>;
+          return <li key={d.id}>{available ? <Link className="text-link" href={`/ho-so/${d.slug}`}>{d.title}</Link> : d.title} · {!available ? "Chưa sẵn sàng" : row?.completed_at ? "Đã hoàn thành" : row ? "Đang học" : "Chưa bắt đầu"}</li>;
         })}</ul>
       </div>)}</div>
     </section>
@@ -56,9 +56,10 @@ export function Passport({ dossiers }: { dossiers: DossierSummary[] }) {
         <h3>{group.competition.name} · {group.competition.standing === "official" ? "Chính thức" : "Tạm thời"}</h3>
       <div className="passport__games">{([['minefield', 'Bãi Mìn Tri Thức'], ['race', 'Đường Đua Lịch Sử']] as const).map(([game, label]) => {
         const result = group.attempts.find((attempt) => attempt.game === game);
+        const voided = attempts.some((attempt) => attempt.competition.id === group.competition.id && attempt.game === game && attempt.state === "voided");
         return <article key={game}>
           <h3>{label}</h3>
-          {!result ? <p>Chưa bắt đầu.</p> : <>
+          {!result ? <p>{voided ? "Lượt đã bị vô hiệu, không tính vào thành tích." : "Chưa bắt đầu."}</p> : <>
             <p>{result.state === "active" ? "Đang chơi" : result.state === "timed_out" ? "Hết giờ" : "Đã hoàn thành"} · {result.score} điểm</p>
             <p>{result.rank != null ? `Hạng ${result.rank}` : "Chưa có thứ hạng"} · {result.mainCorrect}/{result.mainTotal} câu đúng · {result.hardCorrect} câu khó đúng{result.completionDurationMs != null ? ` · ${Math.floor(result.completionDurationMs / 1000)} giây` : ""}</p>
             {result.state === "active" ? <Link className="text-link" href={game === "minefield" ? "/live-arena/bai-min" : "/live-arena/duong-dua"}>Tiếp tục lượt chơi</Link> : null}

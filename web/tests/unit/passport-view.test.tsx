@@ -9,12 +9,15 @@ it("shows the student's official results without counting rehearsals", async () 
     ? { role: "student", fullName: "Nguyễn Văn An", displayName: "An N.V.", studentId: "001" }
     : url.endsWith("/passport/progress") ? [] : [
       { attemptId: "r", game: "race", state: "completed", score: 999, competition: { id: "r", name: "Diễn tập", kind: "rehearsal", standing: "rehearsal" }, reviewAvailable: true },
+      { attemptId: "v", game: "race", state: "voided", score: 500, competition: { id: "o", name: "Cuộc thi A", kind: "official", standing: "official" }, reviewAvailable: false },
       { attemptId: "o", game: "minefield", state: "completed", score: 200, mainCorrect: 2, mainTotal: 10, hardCorrect: 1, rank: 1, competition: { id: "o", name: "Cuộc thi A", kind: "official", standing: "official" }, reviewAvailable: true },
     ] }) })));
   render(<Passport dossiers={[]} />);
   expect(await screen.findByText("Nguyễn Văn An")).toBeInTheDocument();
   expect(screen.getByText(/200 điểm/)).toBeInTheDocument();
   expect(screen.queryByText(/999 điểm/)).not.toBeInTheDocument();
+  expect(screen.queryByText(/500 điểm/)).not.toBeInTheDocument();
+  expect(screen.getByText(/Lượt đã bị vô hiệu/)).toBeInTheDocument();
   expect(screen.getByText(/Hạng 1/)).toBeInTheDocument();
 });
 

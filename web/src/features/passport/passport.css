@@ -1,4 +1,5 @@
 .passport { display: grid; gap: 1.25rem; }
+.passport-header .eyebrow { color: #fff; }
 .passport__panel { border: 1px solid #d8c9b3; border-radius: 1rem; background: #fffdf8; padding: clamp(1.25rem, 3vw, 2.5rem); }
 .passport__panel h2 { margin: 0 0 1rem; font-size: clamp(1.4rem, 2vw, 2rem); }
 .passport__panel h3 { margin: 1rem 0 .65rem; font-size: 1.05rem; }
