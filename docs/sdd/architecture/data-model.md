@@ -90,35 +90,29 @@ Mật khẩu mặc định và mật khẩu nội bộ dẫn xuất (`LA-ACC-005
 
 ## 3. Question governance
 
+Triển khai ở migration `202610300002_question_bank.sql` (Giai đoạn C). **Thay đổi so với bản trước:** `status` nằm trên **phiên bản** (`question_versions`), không nằm trên `questions`, vì một bản Published bất biến còn bản sửa mới là một bản Draft khác; `questions.published_version_id` trỏ tới bản đang được phân bổ.
+
 ### `questions`
 
-- `id`, `game_type` (`minefield | race`), `pool` (`minefield_main | minefield_defuse | race`), `chapter`, `topic`, `question_type` (`single_choice | before_after | pair_choice | defuse_ab`), `option_count` (2 hoặc 3), `difficulty` (`easy | medium | hard`; câu gỡ bom dùng `easy`), `origin` (`bank | fixture`), `status`, `current_version_id`, timestamps.
-- Status `draft | reviewed | published`.
-- `CHECK`: `pool = minefield_defuse` ⇔ `question_type = defuse_ab`.
+- `id`, `external_key` (khóa ổn định trong file tác giả, duy nhất), `game_type` (`minefield | race`), `pool` (`minefield_main | minefield_defuse | race`), `chapter`, `topic`, `question_type` (`single_choice | before_after | pair_choice | defuse_ab`), `option_count` (2 hoặc 3), `difficulty`, `origin` (`bank | fixture`), `current_version_id`, `published_version_id`, `created_by`, timestamps.
+- `CHECK`: nhóm thuộc đúng game; `defuse_ab` ⇔ nhóm gỡ bom; `defuse_ab` và `before_after` đúng 2 đáp án; câu gỡ bom độ khó `easy`.
+- Hình dạng (`game_type`, `pool`, `question_type`, `option_count`, `origin`) bất biến; `chapter`/`difficulty` bị khóa khi đã có bản Published.
 
 ### `question_versions`
 
-- `id`, `question_id`, `version`, `schema_version`, `content_public` JSONB (đề, 2–3 đáp án có id ổn định), `content_private` JSONB (id đáp án đúng, giải thích), review/publish metadata (`reviewed_by`, `reviewed_at`, `published_by`, `published_at`).
-- `content_private` không có client SELECT policy và chỉ được đọc qua RPC xem lại khi cuộc thi Finalized (`LA-FB-004`).
-- `CHECK` số đáp án: 2–3 (`defuse_ab` và `before_after` đúng 2); giới hạn độ dài là cấu hình `[THỬ NGHIỆM LA-CONTENT-008]` (80 / 40 ký tự), kiểm bằng validator thay vì `CHECK` cứng cho tới khi khóa.
-- Published version immutable.
+- `id`, `question_id`, `version`, `status` (`draft | reviewed | published`), `content_public` (`prompt`, `options[{id,label}]`, **không bao giờ** có đáp án), `content_private` (`correctOptionId`, `explanation`), `ai_assisted`, `created_by`, `reviewed_by/at`, `review_note`, `published_by/at`, `retired_at/by`, `retire_reason`.
+- Trigger bắt buộc: bản mới chỉ là Draft (trừ `fixture`); nội dung chỉ sửa khi Draft; duyệt/xuất bản cần quản trị viên đang hoạt động (AI không có hồ sơ nên không thể), nguồn đều `verified`, và ghi chú của người duyệt nếu `ai_assisted`; bản Published bất biến, chỉ được thu hồi (`retired_at`, vĩnh viễn, cần lý do).
+- Quyền: chỉ `service_role`; RLS bật, không policy. Client không đọc được đáp án.
 
-### `question_source_links`
+### `question_source_links`, `question_exposures`, `competition_disclosed_question_confirmations`
 
-- `question_version_id`, `source_id`, `locator`, `usage_note`.
+- Liên kết nguồn (`source_id` → `sources`, `locator`, `usage_note`).
+- `question_exposures(question_version_id, competition_id, allocated_count, displayed_count, answer_disclosed_at)`; `competition_id` chưa có khóa ngoại tới tới khi Giai đoạn D thêm bảng cuộc thi.
+- Xác nhận dùng lại câu đã lộ đáp án (quản trị viên, lý do, thời điểm).
 
-### `question_exposures` (`LA-CONTENT-009`, `LA-CONTENT-010`)
+### Hàm
 
-- `question_version_id`, `competition_id`, `allocated_count` (tăng trong transaction tạo lượt), `displayed_count` (tăng khi `content_released_at` được ghi lần đầu), `answer_disclosed_at` (đặt khi cuộc thi Finalized và chỉ khi `displayed_count > 0`) (`LA-ALLOC-012`).
-- Cập nhật `allocated_count` diễn ra dưới khóa advisory phạm vi transaction theo `competition_game_id` trong `start_or_resume_attempt` (`LA-ALLOC-011`).
-- Primary key `(question_version_id, competition_id)`. View lũy kế: tổng lần xuất hiện, danh sách cuộc thi đã lộ đáp án.
-
-### `competition_disclosed_question_confirmations` (`LA-CONTENT-009`)
-
-- `competition_id`, `question_version_id`, `confirmed_by`, `reason`, `confirmed_at`.
-- Chỉ khi có dòng này, câu đã lộ đáp án mới được đưa vào snapshot của cuộc thi `official`; mỗi dòng có audit.
-
-Câu `origin = fixture` chỉ tồn tại ở môi trường local/preview và chỉ được dùng cho cuộc thi `kind = rehearsal` (`LA-CONTENT-006`).
+`upsert_question_draft`, `transition_question_version` (review/publish/reject/retire, có audit), `eligible_questions`, `allocate_question_set`, `record_question_displayed`, `mark_competition_answers_disclosed`, `confirm_disclosed_questions`, `question_bank_readiness`, `question_content_problems`. Chỉ `service_role` được gọi.
 
 ## 4. Competition và snapshot
 

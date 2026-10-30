@@ -5,7 +5,8 @@ import { join } from "node:path";
 
 const root = join(process.cwd(), "web/.next");
 const SERVER_ONLY = ["SUPABASE_SERVICE_ROLE_KEY", "AUTH_PASSWORD_PEPPER", "ROSTER_DEFAULT_PASSWORD", "CSRF_SIGNING_SECRET"];
-const names = ["SUPABASE_SERVICE_ROLE_KEY", "AUTH_PASSWORD_PEPPER", "ROSTER_DEFAULT_PASSWORD", "CSRF_SIGNING_SECRET", "ROSTER_STUDENT_ID_PATTERN"];
+// Answer-bearing identifiers must never reach client code either (LA-ANTI-007, LA-FB-003).
+const names = ["SUPABASE_SERVICE_ROLE_KEY", "AUTH_PASSWORD_PEPPER", "ROSTER_DEFAULT_PASSWORD", "CSRF_SIGNING_SECRET", "ROSTER_STUDENT_ID_PATTERN", "correctOptionId", "content_private", "[GIẢ LẬP]"];
 
 function* walk(dir) {
   for (const name of readdirSync(dir)) {

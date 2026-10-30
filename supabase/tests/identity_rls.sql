@@ -78,8 +78,8 @@ select is((select count(*) from public.profiles), 1::bigint, 'user_metadata role
 
 -- admin
 select set_config('request.jwt.claims', '{"sub":"00000000-0000-4000-8000-0000000000ad","role":"authenticated","app_metadata":{"role":"admin"}}', true);
-select is((select count(*) from public.profiles), 4::bigint, 'admin reads all profiles');
-select is((select count(*) from public.audit_logs), 1::bigint, 'admin reads audit logs');
+select is((select count(*) from public.profiles where id in ('00000000-0000-4000-8000-00000000000a', '00000000-0000-4000-8000-00000000000b', '00000000-0000-4000-8000-0000000000ad', '00000000-0000-4000-8000-0000000000cc')), 4::bigint, 'admin reads all profiles');
+select is((select count(*) from public.audit_logs where action = 'test'), 1::bigint, 'admin reads audit logs');
 select throws_ok($$select count(*) from public.student_auth_identities$$, '42501', null, 'even admin JWT cannot read auth identities directly');
 select throws_ok($$update public.profiles set display_name = 'X' where id = '00000000-0000-4000-8000-00000000000a'$$, '42501', null, 'admin JWT cannot write profiles directly (server routes only)');
 reset role;

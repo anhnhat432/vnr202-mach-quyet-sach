@@ -280,10 +280,16 @@ Không body. Đặt lại mật khẩu về mật khẩu mặc định cấu hì
 
 ## 9. Admin content
 
-- `GET/POST /admin/questions`
-- `GET/PATCH /admin/questions/{id}`
-- `POST /admin/questions/{id}/reviews`
-- `POST /admin/questions/{id}/publications`
+Câu hỏi (Giai đoạn C, đã triển khai):
+
+- `POST /admin/questions` — tạo hoặc cập nhật **Draft** theo `key` (`201 created`, `200 updated | unchanged | new_version`). Body Zod `strict`; không nhận `status` hay `origin`; luôn `origin = bank`. Quy tắc sâu do database quyết định.
+- `GET /admin/questions?game&origin&status&limit` — danh sách kèm phiên bản, nguồn, đáp án và giải thích (chỉ admin).
+- `POST /admin/question-versions/{id}/transitions` — body `{action: review|publish|reject|retire, note?}`; người thực hiện luôn là admin đang đăng nhập. Lỗi: `422 publication_requirements_failed` (thiếu người duyệt/nguồn đã xác minh/ghi chú cho nội dung do AI soạn), `409 invalid_content_transition`, `403 forbidden`, `404`.
+- `GET /admin/question-bank/readiness?kind=official|rehearsal&competitionId&expectedAttempts` — báo cáo sẵn sàng (blocker và mục tiêu 168 câu riêng).
+
+Chưa triển khai: `GET/PATCH /admin/questions/{id}` riêng lẻ (dùng POST theo `key`), giao diện quản trị (T055).
+
+Dossier:
 - `GET/POST /admin/dossiers`
 - `GET/PATCH /admin/dossiers/{id}`
 - `POST /admin/dossiers/{id}/publications`
