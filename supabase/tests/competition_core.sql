@@ -1,7 +1,7 @@
 -- Competition core: access matrix, clock discipline and structural guarantees (T040-T046).
 -- Behaviour (timing, scoring, concurrency) is covered by web/tests/integration/{competition-core,arena-games}.test.ts.
 begin;
-select plan(23);
+select plan(26);
 
 select ok(
   (select bool_and(c.relrowsecurity)
@@ -87,6 +87,37 @@ select ok(exists (select 1 from pg_constraint where conrelid = 'public.answer_su
 select ok(exists (select 1 from pg_constraint where conrelid = 'public.attempt_events'::regclass and contype = 'u' and pg_get_constraintdef(oid) = 'UNIQUE (attempt_id, event_type, source_ref)'), 'one scoring event per source is a unique constraint');
 select ok(exists (select 1 from pg_indexes where indexname = 'competitions_single_open_idx'), 'at most one open competition is a partial unique index');
 select ok(exists (select 1 from pg_trigger where tgname = 'attempt_allocations_guard') and exists (select 1 from pg_trigger where tgname = 'attempt_events_append_only'), 'allocation timeline and score ledger are guarded by triggers');
+
+
+-- F3 broadcast hint: topic, event and a payload without any personal or scoring data.
+do $$
+begin
+  if to_regprocedure('realtime.send(jsonb,text,text,boolean)') is null then
+    create schema if not exists realtime;
+    create table if not exists realtime.messages (topic text, extension text, payload jsonb, event text, private boolean);
+    create function realtime.send(payload jsonb, event text, topic text, private boolean) returns void language sql
+      as 'insert into realtime.messages (topic, extension, payload, event, private) values (topic, ''broadcast'', payload, event, private)';
+  end if;
+end $$;
+insert into auth.users (id, email) values ('00000000-0000-4000-8000-0000000000f3', 'f3@test.invalid');
+insert into public.profiles (id, role, full_name, display_name) values ('00000000-0000-4000-8000-0000000000f3', 'admin', 'F3 Admin', 'F3 Admin');
+select public.create_competition('00000000-0000-4000-8000-0000000000f3', 'F3 broadcast', 'rehearsal', '2030-01-01T00:00:00Z', '2030-01-01T02:00:00Z');
+insert into public.leaderboard_versions (competition_game_id, version, committed_at)
+  select g.id, 7, clock_timestamp() from public.competition_games g join public.competitions c on c.id = g.competition_id where c.name = 'F3 broadcast' and g.game_type = 'race';
+select is(
+  (select m.topic from realtime.messages m where m.payload -> 'aggregate' ->> 'version' = '7' and m.topic like 'leaderboard:%:race' order by 1 limit 1),
+  (select format('leaderboard:%s:race', c.public_id) from public.competitions c where c.name = 'F3 broadcast'),
+  'a version bump broadcasts on leaderboard:{publicId}:{game}'
+);
+select is(
+  (select m.event from realtime.messages m where m.payload -> 'aggregate' ->> 'version' = '7' and m.topic like 'leaderboard:%:race' limit 1),
+  'leaderboard.changed', 'the event is leaderboard.changed while the competition is not finalized'
+);
+select is(
+  (select array_agg(k order by k) from realtime.messages m, jsonb_object_keys(m.payload) k where m.payload -> 'aggregate' ->> 'version' = '7' and m.topic like 'leaderboard:%:race'),
+  array['aggregate', 'data', 'eventId', 'eventType', 'occurredAt'],
+  'the payload carries only the envelope (no names, scores, answers or ids of people)'
+);
 
 select * from finish();
 rollback;

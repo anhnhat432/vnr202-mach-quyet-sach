@@ -65,6 +65,11 @@ paths:
     get:
       summary: Answers and explanations of the questions the student saw - only after the competition is Finalized
       responses: { "200": { $ref: "#/components/responses/Ok" }, "409": { description: review_not_available } }
+  /arena/competitions/current:
+    get:
+      summary: Public - the competition the boards and the projector show (open, else most recent closing/settling/finalized)
+      security: []
+      responses: { "200": { $ref: "#/components/responses/Ok" } }
   /arena/leaderboards/{publicId}/{game}:
     get:
       summary: Public Top 10 and aggregates of one game (display names only)

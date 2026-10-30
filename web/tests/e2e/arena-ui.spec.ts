@@ -139,6 +139,48 @@ test("Bãi Mìn: open, answer, F5 during a question keeps its countdown", async 
   expect(Number(await page.textContent(".ax-score span"))).toBeGreaterThanOrEqual(0);
 });
 
+test("leaderboards resync from the API without reload, survive going offline, and show display names only", async ({ page, browser, context }) => {
+  // viewer (no sign-in needed)
+  const viewer = await browser.newContext();
+  const board = await viewer.newPage();
+  await board.goto("/live-arena/bang-xep-hang");
+  const raceBoard = board.locator(".ax-lb--race");
+  await expect(raceBoard.getByText(world.students[0].name)).toBeVisible({ timeout: 10000 });
+  const before = Number((await raceBoard.locator(".ax-lb__row", { hasText: world.students[0].name }).locator(".ax-lb__score").textContent())?.replace(/\./g, ""));
+
+  // the player answers; the viewer's board follows by itself (Broadcast hint or periodic sync)
+  await signIn(page, world.students[0].studentId);
+  await enter(page, "/live-arena/duong-dua", ".ax-race");
+  await expect(page.locator(".ax-question:not(.is-expired)")).toBeVisible({ timeout: 10000 });
+  await page.locator(".ax-option").nth(await correctIndex(page)).click();
+  await expect.poll(async () => Number((await raceBoard.locator(".ax-lb__row", { hasText: world.students[0].name }).locator(".ax-lb__score").textContent())?.replace(/\./g, "")), { timeout: 12000 }).toBeGreaterThan(before);
+
+  // offline then back: the board shows the state and resyncs
+  await viewer.setOffline(true);
+  await board.evaluate(() => window.dispatchEvent(new Event("focus")));
+  await expect(board.getByText("Mất kết nối").first()).toBeVisible({ timeout: 8000 });
+  await viewer.setOffline(false);
+  await board.evaluate(() => window.dispatchEvent(new Event("online")));
+  await expect(board.getByText("Mất kết nối")).toHaveCount(0, { timeout: 8000 });
+
+  const text = (await board.locator(".ax-lb-grid").textContent()) ?? "";
+  expect(text).toContain("Diễn tập");
+  for (const s of world.students) expect(text).not.toContain(s.studentId);
+  expect(text).not.toContain("Họ Tên Thử");
+
+  // projector: both boards at 1920x1080, then one game enlarged
+  const proj = await viewer.newPage();
+  await proj.setViewportSize({ width: 1920, height: 1080 });
+  await proj.goto("/trinh-chieu");
+  await expect(proj.locator(".ax-lb--projector")).toHaveCount(2, { timeout: 10000 });
+  await expect(proj.locator(".ax-lb__row").first()).toBeVisible({ timeout: 10000 }); // hydrated and synced
+  await proj.keyboard.press("2");
+  await expect(proj.locator(".ax-lb--projector")).toHaveCount(1);
+  await expect(proj.locator(".ax-lb--race")).toBeVisible();
+  await viewer.close();
+  void context;
+});
+
 test("hub shows both games and the player's state; no answer ever reached the browser", async ({ page }) => {
   await signIn(page, world.students[0].studentId);
   await expect(page.getByRole("heading", { name: "Bãi Mìn Tri Thức" })).toBeVisible();

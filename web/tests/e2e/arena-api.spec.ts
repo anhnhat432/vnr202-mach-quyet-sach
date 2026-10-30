@@ -52,13 +52,22 @@ async function correctFor(allocationId: string) {
 }
 
 test.beforeAll(async () => {
-  const fixtures = generateFixtures("dev87", { keyPrefix: "e2e" });
-  await svc.from("questions").delete().eq("origin", "fixture");
-  const { data: qs, error } = await svc.from("questions").insert(fixtures.map((q) => ({ external_key: q.key, game_type: q.game, pool: q.pool, chapter: q.chapter, topic: q.topic, question_type: q.type, option_count: q.options.length, difficulty: q.difficulty, origin: "fixture" }))).select("id, external_key");
-  if (error) throw error;
-  const ids = new Map(qs!.map((r) => [r.external_key, r.id]));
-  const { error: vError } = await svc.from("question_versions").insert(fixtures.map((q) => ({ question_id: ids.get(q.key), version: 1, status: "published", content_public: { prompt: q.prompt, options: q.options }, content_private: { correctOptionId: q.correctOptionId, explanation: q.explanation } })));
-  if (vError) throw vError;
+  // Reuse fixture questions when a previous suite already loaded them (they may be referenced by
+  // another competition's snapshot and cannot be replaced); otherwise load the dev87 set.
+  const { count } = await svc.from("questions").select("id", { count: "exact", head: true }).eq("origin", "fixture");
+  if (!count) {
+    const fixtures = generateFixtures("dev87", { keyPrefix: `e2e${run}` });
+    const { data: qs, error } = await svc.from("questions").insert(fixtures.map((q) => ({ external_key: q.key, game_type: q.game, pool: q.pool, chapter: q.chapter, topic: q.topic, question_type: q.type, option_count: q.options.length, difficulty: q.difficulty, origin: "fixture" }))).select("id, external_key");
+    if (error) throw error;
+    const ids = new Map(qs!.map((r) => [r.external_key, r.id]));
+    const { error: vError } = await svc.from("question_versions").insert(fixtures.map((q) => ({ question_id: ids.get(q.key), version: 1, status: "published", content_public: { prompt: q.prompt, options: q.options }, content_private: { correctOptionId: q.correctOptionId, explanation: q.explanation } })));
+    if (vError) throw vError;
+  }
+  if (process.env.SUPABASE_DB_URL) {
+    const pool = new Pool({ connectionString: process.env.SUPABASE_DB_URL, max: 1 });
+    await pool.query("update public.competitions set state = 'start_closed' where state = 'open'"); // a test database: one open competition at a time
+    await pool.end();
+  }
 
   const admin = await svc.auth.admin.createUser({ email: adminEmail, password: adminPassword, email_confirm: true, app_metadata: { role: "admin" } });
   if (admin.error || !admin.data.user) throw admin.error;
@@ -83,7 +92,8 @@ test.afterAll(async () => {
       await pool.query("delete from public.audit_logs where target_id = $1", [competitionId]);
       await pool.query("delete from public.competitions where id = $1", [competitionId]);
     }
-    await pool.query("delete from public.auth_events where profile_id = any($1::uuid[])", [[adminId, ...students.map((s) => s.id)]]);
+    const people = [adminId, ...students.map((s) => s.id)].filter(Boolean);
+    await pool.query("delete from public.auth_events where profile_id = any($1::uuid[])", [people]);
     await pool.end();
   }
   await svc.from("questions").delete().eq("origin", "fixture");

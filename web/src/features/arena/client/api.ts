@@ -68,3 +68,6 @@ export const arenaApi = {
   review: (attemptId: string) => request<unknown>("GET", `/arena/attempts/${attemptId}/review`),
   leaderboard: (publicId: string, game: string) => request<import("./types").Leaderboard>("GET", `/arena/leaderboards/${publicId}/${game}`),
 };
+
+export type CurrentCompetition = { publicId: string; name: string; kind: "official" | "rehearsal"; state: string; startDeadlineAt: string; standing: import("./types").Standing } | null;
+export const currentCompetition = () => request<CurrentCompetition>("GET", "/arena/competitions/current");
