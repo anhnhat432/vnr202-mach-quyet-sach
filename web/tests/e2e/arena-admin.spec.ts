@@ -47,6 +47,7 @@ test.afterAll(async () => {
   const pool = new Pool({ connectionString: env.dbUrl!, max: 1 });
   const { rows } = await pool.query("select id from public.competitions where name = $1", [name]);
   for (const r of rows) {
+    await pool.query("delete from public.audit_logs where target_type = 'attempt' and target_id in (select id::text from public.attempts where competition_id = $1)", [r.id]);
     await pool.query("delete from public.question_exposures where competition_id = $1", [r.id]);
     await pool.query("delete from public.audit_logs where target_id = $1", [r.id]);
     await pool.query("delete from public.competitions where id = $1", [r.id]);
@@ -95,7 +96,8 @@ test("admin runs a rehearsal end to end; the student reviews answers only after 
   await student.getByRole("button", { name: "Bắt đầu lượt thi" }).click();
 
   // the admin sees the player live, with MSSV (admin only), and cannot finalize a running attempt
-  await expect(page.locator(".adm__monitor tbody tr", { hasText: studentId })).toBeVisible({ timeout: 10000 });
+  const row = page.locator(".adm__monitor tbody tr", { hasText: studentId });
+  await expect(row).toBeVisible({ timeout: 10000 });
   await page.getByRole("button", { name: "Đóng nhận lượt mới" }).click();
   await page.getByRole("button", { name: "Chuyển sang chốt kết quả" }).click();
   page.once("dialog", (d) => void d.accept());
@@ -110,11 +112,47 @@ test("admin runs a rehearsal end to end; the student reviews answers only after 
   await student.goto("/live-arena/xem-lai");
   await expect(student.getByText("Đáp án mở sau khi cuộc thi kết thúc")).toBeVisible();
 
+  // incident handling (LA-ADMIN-003), after the run so the race clock is not held up: a reason is required,
+  // voiding needs an explicit confirmation, everything lands in the audit log; no score or clock editing
+  await row.getByRole("button", { name: "Xử lý" }).click();
+  const panel = page.getByRole("form", { name: /Xử lý sự cố/ });
+  await panel.getByLabel("Vô hiệu lượt thi").check();
+  await panel.getByLabel("Lý do (bắt buộc)").fill("Thử xác nhận");
+  await expect(panel.getByRole("button", { name: "Vô hiệu lượt thi" })).toBeDisabled();
+  await expect(panel.getByText(/không thể hoàn tác và không tạo lượt thay thế/)).toBeVisible();
+  await panel.getByLabel("Ghi chú sự cố").check();
+  await panel.getByLabel("Lý do (bắt buộc)").fill("Máy 12 mất mạng 30 giây");
+  await panel.getByRole("button", { name: "Ghi chú sự cố" }).click();
+  await expect(row.getByText(/1 ghi nhận/)).toBeVisible({ timeout: 10000 });
+  await page.getByText(/Nhật ký thao tác/).click();
+  await expect(page.locator(".adm__audit li", { hasText: "attempt.note" })).toContainText("Máy 12 mất mạng 30 giây");
+  // lock then unlock reuse the stage B account actions (sessions are revoked on lock)
+  await row.getByRole("button", { name: "Xử lý" }).click();
+  await panel.getByLabel("Khóa tài khoản").check();
+  await panel.getByLabel("Lý do (bắt buộc)").fill("Nghi lộ mật khẩu");
+  await panel.getByRole("checkbox").check();
+  await panel.getByRole("button", { name: "Khóa tài khoản" }).click();
+  await expect(row.getByText("TK bị khóa")).toBeVisible({ timeout: 10000 });
+  await student.reload();
+  await expect(student.getByText("để xem lượt thi của bạn")).toBeVisible({ timeout: 10000 }); // signed out everywhere
+  await row.getByRole("button", { name: "Xử lý" }).click();
+  await panel.getByLabel("Mở khóa tài khoản").check();
+  await panel.getByLabel("Lý do (bắt buộc)").fill("Đã đổi mật khẩu");
+  await panel.getByRole("button", { name: "Mở khóa tài khoản" }).click();
+  await expect(row.getByText("TK bị khóa")).toHaveCount(0, { timeout: 10000 });
+  await expect(page.locator(".adm__audit li", { hasText: "attempt.lock_account" })).toBeVisible();
+  await expect(page.locator(".adm__audit li", { hasText: "account.set_status" }).first()).toBeVisible();
+
   // --- finalize, then the review opens -------------------------------------------------------------
   page.once("dialog", (d) => void d.accept());
   await page.getByRole("button", { name: /Kết thúc & công bố/ }).click();
   await expect(page.getByText(/Đã kết thúc · nhãn bảng: Diễn tập/)).toBeVisible({ timeout: 10000 });
-  await student.reload();
+  await student.goto("/dang-nhap");
+  await student.fill("input[name=studentId]", studentId);
+  await student.fill("input[name=password]", env.defaultPassword!);
+  await student.click("button[type=submit]");
+  await student.waitForURL("**/live-arena");
+  await student.goto("/live-arena/xem-lai");
   await student.getByRole("button", { name: "Xem lại đáp án" }).click();
   await expect(student.locator(".rev__q")).toHaveCount(15);
   await expect(student.getByText("✓ đáp án đúng").first()).toBeVisible();

@@ -21,6 +21,13 @@ const MESSAGES: Record<string, string> = {
   attempt_time_over: "Đã hết thời gian lượt thi.",
   review_not_available: "Chỉ xem lại được sau khi cuộc thi kết thúc.",
   readiness_blocked: "Ngân hàng câu hỏi chưa đủ điều kiện để mở cuộc thi.",
+  already_voided: "Lượt thi này đã bị vô hiệu.",
+  competition_finalized: "Cuộc thi đã công bố kết quả; chỉ có thể ghi chú sự cố.",
+  reason_required: "Cần nhập lý do (ít nhất 3 ký tự).",
+  confirmation_closed: "Chỉ xác nhận được khi cuộc thi còn ở trạng thái Nháp.",
+  not_needed_for_rehearsal: "Cuộc thi diễn tập không cần xác nhận câu đã công bố.",
+  not_disclosed: "Có câu được chọn chưa từng bị công bố đáp án.",
+  nothing_selected: "Chưa chọn câu hỏi nào.",
 };
 
 // Maps a database error token to an API error. Raw SQL text is never forwarded.

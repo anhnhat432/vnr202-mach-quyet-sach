@@ -4596,6 +4596,27 @@ main {
 .adm__options { margin: 0; padding-left: 1.4rem; }
 .adm__options li.is-correct { color: var(--evidence-teal); font-weight: 700; }
 .adm__explain { margin: 0; color: var(--ink-soft); }
+.adm__warn { padding: 0.5rem 0.6rem; border-left: 3px solid var(--command-red); background: rgba(177, 40, 46, 0.06); color: var(--ink); }
+.adm__message.is-bad { background: rgba(177, 40, 46, 0.08); border-color: rgba(177, 40, 46, 0.35); color: var(--command-red); }
+.adm button.adm__small { padding: 0.3rem 0.65rem; font-size: 0.85rem; background: transparent; color: var(--command-red); border: 1px solid currentColor; }
+.adm button.is-danger { background: #8f1d22; }
+.adm__tag { display: inline-block; margin-right: 0.35rem; padding: 0.1rem 0.45rem; border-radius: 999px; font-size: 0.8rem; font-weight: 700; }
+.adm__tag.is-bad { background: rgba(177, 40, 46, 0.12); color: var(--command-red); }
+.adm__incident, .adm__disclosed { display: grid; gap: 0.6rem; padding: 1rem; border: 2px solid rgba(177, 40, 46, 0.35); border-radius: var(--radius-card); background: white; }
+.adm__disclosed { border-color: var(--line); }
+.adm__incident fieldset { display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; margin: 0; padding: 0.5rem 0.7rem; border: 1px solid var(--line); border-radius: 10px; }
+.adm__incident legend { padding: 0 0.3rem; font-weight: 600; font-size: 0.9rem; }
+.adm__radio { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.95rem; }
+.adm__incident > label, .adm__disclosed form > label { display: grid; gap: 0.2rem; font-size: 0.9rem; font-weight: 600; }
+.adm__incident textarea, .adm__disclosed textarea { padding: 0.5rem 0.6rem; border: 1px solid var(--line); border-radius: 8px; font: inherit; background: white; resize: vertical; }
+.adm__incident .adm__confirm { display: flex; align-items: flex-start; gap: 0.5rem; padding: 0.6rem 0.8rem; border-radius: 10px; background: rgba(177, 40, 46, 0.07); font-weight: 400; }
+.adm__disclosed form { display: grid; gap: 0.5rem; }
+.adm__qlist { display: grid; gap: 0.4rem; margin: 0; padding: 0; list-style: none; }
+.adm__qlist label { display: flex; gap: 0.6rem; align-items: flex-start; padding: 0.5rem 0.6rem; border: 1px solid var(--line); border-radius: 10px; font-size: 0.9rem; }
+.adm__qlist small { color: var(--ink-soft); }
+.adm__audit summary { display: inline-flex; align-items: center; gap: 0.4rem; cursor: pointer; font-weight: 600; }
+.adm__audit ol { display: grid; gap: 0.25rem; max-height: 22rem; overflow-y: auto; margin: 0.6rem 0 0; padding-left: 1.4rem; font-size: 0.88rem; }
+.adm__audit code { font-size: 0.82rem; }
 
 /* ---- post-final review --------------------------------------------------------------------------- */
 .rev { display: grid; gap: 1rem; margin-top: 1.5rem; }

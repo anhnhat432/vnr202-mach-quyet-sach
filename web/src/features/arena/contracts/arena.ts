@@ -34,3 +34,15 @@ export const createCompetitionBody = z
   .strict();
 
 export const competitionTransitionBody = z.object({ target: z.enum(["scheduled", "open", "start_closed", "settling", "archived"]) }).strict();
+
+// Incident actions on one attempt (LA-ADMIN-003). None can change a score, a clock, a rank or create an attempt.
+export const attemptIncidentBody = z
+  .object({
+    action: z.enum(["note", "void_attempt", "revoke_sessions", "lock_account", "unlock_account"]),
+    reason: z.string().trim().min(3).max(300),
+  })
+  .strict();
+
+export const disclosedConfirmationBody = z
+  .object({ questionVersionIds: z.array(z.guid()).min(1).max(200), reason: z.string().trim().min(3).max(300) })
+  .strict();

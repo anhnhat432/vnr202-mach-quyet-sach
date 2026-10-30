@@ -118,6 +118,44 @@ paths:
       summary: Settle expired questions and close starts after the deadline; idempotent (admin)
       requestBody: { $ref: "#/components/requestBodies/Empty" }
       responses: { "200": { $ref: "#/components/responses/Ok" } }
+  /admin/competitions/{id}/audit:
+    get:
+      summary: Audit trail of the competition, its attempts and its players' accounts, newest first (admin)
+      responses: { "200": { $ref: "#/components/responses/Ok" } }
+  /admin/competitions/{id}/disclosed-questions:
+    get:
+      summary: Eligible questions whose answers an earlier competition disclosed, with confirmation state (admin)
+      responses: { "200": { $ref: "#/components/responses/Ok" } }
+  /admin/competitions/{id}/disclosed-question-confirmations:
+    post:
+      summary: Explicitly confirm reuse of selected disclosed questions in a Draft official competition (admin, audited)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [questionVersionIds, reason]
+              properties:
+                questionVersionIds: { type: array, minItems: 1, maxItems: 200, items: { type: string, format: uuid } }
+                reason: { type: string, minLength: 3, maxLength: 300 }
+      responses: { "200": { $ref: "#/components/responses/Ok" }, "409": { description: confirmation_closed }, "422": { description: not_disclosed | not_needed_for_rehearsal | reason_required } }
+  /admin/attempts/{attemptId}/incidents:
+    post:
+      summary: Record an incident on an attempt — note, void (excluded from boards, history kept), revoke sessions, lock/unlock account (admin, audited)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [action, reason]
+              properties:
+                action: { enum: [note, void_attempt, revoke_sessions, lock_account, unlock_account] }
+                reason: { type: string, minLength: 3, maxLength: 300 }
+      responses: { "200": { $ref: "#/components/responses/Ok" }, "404": { description: not_found }, "409": { description: already_voided | competition_finalized } }
 components:
   securitySchemes:
     supabaseSession: { type: apiKey, in: cookie, name: sb-access-token }

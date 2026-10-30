@@ -48,4 +48,71 @@ describe("admin views and student history", () => {
     await call("finalize_competition", [w.competitionId, w.adminId], at(10000 + 400 + 250 + 100));
     expect((await call<Array<{ reviewAvailable: boolean }>>("arena_my_attempts", [a]))[0].reviewAvailable).toBe(true);
   });
+
+  it("incidents: admin-only, reason required, void keeps score and history but leaves the boards, every action audited", async () => {
+    const w = await createWorld({ students: 2 });
+    worlds.push(w);
+    const [a, b] = w.students;
+    const started = await start(w, a, "race", T0);
+    await start(w, b, "race", T0);
+    const attemptId = started.projection.attempt.id;
+    try {
+      await expectError(call("record_attempt_incident", [b, attemptId, "void_attempt", "gian lận"]), "42501", "actor_not_admin");
+      await expectError(call("record_attempt_incident", [w.adminId, attemptId, "void_attempt", " "]), "QA422", "reason_required");
+      await expectError(call("record_attempt_incident", [w.adminId, attemptId, "edit_score", "sửa điểm"]), "QA422", "invalid_action");
+      await call("record_attempt_incident", [w.adminId, attemptId, "note", "Mất điện phòng máy 2 phút"], at(500));
+      const before = (await pool.query("select score, version from public.attempts where id = $1", [attemptId])).rows[0];
+      const ledger = (await pool.query("select count(*)::int n from public.attempt_events where attempt_id = $1", [attemptId])).rows[0].n;
+      const voided = await call<{ state: string }>("record_attempt_incident", [w.adminId, attemptId, "void_attempt", "Dùng tài liệu khi thi"], at(1000));
+      expect(voided.state).toBe("voided");
+      await expectError(call("record_attempt_incident", [w.adminId, attemptId, "void_attempt", "lặp lại"]), "QA409", "already_voided");
+      const after = (await pool.query("select score, pending_allocation_id from public.attempts where id = $1", [attemptId])).rows[0];
+      expect(after.score).toBe(before.score); // score untouched; ledger untouched
+      expect(after.pending_allocation_id).toBeNull();
+      expect((await pool.query("select count(*)::int n from public.attempt_events where attempt_id = $1", [attemptId])).rows[0].n).toBe(ledger);
+      const board = await call<{ players: number; entries: Array<{ displayName: string }> }>("get_leaderboard", [w.publicId, "race"], at(1000));
+      expect(board.players).toBe(1);
+      expect(board.entries.map((e) => e.displayName).join()).not.toContain("SV1 ");
+      // History cannot be rewritten to hide the incident.
+      await expect(pool.query("update public.attempt_incidents set reason = 'x' where attempt_id = $1", [attemptId])).rejects.toThrow("append_only");
+      await expect(pool.query("delete from public.attempt_incidents where attempt_id = $1", [attemptId])).rejects.toThrow("append_only");
+      const m = await call<{ attempts: Array<{ attemptId: string; state: string; incidents: Array<{ action: string }> }> }>("arena_admin_monitor", [w.adminId, w.competitionId], at(1000));
+      expect(m.attempts.find((x) => x.attemptId === attemptId)).toMatchObject({ state: "voided", incidents: [{ action: "note" }, { action: "void_attempt" }] });
+      const audit = await call<Array<{ action: string; actor: string }>>("arena_admin_audit", [w.adminId, w.competitionId]);
+      expect(audit.map((x) => x.action)).toEqual(expect.arrayContaining(["attempt.note", "attempt.void_attempt"]));
+      await expectError(call("arena_admin_audit", [a, w.competitionId]), "42501", "actor_not_admin");
+      // After results are published, voiding is refused; a note is still possible.
+      await w.transition("start_closed", at(1000));
+      await w.transition("settling", at(1000));
+      await call("finalize_competition", [w.competitionId, w.adminId], at(150000 + 400 + 250 + 100));
+      const other = (await pool.query("select id from public.attempts where profile_id = $1", [b])).rows[0].id;
+      await expectError(call("record_attempt_incident", [w.adminId, other, "void_attempt", "phát hiện muộn"]), "QA409", "competition_finalized");
+      await call("record_attempt_incident", [w.adminId, other, "note", "phát hiện muộn, đã báo giảng viên"]);
+    } finally {
+      await pool.query("delete from public.audit_logs where target_type = 'attempt' and target_id in (select id::text from public.attempts where competition_id = $1)", [w.competitionId]);
+    }
+  });
+
+  it("disclosed questions are reused only by explicit confirmation in a Draft official competition", async () => {
+    const rehearsal = await createWorld({ students: 1, open: false });
+    worlds.push(rehearsal);
+    const official = await createWorld({ students: 1, kind: "official", open: false });
+    worlds.push(official);
+    const [v1, v2] = (await pool.query("select id from public.question_versions order by id limit 2")).rows.map((r) => r.id as string);
+    const donor = crypto.randomUUID();
+    await pool.query("insert into public.question_exposures (question_version_id, competition_id, allocated_count, displayed_count, answer_disclosed_at) values ($1, $2, 1, 1, now())", [v1, donor]);
+    try {
+      const listed = await call<{ kind: string; questions: unknown[] }>("arena_admin_disclosed", [official.adminId, official.competitionId]);
+      expect(listed.kind).toBe("official"); // fixtures are never eligible for official, so nothing is listed here
+      await expectError(call("arena_confirm_disclosed", [official.students[0], official.competitionId, [v1], "đủ lý do"]), "42501", "actor_not_admin");
+      await expectError(call("arena_confirm_disclosed", [rehearsal.adminId, rehearsal.competitionId, [v1], "đủ lý do"]), "QA422", "not_needed_for_rehearsal");
+      await expectError(call("arena_confirm_disclosed", [official.adminId, official.competitionId, [v1], "  "]), "QA422", "reason_required");
+      await expectError(call("arena_confirm_disclosed", [official.adminId, official.competitionId, [v1, v2], "đủ lý do"]), "QA422", "not_disclosed");
+      expect(await call("arena_confirm_disclosed", [official.adminId, official.competitionId, [v1], "Câu nền tảng, đã thay phương án"])).toBe(1);
+      const audit = await call<Array<{ action: string; after: { reason: string } }>>("arena_admin_audit", [official.adminId, official.competitionId]);
+      expect(audit[0]).toMatchObject({ action: "question.confirm_disclosed_reuse", after: { reason: "Câu nền tảng, đã thay phương án" } });
+    } finally {
+      await pool.query("delete from public.question_exposures where competition_id = $1", [donor]);
+    }
+  });
 });

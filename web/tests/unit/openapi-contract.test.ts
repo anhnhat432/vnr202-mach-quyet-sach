@@ -7,7 +7,7 @@ import { describe, expect, it } from "vitest";
 // HTTP methods) without a YAML dependency.
 const root = path.resolve(import.meta.dirname, "../../..");
 const apiRoot = path.join(root, "web/src/app/api/v1");
-const SCOPES = ["arena", "admin/competitions"];
+const SCOPES = ["arena", "admin/competitions", "admin/attempts"];
 
 function routeFiles(dir: string): string[] {
   return fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? routeFiles(path.join(dir, e.name)) : e.name === "route.ts" ? [path.join(dir, e.name)] : []));

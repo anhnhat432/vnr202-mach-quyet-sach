@@ -70,6 +70,16 @@ export function GameIntro({ game, lobby, busy, notice, onStart }: { game: Game; 
 export function FinishedScreen({ game, projection, standing }: { game: Game; projection: Projection; standing: PlayerStanding | null }) {
   const a = projection.attempt;
   const timedOut = a.state === "timed_out";
+  if (a.state === "voided") {
+    return (
+      <CenterCard>
+        <p className="ax-kicker">{RULES[game].title}</p>
+        <h1 className="ax-title">Lượt thi đã bị vô hiệu</h1>
+        <p className="ax-lead">Giảng viên đã ghi nhận sự cố với lượt thi này nên lượt không được tính trên bảng xếp hạng. Liên hệ giảng viên nếu cần trao đổi.</p>
+        <div className="ax-row"><Link className="ax-btn ax-btn--ghost" href="/live-arena">Về sảnh</Link></div>
+      </CenterCard>
+    );
+  }
   return (
     <CenterCard>
       <p className="ax-kicker">{RULES[game].title} · {STANDING_LABEL[projection.competition.standing]}</p>

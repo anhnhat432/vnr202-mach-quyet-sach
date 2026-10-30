@@ -49,7 +49,7 @@ export function ArenaHub() {
         {(Object.keys(GAMES) as Game[]).map((game) => {
           const meta = GAMES[game];
           const mine = lobby?.games.find((g) => g.game === game);
-          const label = !mine?.attemptId ? "Vào game" : mine.state === "active" ? "Tiếp tục lượt đang chơi" : `Đã hoàn thành · ${mine.score ?? 0} điểm`;
+          const label = !mine?.attemptId ? "Vào game" : mine.state === "active" ? "Tiếp tục lượt đang chơi" : mine.state === "voided" ? "Lượt đã bị vô hiệu" : `Đã hoàn thành · ${mine.score ?? 0} điểm`;
           return (
             <article key={game} className={`hub__game hub__game--${game}`}>
               <span className="hub__icon">{meta.icon}</span>

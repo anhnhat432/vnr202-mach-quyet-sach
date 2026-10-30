@@ -1,7 +1,7 @@
 -- Competition core: access matrix, clock discipline and structural guarantees (T040-T046).
 -- Behaviour (timing, scoring, concurrency) is covered by web/tests/integration/{competition-core,arena-games}.test.ts.
 begin;
-select plan(26);
+select plan(28);
 
 select ok(
   (select bool_and(c.relrowsecurity)
@@ -32,6 +32,17 @@ select ok(
    from pg_proc p join pg_namespace n on n.oid = p.pronamespace
    where n.nspname = 'public' and p.proname in ('arena_bind_session', 'arena_claim_active_attempt')),
   'session binding RPCs are executable by service_role only'
+);
+select ok(
+  (select bool_and(has_function_privilege('service_role', p.oid, 'EXECUTE') and not has_function_privilege('anon', p.oid, 'EXECUTE') and not has_function_privilege('authenticated', p.oid, 'EXECUTE'))
+   from pg_proc p join pg_namespace n on n.oid = p.pronamespace
+   where n.nspname = 'public' and p.proname in ('record_attempt_incident', 'arena_admin_audit', 'arena_admin_disclosed', 'arena_confirm_disclosed')),
+  'incident, audit and disclosed-question RPCs are executable by service_role only'
+);
+select ok(
+  (select c.relrowsecurity and not has_table_privilege('anon', c.oid, 'SELECT, INSERT, UPDATE, DELETE') and not has_table_privilege('authenticated', c.oid, 'SELECT, INSERT, UPDATE, DELETE')
+   from pg_class c join pg_namespace n on n.oid = c.relnamespace where n.nspname = 'public' and c.relname = 'attempt_incidents'),
+  'attempt_incidents has RLS and no client access'
 );
 select ok(
   (select bool_and(not has_function_privilege('anon', p.oid, 'EXECUTE') and not has_function_privilege('authenticated', p.oid, 'EXECUTE'))
