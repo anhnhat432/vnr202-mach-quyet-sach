@@ -61,10 +61,10 @@ Yêu cầu:
 
 1. Mọi RPC gây sự kiện điểm (`submit_answer`, `open_minefield_cell` khi mở rương hoặc gỡ bom thất bại, `reconcile_attempt` khi ghi hết giờ hoặc kết thúc lượt) khóa attempt và leaderboard version row.
 2. RPC đánh giá, ghi sổ sự kiện, update attempt và leaderboard entry, tăng version (`LA-LB-002`).
-3. Database trigger hoặc server broadcaster phát `leaderboard.changed` sau commit.
+3. Database trigger phát `leaderboard.changed` sau commit, **tối đa 1 lần/giây cho mỗi game** (G, migration `202610310005`; `leaderboard.finalized` luôn phát). Lý do: mỗi hint fan-out tới mọi viewer; 60 người chơi ≈ 20 sự kiện/giây × ~200 viewer vượt xa quota Realtime (Free 100, Pro 500 tin/giây).
 4. Player nhận score, rank, khoảng cách điểm và version trực tiếp trong HTTP response.
-5. Viewer nhận Broadcast, debounce 100-250 ms rồi GET authoritative leaderboard.
-6. Nếu Broadcast thiếu hoặc sai thứ tự, periodic sync 15 giây khi live và sync ngay khi tab focus/reconnect sửa divergence.
+5. Viewer nhận Broadcast, chờ 200 ms (không reset khi có hint mới, tối đa 2 lần đọc/giây) rồi GET authoritative leaderboard với `?v=<version>` để CDN gộp các viewer đọc cùng version; thêm một lần đọc `settle=1` 1,2 giây sau hint cuối để thấy thay đổi rơi vào giây bị gộp.
+6. Nếu Broadcast thiếu hoặc sai thứ tự, periodic sync 15 giây khi live và sync ngay khi tab focus/reconnect sửa divergence. Hint có version mà server không xác nhận bị bỏ (không đọc lặp).
 
 Mục tiêu dưới tải duyệt: rank đã commit xuất hiện ở connected viewer trong 1 giây.
 

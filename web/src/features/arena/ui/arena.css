@@ -480,15 +480,17 @@
 .ax-proj__zoom button[aria-pressed="true"] { color: #111; background: var(--ax-amber); border-color: var(--ax-amber); }
 .ax-proj__boards { position: relative; flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 2vw; padding: 2.4vh 2.4vw; min-height: 0; }
 .ax-proj[data-zoom="minefield"] .ax-proj__boards, .ax-proj[data-zoom="race"] .ax-proj__boards { grid-template-columns: minmax(0, 62vw); justify-content: center; }
-.ax-lb--projector { padding: 2vh 1.6vw; gap: 1.2vh; }
-.ax-lb--projector .ax-lb__head h2 { font-size: 4vh; }
+/* The frame never scrolls on a projector: ten rows share the height left under the headers. */
+.ax-proj__boards { grid-template-rows: minmax(0, 1fr); }
+.ax-lb--projector { padding: 1.8vh 1.6vw; gap: 1.2vh; min-height: 0; grid-template-rows: auto minmax(0, 1fr); align-content: stretch; }
+.ax-lb--projector .ax-lb__head h2 { font-size: 3.6vh; }
 .ax-lb--projector .ax-lb__head p { font-size: 1.8vh; }
-.ax-lb--projector .ax-lb__rows { gap: 0.9vh; }
-.ax-lb--projector .ax-lb__row { grid-template-columns: 5vh 1fr auto 4vh 9vh; padding: 1vh 1.2vw; border-radius: 1.4vh; min-height: 6.2vh; }
-.ax-lb--projector .ax-lb__rank { font-size: 3.4vh; }
+.ax-lb--projector .ax-lb__rows { grid-template-rows: repeat(10, minmax(0, 1fr)); gap: 0.8vh; min-height: 0; }
+.ax-lb--projector .ax-lb__row { grid-template-columns: 5vh 1fr auto 4vh 9vh; padding: 0.6vh 1.2vw; border-radius: 1.4vh; min-height: 0; }
+.ax-lb--projector .ax-lb__rank { font-size: 3.2vh; }
 .ax-lb--projector .ax-lb__name { font-size: 2.8vh; }
 .ax-lb--projector .ax-lb__state { font-size: 1.7vh; }
-.ax-lb--projector .ax-lb__score { font-size: 3.6vh; }
+.ax-lb--projector .ax-lb__score { font-size: 3.4vh; }
 .ax-lb--projector .ax-lb__up { font-size: 2vh; }
 .ax-lb--projector .ax-badge { font-size: 1.6vh; }
 .ax-proj__toasts { position: absolute; left: 50%; bottom: 3vh; z-index: 10; display: grid; gap: 1vh; transform: translateX(-50%); pointer-events: none; }
@@ -496,3 +498,30 @@
 .ax-proj__toast svg { width: 3vh; height: 3vh; color: var(--ax-good); }
 .ax-proj__toast--lead { border-color: var(--ax-amber); color: #fff3dc; box-shadow: 0 20px 60px -20px rgba(240, 170, 60, 0.8); }
 .ax-proj__toast--lead svg { color: var(--ax-amber); }
+
+/* ---- phones (G5): the question and its answers come first and fit a 360×640 screen without
+   scrolling while the clock runs; status panels move below. ------------------------------------- */
+@media (max-width: 560px) {
+  .ax-top { gap: 0.4rem; padding: 0.45rem 0.6rem; }
+  .ax-top__back, .ax-icon-btn { width: 2.2rem; height: 2.2rem; flex: none; }
+  .ax-top__title { gap: 0.3rem; min-width: 0; }
+  .ax-top__title strong { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .ax-clock, .ax-score { padding: 0.3rem 0.5rem; font-size: 1.15rem; gap: 0.25rem; }
+  .ax-score { min-width: 0; }
+  .ax-net { width: 1.3rem; flex: none; }
+
+  .ax-race { grid-template-rows: none; gap: 0.7rem; padding: 0.7rem; }
+  .ax-race__stage { order: -1; min-height: 0; padding-top: 0; place-items: stretch; }
+  .ax-track { padding: 0.7rem 0.6rem 0.5rem; }
+  .ax-track__lane { height: 2.4rem; margin: 0 0.3rem; }
+  .ax-node span { width: 1.05rem; height: 1.05rem; font-size: 0.55rem; border-width: 1px; }
+  .ax-track__labels { margin: 0 0.3rem; font-size: 0.65rem; }
+
+  .ax-mine { gap: 0.8rem; padding: 0.7rem; }
+  .ax-board-wrap { order: -1; min-height: 0; }
+  .ax-question { padding: 0.9rem; gap: 0.6rem; }
+  .ax-question__time { font-size: 1.5rem; }
+  .ax-question__prompt { font-size: 1.1rem; }
+  .ax-options { gap: 0.5rem; }
+  .ax-option { min-height: 3.2rem; padding: 0.55rem 0.8rem; }
+}

@@ -25,6 +25,8 @@ POSTGREST_IMAGE="${POSTGREST_IMAGE:-postgrest/postgrest:v16.1}"
 REALTIME_IMAGE="${REALTIME_IMAGE:-supabase/realtime:v2.34.47}"
 REALTIME_PORT="${REALTIME_PORT:-54340}"
 LOCAL_REALTIME="${LOCAL_REALTIME:-1}" # 0 skips Realtime (Broadcast hints become no-ops, clients poll)
+# Tenant quotas like the hosted plans: free = 200 connections / 100 msg/s / 100 joins/s, pro = 500 / 500 / 500.
+REALTIME_PLAN="${REALTIME_PLAN:-free}"
 PG_USER_OS="${PG_USER_OS:-pglocal}"
 
 as_pg() {
@@ -141,6 +143,9 @@ start_realtime() {
     -e API_JWT_SECRET="$JWT_SECRET" -e SECRET_KEY_BASE="$(node -e "console.log(require('crypto').randomBytes(48).toString('hex'))")" \
     -e ERL_AFLAGS="-proto_dist inet_tcp" -e DNS_NODES="''" -e RLIMIT_NOFILE=10000 -e APP_NAME=realtime \
     -e SEED_SELF_HOST=true -e RUN_JANITOR=true -e SELF_HOST_TENANT_NAME=realtime-dev \
+    -e TENANT_MAX_CONCURRENT_USERS="$([ "$REALTIME_PLAN" = pro ] && echo 500 || echo 200)" \
+    -e TENANT_MAX_EVENTS_PER_SECOND="$([ "$REALTIME_PLAN" = pro ] && echo 500 || echo 100)" \
+    -e TENANT_MAX_JOINS_PER_SECOND="$([ "$REALTIME_PLAN" = pro ] && echo 500 || echo 100)" \
     "$REALTIME_IMAGE" >/dev/null
   for _ in $(seq 1 60); do
     curl -s -o /dev/null "http://127.0.0.1:$REALTIME_PORT/" 2>/dev/null && break

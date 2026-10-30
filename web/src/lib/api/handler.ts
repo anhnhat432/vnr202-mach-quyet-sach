@@ -12,7 +12,8 @@ export function route(handler: (request: Request, requestId: string) => Promise<
     const requestId = requestIdFrom(request);
     try {
       const response = await handler(request, requestId);
-      response.headers.set("Cache-Control", "no-store");
+      // Private by default; a route may opt into shared caching explicitly (the public Top 10).
+      if (!response.headers.has("Cache-Control")) response.headers.set("Cache-Control", "no-store");
       return response;
     } catch (error) {
       return errorResponse(error, requestId);

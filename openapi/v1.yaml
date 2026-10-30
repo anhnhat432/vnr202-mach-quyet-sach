@@ -76,8 +76,10 @@ paths:
       responses: { "200": { $ref: "#/components/responses/Ok" } }
   /arena/leaderboards/{publicId}/{game}:
     get:
-      summary: Public Top 10 and aggregates of one game (display names only)
+      summary: Public Top 10 and aggregates of one game (display names only); briefly cacheable by the CDN
       security: []
+      parameters:
+        - { name: v, in: query, required: false, description: "Version announced by a Broadcast hint; groups viewers' reads of that version at the CDN", schema: { type: integer, minimum: 0 } }
       responses: { "200": { $ref: "#/components/responses/Ok" }, "404": { $ref: "#/components/responses/Error" }, "429": { $ref: "#/components/responses/Error" } }
   /admin/competitions:
     get:

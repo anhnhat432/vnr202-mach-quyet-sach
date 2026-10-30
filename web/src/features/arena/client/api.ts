@@ -66,7 +66,8 @@ export const arenaApi = {
   heartbeat: (attemptId: string) => request<{ state: string; remainingMs: number }>("POST", `/arena/attempts/${attemptId}/heartbeat`),
   standing: (attemptId: string) => request<import("./types").PlayerStanding>("GET", `/arena/attempts/${attemptId}/standing`),
   review: (attemptId: string) => request<unknown>("GET", `/arena/attempts/${attemptId}/review`),
-  leaderboard: (publicId: string, game: string) => request<import("./types").Leaderboard>("GET", `/arena/leaderboards/${publicId}/${game}`),
+  leaderboard: (publicId: string, game: string, hinted?: number, settle = false) =>
+    request<import("./types").Leaderboard>("GET", `/arena/leaderboards/${publicId}/${game}${hinted === undefined ? "" : `?v=${hinted}${settle ? "&settle=1" : ""}`}`),
 };
 
 export type CurrentCompetition = { publicId: string; name: string; kind: "official" | "rehearsal"; state: string; startDeadlineAt: string; standing: import("./types").Standing } | null;

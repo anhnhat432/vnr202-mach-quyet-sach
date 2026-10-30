@@ -1,7 +1,7 @@
 -- Competition core: access matrix, clock discipline and structural guarantees (T040-T046).
 -- Behaviour (timing, scoring, concurrency) is covered by web/tests/integration/{competition-core,arena-games}.test.ts.
 begin;
-select plan(28);
+select plan(32);
 
 select ok(
   (select bool_and(c.relrowsecurity)
@@ -116,19 +116,38 @@ select public.create_competition('00000000-0000-4000-8000-0000000000f3', 'F3 bro
 insert into public.leaderboard_versions (competition_game_id, version, committed_at)
   select g.id, 7, clock_timestamp() from public.competition_games g join public.competitions c on c.id = g.competition_id where c.name = 'F3 broadcast' and g.game_type = 'race';
 select is(
-  (select m.topic from realtime.messages m where m.payload -> 'aggregate' ->> 'version' = '7' and m.topic like 'leaderboard:%:race' order by 1 limit 1),
+  (select m.topic from realtime.messages m where m.payload -> 'aggregate' ->> 'version' = '7' and m.topic = (select format('leaderboard:%s:race', c.public_id) from public.competitions c where c.name = 'F3 broadcast') order by 1 limit 1),
   (select format('leaderboard:%s:race', c.public_id) from public.competitions c where c.name = 'F3 broadcast'),
   'a version bump broadcasts on leaderboard:{publicId}:{game}'
 );
 select is(
-  (select m.event from realtime.messages m where m.payload -> 'aggregate' ->> 'version' = '7' and m.topic like 'leaderboard:%:race' limit 1),
+  (select m.event from realtime.messages m where m.payload -> 'aggregate' ->> 'version' = '7' and m.topic = (select format('leaderboard:%s:race', c.public_id) from public.competitions c where c.name = 'F3 broadcast') limit 1),
   'leaderboard.changed', 'the event is leaderboard.changed while the competition is not finalized'
 );
 select is(
-  (select array_agg(k order by k) from realtime.messages m, jsonb_object_keys(m.payload - 'id') k where m.payload -> 'aggregate' ->> 'version' = '7' and m.topic like 'leaderboard:%:race'),
+  (select array_agg(k order by k) from realtime.messages m, jsonb_object_keys(m.payload - 'id') k where m.payload -> 'aggregate' ->> 'version' = '7' and m.topic = (select format('leaderboard:%s:race', c.public_id) from public.competitions c where c.name = 'F3 broadcast')),
   array['aggregate', 'data', 'eventId', 'eventType', 'occurredAt'],
   'the payload carries only the envelope (no names, scores, answers or ids of people); Realtime adds its own message id'
 );
+-- G pacing: at most one leaderboard.changed per game per second; finalization is never paced.
+update public.leaderboard_versions v set version = 8 from public.competition_games g join public.competitions c on c.id = g.competition_id
+  where v.competition_game_id = g.id and c.name = 'F3 broadcast' and g.game_type = 'race';
+select is((select count(*)::int from realtime.messages m where m.payload -> 'aggregate' ->> 'version' = '8' and m.topic = (select format('leaderboard:%s:race', c.public_id) from public.competitions c where c.name = 'F3 broadcast')), 0,
+  'a second change within the same second is paced (no extra fan-out)');
+insert into public.leaderboard_versions (competition_game_id, version, committed_at)
+  select g.id, 1, clock_timestamp() from public.competition_games g join public.competitions c on c.id = g.competition_id where c.name = 'F3 broadcast' and g.game_type = 'race'
+  on conflict (competition_game_id) do update set version = 81, committed_at = excluded.committed_at;
+select is((select count(*)::int from realtime.messages m where m.payload -> 'aggregate' ->> 'version' in ('1', '81') and m.topic = (select format('leaderboard:%s:race', c.public_id) from public.competitions c where c.name = 'F3 broadcast')), 0,
+  'the scoring upsert path (insert .. on conflict do update) is paced too');
+update public.leaderboard_versions v set version = 9, hinted_at = clock_timestamp() - interval '2 seconds' from public.competition_games g join public.competitions c on c.id = g.competition_id
+  where v.competition_game_id = g.id and c.name = 'F3 broadcast' and g.game_type = 'race';
+select is((select count(*)::int from realtime.messages m where m.payload -> 'aggregate' ->> 'version' = '9' and m.topic = (select format('leaderboard:%s:race', c.public_id) from public.competitions c where c.name = 'F3 broadcast')), 1,
+  'once the second has passed the next change is hinted again');
+update public.competitions set state = 'finalized' where name = 'F3 broadcast';
+update public.leaderboard_versions v set version = 10 from public.competition_games g join public.competitions c on c.id = g.competition_id
+  where v.competition_game_id = g.id and c.name = 'F3 broadcast' and g.game_type = 'race';
+select is((select m.event from realtime.messages m where m.payload -> 'aggregate' ->> 'version' = '10' and m.topic = (select format('leaderboard:%s:race', c.public_id) from public.competitions c where c.name = 'F3 broadcast') limit 1),
+  'leaderboard.finalized', 'finalization is always hinted, even inside the paced second');
 
 select * from finish();
 rollback;
