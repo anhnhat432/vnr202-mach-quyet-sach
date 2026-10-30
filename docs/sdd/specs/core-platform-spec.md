@@ -1,6 +1,6 @@
 # Core Platform Specification
 
-Status: Approved
+Status: Approved (v1.0, 2026-08-19); Amendment v1.1 for Live Arena V1.0 (2026-10-29) — owner decisions Q1–Q14, O1–O14 and N1–N9 approved. See §16.
 Risk: High
 Specification depth: Full
 Project: VNR202 - Mach Quyet Sach
@@ -83,6 +83,8 @@ Alternative transitions:
 - `DisconnectedRunning -> Active` when the student reconnects before time expires.
 - `Active | GracePaused | DisconnectedRunning -> TimedOut` when playable time expires.
 
+**[v1.1]** `GracePaused` and `DisconnectedRunning` are removed for Live Arena V1.0: the attempt state model is `NotStarted -> Active -> Completed | TimedOut` (see `live-arena-game-spec.md` §6.2).
+
 Completed and TimedOut are terminal for that game in that competition.
 
 ### 5.3 Question state
@@ -95,15 +97,15 @@ Only Published content may be copied into an immutable competition question snap
 
 ### Accounts and access
 
-- `ACC-001`: The administrator SHALL import the student roster from CSV.
+- `ACC-001`: The administrator SHALL import the student roster from CSV. **[v1.1: Amended by `LA-ACC-001`, `LA-ACC-002` (.xlsx or .csv, preview before apply)]**
 - `ACC-002`: Each student account SHALL be uniquely bound to one student ID.
-- `ACC-003`: A student SHALL change the temporary password before accessing protected features.
+- `ACC-003`: A student SHALL change the temporary password before accessing protected features. **[v1.1: Superseded by `LA-ACC-004` (documented V1 exception: no forced first-login change)]**
 - `ACC-004`: The system SHALL reject duplicate student IDs in both the uploaded file and persisted roster.
 - `ACC-005`: Real roster data and real credentials SHALL NOT be committed to source control.
 - `ACCESS-001`: Public historical exploration and public leaderboard viewing SHALL not require authentication.
 - `ACCESS-002`: Live Arena, Student Passport, and private results SHALL require student authentication.
 - `ACCESS-003`: Roster, competition, question, and detailed-result management SHALL require administrator authorization.
-- `ACCESS-004`: A forgotten student password SHALL be reset by an administrator to a new temporary password.
+- `ACCESS-004`: A forgotten student password SHALL be reset by an administrator to a new temporary password. **[v1.1: Amended by `LA-ACC-003`, `LA-ADMIN-003` (shared default password; admin incident actions)]**
 
 ### Class and competition scope
 
@@ -116,7 +118,7 @@ Only Published content may be copied into an immutable competition question snap
 - `EVT-001`: Each competition SHALL have an opening time and a start deadline.
 - `EVT-002`: WHEN the start deadline passes, the system SHALL reject creation of a new attempt.
 - `EVT-003`: A valid attempt created before the start deadline SHALL receive the full configured playable duration.
-- `EVT-004`: The maximum legal end time SHALL equal the start deadline plus game duration plus the 120-second disconnect allowance.
+- `EVT-004`: The maximum legal end time SHALL equal the start deadline plus game duration plus the 120-second disconnect allowance. **[v1.1: Amended by `LA-TIME-011` (no 120-second allowance; latency allowance only)]**
 - `EVT-005`: The leaderboard SHALL remain live until all legal attempts finish or reach their maximum legal end time, then finalize.
 
 ### Attempts, disconnects, and devices
@@ -127,10 +129,10 @@ Only Published content may be copied into an immutable competition question snap
 - `TRY-004`: Results SHALL be partitioned by competition and game.
 - `ATT-001`: A disconnect SHALL NOT create a new attempt.
 - `ATT-002`: Current question instance, question progress, score, remaining playable time, and allocated question snapshot SHALL be persisted server-side.
-- `ATT-003`: The server SHALL pause playable time for at most 120 cumulative seconds per game attempt while disconnected.
-- `ATT-004`: WHEN the cumulative allowance is exhausted, playable time SHALL continue even if the student remains disconnected.
+- `ATT-003`: The server SHALL pause playable time for at most 120 cumulative seconds per game attempt while disconnected. **[v1.1: Superseded by `LA-TIME-001`]**
+- `ATT-004`: WHEN the cumulative allowance is exhausted, playable time SHALL continue even if the student remains disconnected. **[v1.1: Superseded by `LA-TIME-001`]**
 - `ATT-005`: WHEN the student reconnects before a terminal state, the system SHALL resume the same attempt.
-- `ATT-006`: Disconnect state SHALL be derived from server-observed heartbeat and session state rather than a client-provided claim.
+- `ATT-006`: Disconnect state SHALL be derived from server-observed heartbeat and session state rather than a client-provided claim. **[v1.1: Amended by `LA-TIME-012` (heartbeat for monitoring only)]**
 - `SESSION-001`: A student SHALL have at most one active gameplay session.
 - `SESSION-002`: WHEN the student authenticates on a new device during an active attempt, control SHALL transfer to the new session.
 - `SESSION-003`: The previous gameplay session SHALL be invalidated immediately after transfer.
@@ -139,51 +141,53 @@ Only Published content may be copied into an immutable competition question snap
 
 ### Game configuration
 
-- `GAME1-001`: The default Dòng Chảy Lịch Sử configuration SHALL contain 15 questions and 6 minutes of playable time.
-- `GAME1-002`: The default blueprint SHALL allocate five questions to each course chapter.
-- `GAME2-001`: The default Phòng Quyết Sách configuration SHALL contain six scenarios and 9 minutes of playable time.
-- `GAME2-002`: The default blueprint SHALL allocate two scenarios to each course chapter.
-- `CFG-001`: An administrator MAY change question counts and playable durations before the competition opens.
+- `GAME1-001`: The default Dòng Chảy Lịch Sử configuration SHALL contain 15 questions and 6 minutes of playable time. **[v1.1: Superseded by `LA-SCOPE-001`, `MINE-*`]**
+- `GAME1-002`: The default blueprint SHALL allocate five questions to each course chapter. **[v1.1: Superseded by `LA-ALLOC-002`]**
+- `GAME2-001`: The default Phòng Quyết Sách configuration SHALL contain six scenarios and 9 minutes of playable time. **[v1.1: Superseded by `LA-SCOPE-001`, `RACE-*`]**
+- `GAME2-002`: The default blueprint SHALL allocate two scenarios to each course chapter. **[v1.1: Superseded by `LA-ALLOC-002`]**
+- `CFG-001`: An administrator MAY change question counts and playable durations before the competition opens. **[v1.1: Amended by `LA-TIME-002`, `MINE-END-004` (total durations and latency allowance configurable before open; board composition, per-question limits and points locked)]**
 - `CFG-002`: WHEN the first student starts, the competition's game configuration and question snapshot SHALL become immutable.
 
 ### Question allocation and learning feedback
 
 - `ALLOC-001`: Each student SHALL receive a separately randomized question set.
-- `ALLOC-002`: Every allocated set SHALL conform to the same chapter, type, difficulty, and total-weight blueprint for that game and competition.
+- `ALLOC-002`: Every allocated set SHALL conform to the same chapter, type, difficulty, and total-weight blueprint for that game and competition. **[v1.1: Superseded by `LA-ALLOC-002` (difficulty blueprint; chapter spread is a soft target `LA-ALLOC-007`)]**
 - `ALLOC-003`: The system SHALL randomize answer-option order where the question type permits it.
-- `LEARN-001`: WHEN a question or independently scored scenario stage is evaluated, the system SHALL display correctness and an explanation limited to that completed interaction.
-- `LEARN-002`: The playable timer SHALL pause for at most 8 seconds while feedback is displayed.
-- `LEARN-003`: Feedback-reading time SHALL NOT contribute to the speed score.
-- `LEARN-004`: The applicable leaderboard SHALL update after the server commits each scored question or scenario-stage result.
-- `LEARN-005`: WHEN 8 seconds elapse or the student continues earlier, the system SHALL advance to the next interaction.
+- `LEARN-001`: WHEN a question or independently scored scenario stage is evaluated, the system SHALL display correctness and an explanation limited to that completed interaction. **[v1.1: Superseded by `LA-FB-001`, `LA-FB-004`]**
+- `LEARN-002`: The playable timer SHALL pause for at most 8 seconds while feedback is displayed. **[v1.1: Superseded by `LA-FB-002`, `LA-TIME-010`]**
+- `LEARN-003`: Feedback-reading time SHALL NOT contribute to the speed score. **[v1.1: Superseded by `LA-FB-001` (no speed score)]**
+- `LEARN-004`: The applicable leaderboard SHALL update after the server commits each scored question or scenario-stage result. **[v1.1: Amended by `LA-LB-002` (every committed score event)]**
+- `LEARN-005`: WHEN 8 seconds elapse or the student continues earlier, the system SHALL advance to the next interaction. **[v1.1: Superseded by `LA-FB-002`, `LA-TIME-010`]**
 
 ### Question governance
 
 - `CONTENT-001`: Each question SHALL have one of Draft, Reviewed, or Published status.
 - `CONTENT-002`: Only Published questions SHALL be allocated.
-- `CONTENT-003`: Every question SHALL include chapter, topic, type, difficulty, answer, explanation, and source metadata.
+- `CONTENT-003`: Every question SHALL include chapter, topic, type, difficulty, answer, explanation, and source metadata. **[v1.1: Amended by `LA-CONTENT-002` (question types `single_choice`, `before_after`, `pair_choice`, `defuse_ab`)]**
 - `CONTENT-004`: AI MAY create or improve a Draft but SHALL NOT mark content Reviewed or Published.
 - `CONTENT-005`: An administrator or lecturer SHALL review the academic answer, explanation, and source before publication.
 - `CONTENT-006`: A question snapshot already allocated to an active competition SHALL remain unchanged for that competition.
 
 ### Scoring and ranking
 
-- `SCORE-001`: Each game SHALL have a maximum normalized score of 1,000 points.
-- `SCORE-002`: The server SHALL calculate score from correctness, difficulty weight, and a capped speed component.
-- `SCORE-003`: Different allocated sets conforming to the same blueprint SHALL have equivalent maximum base weight.
-- `SCORE-004`: WHEN a scored question or scenario-stage result is committed, the server SHALL persist the new score and publish the resulting rank update.
-- `SCORE-005`: Ties SHALL be ordered by higher accuracy, then lower active answer time, then earlier completion time.
-- `GAME2-SCORE-001`: Phòng Quyết Sách SHALL weight evidence selection at 35%, decision selection at 35%, consequence ordering at 20%, and speed at 10%.
-- `GAME2-SCORE-002`: The 35% evidence-analysis component SHALL consist of 10% central-problem identification and 25% evidence selection, so every scenario stage contributes an observable scored result.
+- `SCORE-001`: Each game SHALL have a maximum normalized score of 1,000 points. **[v1.1: Superseded by `MINE-END-003`, `RACE-008` (raw points, max 2,460 and 2,300)]**
+- `SCORE-002`: The server SHALL calculate score from correctness, difficulty weight, and a capped speed component. **[v1.1: Superseded by `MINE-Q-001`, `RACE-003` (no speed component)]**
+- `SCORE-003`: Different allocated sets conforming to the same blueprint SHALL have equivalent maximum base weight. **[v1.1: Amended by `LA-ALLOC-002`, `MINE-END-003` (identical blueprint and theoretical maximum; realized Game 1 item luck is accepted and monitored, P6)]**
+- `SCORE-004`: WHEN a scored question or scenario-stage result is committed, the server SHALL persist the new score and publish the resulting rank update. **[v1.1: Amended by `LA-LB-002`]**
+- `SCORE-005`: Ties SHALL be ordered by higher accuracy, then lower active answer time, then earlier completion time. **[v1.1: Superseded by `LA-LB-008`]**
+- `GAME2-SCORE-001`: Phòng Quyết Sách SHALL weight evidence selection at 35%, decision selection at 35%, consequence ordering at 20%, and speed at 10%. **[v1.1: Superseded by `RACE-*`]**
+- `GAME2-SCORE-002`: The 35% evidence-analysis component SHALL consist of 10% central-problem identification and 25% evidence selection, so every scenario stage contributes an observable scored result. **[v1.1: Superseded by `RACE-*`]**
 
 ### Public leaderboard privacy
 
-- `PRV-001`: A public leaderboard SHALL display the student's full name.
+- `PRV-001`: A public leaderboard SHALL display the student's full name. **[v1.1: Amended by `LA-PRV-003`, `LA-PRV-004` — public leaderboards show only the classroom display name (e.g. "An N.V."), never the full name; anonymous viewers get Top 10 and aggregates only]**
 - `PRV-002`: A public leaderboard SHALL NOT display the student ID.
 - `PRV-003`: Authorized administrators MAY view full name, student ID, and detailed attempt information.
-- `PRV-004`: Duplicate full names SHALL remain separate internal identities without exposing student IDs publicly.
+- `PRV-004`: Duplicate full names SHALL remain separate internal identities without exposing student IDs publicly. **[v1.1: applies equally to duplicate display names, `LA-LB-012`]**
 
 ## 7. Game interaction contracts
+
+**[v1.1: Superseded by `live-arena-game-spec.md` §5.6 (Bãi Mìn Tri Thức) and §5.7 (Đường Đua Lịch Sử).]** Dòng Chảy Lịch Sử remains a public practice mode (`LA-SCOPE-002`); Phòng Quyết Sách remains a stage of the public Scenario Engine (`LA-SCOPE-003`). The text below is retained for history only.
 
 ### 7.1 Dòng Chảy Lịch Sử
 
@@ -248,14 +252,14 @@ Realtime payloads SHALL carry identifiers and version numbers sufficient for a c
 - `AC-TRY-001`: WHEN a student starts an unused game before the deadline, THE SYSTEM SHALL create exactly one attempt and an immutable balanced allocation.
 - `AC-TRY-002`: IF the same student requests a second attempt for the same game and competition, THEN THE SYSTEM SHALL return the existing attempt or terminal result and SHALL NOT create a new attempt.
 - `AC-SESSION-001`: WHEN a student transfers to a new device, THE SYSTEM SHALL invalidate the previous gameplay session and resume the same attempt on the new device.
-- `AC-DISC-001`: WHEN a server-observed disconnect begins, THE SYSTEM SHALL pause playable time until reconnect or until the cumulative 120-second allowance is exhausted.
-- `AC-DISC-002`: IF the allowance is exhausted while disconnected, THEN THE SYSTEM SHALL continue the playable timer and preserve the ability to reconnect before timeout.
-- `AC-SCORE-001`: WHEN a valid unanswered item is submitted, THE SYSTEM SHALL evaluate it once, persist the result transactionally, update the normalized score, and publish a versioned leaderboard update.
+- `AC-DISC-001`: WHEN a server-observed disconnect begins, THE SYSTEM SHALL pause playable time until reconnect or until the cumulative 120-second allowance is exhausted. **[v1.1: Superseded by `LA-TIME-001`, `LA-AC-004`]**
+- `AC-DISC-002`: IF the allowance is exhausted while disconnected, THEN THE SYSTEM SHALL continue the playable timer and preserve the ability to reconnect before timeout. **[v1.1: Superseded by `LA-TIME-001`, `LA-TIME-008`]**
+- `AC-SCORE-001`: WHEN a valid unanswered item is submitted, THE SYSTEM SHALL evaluate it once, persist the result transactionally, update the normalized score, and publish a versioned leaderboard update. **[v1.1: Amended by `LA-AC-008`, `LA-AC-010`, `LA-AC-017` (raw rather than normalized score)]**
 - `AC-SCORE-002`: IF the same answer is submitted more than once, THEN THE SYSTEM SHALL award points at most once.
 - `AC-RT-001`: WHEN a score is committed under the approved load target, THE SYSTEM SHALL show the new rank to connected viewers within 1 second.
 - `AC-RT-002`: IF a client misses a realtime event, THEN THE SYSTEM SHALL allow it to retrieve and render the current authoritative leaderboard.
 - `AC-CONTENT-001`: IF the Published pool cannot satisfy every allocation category, THEN THE SYSTEM SHALL block competition opening.
-- `AC-PRV-001`: WHEN a public viewer opens a leaderboard, THE SYSTEM SHALL show full names and SHALL NOT expose student IDs.
+- `AC-PRV-001`: WHEN a public viewer opens a leaderboard, THE SYSTEM SHALL show full names and SHALL NOT expose student IDs. **[v1.1: Amended by `LA-AC-032`, `LA-AC-038` — display names only, Top 10 for anonymous viewers]**
 - `AC-FINAL-001`: WHEN every legal attempt is terminal or its maximum legal end time has passed, THE SYSTEM SHALL reconcile, lock, and retain both final leaderboards.
 
 ## 12. Edge cases to test
@@ -265,10 +269,10 @@ Realtime payloads SHALL carry identifiers and version numbers sufficient for a c
 - Two simultaneous start requests for the same student and game.
 - Two simultaneous answers for one question instance.
 - Answer arriving as the timer reaches zero.
-- Multiple brief disconnects that cumulatively reach 120 seconds.
+- Multiple brief disconnects that cumulatively reach 120 seconds. **[v1.1: Superseded; see `live-arena-game-spec.md` §9.]**
 - Device transfer while an answer request is in flight.
 - Realtime event delivered out of order or more than once.
-- Duplicate full names on the public leaderboard.
+- Duplicate full names on the public leaderboard. **[v1.1: duplicate display names, `LA-LB-012`]**
 - Published question removed after snapshot creation.
 - Competition opening with an insufficient question pool.
 - Start request exactly at the configured deadline.
@@ -292,3 +296,35 @@ Realtime payloads SHALL carry identifiers and version numbers sufficient for a c
 ## 15. Traceability status
 
 This Approved version records the Core rules and full 15-dossier scope approved in conversation. Implementation SHALL follow the accepted Architecture Decision Record, validation mapping and implementation plans.
+
+## 16. Amendment v1.1 — Live Arena V1.0 (2026-10-29)
+
+Source: owner's "Live Arena Game Design Specification V1.0" and decisions Q1–Q14 dated 2026-10-29. Detailed rules: `docs/sdd/specs/live-arena-game-spec.md`. Architecture: `docs/sdd/architecture/ADR-004-live-arena-game-redesign.md`.
+
+This amendment is explicit, not silent: every affected v1.0 rule is marked inline above and listed here. Rules not listed remain in force unchanged.
+
+| v1.0 rule | Change | Replacement |
+| --- | --- | --- |
+| §5.2 `GracePaused`, `DisconnectedRunning` | Removed | Attempt states `NotStarted -> Active -> Completed \| TimedOut` (+ proposed admin-only `Voided`) |
+| `ACC-001` | Amended | `.xlsx` or `.csv`, row-level preview before apply (`LA-ACC-001`, `LA-ACC-002`) |
+| `ACC-003` | Superseded (documented exception) | No forced first-login password change in V1 (`LA-ACC-004`) |
+| `ACCESS-004` | Amended | Shared default password `LA-ACC-003`, server-side mapping `LA-ACC-005`, accepted identity risk `LA-ACC-006` |
+| `EVT-004` | Amended | Max legal end = start deadline + total duration + latency allowance (`LA-TIME-011`) |
+| `ATT-003`, `ATT-004`, `AC-DISC-001`, `AC-DISC-002` | Superseded | Clock never pauses; absolute question deadlines (`LA-TIME-001`, `LA-TIME-003`, `LA-TIME-008`) |
+| `ATT-006` | Amended | Heartbeat for monitoring only (`LA-TIME-012`) |
+| `GAME1-001/002`, `GAME2-001/002`, `GAME2-SCORE-001/002`, §7 | Superseded | Bãi Mìn Tri Thức (`MINE-*`) and Đường Đua Lịch Sử (`RACE-*`) |
+| `CFG-001` | Amended | Only total durations and latency allowance configurable before open (`LA-TIME-002`, `LA-TIME-006`) |
+| `ALLOC-002` | Superseded | Difficulty blueprint (`LA-ALLOC-002`) |
+| `LEARN-001/002/003/005` | Superseded | Correct/incorrect and points only while the competition is not Finalized; review after finalization (`LA-FB-*`) |
+| `LEARN-004`, `SCORE-004` | Amended | Leaderboard updates after every committed score event (`LA-LB-002`) |
+| `CONTENT-003` | Amended | Question types for the two games (`LA-CONTENT-002`) |
+| `SCORE-001`, `SCORE-002` | Superseded | Raw points; no speed component (`MINE-END-003`, `RACE-008`) |
+| `SCORE-003` | Amended | Identical blueprint and theoretical maximum; Game 1 item luck accepted and monitored |
+| `SCORE-005` | Superseded | Per-game tie-breakers with shared ranks (`LA-LB-008`) |
+| `AC-SCORE-001` | Amended | Raw score; `LA-AC-008`, `LA-AC-010`, `LA-AC-017` |
+| `PRV-001`, `AC-PRV-001` | Amended (decision N1/N2) | Classroom display name only, never full name or student ID; anonymous viewers see Top 10 and aggregates (`LA-PRV-003`, `LA-PRV-004`, `LA-AC-032`, `LA-AC-038`). CONSTITUTION and `AGENTS.md` amended accordingly |
+
+New rule families with no v1.0 equivalent: `LA-TRY-003` (one active attempt across games), `LA-LB-003..007` (projector Top 10, personal gap, provisional/official labels), `LA-ANTI-*`, `LA-IDEM-*`, `LA-ADMIN-*`, `LA-CONTENT-005/006` (fixture separation, rehearsal competition), `LA-TIME-019..023` (database clock and lock waits), `LA-ALLOC-010..012` (two-option cap, concurrent balanced allocation, allocated vs displayed counters).
+
+Retained without change: `ACC-002`, `ACC-004`, `ACC-005`, `ACCESS-001..003`, `SCOPE-*`, `EVT-001..003`, `EVT-005`, `TRY-*`, `ATT-001`, `ATT-002`, `ATT-005`, `SESSION-*`, `CFG-002`, `ALLOC-001`, `ALLOC-003`, `CONTENT-001/002/004/005/006`, `PRV-002..004`, `NFR-RT-*`, and acceptance criteria not listed above.
+

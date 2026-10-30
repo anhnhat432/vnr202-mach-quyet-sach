@@ -7,8 +7,10 @@ const isDevelopment = process.env.NODE_ENV === "development";
 const supabaseConnectSources: string[] = [];
 if (process.env.NEXT_PUBLIC_SUPABASE_URL) {
   try {
-    const host = new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).host;
-    supabaseConnectSources.push(`https://${host}`, `wss://${host}`);
+    const url = new URL(process.env.NEXT_PUBLIC_SUPABASE_URL);
+    // Production dùng https/wss; stack cục bộ (http://127.0.0.1) dùng http/ws.
+    const secure = url.protocol === "https:";
+    supabaseConnectSources.push(`${secure ? "https" : "http"}://${url.host}`, `${secure ? "wss" : "ws"}://${url.host}`);
   } catch {
     // URL không hợp lệ — bỏ qua, giữ CSP mặc định.
   }

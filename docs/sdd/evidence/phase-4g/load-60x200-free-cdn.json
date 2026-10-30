@@ -1,0 +1,130 @@
+{
+  "run": "MVUICN4E122",
+  "players": 60,
+  "realtimeQuotas": {
+    "max_concurrent_users": 200,
+    "max_events_per_second": 100,
+    "max_joins_per_second": 100
+  },
+  "viewers": {
+    "subscribedChannelsAtStart": 399,
+    "channelsExpected": 402,
+    "hintsReceived": 9375,
+    "hintsPerViewerPerMinute": 37,
+    "viewerBoardReads": 17584,
+    "cdn": true,
+    "originBoardReads": 268,
+    "originReadsPerSecond": 4,
+    "channelErrors": 33
+  },
+  "playSeconds": 76,
+  "latencyMs": {
+    "sign_in": {
+      "n": 68,
+      "p50": 173,
+      "p95": 456,
+      "p99": 633,
+      "max": 633
+    },
+    "start": {
+      "n": 60,
+      "p50": 91,
+      "p95": 313,
+      "p99": 457,
+      "max": 457
+    },
+    "cell_open": {
+      "n": 575,
+      "p50": 144,
+      "p95": 388,
+      "p99": 493,
+      "max": 757
+    },
+    "content_minefield": {
+      "n": 383,
+      "p50": 502,
+      "p95": 524,
+      "p99": 545,
+      "max": 659
+    },
+    "content_race_longpoll": {
+      "n": 450,
+      "p50": 900,
+      "p95": 924,
+      "p99": 946,
+      "max": 989
+    },
+    "content_after_release": {
+      "n": 803,
+      "p50": 3,
+      "p95": 29,
+      "p99": 93,
+      "max": 475
+    },
+    "content_refetch": {
+      "n": 29,
+      "p50": 106,
+      "p95": 268,
+      "p99": 278,
+      "max": 278
+    },
+    "submit": {
+      "n": 821,
+      "p50": 143,
+      "p95": 378,
+      "p99": 535,
+      "max": 727
+    },
+    "heartbeat": {
+      "n": 277,
+      "p50": 178,
+      "p95": 619,
+      "p99": 880,
+      "max": 898
+    },
+    "transfer": {
+      "n": 8,
+      "p50": 134,
+      "p95": 422,
+      "p99": 422,
+      "max": 422
+    },
+    "board_read": {
+      "n": 17584,
+      "p50": 5,
+      "p95": 59,
+      "p99": 278,
+      "max": 302
+    }
+  },
+  "top10Propagation": {
+    "scoreChanges": 719,
+    "changesSeenOnBoards": 319,
+    "samples": 38923,
+    "p50": 803,
+    "p95": 5075,
+    "p99": 9903,
+    "max": 13016
+  },
+  "chaos": {
+    "f5Resume": 29,
+    "f5ContentSame": 29,
+    "duplicateSubmit": 34,
+    "duplicateIdentical": 34,
+    "offlineGap": 12,
+    "transfer": 8,
+    "oldDeviceRejected": 8
+  },
+  "errors": {},
+  "invariants": {
+    "attemptsPerPlayerGame": 1,
+    "activeAtOnce": 0,
+    "scoreEqualsLedger": true,
+    "boardMatchesAttempts": true,
+    "duplicateSubmissions": 0,
+    "attemptStates": {
+      "completed": 60
+    },
+    "timeouts": 12
+  }
+}

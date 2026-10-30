@@ -1,0 +1,130 @@
+{
+  "run": "MVUI9D5C517",
+  "players": 60,
+  "realtimeQuotas": {
+    "max_concurrent_users": 500,
+    "max_events_per_second": 500,
+    "max_joins_per_second": 500
+  },
+  "viewers": {
+    "subscribedChannelsAtStart": 402,
+    "channelsExpected": 402,
+    "hintsReceived": 25125,
+    "hintsPerViewerPerMinute": 86,
+    "viewerBoardReads": 36020,
+    "cdn": true,
+    "originBoardReads": 383,
+    "originReadsPerSecond": 4,
+    "channelErrors": 0
+  },
+  "playSeconds": 88,
+  "latencyMs": {
+    "sign_in": {
+      "n": 68,
+      "p50": 178,
+      "p95": 571,
+      "p99": 860,
+      "max": 860
+    },
+    "start": {
+      "n": 60,
+      "p50": 99,
+      "p95": 262,
+      "p99": 394,
+      "max": 394
+    },
+    "cell_open": {
+      "n": 572,
+      "p50": 132,
+      "p95": 370,
+      "p99": 546,
+      "max": 812
+    },
+    "content": {
+      "n": 413,
+      "p50": 502,
+      "p95": 574,
+      "p99": 593,
+      "max": 806
+    },
+    "content_race_longpoll": {
+      "n": 420,
+      "p50": 901,
+      "p95": 925,
+      "p99": 938,
+      "max": 957
+    },
+    "content_refetch": {
+      "n": 34,
+      "p50": 92,
+      "p95": 333,
+      "p99": 532,
+      "max": 532
+    },
+    "submit": {
+      "n": 828,
+      "p50": 139,
+      "p95": 372,
+      "p99": 479,
+      "max": 545
+    },
+    "next_question_lag": {
+      "n": 420,
+      "p50": 3,
+      "p95": 31,
+      "p99": 76,
+      "max": 378
+    },
+    "heartbeat": {
+      "n": 273,
+      "p50": 148,
+      "p95": 554,
+      "p99": 817,
+      "max": 931
+    },
+    "transfer": {
+      "n": 8,
+      "p50": 150,
+      "p95": 169,
+      "p99": 169,
+      "max": 169
+    },
+    "board_read": {
+      "n": 36020,
+      "p50": 8,
+      "p95": 118,
+      "p99": 299,
+      "max": 327
+    }
+  },
+  "top10Propagation": {
+    "scoreChanges": 690,
+    "changesSeenOnBoards": 315,
+    "samples": 61956,
+    "p50": 429,
+    "p95": 946,
+    "p99": 1104,
+    "max": 1375
+  },
+  "chaos": {
+    "f5Resume": 34,
+    "f5ContentSame": 34,
+    "duplicateSubmit": 32,
+    "duplicateIdentical": 32,
+    "offlineGap": 5,
+    "transfer": 8,
+    "oldDeviceRejected": 8
+  },
+  "errors": {},
+  "invariants": {
+    "attemptsPerPlayerGame": 1,
+    "activeAtOnce": 0,
+    "scoreEqualsLedger": true,
+    "boardMatchesAttempts": true,
+    "duplicateSubmissions": 0,
+    "attemptStates": {
+      "completed": 60
+    },
+    "timeouts": 5
+  }
+}

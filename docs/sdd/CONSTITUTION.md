@@ -61,7 +61,7 @@ Shell work MAY use bounded ADD after its Definition of Done and Core contracts a
 - Never commit passwords, service-role keys, access tokens, secrets, or a real student roster.
 - Supabase service-role credentials SHALL be used only in server-side code.
 - Passwords SHALL be managed and hashed by the authentication provider; application code SHALL NOT store plaintext passwords.
-- Public leaderboards SHALL display full names only and SHALL NOT display student IDs.
+- Public leaderboards SHALL display a classroom display name (for example "An N.V.") and SHALL NOT display full names or student IDs. *(Amended 2026-10-29 by owner decision N1, `live-arena-game-spec.md` `LA-PRV-003`; previously: full names only.)*
 - Student IDs and detailed attempt records SHALL be visible only to authorized administrators and the owning student where applicable.
 - Administrative mutations SHALL be audit logged.
 - User-facing errors SHALL not disclose secrets, authorization logic, internal queries, or stack traces.
