@@ -24,9 +24,11 @@ paths:
             schema:
               type: object
               additionalProperties: false
-              required: [slug, state]
+              required: [slug, state, ownerId, expectedVersion]
               properties:
                 slug: { type: string, maxLength: 150 }
+                ownerId: { type: string, format: uuid, description: "Identity returned by GET; must match the current authenticated student" }
+                expectedVersion: { type: integer, minimum: 0, description: "0 for a new record; otherwise the version last read or saved" }
                 state:
                   type: object
                   additionalProperties: false
@@ -35,7 +37,7 @@ paths:
                     stage: { type: string, enum: [briefing, evidence, decision, consequences, comparison, connections] }
                     selectedEvidence: { type: array, maxItems: 30, items: { type: string } }
                     selectedDecision: { type: string, maxLength: 100 }
-      responses: { "200": { $ref: "#/components/responses/Ok" }, "401": { $ref: "#/components/responses/Error" }, "404": { $ref: "#/components/responses/Error" }, "422": { $ref: "#/components/responses/Error" } }
+      responses: { "200": { $ref: "#/components/responses/Ok" }, "401": { $ref: "#/components/responses/Error" }, "404": { $ref: "#/components/responses/Error" }, "409": { description: progress_conflict | session_changed }, "422": { $ref: "#/components/responses/Error" } }
   /arena/lobby:
     get:
       summary: Open competition and the student's per-game attempt state

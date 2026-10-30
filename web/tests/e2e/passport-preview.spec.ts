@@ -7,7 +7,7 @@ test("Passport renders a private profile, progress markers and official history"
     const data = url.endsWith("/me")
       ? { role: "student", fullName: "Sinh viên kiểm thử", displayName: "Thử S.V.", studentId: "TEST001", className: "Lớp kiểm thử" }
       : url.endsWith("/passport/progress")
-        ? [{ dossier_id: "20000000-0000-0000-0000-000000000002", completed_at: "2026-01-01T00:00:00Z", state: { stage: "connections" } }]
+        ? { ownerId: "test", items: [{ dossier_id: "20000000-0000-0000-0000-000000000002", completed_at: "2026-01-01T00:00:00Z", state: { stage: "connections" } }] }
         : [
           { attemptId: "synthetic", game: "minefield", state: "completed", score: 1200, mainCorrect: 7, mainTotal: 10, hardCorrect: 2, completionDurationMs: 83000, rank: 4, competition: { id: "test", name: "Cuộc thi kiểm thử", kind: "official", standing: "official" }, reviewAvailable: true },
           { attemptId: "void", game: "race", state: "voided", score: 9876, competition: { id: "test", name: "Cuộc thi kiểm thử", kind: "official", standing: "official" }, reviewAvailable: false },

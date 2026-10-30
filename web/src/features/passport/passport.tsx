@@ -19,8 +19,8 @@ export function Passport({ dossiers }: { dossiers: DossierSummary[] }) {
 
   useEffect(() => {
     let active = true;
-    Promise.all([request<Profile>("GET", "/me"), request<Attempt[]>("GET", "/arena/me/attempts"), request<ProgressRow[]>("GET", "/passport/progress")])
-      .then(([p, a, rows]) => { if (active) { setProfile(p); setAttempts(a); setProgress(rows); } })
+    Promise.all([request<Profile>("GET", "/me"), request<Attempt[]>("GET", "/arena/me/attempts"), request<{ ownerId: string; items: ProgressRow[] }>("GET", "/passport/progress")])
+      .then(([p, a, rows]) => { if (active) { setProfile(p); setAttempts(a); setProgress(rows.items); } })
       .catch((e: unknown) => { if (active) setError(e instanceof ArenaApiError && e.status === 401 ? "login" : "failed"); });
     return () => { active = false; };
   }, []);

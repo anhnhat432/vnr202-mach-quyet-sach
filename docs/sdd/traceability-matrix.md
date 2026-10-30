@@ -1,6 +1,6 @@
 # Traceability Matrix
 
-Student Passport T025/T034: profile/class, fifteen status markers, account-scoped progress and official non-void history use server projections; private progress has no client table permissions. `passport.test.ts`, `passport-view.test.tsx`, `dossier-progress.test.ts`, `arena-admin.test.ts` and `passport.spec.ts` cover grouping, validation, access and transfer; isolated CI verification and hosted/classroom acceptance remain open.
+Student Passport T025/T034: profile/class, fifteen status markers, account-scoped progress and official non-void history use server projections; private progress has no client table permissions. `passport.test.ts`, `passport-view.test.tsx`, `dossier-progress.test.ts`, `arena-admin.test.ts` and `passport.spec.ts` cover grouping, validation, access and transfer. Versioned writes reject stale progress; `offline-progress.test.ts` and `passport-offline.spec.ts` cover local drafts, retry and explicit conflict choices, including a production-build offline reload. Isolated CI verification and hosted/classroom acceptance remain open.
 
 Status: Phase 2 Checkpoint A1 integration snapshot (2026-08-20)
 Live Arena V1.0 re-scope (2026-10-29): rows for superseded v1.0 rules are marked Superseded and point to their replacements; new rule families are traced in the Live Arena section below. Stage A documents await owner approval and no Live Arena code exists yet.

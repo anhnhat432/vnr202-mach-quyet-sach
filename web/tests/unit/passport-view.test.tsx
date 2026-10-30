@@ -7,7 +7,7 @@ afterEach(() => { cleanup(); vi.unstubAllGlobals(); });
 it("shows the student's official results without counting rehearsals", async () => {
   vi.stubGlobal("fetch", vi.fn(async (url: string) => ({ ok: true, json: async () => ({ data: url.endsWith("/me")
     ? { role: "student", fullName: "Nguyễn Văn An", displayName: "An N.V.", studentId: "001" }
-    : url.endsWith("/passport/progress") ? [] : [
+    : url.endsWith("/passport/progress") ? { ownerId: "test", items: [] } : [
       { attemptId: "r", game: "race", state: "completed", score: 999, competition: { id: "r", name: "Diễn tập", kind: "rehearsal", standing: "rehearsal" }, reviewAvailable: true },
       { attemptId: "v", game: "race", state: "voided", score: 500, competition: { id: "o", name: "Cuộc thi A", kind: "official", standing: "official" }, reviewAvailable: false },
       { attemptId: "o", game: "minefield", state: "completed", score: 200, mainCorrect: 2, mainTotal: 10, hardCorrect: 1, rank: 1, competition: { id: "o", name: "Cuộc thi A", kind: "official", standing: "official" }, reviewAvailable: true },
@@ -30,7 +30,7 @@ it("requires sign-in instead of showing private results", async () => {
 it("labels an unfinished official competition provisional and does not link to review", async () => {
   vi.stubGlobal("fetch", vi.fn(async (url: string) => ({ ok: true, json: async () => ({ data: url.endsWith("/me")
     ? { role: "student", fullName: "An" }
-    : url.endsWith("/passport/progress") ? [] : [{ attemptId: "o", game: "race", state: "completed", score: 100, competition: { id: "o", name: "Cuộc thi", kind: "official", standing: "provisional" }, reviewAvailable: false }] }) })));
+    : url.endsWith("/passport/progress") ? { ownerId: "test", items: [] } : [{ attemptId: "o", game: "race", state: "completed", score: 100, competition: { id: "o", name: "Cuộc thi", kind: "official", standing: "provisional" }, reviewAvailable: false }] }) })));
   render(<Passport dossiers={[]} />);
   expect(await screen.findByText(/Tạm thời/)).toBeInTheDocument();
   expect(screen.queryByRole("link", { name: "Xem lại đáp án" })).not.toBeInTheDocument();

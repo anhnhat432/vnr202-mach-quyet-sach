@@ -14,7 +14,7 @@ type MonitorRow = { attemptId: string; profileId: string; accountStatus: string;
 type AuditRow = { at: string; action: string; targetType: string; actor: string; after: { reason?: string } | null };
 type Disclosed = { kind: string; competitionState: string; questions: Array<{ versionId: string; game: string; pool: string; difficulty: string; chapter: string; prompt: string; confirmed: boolean; disclosedBy: Array<{ competition: string; at: string }> | null }> };
 type IncidentAction = "note" | "void_attempt" | "revoke_sessions" | "lock_account" | "unlock_account";
-type Readiness = { ready: boolean; blockers: string[]; target: { meetsTarget: boolean; expectedAttempts: number; maxPerQuestion: number }; games: Record<string, { slots: Array<{ pool: string; difficulty: string; needed: number; available: number; expectedAllocationsPerQuestion: number | null }> }> };
+type Readiness = { ready: boolean; blockers: string[]; classSize: number | null; target: { meetsTarget: boolean; expectedAttempts: number; maxPerQuestion: number }; games: Record<string, { slots: Array<{ pool: string; difficulty: string; needed: number; available: number; expectedAllocationsPerQuestion: number | null }> }> };
 
 const STATE_LABEL: Record<string, string> = { draft: "Nháp", scheduled: "Đã lên lịch", open: "Đang mở", start_closed: "Đóng nhận lượt", settling: "Chốt kết quả", finalized: "Đã kết thúc", archived: "Lưu trữ" };
 const NEXT_ACTIONS: Record<string, Array<{ target: string; label: string }>> = {
@@ -202,6 +202,7 @@ export function CompetitionAdmin() {
             {current.state === "draft" && current.kind === "official" ? <label>Sĩ số dự kiến <input type="number" min={1} max={500} value={expectedAttempts} onChange={(e) => { setExpectedAttempts(Number(e.target.value)); setAcknowledgeRisk(false); setReadiness(null); }} /></label> : null}
             {readiness && current.state === "draft" ? <div className={`adm__ready ${readiness.ready ? "is-ok" : "is-bad"}`}>
               <p>{readiness.ready ? "Ngân hàng câu đủ điều kiện bắt buộc." : `Chưa đủ điều kiện: ${readiness.blockers.join(", ")}`}</p>
+              {current.kind === "official" && readiness.classSize != null ? <p role={readiness.classSize !== readiness.target.expectedAttempts ? "alert" : undefined}>Danh sách lớp hiện có {readiness.classSize} sinh viên{readiness.classSize !== readiness.target.expectedAttempts ? `, khác sĩ số dự kiến ${readiness.target.expectedAttempts}. Hãy kiểm tra trước khi xác nhận.` : "."}</p> : null}
               {current.kind === "official" && !readiness.target.meetsTarget ? <>
                 <p>Sĩ số dự kiến {readiness.target.expectedAttempts}: chưa đạt mục tiêu tối đa {readiness.target.maxPerQuestion} lượt phân bổ mỗi câu. Một câu có thể được nhiều sinh viên nhận, tăng rủi ro chia sẻ đáp án.</p>
                 <p>Tổng còn thiếu {Object.values(readiness.games).flatMap((game) => game.slots).reduce((sum, slot) => sum + Math.max(0, Math.ceil(readiness.target.expectedAttempts * slot.needed / readiness.target.maxPerQuestion) - slot.available), 0)} câu theo cơ cấu mục tiêu.</p>

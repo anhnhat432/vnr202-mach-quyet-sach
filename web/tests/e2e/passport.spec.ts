@@ -38,7 +38,7 @@ test("progress follows the student to a second device and stays private", async 
   await expect.poll(async () => first.evaluate(async () => {
     const result = await fetch("/api/v1/passport/progress");
     const body = await result.json();
-    return body.data?.some((r: { completed_at: string | null }) => r.completed_at !== null);
+    return body.data?.items.some((r: { completed_at: string | null }) => r.completed_at !== null);
   })).toBe(true);
   const second = await signIn(browser, 0);
   await second.goto("/passport");

@@ -76,6 +76,21 @@ describe("admin views and student history", () => {
     expect(privileges).toMatchObject({ can_read: false, can_write: false });
   });
 
+  it("rejects stale progress writes from another device without losing the newer state", async () => {
+    const w = await createWorld({ students: 1 });
+    worlds.push(w);
+    const privilege = (await pool.query("select has_function_privilege('service_role', 'public.save_dossier_progress(uuid,uuid,jsonb)', 'execute') as can_overwrite")).rows[0];
+    expect(privilege.can_overwrite).toBe(false);
+    const dossier = "20000000-0000-0000-0000-000000000002";
+    const a = JSON.stringify({ stage: "evidence", selectedEvidence: [], selectedDecision: "" });
+    const b = JSON.stringify({ stage: "decision", selectedEvidence: ["c1-e1", "c1-e2", "c1-e3"], selectedDecision: "" });
+    expect(await call("save_dossier_progress_versioned", [w.students[0], dossier, a, 0])).toBe(1);
+    expect(await call("save_dossier_progress_versioned", [w.students[0], dossier, b, 1])).toBe(2);
+    await expectError(call("save_dossier_progress_versioned", [w.students[0], dossier, a, 1]), "QA409", "progress_conflict");
+    const { rows } = await pool.query("select state, version from public.student_dossier_progress where profile_id = $1 and dossier_id = $2", [w.students[0], dossier]);
+    expect(rows[0]).toMatchObject({ state: { stage: "decision" }, version: 2 });
+  });
+
   it("incidents: admin-only, reason required, void keeps score and history but leaves the boards, every action audited", async () => {
     const w = await createWorld({ students: 2 });
     worlds.push(w);

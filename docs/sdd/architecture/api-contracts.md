@@ -6,9 +6,9 @@ Format: JSON UTF-8, camelCase ở API, snake_case trong PostgreSQL
 
 ### Student Passport progress (T025/T034)
 
-`GET /passport/progress` trả các hàng tiến độ của chính sinh viên đã xác thực (`dossier_id`, `state`, `completed_at`); `POST /passport/progress` nhận `slug` và `state` gồm `stage`, `selectedEvidence`, `selectedDecision`. Server xác thực, kiểm tra CSRF, chỉ nhận hồ sơ Published và kiểm tra dữ kiện/phương án thuộc hồ sơ cùng điều kiện của chặng. Chặng cuối ghi dấu hoàn thành; không nhận profile ID từ client. Các trường snake_case hiện phản ánh projection lưu trữ; hợp đồng cụ thể nằm trong OpenAPI.
+`GET /passport/progress` trả `ownerId` của phiên và các hàng tiến độ của chính sinh viên (`dossier_id`, `state`, `completed_at`, `version`); `POST /passport/progress` nhận `slug`, `state`, `ownerId` đã đọc và `expectedVersion` (0 khi chưa có bản lưu). Server luôn lấy profile từ phiên và từ chối nếu `ownerId` không khớp; giá trị này không chọn tài khoản để ghi. Server kiểm tra CSRF, chỉ nhận hồ sơ Published và kiểm tra dữ kiện/phương án thuộc hồ sơ. Ghi có điều kiện theo phiên bản, trả `409 progress_conflict` khi bản server đã đổi. Chặng cuối ghi dấu hoàn thành.
 
-Tiến độ khách lưu tại thiết bị không tự nhập vào tài khoản khi đăng nhập, vì thiết bị có thể dùng chung. Khi lưu tài khoản thất bại, giao diện báo lỗi và cho thử lại trước khi rời trang; hiện chưa có hàng đợi ngoại tuyến bền vững.
+Tiến độ chưa đồng bộ được lưu tại thiết bị; trên máy dùng chung người học cần kiểm tra bản thiết bị trước khi chọn dùng. Khi phiên bản server thay đổi hoặc không xác định, hệ thống yêu cầu chọn bản; không tự ghi đè. Khi chọn bản tài khoản, bản thiết bị được lưu dự phòng cục bộ.
 
 ## 1. Envelope
 
