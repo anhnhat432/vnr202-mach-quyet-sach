@@ -47,7 +47,7 @@ Trên **stack Supabase CLI chính thức** (GitHub Actions, Draft PR #6, commit 
 | `database`: `supabase start` | pass (~1m25s) |
 | `database`: `supabase test db` | pass (2 file pgTAP) — lần chạy trước (`fd7a163`) **fail** 15/26 assertion với `permission denied for table profiles` |
 | `database`: test tích hợp | pass, **31/31** (log đã kiểm tra) |
-| `database`: E2E trong CI | **chưa chạy**: bước thêm sau commit này, chờ lần chạy tiếp theo (T101) |
+| `database`: E2E trong CI (commit `5310442`) | pass, **14/14** (desktop + mobile), không test nào bị bỏ qua (đã đọc log); T101 xong |
 
 Kiểm tra đối chứng (bộ test không "xanh rỗng"):
 - Thêm policy rò rỉ → 3 test tích hợp và 2 assertion pgTAP fail. Bỏ giới hạn khóa đăng nhập → 2 test fail. Bộ quét bundle bắt giá trị cố ý để lọt (22 phát hiện).
@@ -87,6 +87,7 @@ Kiểm tra đối chứng (bộ test không "xanh rỗng"):
 7. **Mật khẩu mặc định trong test**: test dùng 1 ký tự ngẫu nhiên mỗi lần chạy thay vì giá trị thật của sản phẩm.
 
 Còn lại:
+- Cảnh báo hydration của React trong log dev server khi chạy E2E trang chủ (`cold-meter__fill` render `width: 0px` ở server nhưng `35%` ở client). Có từ trước, không thuộc phạm vi Giai đoạn B và không làm test fail; nên xem lại ở phần giao diện trang chủ.
 - `vitest` 4.1.11 (moderate), `@vitest/mocker` (moderate), `vite` (high): chỉ là công cụ dev. Bump `vitest` làm npm 10.9.4 lỗi `edgesOut` trên lockfile này (`npm audit fix` cũng vậy). T104.
 - Cạnh nhỏ về khả năng truy cập thấy khi đọc `cause-map.tsx`: nhãn quan hệ giữa các lớp (`cause-step__rel`) có `aria-hidden="true"`, nên người dùng đọc màn hình không nghe thấy quan hệ mà UX-AC-005 yêu cầu hiển thị. Chưa sửa (giao diện thuộc phạm vi thiết kế của bạn); đề nghị xem xét.
 - Bom giải nén: `fflate` cắt đầu ra theo kích thước khai báo nên không có bom bộ nhớ (đo: tệp khai 100 byte, thật 512 MiB → RSS tăng ~7 MiB), nhưng thời gian CPU vẫn theo kích thước thật (~1,5 s cho 512 MiB; với tệp ≤ 1 MiB và tỷ lệ nén DEFLATE tối đa ~1000:1 thì cận trên cỡ vài giây một yêu cầu). Route chỉ dành cho admin. Chưa có giới hạn tần suất riêng cho route nhập lớp.
@@ -94,7 +95,7 @@ Còn lại:
 ## 5. Chưa làm / chưa được xác minh
 
 - **Supabase thật (hosted):** LA-ACC-016 / T102 **chưa làm** vì không có thông tin project. Script `scripts/db/verify-hosted-auth.mjs` sẵn sàng. Ghi nhận từ GoTrue cục bộ (`minimum_password_length = 6`): API admin tạo user với mật khẩu 1 ký tự thành công, đăng nhập công khai bằng nó thành công, đổi mật khẩu tự phục vụ sang 1 ký tự bị từ chối. Ứng dụng luôn dùng mật khẩu dẫn xuất nên không phụ thuộc kết quả này.
-- **Stack Supabase chính thức:** đã có bằng chứng cho `start`, `test db`, test tích hợp (mục 2). **Chưa có** cho E2E và cho `supabase db reset` riêng lẻ (`supabase start` đã áp dụng toàn bộ migration + seed).
+- **Stack Supabase chính thức:** đã có bằng chứng cho `start`, `test db`, test tích hợp và E2E (mục 2). **Chưa có** cho lệnh `supabase db reset` chạy riêng (`supabase start` đã áp dụng toàn bộ migration + seed).
 - **File thật từ Excel / Google Sheets / WPS:** **chưa thử** — không có bản nào trong môi trường này. Chỉ thử với file từ XlsxWriter, openpyxl và LibreOffice (xem `web/tests/fixtures/roster/README.md`). Công cụ tự kiểm tra offline: `ROSTER_FILE=/đường/dẫn/lop.xlsx npm --prefix web run roster:check` (che MSSV, không ghi, không tải lên). T103.
 - **N6:** chưa xem danh sách lớp thật; mẫu MSSV và giới hạn số hàng vẫn là cấu hình tùy chọn.
 - **Realtime**, Student Passport (T034), đo thống kê thời gian phản hồi đăng nhập, đo giới hạn IP với NAT lớp học (P10): không thuộc hoặc chưa làm trong Giai đoạn B.
