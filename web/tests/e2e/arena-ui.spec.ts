@@ -1,0 +1,147 @@
+import { expect, test, type Page } from "@playwright/test";
+
+import { createArenaWorld, env, ready, type ArenaWorld } from "./arena-world";
+
+// Stage F browser flows on the real stack: play both games through the UI, F5 keeps the same
+// question and clock, offline banner then resync, device transfer only after explicit confirmation,
+// and no answer ever reaches the browser before the competition is Finalized.
+test.skip(!ready, "needs the local stack and server secrets");
+test.describe.configure({ mode: "serial" });
+
+let world: ArenaWorld;
+const leaks: string[] = [];
+
+test.beforeAll(async () => {
+  world = await createArenaWorld(["Ánh Đ.T.", "Bảo N.Q.", "Cúc L.T."]);
+});
+test.afterAll(async () => {
+  await world?.cleanup();
+});
+test.beforeEach(async ({ page }, info) => {
+  test.skip(info.project.name !== "desktop-chromium", "stateful flows share one competition; viewport checks are in the screenshot pass");
+  page.on("response", async (response) => {
+    if (!response.url().includes("/api/v1/arena/")) return;
+    const text = await response.text().catch(() => "");
+    if (/correctOptionId|explanation|snapshot_private/.test(text)) leaks.push(response.url());
+  });
+});
+
+async function signIn(page: Page, studentId: string) {
+  await page.goto("/dang-nhap");
+  await page.fill("input[name=studentId]", studentId);
+  await page.fill("input[name=password]", env.defaultPassword!);
+  await page.click("button[type=submit]");
+  await page.waitForURL("**/live-arena");
+}
+
+// Fixture prompts name their answer ("... chọn đáp án C") so a scripted player can answer correctly
+// without the browser ever receiving the correct option id.
+async function correctIndex(page: Page) {
+  const prompt = (await page.textContent(".ax-question__prompt")) ?? "";
+  const letter = prompt.match(/đáp án ([A-C])/)?.[1];
+  const labels = await page.$$eval(".ax-option span", (spans) => spans.map((s) => s.textContent?.trim()));
+  return Math.max(0, labels.indexOf(`Đáp án ${letter}`));
+}
+
+// Every test signs in again (a new Auth session), so entering a game with an attempt already running
+// elsewhere asks for confirmation first: accept it and continue.
+async function enter(page: Page, path: string, ready: string) {
+  await page.goto(path);
+  const dialog = page.getByRole("dialog", { name: "Lượt thi đang mở ở thiết bị khác" });
+  await expect(page.locator(ready).or(dialog).first()).toBeVisible({ timeout: 8000 });
+  if (await dialog.count()) await page.getByRole("button", { name: "Chuyển sang thiết bị này" }).click();
+  await expect(page.locator(ready)).toBeVisible({ timeout: 8000 });
+}
+
+const raceQuestion = (page: Page, n: number) => page.locator(`.ax-question:not(.is-expired) .ax-chip:has-text("Câu ${n}/15")`);
+const clockMs = async (page: Page) => {
+  const [m, s] = ((await page.textContent(".ax-clock span")) ?? "0:00").split(":").map(Number);
+  return (m * 60 + s) * 1000;
+};
+
+test("Đường Đua: keyboard play, F5 keeps the question, score and clock", async ({ page }) => {
+  await signIn(page, world.students[0].studentId);
+  await page.goto("/live-arena/duong-dua");
+  await page.getByRole("button", { name: "Bắt đầu lượt thi" }).click();
+  for (const n of [1, 2]) {
+    await expect(raceQuestion(page, n)).toBeVisible({ timeout: 8000 });
+    await page.keyboard.press(["a", "b", "c"][await correctIndex(page)]);
+  }
+  await expect(raceQuestion(page, 3)).toBeVisible({ timeout: 8000 });
+  const score = await page.textContent(".ax-score span");
+  expect(score).toBe("200");
+  const before = await clockMs(page);
+
+  await page.reload();
+  await expect(raceQuestion(page, 3)).toBeVisible({ timeout: 8000 }); // same question after F5, not a new attempt
+  expect(await page.textContent(".ax-score span")).toBe("200");
+  expect(await clockMs(page)).toBeLessThanOrEqual(before); // the clock never restarts
+  await expect(page.getByText("Bắt đầu lượt thi")).toHaveCount(0);
+});
+
+test("offline: the banner shows, then the game resyncs from the server", async ({ page, context }) => {
+  await signIn(page, world.students[0].studentId);
+  await enter(page, "/live-arena/duong-dua", ".ax-race");
+  await context.setOffline(true);
+  await page.evaluate(() => window.dispatchEvent(new Event("offline")));
+  await expect(page.getByText("Mất kết nối – đang thử lại")).toBeVisible({ timeout: 6000 });
+  await page.waitForTimeout(1500);
+  await context.setOffline(false);
+  await page.evaluate(() => window.dispatchEvent(new Event("online")));
+  await expect(page.getByText("Mất kết nối – đang thử lại")).toHaveCount(0, { timeout: 8000 });
+  await expect(page.locator(".ax-question, .ax-reveal").first()).toBeVisible();
+});
+
+test("device transfer needs an explicit confirmation and locks the old device", async ({ page, browser }) => {
+  await signIn(page, world.students[0].studentId);
+  await enter(page, "/live-arena/duong-dua", ".ax-race");
+
+  const second = await browser.newContext();
+  const page2 = await second.newPage();
+  await signIn(page2, world.students[0].studentId);
+  await page2.goto("/live-arena/duong-dua");
+  await expect(page2.getByRole("dialog", { name: "Lượt thi đang mở ở thiết bị khác" })).toBeVisible({ timeout: 8000 });
+  // nothing moved yet: the first device still plays
+  await page.reload();
+  await expect(page.locator(".ax-race")).toBeVisible({ timeout: 8000 });
+
+  await page2.getByRole("button", { name: "Chuyển sang thiết bị này" }).click();
+  await expect(page2.locator(".ax-race")).toBeVisible({ timeout: 8000 });
+  await expect(page2.locator(".ax-score span")).toHaveText("200");
+
+  // the old device is refused on its next action and is asked to confirm instead
+  await page.reload();
+  await expect(page.getByRole("dialog", { name: "Lượt thi đang mở ở thiết bị khác" })).toBeVisible({ timeout: 8000 });
+  await second.close();
+});
+
+test("Bãi Mìn: open, answer, F5 during a question keeps its countdown", async ({ page }) => {
+  await signIn(page, world.students[1].studentId);
+  await page.goto("/live-arena/bai-min");
+  await page.getByRole("button", { name: "Bắt đầu lượt thi" }).click();
+  await expect(page.locator(".ax-board")).toBeVisible();
+  for (let i = 0; i < 20 && !(await page.locator(".ax-question").count()); i += 1) {
+    const opened = await page.locator(".ax-cell.is-open").count();
+    await page.locator(".ax-cell:not(.is-open)").first().click({ force: true });
+    await expect(page.locator(".ax-cell.is-open")).toHaveCount(opened + 1);
+    await page.waitForTimeout(700);
+  }
+  await expect(page.locator(".ax-question")).toBeVisible({ timeout: 5000 });
+  const prompt = await page.textContent(".ax-question__prompt");
+  const shown = Number((await page.textContent(".ax-question__time"))?.replace(",", "."));
+  await page.reload();
+  await expect(page.locator(".ax-question__prompt")).toHaveText(prompt ?? "", { timeout: 8000 });
+  const after = Number((await page.textContent(".ax-question__time"))?.replace(",", "."));
+  expect(after).toBeLessThanOrEqual(shown); // the deadline did not move
+  await page.locator(".ax-option").nth(await correctIndex(page)).click();
+  await expect(page.locator(".ax-overlay")).toHaveCount(0, { timeout: 5000 });
+  await expect(page.locator(".ax-mark--ok, .ax-mark--bad").first()).toBeVisible();
+  expect(Number(await page.textContent(".ax-score span"))).toBeGreaterThanOrEqual(0);
+});
+
+test("hub shows both games and the player's state; no answer ever reached the browser", async ({ page }) => {
+  await signIn(page, world.students[0].studentId);
+  await expect(page.getByRole("heading", { name: "Bãi Mìn Tri Thức" })).toBeVisible();
+  await expect(page.getByText("Tiếp tục lượt đang chơi")).toBeVisible();
+  expect(leaks).toEqual([]);
+});

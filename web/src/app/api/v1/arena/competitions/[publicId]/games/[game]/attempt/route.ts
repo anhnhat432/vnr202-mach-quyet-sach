@@ -8,7 +8,8 @@ import { ok } from "@/lib/api/response";
 type Started = { result: { resumed: boolean }; projection: { attempt: { id: string; sessionVersion: number } } };
 
 // Start or resume the one attempt a student has per game and competition (LA-TRY-001..004).
-// Resuming from a new Auth session takes over control from the old one (LA-TRY-006).
+// Owner decision (stage F): control never moves silently. Resuming from another Auth session answers
+// 409 stale_session; the client asks the student to confirm, then calls /transfer (LA-TRY-006).
 export const POST = route(async (request, requestId) => {
   const ctx = await requireStudent(request, { mutating: true });
   const key = idempotencyKeyFrom(request, idempotencyKey);
@@ -18,7 +19,7 @@ export const POST = route(async (request, requestId) => {
   const profile = ctx.actor.userId;
   const started = await rpc<Started>(ctx.admin, "start_or_resume_attempt", { p_profile_id: profile, p_competition_public_id: publicId, p_game: game, p_idempotency_key: key });
   const attemptId = started.projection.attempt.id;
-  const version = await bindSession(ctx.admin, profile, attemptId, ctx.authSessionId, true);
+  const version = await bindSession(ctx.admin, profile, attemptId, ctx.authSessionId);
   const projection = version === started.projection.attempt.sessionVersion
     ? started.projection
     : await rpc(ctx.admin, "get_attempt_projection", { p_profile_id: profile, p_attempt_id: attemptId, p_session_version: version });

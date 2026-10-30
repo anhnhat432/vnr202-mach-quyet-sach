@@ -91,7 +91,7 @@ test.afterAll(async () => {
   if (adminId) await svc.auth.admin.deleteUser(adminId);
 });
 
-test("gameplay over HTTP: Auth-verified profile, idempotency, control follows the newest Auth session, no answer leaks", async ({ request }) => {
+test("gameplay over HTTP: Auth-verified profile, idempotency, control moves only on an explicit transfer, no answer leaks", async ({ request }) => {
   // --- nobody signed in ------------------------------------------------------------------------
   expect((await request.get("/api/v1/arena/lobby")).status()).toBe(401);
   expect((await request.post(`/api/v1/arena/attempts/${crypto.randomUUID()}/heartbeat`, { headers: { origin }, data: {} })).status()).toBe(401);
@@ -158,8 +158,15 @@ test("gameplay over HTTP: Auth-verified profile, idempotency, control follows th
   const devB = await signIn("student", B);
   expect((await get(devB, `/api/v1/arena/attempts/${attemptId}`)).status()).toBe(404);
 
-  // --- device 2: a new Auth session takes control, device 1 is refused -------------------------
+  // --- device 2: a new Auth session must confirm before taking control (stage F decision) --------
   const dev2 = await signIn("student", A);
+  const notYet = await get(dev2, `/api/v1/arena/attempts/${attemptId}`);
+  expect(notYet.status()).toBe(409);
+  expect((await notYet.json()).error.code).toBe("stale_session");
+  expect((await post(dev2, startPath, {}, "idem-start-race-dev2")).status()).toBe(409); // resuming does not move control either
+  expect((await get(dev1, `/api/v1/arena/attempts/${attemptId}`)).status()).toBe(200); // device 1 still plays
+  const confirmed = await post(dev2, `/api/v1/arena/attempts/${attemptId}/transfer`, {}, "idem-transfer-dev2");
+  expect(confirmed.status()).toBe(200);
   const stale = await get(dev1, `/api/v1/arena/attempts/${attemptId}`);
   expect(stale.status()).toBe(409);
   expect((await stale.json()).error.code).toBe("stale_session");

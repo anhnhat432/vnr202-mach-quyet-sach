@@ -4535,3 +4535,19 @@ main {
 .roster-import tr[data-status="warning"] { background: rgba(214, 146, 46, 0.18); }
 .roster-import label { display: grid; gap: 0.3rem; margin-top: 0.75rem; font-weight: 700; }
 .roster-import input, .roster-import button { min-height: 2.5rem; border: 1px solid var(--ink); background: transparent; color: var(--ink); padding: 0.4rem 0.6rem; font: inherit; }
+
+/* ---- Live Arena hub (stage F) -------------------------------------------------------------------- */
+.hub { display: grid; gap: 1.5rem; margin-top: 1.5rem; }
+.hub__status p { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; margin: 0; padding: 0.8rem 1rem; border: 1px solid var(--line); border-radius: var(--radius-card); background: var(--paper-light); }
+.hub__dot { display: inline-block; width: 0.6rem; height: 0.6rem; border-radius: 50%; background: var(--command-red); box-shadow: 0 0 0 4px rgba(177, 40, 46, 0.18); }
+.hub__games { display: grid; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); gap: 1.2rem; }
+.hub__game { position: relative; display: grid; gap: 0.7rem; padding: 1.6rem; border-radius: 20px; color: #f3ebdd; background: radial-gradient(30rem 16rem at 100% 0%, rgba(214, 146, 46, 0.25), transparent 60%), var(--night-panel); box-shadow: var(--shadow-lift); overflow: hidden; }
+.hub__game--race { background: radial-gradient(30rem 16rem at 0% 0%, rgba(177, 40, 46, 0.35), transparent 60%), var(--night-panel); }
+.hub__game h2 { margin: 0; font-family: var(--font-display), sans-serif; font-size: 2.3rem; text-transform: uppercase; letter-spacing: 0.03em; }
+.hub__game p { margin: 0; color: #c7d1d6; line-height: 1.5; }
+.hub__icon svg { width: 2.4rem; height: 2.4rem; color: var(--signal-amber); }
+.hub__tag { font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--signal-amber); }
+.hub__cta { justify-self: start; margin-top: 0.4rem; padding: 0.75rem 1.2rem; border-radius: var(--radius-btn); background: var(--command-red); color: white; font-weight: 700; }
+.hub__cta:hover { filter: brightness(1.1); }
+.hub__links { display: flex; flex-wrap: wrap; gap: 0.8rem; }
+.hub__link { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.6rem 1rem; border: 1px solid var(--line); border-radius: 999px; background: var(--paper-light); font-weight: 600; }
