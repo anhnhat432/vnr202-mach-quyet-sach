@@ -194,7 +194,7 @@ Timer không decrement bằng background loop và không tạm dừng.
 - Nội dung câu chỉ được trả khi `clock_timestamp() ≥ available_at` (`LA-TIME-013`); yêu cầu sớm hơn được giữ tới `available_at` hoặc trả `425` (`LA-TIME-017`).
 - Trả lời được chấp nhận khi `received_at ≤ min(deadline_at, ends_at) + latency_allowance_ms`; ngược lại ghi `timed_out` (`LA-TIME-005`, `LA-TIME-009`).
 - Câu có `available_at ≥ ends_at` không được phát hành và được ghi `timed_out` khi lượt kết thúc (`LA-TIME-016`).
-- Mọi RPC đọc/ghi gọi `reconcile_attempt` để xử lý câu quá hạn và chuyển lượt sang `timed_out` khi `clock_timestamp() > ends_at + latency_allowance_ms + lock_wait_limit` (`LA-TIME-022`).
+- Mọi RPC đọc/ghi gọi `reconcile_attempt` để xử lý câu quá hạn và chuyển lượt sang `timed_out` khi đồng hồ lấy trước khi xếp hàng khóa `> ends_at + latency_allowance_ms + reconcile_grace_ms` (`LA-TIME-022`, đã sửa 2026-10-30).
 - Heartbeat mặc định 5 giây, chỉ cập nhật `last_heartbeat_at`.
 
 ## 6. Score và leaderboard
@@ -275,3 +275,4 @@ Migration `202610300003_competition_core.sql` implements §4–§6 and §8 with 
 - `question_exposures.competition_id` still has no foreign key (stage C tests use ad-hoc ids); cleanup of a deleted competition's exposure rows is explicit.
 - Error codes: `QA404`, `QA409`, `QA410`, `QA422`, `QA425` (detail `{"availableInMs"}`), `QB001`/`QB002`, `55P03` (lock wait limit; retryable).
 - Leaderboard ranks are computed on read (no stored rank); `get_leaderboard` caps at Top 10; personal standing is `get_player_standing`.
+- `competitions.reconcile_grace_ms` (mặc định 250) thay `lock_wait_limit_ms` trong ngưỡng ghi hết giờ; `lock_wait_limit_ms` chỉ đặt `lock_timeout`. Mốc câu kế tiếp của Game 2 sau khi hết giờ = `effective_deadline` của câu trước.

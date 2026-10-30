@@ -220,22 +220,26 @@ describe("question timeline and content release (LA-TIME-*, T042)", () => {
     expect(done.attempt.score).toBe(0);
   });
 
-  it("writes a timeout only after deadline + latency + lock-wait limit, then presents the next question (LA-TIME-022)", async () => {
+  it("writes a timeout only after deadline + latency + grace, chains the next question to the expired deadline (LA-TIME-022)", async () => {
     const w = await track({ students: 1 });
     const p = w.students[0];
     const s = await start(w, p, "race", T0);
     const id = s.projection.attempt.id;
     await content(p, id, s.projection.interaction!.allocationId, 1, at(AVAIL));
-    // 400 + 2000 ms after the deadline: displayed as expired but nothing written yet
-    let proj = await projection(p, id, 1, at(DEADLINE + 400 + 2000));
-    expect(proj.interaction).toMatchObject({ sequence: 1, status: "expired" });
+    // window closed (deadline + latency) but inside the grace: shown as expired, nothing written, next question announced
+    let proj = await projection(p, id, 1, at(DEADLINE + 400 + 250));
+    expect(proj.interaction).toMatchObject({ sequence: 1, status: "expired", upcoming: { sequence: 2, availableInMs: 900 - 650 } });
     expect(proj.attempt.mainAnswered).toBe(0);
-    proj = await projection(p, id, 1, at(DEADLINE + 400 + 2000 + 1));
+    // one millisecond later the timeout is written; question 2 keeps the timeline chained to question 1's deadline
+    proj = await projection(p, id, 1, at(DEADLINE + 400 + 250 + 1));
     expect(proj.attempt.mainAnswered).toBe(1);
-    expect(proj.interaction).toMatchObject({ sequence: 2, status: "pending", availableInMs: 900 });
+    expect(proj.interaction).toMatchObject({ sequence: 2, status: "pending", availableInMs: 900 - 651 });
     expect(proj.lastEvent).toMatchObject({ type: "timeout", pointsDelta: 0 });
-    // asking again changes nothing (reconcile is idempotent)
-    const same = await projection(p, id, 1, at(DEADLINE + 400 + 2000 + 5));
+    const { rows } = await pool.query("select presented_at, available_at, deadline_at from public.attempt_allocations where attempt_id = $1 and sequence = 2", [id]);
+    expect(rows[0].presented_at).toEqual(at(DEADLINE));
+    expect(rows[0].available_at).toEqual(at(DEADLINE + 900));
+    expect(rows[0].deadline_at).toEqual(at(DEADLINE + 900 + 5000));
+    const same = await projection(p, id, 1, at(DEADLINE + 400 + 250 + 5));
     expect(same.attempt.version).toBe(proj.attempt.version);
   });
 

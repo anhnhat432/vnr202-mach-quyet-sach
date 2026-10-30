@@ -19,13 +19,18 @@ Ngày: 2026-10-30. Phạm vi: cuộc thi + trạng thái hai game + luật Bãi 
 
 ## Kiểm thử (cục bộ, harness dự phòng)
 - pgTAP: `competition_core.sql` 22 assertion (quyền, RLS, không có `now()`/`current_timestamp` trong hàm, ràng buộc duy nhất, đồng hồ thử nghiệm chỉ bật khi cho phép); tổng 4 file / 110 assertion.
-- Tích hợp (Postgres thật, kết nối đồng thời bằng `pg` Pool): 114 test; mới trong D: `competition-core.test.ts` 25, `arena-games.test.ts` 26, `sources-sync.test.ts` 2.
+- Tích hợp (Postgres thật, kết nối đồng thời bằng `pg` Pool): 121 test; mới trong D: `competition-core.test.ts` 25, `arena-games.test.ts` 26, `arena-clock.test.ts` 7, `sources-sync.test.ts` 2.
 - **Bộ đếm hiển thị** (`LA-ALLOC-012`): F5, gọi lại, 12 lời gọi đồng thời (đồng hồ cố định và đồng hồ thật), chuyển thiết bị, câu đã trả lời, câu chưa mở, câu không bao giờ phát hành → `displayed_count` tăng đúng 1 lần cho mỗi câu thực sự phát hành.
 - Thời gian: không nội dung trước `available_at` (425 + `availableInMs`), tải muộn không kéo dài hạn, biên chính xác và +1 ms với độ trễ 100/300/600/1000 ms, hạn vượt `ends_at`, câu không bao giờ phát hành, chờ khóa, transaction cũ, `lock_timeout` (55P03, không ghi gì), ghi hết giờ chỉ sau hạn + độ trễ + `lock_wait_limit`.
 - Song song: 20 lượt bắt đầu cùng lúc một MSSV = 1 lượt; hai game cùng lúc = 1 thắng; 10 lần gửi cùng khóa / khác khóa = chấm một lần; mở hai ô cùng lúc = một lần.
 - Tải: 60 người chơi trả lời cùng lúc trên đồng hồ thật, sổ điểm = điểm cho cả 60; độ trễ nộp bài p50 35 ms, tối đa 896 ms (harness cục bộ, chưa phải đo P7 chính thức).
 - Song song SQL ↔ TypeScript: 14 ván ngẫu nhiên mỗi game, so từng bước.
 - Unit 100 test, `tsc`, ESLint, quét bí mật, kiểm tra tài liệu: đạt.
+
+## Sửa đồng hồ sau nghiệm thu (2026-10-30)
+Theo quyết định chủ dự án: ngưỡng ghi hết giờ = hạn + `latency_allowance` + `reconcile_grace_ms` (250 ms), không còn cộng `lock_wait_limit_ms` (2000 ms, chỉ còn là `lock_timeout`). Bảo vệ câu trả lời đúng hạn đang chờ khóa dựa vào: (1) `received_at` lấy trước khi xếp hàng; (2) đối soát lấy đồng hồ trước khi xếp hàng và chỉ ghi khi đồng hồ đó > hạn + dung sai + grace; (3) hàng đợi khóa FIFO. Câu kế tiếp của Game 2 nối với hạn hiệu lực của câu hết hạn (không phụ thuộc lúc ghi); khách xin câu kế tiếp trong lúc chờ grace được giữ/hoặc nhận 425 trước khi xếp hàng khóa.
+Test mới `arena-clock.test.ts` (7): hết hạn không có đáp án; câu kế tiếp lấy được đúng lúc `available_at` (hạn + 900 ms, không phải + 2,4 s); đáp án đúng hạn đang chờ khóa không bị đối soát chen trước (đồng hồ thật); 20 lần đua đáp án ↔ đối soát quanh biên (mỗi câu đúng một kết cục, chấm theo `received_at`); 15 câu Game 2 hết hạn hết, chạy 12 đối soát song song (15 timeout, mốc nối đúng, không lặp/nhảy câu); đối soát đồng thời ở ngưỡng đầu chỉ chuyển một câu; trả lời muộn và đối soát cho cùng mốc câu kế tiếp; Bãi Mìn.
+Giả định còn lại cần đo ở P7: khoảng cách nhận–xếp hàng khóa < `reconcile_grace_ms` và khóa hàng đợi đúng thứ tự FIFO của PostgreSQL.
 
 ## Lỗi thật tìm thấy khi làm
 - Hàm đọc BXH cá nhân đầu tiên dùng bảng tạm trong hàm STABLE (không cho phép) → viết lại bằng một truy vấn CTE.

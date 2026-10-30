@@ -27,6 +27,10 @@ create table public.competitions (
   start_deadline_at timestamptz not null,
   latency_allowance_ms int not null default 400 check (latency_allowance_ms between 0 and 1500),
   lock_wait_limit_ms int not null default 2000 check (lock_wait_limit_ms between 100 and 10000),
+  -- Safety margin before an unanswered question may be written as timed out. It only has to cover the
+  -- gap between a request taking its receipt time and queueing for the row lock (microseconds to a few
+  -- ms); lock waiting itself is protected by the FIFO lock queue and lock_wait_limit_ms (see arena_reconcile).
+  reconcile_grace_ms int not null default 250 check (reconcile_grace_ms between 50 and 2000),
   timezone text not null default 'Asia/Ho_Chi_Minh',
   created_by uuid not null references public.profiles(id),
   created_at timestamptz not null default clock_timestamp(),
@@ -393,7 +397,8 @@ $$;
 create function public.create_competition(
   p_actor uuid, p_name text, p_kind text, p_opens_at timestamptz, p_start_deadline_at timestamptz,
   p_latency_allowance_ms int default 400, p_lock_wait_limit_ms int default 2000,
-  p_minefield_duration_ms int default 180000, p_race_duration_ms int default 150000, p_offsets jsonb default null
+  p_minefield_duration_ms int default 180000, p_race_duration_ms int default 150000, p_offsets jsonb default null,
+  p_reconcile_grace_ms int default 250
 )
 returns jsonb
 language plpgsql
@@ -412,8 +417,8 @@ begin
      or (v_offsets ->> 'raceNextMs')::int not between 800 and 1000 then
     raise exception 'invalid_offsets' using errcode = 'QA422';
   end if;
-  insert into public.competitions (name, kind, opens_at, start_deadline_at, latency_allowance_ms, lock_wait_limit_ms, created_by)
-  values (p_name, p_kind::public.competition_kind, p_opens_at, p_start_deadline_at, p_latency_allowance_ms, p_lock_wait_limit_ms, p_actor)
+  insert into public.competitions (name, kind, opens_at, start_deadline_at, latency_allowance_ms, lock_wait_limit_ms, reconcile_grace_ms, created_by)
+  values (p_name, p_kind::public.competition_kind, p_opens_at, p_start_deadline_at, p_latency_allowance_ms, p_lock_wait_limit_ms, p_reconcile_grace_ms, p_actor)
   returning id, public_id into v_id, v_public;
   insert into public.competition_games (competition_id, game_type, total_duration_ms, rules, blueprint) values
     (v_id, 'minefield', p_minefield_duration_ms, jsonb_build_object('schemaVersion', 1, 'offsets', v_offsets),
@@ -649,6 +654,7 @@ declare
   v_penalty int;
   v_result jsonb;
   v_next uuid;
+  v_next_at timestamptz;
 begin
   select * into a from public.attempts where id = p_attempt_id;
   select * into al from public.attempt_allocations where id = p_alloc_id;
@@ -710,21 +716,36 @@ begin
   update public.attempts set pending_allocation_id = null, version = version + 1 where id = a.id;
 
   select * into a from public.attempts where id = a.id;
+  -- Game 2: the next question is presented when the previous one was processed. For an answer that is
+  -- the commit time; for an expired question it is that question's effective deadline, so the timeline
+  -- is the same whether the timeout is written now or later.
+  v_next_at := case when p_outcome = 'timed_out' then p_processed_at else p_now end;
   if a.main_answered >= a.main_total then
     perform public.arena_finish(a.id, p_processed_at);
-  elsif p_now >= a.ends_at then
+  elsif a.game_type = 'race' and v_next_at >= a.ends_at then
+    perform public.arena_finish(a.id, a.ends_at);
+  elsif a.game_type = 'minefield' and p_now >= a.ends_at then
     perform public.arena_finish(a.id, a.ends_at);
   elsif a.game_type = 'race' then
     select x.id into v_next from public.attempt_allocations x
       where x.attempt_id = a.id and x.role = 'main' and x.presented_at is null order by x.sequence limit 1;
-    perform public.arena_present(a.id, v_next, p_now, public.arena_offset_ms(a.competition_game_id, 'raceNextMs'));
+    perform public.arena_present(a.id, v_next, v_next_at, public.arena_offset_ms(a.competition_game_id, 'raceNextMs'));
   end if;
   perform public.arena_lb_refresh(a.id);
   return v_result;
 end;
 $$;
 
--- LA-TIME-022: a timeout is only written once the answer window plus the lock-wait limit has passed.
+-- LA-TIME-022 (amended 2026-10-30, owner decision): a timeout is written once the answer window plus
+-- reconcile_grace_ms has passed, NOT plus the lock-wait limit. Why this still protects an on-time
+-- answer that is waiting for the row lock: every writer takes its clock BEFORE it queues for the lock
+-- and the lock queue is FIFO. An answer received at r <= deadline+latency queues at r+e (e = the few
+-- statements between taking r and `for update`); a reconcile only writes if its own pre-lock clock t0
+-- is > deadline+latency+grace, so it queues after t0 > r+e whenever grace >= e. The answer therefore
+-- runs first and the reconcile then finds the question already resolved. lock_wait_limit_ms bounds
+-- how long any request waits (lock_timeout, nothing written on expiry) and no longer delays a
+-- question change. The next question's timeline is chained to the expired question's effective
+-- deadline, so the moment the write happens never changes anybody's clock.
 create function public.arena_needs_reconcile(p_attempt_id uuid, p_now timestamptz) returns boolean
 language plpgsql
 stable
@@ -740,7 +761,7 @@ begin
   select * into a from public.attempts where id = p_attempt_id;
   if a.state <> 'active' then return false; end if;
   select * into c from public.competitions where id = a.competition_id;
-  v_buf := public.arena_ms(c.latency_allowance_ms + c.lock_wait_limit_ms);
+  v_buf := public.arena_ms(c.latency_allowance_ms + c.reconcile_grace_ms);
   if a.pending_allocation_id is not null then
     select * into al from public.attempt_allocations where id = a.pending_allocation_id;
     return p_now > least(al.deadline_at, a.ends_at) + v_buf;
@@ -764,7 +785,7 @@ declare
 begin
   select * into a from public.attempts where id = p_attempt_id;
   select * into c from public.competitions where id = a.competition_id;
-  v_buf := public.arena_ms(c.latency_allowance_ms + c.lock_wait_limit_ms);
+  v_buf := public.arena_ms(c.latency_allowance_ms + c.reconcile_grace_ms);
   loop
     v_guard := v_guard + 1;
     exit when v_guard > 40;
@@ -809,6 +830,8 @@ declare
   v_last jsonb;
   v_eff timestamptz;
   v_status text;
+  v_up_id uuid;
+  v_up_seq smallint;
 begin
   select * into a from public.attempts where id = p_attempt_id;
   select * into c from public.competitions where id = a.competition_id;
@@ -841,6 +864,15 @@ begin
       v_inter := v_inter || jsonb_build_object('availableInMs', public.arena_ms_until(p_now, al.available_at));
     elsif v_status = 'released' then
       v_inter := v_inter || jsonb_build_object('remainingMs', greatest(0, public.arena_ms_between(p_now, v_eff)));
+    elsif v_status = 'expired' and a.game_type = 'race' and a.state = 'active' then
+      -- The answer window is closed but the timeout is not written yet (grace). The next question's
+      -- timeline is already fixed (chained to this deadline), so the client can start waiting for it.
+      select x.id, x.sequence into v_up_id, v_up_seq from public.attempt_allocations x
+        where x.attempt_id = a.id and x.role = 'main' and x.presented_at is null order by x.sequence limit 1;
+      if v_up_id is not null and v_eff + public.arena_ms(public.arena_offset_ms(a.competition_game_id, 'raceNextMs')) < a.ends_at then
+        v_inter := v_inter || jsonb_build_object('upcoming', jsonb_build_object('allocationId', v_up_id, 'sequence', v_up_seq,
+          'availableInMs', public.arena_ms_until(p_now, v_eff + public.arena_ms(public.arena_offset_ms(a.competition_game_id, 'raceNextMs')))));
+      end if;
     end if;
   end if;
 
@@ -1006,7 +1038,36 @@ declare
   v_eff timestamptz;
   v_wait numeric;
   v_first int;
+  pend public.attempt_allocations;
+  c public.competitions;
+  v_ready timestamptz;
+  v_wait0 numeric;
 begin
+  -- Race: the player may ask for the next question while the previous one is expired but its timeout is
+  -- not writable yet. The wait happens BEFORE queueing for the row lock: a reconcile must queue after
+  -- deadline + latency + grace, otherwise it could overtake an on-time answer (see arena_reconcile).
+  select * into a from public.attempts where id = p_attempt_id and profile_id = p_profile_id;
+  if found and a.state = 'active' and a.game_type = 'race' and a.pending_allocation_id is not null
+     and a.pending_allocation_id is distinct from p_allocation_id then
+    select * into al from public.attempt_allocations where id = p_allocation_id and attempt_id = a.id;
+    select * into pend from public.attempt_allocations where id = a.pending_allocation_id;
+    select * into c from public.competitions where id = a.competition_id;
+    if al.id is not null and al.outcome is null and al.presented_at is null
+       and v_received > least(pend.deadline_at, a.ends_at) + public.arena_ms(c.latency_allowance_ms) then
+      v_ready := least(pend.deadline_at, a.ends_at) + public.arena_ms(c.latency_allowance_ms + c.reconcile_grace_ms);
+      if v_received <= v_ready then
+        v_wait0 := extract(epoch from (v_ready - v_received)) * 1000;
+        if v_wait0 <= 1000 and not public.arena_clock_is_fixed() then
+          perform pg_sleep(v_wait0 / 1000.0 + 0.002);
+          v_received := public.arena_clock();
+        else
+          raise exception 'too_early' using errcode = 'QA425',
+            detail = jsonb_build_object('availableInMs', public.arena_ms_until(v_received, v_ready))::text;
+        end if;
+      end if;
+    end if;
+  end if;
+
   a := public.arena_lock_attempt(p_attempt_id, p_profile_id);
   perform public.arena_check_session(a, p_session_version);
   perform public.arena_reconcile(a.id, v_received);
@@ -1188,7 +1249,7 @@ begin
 
   insert into public.answer_submissions (attempt_id, allocation_id, idempotency_key, submitted_option_id, received_at, is_correct, outcome)
   values (a.id, al.id, p_idempotency_key, p_option_id, v_received, v_correct, v_outcome);
-  v_result := public.arena_resolve(a.id, al.id, v_outcome, v_received, public.arena_clock());
+  v_result := public.arena_resolve(a.id, al.id, v_outcome, case when v_outcome = 'timed_out' then v_eff else v_received end, public.arena_clock());
   return jsonb_build_object('result', v_result, 'replayed', false, 'projection', public.arena_projection(a.id, public.arena_clock()));
 end;
 $$;

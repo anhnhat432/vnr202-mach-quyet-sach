@@ -86,6 +86,7 @@ export async function createWorld(options: {
   raceMs?: number;
   latencyMs?: number;
   lockWaitMs?: number;
+  graceMs?: number;
   offsets?: Record<string, number>;
   open?: boolean;
   startDeadlineMs?: number;
@@ -114,7 +115,7 @@ export async function createWorld(options: {
   const created = await call<{ id: string; publicId: string }>("create_competition", [
     adminId, `Arena thử ${tag}`, options.kind ?? "rehearsal", at(-3_600_000), at(options.startDeadlineMs ?? 3_600_000),
     options.latencyMs ?? 400, options.lockWaitMs ?? 2000, options.minefieldMs ?? 180000, options.raceMs ?? 150000,
-    options.offsets ? JSON.stringify(options.offsets) : null,
+    options.offsets ? JSON.stringify(options.offsets) : null, options.graceMs ?? 250,
   ]);
   const world = {
     tag, adminId, students, competitionId: created.id, publicId: created.publicId,

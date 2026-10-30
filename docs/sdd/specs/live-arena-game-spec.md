@@ -115,8 +115,8 @@ Luật `[ĐỀ XUẤT]` và `[MỞ]` không được triển khai như hành vi 
 - `LA-TIME-019` `[CHỐT]` Mọi mốc thời gian dùng để quyết định (đặt mốc câu, `received_at`, kiểm tra hạn, hết giờ, kết thúc lượt) lấy bằng `clock_timestamp()` của PostgreSQL, **không** dùng `now()`/`CURRENT_TIMESTAMP` (vốn là thời điểm bắt đầu transaction và có thể đã cũ). Mỗi thao tác là một transaction ngắn do một RPC tạo ra; không transaction nào được giữ mở giữa hai yêu cầu của client.
 - `LA-TIME-020` `[CHỐT]` `received_at` được lấy bằng `clock_timestamp()` ở câu lệnh **đầu tiên** của RPC trả lời, **trước** khi chờ khóa hàng của lượt. Kiểm tra hạn dùng `received_at` này. Thời gian chờ khóa vì vậy không làm một câu trả lời đến đúng hạn bị coi là muộn, và một timestamp cũ (từ transaction bắt đầu sớm) không thể làm câu trả lời đến muộn được chấp nhận.
 - `LA-TIME-021` `[CHỐT]` Thời gian chờ khóa bị giới hạn bởi `lock_wait_limit` (`SET LOCAL lock_timeout`). Hết giới hạn: transaction bị hủy, không ghi gì, server trả `503 temporarily_unavailable` có thể thử lại; lần thử lại được chấm theo `received_at` của chính nó.
-- `LA-TIME-022` `[CHỐT]` Thao tác đối soát chỉ ghi hết giờ cho một câu chưa có câu trả lời khi `clock_timestamp() > effective_deadline + latency_allowance + lock_wait_limit`. Nhờ vậy, một câu trả lời đã đến đúng hạn nhưng đang chờ khóa không bao giờ bị đối soát "chen trước" và ghi hết giờ. Giao diện vẫn hiển thị câu đã hết giờ ngay khi qua `effective_deadline + latency_allowance` mà không cần ghi.
-- `LA-TIME-023` `[THỬ NGHIỆM]` `lock_wait_limit` = 2 000 ms; đo thời gian chờ khóa thực tế ở kiểm thử tải (P7).
+- `LA-TIME-022` `[CHỐT]` *(sửa 2026-10-30 theo quyết định chủ dự án)* Thao tác đối soát chỉ ghi hết giờ cho một câu chưa có câu trả lời khi thời điểm `clock_timestamp()` lấy **trước khi xếp hàng chờ khóa** lớn hơn `effective_deadline + latency_allowance + reconcile_grace`. `reconcile_grace` (mặc định 250 ms, `[THỬ NGHIỆM]`) chỉ cần bao phủ khoảng cách giữa lúc một yêu cầu lấy `received_at` và lúc nó xếp hàng chờ khóa hàng của lượt; **không** cộng `lock_wait_limit` vào thời điểm chuyển câu. Một câu trả lời đã đến đúng hạn (`received_at ≤ effective_deadline + latency_allowance`) nhưng đang chờ khóa luôn xếp hàng trước đối soát (hàng đợi khóa FIFO), nên không bao giờ bị đối soát chen trước. Mốc của câu kế tiếp (Game 2) được nối với `effective_deadline` của câu hết hạn, nên thời điểm ghi không làm đổi đồng hồ của ai. Giao diện hiển thị câu đã hết giờ ngay khi qua `effective_deadline + latency_allowance` mà không cần ghi và nhận trước `availableInMs` của câu kế tiếp.
+- `LA-TIME-023` `[THỬ NGHIỆM]` `lock_wait_limit` = 2 000 ms chỉ là giới hạn chờ khóa của một yêu cầu (`LA-TIME-021`), không ảnh hưởng thời điểm chuyển câu; `reconcile_grace` = 250 ms. Đo thời gian chờ khóa và khoảng cách nhận–xếp hàng thực tế ở kiểm thử tải (P7).
 
 #### 5.4.1 Mô hình mốc thời gian của một câu
 
@@ -134,8 +134,8 @@ Mọi mốc dùng đồng hồ của database bằng `clock_timestamp()` tại t
 | `received_at` | Server, câu lệnh đầu tiên của RPC trả lời, trước khi chờ khóa | `clock_timestamp()` (`LA-TIME-020`) |
 | Chấp nhận | — | `received_at ≤ effective_deadline + latency_allowance` |
 | Hiển thị hết giờ | Projection | `clock_timestamp() > effective_deadline + latency_allowance` (chỉ hiển thị, không ghi) |
-| Ghi hết giờ | Server, khi đối soát | `clock_timestamp() > effective_deadline + latency_allowance + lock_wait_limit` mà chưa có câu trả lời hợp lệ (`LA-TIME-022`) |
-| Lượt kết thúc | Server | Xử lý đủ câu chính, hoặc `clock_timestamp() > attempt_ends_at + latency_allowance + lock_wait_limit` sau khi xử lý câu dở dang; thời điểm kết thúc ghi nhận cho phân định hòa là `min(thời điểm xử lý câu cuối, attempt_ends_at)` |
+| Ghi hết giờ | Server, khi đối soát | Đồng hồ lấy trước khi xếp hàng khóa `> effective_deadline + latency_allowance + reconcile_grace` mà chưa có câu trả lời hợp lệ (`LA-TIME-022`) |
+| Lượt kết thúc | Server | Xử lý đủ câu chính, hoặc `clock_timestamp() > attempt_ends_at + latency_allowance + reconcile_grace` sau khi xử lý câu dở dang; thời điểm kết thúc ghi nhận cho phân định hòa là `min(thời điểm xử lý câu cuối, attempt_ends_at)` |
 
 Bất biến: `presented_at ≤ available_at ≤ content_released_at`; `available_at < deadline_at`; `deadline_at` và `available_at` không đổi sau khi ghi; mỗi câu có tối đa một câu trả lời được chấp nhận.
 
@@ -143,7 +143,7 @@ Bất biến: `presented_at ≤ available_at ≤ content_released_at`; `availabl
 
 Thứ tự gửi lại: nếu yêu cầu trả lời đầu tiên đã được commit, mọi lần gửi lại cùng `Idempotency-Key` nhận kết quả đã commit. Nếu yêu cầu đầu không tới server hoặc bị hủy vì hết `lock_wait_limit` (không ghi gì), lần gửi lại được chấm theo `received_at` của chính nó.
 
-Chờ khóa và transaction chậm: `received_at` được lấy trước khi chờ khóa (`LA-TIME-020`); thời gian chờ khóa bị giới hạn (`LA-TIME-021`); đối soát hết giờ cộng thêm `lock_wait_limit` (`LA-TIME-022`). Ba luật này cùng bảo đảm: (a) đáp án đến muộn không bao giờ được chấp nhận nhờ timestamp cũ; (b) đáp án đến đúng hạn không bị từ chối chỉ vì phải chờ khóa trong giới hạn.
+Chờ khóa và transaction chậm: `received_at` được lấy trước khi chờ khóa (`LA-TIME-020`); thời gian chờ khóa bị giới hạn (`LA-TIME-021`); đối soát lấy đồng hồ trước khi xếp hàng và chỉ ghi sau `latency_allowance + reconcile_grace` (`LA-TIME-022`), nên hàng đợi khóa FIFO đưa câu trả lời đúng hạn đi trước. Ba luật này cùng bảo đảm: (a) đáp án đến muộn không bao giờ được chấp nhận nhờ timestamp cũ; (b) đáp án đến đúng hạn không bị từ chối hay bị đối soát chen trước chỉ vì phải chờ khóa trong giới hạn.
 
 ### 5.5 Phân bổ câu hỏi
 
@@ -413,7 +413,7 @@ Cột "Gốc" ánh xạ 12 yêu cầu kiểm thử bắt buộc của đặc t�
 | `LA-AC-031` | 9 | WHEN người chơi ở hạng 1, THE SYSTEM SHALL hiển thị khoảng cách dẫn trước hạng 2, hoặc "Đang dẫn đầu" khi chưa có hạng 2, hoặc "Đồng hạng 1" khi bằng điểm theo mọi tiêu chí. |
 | `LA-AC-032` | — | WHEN các endpoint công khai được gọi không đăng nhập, THE SYSTEM SHALL chỉ trả Top 10 mỗi game và số liệu tổng hợp, và SHALL NOT trả danh sách lớp, MSSV, họ tên đầy đủ hay người chưa bắt đầu lượt. |
 | `LA-AC-033` | 7 | WHEN một transaction bắt đầu trước `effective_deadline` nhưng câu lệnh nhận câu trả lời chạy sau `effective_deadline + latency_allowance`, THE SYSTEM SHALL ghi hết giờ (kiểm tra bằng `clock_timestamp()`, không bằng `now()`). |
-| `LA-AC-034` | 7 | WHEN câu trả lời đến trước hạn nhưng phải chờ khóa do một transaction khác giữ tới sau hạn (trong `lock_wait_limit`), THE SYSTEM SHALL chấm theo `received_at` trước khi chờ khóa và SHALL NOT để thao tác đối soát ghi hết giờ trước câu trả lời đó. |
+| `LA-AC-034` | 7 | WHEN câu trả lời đến trước hạn nhưng phải chờ khóa do một transaction khác giữ tới sau hạn (trong `lock_wait_limit`), kể cả khi một đối soát được gửi sau `reconcile_grace`, THE SYSTEM SHALL chấm theo `received_at` trước khi chờ khóa và SHALL NOT để thao tác đối soát ghi hết giờ trước câu trả lời đó. |
 | `LA-AC-035` | 7 | IF thời gian chờ khóa vượt `lock_wait_limit`, THEN THE SYSTEM SHALL hủy transaction không ghi gì, trả `503` có thể thử lại, và chấm lần thử lại theo `received_at` của chính nó. |
 | `LA-AC-036` | — | WHEN 60 lượt của cùng một game bắt đầu gần như đồng thời, THE SYSTEM SHALL tạo phân bổ thỏa blueprint, không lặp câu trong lượt, tối đa 5 câu hai lựa chọn mỗi lượt Game 2, và chênh lệch số lần phân bổ giữa hai câu cùng ô ≤ 1. |
 | `LA-AC-037` | — | WHEN câu được phân bổ nhưng không hiển thị (ô chưa mở, bom không gặp), THE SYSTEM SHALL tăng bộ đếm phân bổ nhưng SHALL NOT tăng bộ đếm hiển thị hay đánh dấu câu đã lộ đáp án. |

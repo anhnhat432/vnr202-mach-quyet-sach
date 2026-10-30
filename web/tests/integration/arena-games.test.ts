@@ -336,7 +336,7 @@ describe("Đường Đua Lịch Sử rules (T045)", () => {
     expect(model.comboAwards).toBe(3);
   });
 
-  it("the global clock ending mid-run closes the attempt as timed out with the full duration (RACE-009)", async () => {
+  it("the global clock ending mid-run closes the attempt as timed out with the full duration; the question pending at the end counts as a timeout (RACE-009, LA-TIME-009)", async () => {
     const w = await track({ students: 1, raceMs: 10000 });
     const p = w.students[0];
     const s = await start(w, p, "race", T0);
@@ -346,7 +346,7 @@ describe("Đường Đua Lịch Sử rules (T045)", () => {
     const r = await submit(p, id, alloc, await correctOption(alloc), 1, at(800));
     expect(r.projection.interaction!.sequence).toBe(2);
     const fin = await projection(p, id, 1, at(10000 + LATENCY + 2000 + 1));
-    expect(fin.attempt).toMatchObject({ state: "timed_out", completionDurationMs: 10000, mainAnswered: 2 });
+    expect(fin.attempt).toMatchObject({ state: "timed_out", completionDurationMs: 10000, mainAnswered: 3 });
     expect(fin.attempt.score).toBe(100);
   });
 });
