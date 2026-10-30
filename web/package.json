@@ -15,7 +15,8 @@
     "test:e2e": "playwright test",
     "test:integration": "vitest run --config vitest.integration.config.mts",
     "db:up": "bash ../scripts/db/local-stack.sh up",
-    "db:test": "bash ../scripts/db/test-db.sh"
+    "db:test": "bash ../scripts/db/test-db.sh",
+    "roster:check": "vitest run --config vitest.roster-check.config.mts"
   },
   "dependencies": {
     "@supabase/ssr": "0.12.4",

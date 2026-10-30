@@ -36,6 +36,7 @@ export function errorResponse(error: unknown, requestId: string): Response {
       invalid_encoding: "Tệp phải mã hóa UTF-8.",
       malformed_file: "Tệp không đọc được.",
       unsupported_format: "Chỉ hỗ trợ tệp .xlsx hoặc .csv.",
+      legacy_or_encrypted: "Tệp là .xls cũ hoặc có mật khẩu. Hãy lưu lại thành .xlsx không mật khẩu.",
     };
     apiError = new ApiError(422, "validation_error", message[error.code], [{ field: "file", code: error.code, message: message[error.code] }]);
   } else if (error instanceof RosterHeaderError) {

@@ -7,7 +7,7 @@ import { resetPasswordToDefault, revokeSessions, setAccountStatus, updateDisplay
 import { applyRosterImport, createRosterPreview } from "@/features/roster/server/roster-service";
 import { ApiError } from "@/lib/api/errors";
 import { clientIp } from "@/lib/api/client-info";
-import { anonClient, cleanupClass, clientWithToken, env, serviceClient, stack, utf8 } from "./stack";
+import { anonClient, cleanupClass, clientWithToken, defaultPassword, env, serviceClient, stack, utf8 } from "./stack";
 
 const admin = serviceClient();
 const CLASS = `IT-${Date.now().toString(36)}`;
@@ -134,33 +134,33 @@ describe("roster import against real Auth and Postgres", () => {
 
 describe("student sign-in against real Auth (LA-ACC-003..009, LA-AC-019)", () => {
   it("signs in with MSSV and the default password, with no password-change step", async () => {
-    const result = await signIn(studentIds.a, "1");
+    const result = await signIn(studentIds.a, defaultPassword);
     expect(result).toMatchObject({ ok: true, role: "student", displayName: "An N.V." });
   });
 
   it("normalizes MSSV input (trim, case)", async () => {
-    expect((await signIn(`  ${studentIds.b.toLowerCase()} `, "1")).ok).toBe(true);
+    expect((await signIn(`  ${studentIds.b.toLowerCase()} `, defaultPassword)).ok).toBe(true);
   });
 
   it("fails generically for wrong password, unknown MSSV and the numeric-looking MSSV with lost zeros", async () => {
-    expect(await signIn(studentIds.a, "2")).toEqual({ ok: false, reason: "invalid_credentials" });
-    expect(await signIn("HE404404", "1")).toEqual({ ok: false, reason: "invalid_credentials" });
-    expect(await signIn("123", "1")).toEqual({ ok: false, reason: "invalid_credentials" });
+    expect(await signIn(studentIds.a, `${defaultPassword}-wrong`)).toEqual({ ok: false, reason: "invalid_credentials" });
+    expect(await signIn("HE404404", defaultPassword)).toEqual({ ok: false, reason: "invalid_credentials" });
+    expect(await signIn("123", defaultPassword)).toEqual({ ok: false, reason: "invalid_credentials" });
   });
 
   it("does not let the public Auth endpoint accept the raw default password (derivation LA-ACC-005)", async () => {
     const { data: a } = await admin.from("profiles").select("id").eq("student_id", studentIds.a).single();
     const { data: identity } = await admin.from("student_auth_identities").select("internal_email").eq("profile_id", a!.id).single();
-    const direct = await anonClient().auth.signInWithPassword({ email: identity!.internal_email, password: "1" });
+    const direct = await anonClient().auth.signInWithPassword({ email: identity!.internal_email, password: defaultPassword });
     expect(direct.error).not.toBeNull();
-    const derived = await anonClient().auth.signInWithPassword({ email: identity!.internal_email, password: deriveProviderPassword(env.AUTH_PASSWORD_PEPPER, studentIds.a, "1") });
+    const derived = await anonClient().auth.signInWithPassword({ email: identity!.internal_email, password: deriveProviderPassword(env.AUTH_PASSWORD_PEPPER, studentIds.a, defaultPassword) });
     expect(derived.error).toBeNull();
   });
 
   it("rate-limits repeated failures per MSSV, then refuses even the right password (LA-ACC-008)", async () => {
     for (let i = 0; i < SIGN_IN_LIMITS.studentFailures.limit; i += 1) await signIn(studentIds.c, "bad", `10.1.0.${i}`);
-    expect(await signIn(studentIds.c, "1", "10.1.9.9")).toEqual({ ok: false, reason: "rate_limited" });
-    expect((await signIn(studentIds.a, "1", "10.1.9.9")).ok).toBe(true); // other MSSV on the same IP unaffected
+    expect(await signIn(studentIds.c, defaultPassword, "10.1.9.9")).toEqual({ ok: false, reason: "rate_limited" });
+    expect((await signIn(studentIds.a, defaultPassword, "10.1.9.9")).ok).toBe(true); // other MSSV on the same IP unaffected
   });
 
   it("records hashed sign-in events without raw MSSV or IP (LA-ACC-009)", async () => {
@@ -179,13 +179,13 @@ describe("admin sign-in and account actions", () => {
     expect((await signInAdmin({ admin, auth: anonClient(), env }, { email: adminEmail, password: adminPassword, ip: "10.2.0.1", device: "vitest" })).ok).toBe(true);
     const { data: a } = await admin.from("profiles").select("id").eq("student_id", studentIds.a).single();
     const { data: identity } = await admin.from("student_auth_identities").select("internal_email").eq("profile_id", a!.id).single();
-    const viaAdminPath = await signInAdmin({ admin, auth: anonClient(), env }, { email: identity!.internal_email, password: deriveProviderPassword(env.AUTH_PASSWORD_PEPPER, studentIds.a, "1"), ip: "10.2.0.2", device: "vitest" });
+    const viaAdminPath = await signInAdmin({ admin, auth: anonClient(), env }, { email: identity!.internal_email, password: deriveProviderPassword(env.AUTH_PASSWORD_PEPPER, studentIds.a, defaultPassword), ip: "10.2.0.2", device: "vitest" });
     expect(viaAdminPath).toEqual({ ok: false, reason: "invalid_credentials" });
   });
 
   it("revokes sessions: the old access token stops working immediately (T033)", async () => {
     const client = anonClient();
-    const first = await signInStudent({ admin, auth: client, env }, { studentId: studentIds.b, password: "1", ip: "10.3.0.1", device: "d1" });
+    const first = await signInStudent({ admin, auth: client, env }, { studentId: studentIds.b, password: defaultPassword, ip: "10.3.0.1", device: "d1" });
     expect(first.ok).toBe(true);
     const token = (await client.auth.getSession()).data.session!.access_token;
     expect((await anonClient().auth.getUser(token)).error).toBeNull();
@@ -198,17 +198,17 @@ describe("admin sign-in and account actions", () => {
   it("resets the password to the default and revokes old sessions (T033)", async () => {
     const profile = await profileOf(studentIds.b);
     await admin.auth.admin.updateUserById(profile.id, { password: "tam-thoi-khong-phai-mac-dinh-123" });
-    expect((await signIn(studentIds.b, "1", "10.4.0.1")).ok).toBe(false);
+    expect((await signIn(studentIds.b, defaultPassword, "10.4.0.1")).ok).toBe(false);
     await resetPasswordToDefault(deps, { actorId: adminId, profileId: profile.id, reason: "quên mật khẩu" });
-    expect((await signIn(studentIds.b, "1", "10.4.0.2")).ok).toBe(true);
+    expect((await signIn(studentIds.b, defaultPassword, "10.4.0.2")).ok).toBe(true);
   });
 
   it("locks and unlocks an account; a locked account cannot sign in (account_disabled)", async () => {
     const profile = await profileOf(studentIds.a);
     await setAccountStatus(deps, { actorId: adminId, profileId: profile.id, reason: "sự cố", status: "locked" });
-    expect(await signIn(studentIds.a, "1", "10.5.0.1")).toEqual({ ok: false, reason: "account_disabled" });
+    expect(await signIn(studentIds.a, defaultPassword, "10.5.0.1")).toEqual({ ok: false, reason: "account_disabled" });
     await setAccountStatus(deps, { actorId: adminId, profileId: profile.id, reason: "xử lý xong", status: "active" });
-    expect((await signIn(studentIds.a, "1", "10.5.0.2")).ok).toBe(true);
+    expect((await signIn(studentIds.a, defaultPassword, "10.5.0.2")).ok).toBe(true);
   });
 
   it("edits the display name with audit and keeps duplicates distinct (LA-PRV-003)", async () => {
@@ -233,7 +233,7 @@ describe("admin sign-in and account actions", () => {
 describe("RLS with real JWTs through PostgREST (ACCESS-002/003, security-spec §5)", () => {
   async function tokenFor(studentId: string) {
     const client = anonClient();
-    const result = await signInStudent({ admin, auth: client, env }, { studentId, password: "1", ip: "10.6.0.1", device: "rls" });
+    const result = await signInStudent({ admin, auth: client, env }, { studentId, password: defaultPassword, ip: "10.6.0.1", device: "rls" });
     expect(result.ok).toBe(true);
     return (await client.auth.getSession()).data.session!.access_token;
   }
@@ -267,10 +267,10 @@ describe("RLS with real JWTs through PostgREST (ACCESS-002/003, security-spec §
 
   it("a student whose user_metadata claims admin is still a student", async () => {
     const profile = await profileOf(studentIds.c);
-    await admin.auth.admin.updateUserById(profile.id, { user_metadata: { role: "admin" }, password: deriveProviderPassword(env.AUTH_PASSWORD_PEPPER, studentIds.c, "1") });
+    await admin.auth.admin.updateUserById(profile.id, { user_metadata: { role: "admin" }, password: deriveProviderPassword(env.AUTH_PASSWORD_PEPPER, studentIds.c, defaultPassword) });
     await admin.rpc("revoke_user_sessions", { p_user_id: profile.id });
     const client = anonClient();
-    const { data } = await client.auth.signInWithPassword({ email: (await admin.from("student_auth_identities").select("internal_email").eq("profile_id", profile.id).single()).data!.internal_email, password: deriveProviderPassword(env.AUTH_PASSWORD_PEPPER, studentIds.c, "1") });
+    const { data } = await client.auth.signInWithPassword({ email: (await admin.from("student_auth_identities").select("internal_email").eq("profile_id", profile.id).single()).data!.internal_email, password: deriveProviderPassword(env.AUTH_PASSWORD_PEPPER, studentIds.c, defaultPassword) });
     const asForged = clientWithToken(data.session!.access_token);
     expect((await asForged.from("profiles").select("id")).data).toHaveLength(1);
   });

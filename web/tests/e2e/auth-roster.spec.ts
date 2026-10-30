@@ -6,7 +6,7 @@ import { createClient } from "@supabase/supabase-js";
 // plus the server-only secrets; skipped explicitly (not silently green) when they are absent.
 const url = process.env.SUPABASE_URL;
 const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-test.skip(!url || !serviceKey || !process.env.AUTH_PASSWORD_PEPPER, "stage B e2e needs the local stack and server secrets");
+test.skip(!url || !serviceKey || !process.env.AUTH_PASSWORD_PEPPER || !process.env.ROSTER_DEFAULT_PASSWORD, "stage B e2e needs the local stack and server secrets");
 
 const admin = createClient(url ?? "http://x", serviceKey ?? "x", { auth: { persistSession: false } });
 const run = Date.now().toString(36);
@@ -69,7 +69,7 @@ test("admin imports a roster over HTTP, a student signs in, and protections hold
   const page = await browser.newPage({ baseURL: origin });
   await page.goto("/dang-nhap");
   await page.getByLabel("Mã số sinh viên").fill(" 00777 ");
-  await page.getByLabel("Mật khẩu").fill("1");
+  await page.getByLabel("Mật khẩu").fill(process.env.ROSTER_DEFAULT_PASSWORD!);
   await page.getByRole("button", { name: "Đăng nhập" }).click();
   await page.waitForURL("**/live-arena");
   const me = await page.request.get("/api/v1/me");

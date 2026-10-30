@@ -9,7 +9,7 @@ const rules = [
   ["private key", /-----BEGIN [A-Z ]*PRIVATE KEY-----/],
   ["service role value", /SERVICE_ROLE_KEY\s*=\s*(?!server-only-service-role-key|\$|["']?\s*$)[A-Za-z0-9._-]{20,}/],
   ["pepper value", /AUTH_PASSWORD_PEPPER\s*=\s*(?!replace-with|\$)[A-Za-z0-9._-]{16,}/],
-  ["roster default password literal", /ROSTER_DEFAULT_PASSWORD\s*=\s*(?!\$|replace-with|set-in-deployment-environment)["']?\S+/],
+  ["roster default password literal", /ROSTER_DEFAULT_PASSWORD\s*=\s*(?!["']?\$|replace-with|set-in-deployment-environment)["']?\S+/],
   ["harness secrets file", /\.local\/supabase\/(secrets|stack)\.env/],
 ];
 const allow = new Set(["scripts/security/scan-secrets.mjs", "docs/sdd/evidence/phase-3/README.md", "scripts/db/local-stack.sh", "scripts/db/test-db.sh", "web/vitest.integration.config.mts", ".gitignore"]);

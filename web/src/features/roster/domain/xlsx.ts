@@ -11,6 +11,17 @@ const MAX_ENTRY_BYTES = 16 * 1024 * 1024;
 const MAX_TOTAL_BYTES = 48 * 1024 * 1024;
 const NEEDED = /^(\[Content_Types\]\.xml|xl\/workbook\.xml|xl\/_rels\/workbook\.xml\.rels|xl\/sharedStrings\.xml|xl\/worksheets\/[^/]+\.xml)$/;
 
+// Excel escapes characters that XML cannot carry as _xHHHH_ (for example CR as _x000D_).
+function decodeEscapes(value: string): string {
+  return value.replace(/_x([0-9A-Fa-f]{4})_/g, (_, hex: string) => String.fromCharCode(Number.parseInt(hex, 16)));
+}
+
+// Some producers write every element with a namespace prefix (<x:row>, <x:c>). Drop the element
+// prefixes so one set of patterns reads both styles; attribute names such as r:id are untouched.
+function stripElementPrefixes(xml: string): string {
+  return /<\w+:(worksheet|workbook|sst|Relationships)\b/.test(xml) ? xml.replace(/<(\/?)\w+:(?=[A-Za-z])/g, "<$1") : xml;
+}
+
 function decodeXml(value: string): string {
   return value.replace(/&(#x[0-9a-fA-F]+|#\d+|amp|lt|gt|quot|apos);/g, (_, entity: string) => {
     if (entity === "amp") return "&";
@@ -24,7 +35,9 @@ function decodeXml(value: string): string {
 }
 
 function textRuns(xml: string): string {
-  return [...xml.matchAll(/<t(?:\s[^>]*)?>([\s\S]*?)<\/t>|<t(?:\s[^>]*)?\/>/g)].map((m) => decodeXml(m[1] ?? "")).join("");
+  // Phonetic guides (<rPh>) are annotations, not part of the cell text.
+  const visible = xml.replace(/<rPh\b[\s\S]*?<\/rPh>/g, "").replace(/<phoneticPr\b[^>]*\/>/g, "");
+  return decodeEscapes([...visible.matchAll(/<t(?:\s[^>]*)?>([\s\S]*?)<\/t>|<t(?:\s[^>]*)?\/>/g)].map((m) => decodeXml(m[1] ?? "")).join(""));
 }
 
 function columnIndex(ref: string): number {
@@ -41,6 +54,8 @@ function attr(tag: string, name: string): string | undefined {
 export function parseXlsx(bytes: Uint8Array): SheetCell[][] {
   let entries = 0;
   let total = 0;
+  // Compound File magic: an old binary .xls, or an OOXML file protected with a password.
+  if (bytes[0] === 0xd0 && bytes[1] === 0xcf && bytes[2] === 0x11 && bytes[3] === 0xe0) throw new RosterFileError("legacy_or_encrypted");
   let files: Record<string, Uint8Array>;
   try {
     files = unzipSync(bytes, {
@@ -57,17 +72,22 @@ export function parseXlsx(bytes: Uint8Array): SheetCell[][] {
     if (error instanceof RosterFileError) throw error;
     throw new RosterFileError("unsupported_format");
   }
-  const read = (name: string) => (files[name] ? new TextDecoder("utf-8").decode(files[name]) : undefined);
+  const read = (name: string) => {
+    const raw = files[name] ? new TextDecoder("utf-8").decode(files[name]) : undefined;
+    return raw === undefined ? undefined : stripElementPrefixes(raw);
+  };
 
   const workbook = read("xl/workbook.xml");
   const rels = read("xl/_rels/workbook.xml.rels");
   if (!workbook || !rels) throw new RosterFileError("unsupported_format");
-  const firstSheet = /<sheet\s[^>]*>/.exec(workbook)?.[0];
+  // First sheet the user can see: a hidden sheet is never read, so stale or private data in a
+  // hidden tab cannot be imported by accident.
+  const firstSheet = [...workbook.matchAll(/<sheet\s[^>]*>/g)].map((m) => m[0]).find((tag) => !/^(hidden|veryHidden)$/.test(attr(tag, "state") ?? ""));
   const relId = firstSheet && (attr(firstSheet, "r:id") ?? attr(firstSheet, "id"));
   const relTag = relId ? [...rels.matchAll(/<Relationship\s[^>]*>/g)].map((m) => m[0]).find((tag) => attr(tag, "Id") === relId) : undefined;
   const target = relTag ? attr(relTag, "Target") : undefined;
   if (!target) throw new RosterFileError("unsupported_format");
-  const sheetPath = target.startsWith("/") ? target.slice(1) : `xl/${target.replace(/^\.\//, "")}`;
+  const sheetPath = target.startsWith("/") ? target.slice(1) : `xl/${target.replace(/^\.\//, "")}`.replace(/^xl\/\.\.\//, "");
   const sheet = read(sheetPath);
   if (!sheet) throw new RosterFileError("unsupported_format");
 
@@ -87,7 +107,7 @@ export function parseXlsx(bytes: Uint8Array): SheetCell[][] {
       let cell: SheetCell;
       if (type === "s") cell = { text: shared[Number(raw)] ?? "", kind: "text" };
       else if (type === "inlineStr") cell = { text: textRuns(/<is>([\s\S]*?)<\/is>/.exec(body)?.[1] ?? ""), kind: "text" };
-      else if (type === "str") cell = { text: decodeXml(raw ?? ""), kind: "text" };
+      else if (type === "str") cell = { text: decodeEscapes(decodeXml(raw ?? "")), kind: "text" };
       else if (type === "n") cell = { text: raw === undefined ? "" : decodeXml(raw), kind: raw === undefined ? "text" : "number" };
       else cell = { text: decodeXml(raw ?? ""), kind: "other" };
       cells[index] = cell;

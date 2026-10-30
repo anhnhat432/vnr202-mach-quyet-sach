@@ -55,7 +55,7 @@ Phase 2 Checkpoint A2 evidence snapshot (2026-08-20): Chapter 2 dossiers 07-10 v
 - [x] `T098` Documentation consistency check. Depends: T096. DoD: `tools/sdd/check-live-arena-docs.mjs` passes and its report is recorded in `docs/sdd/evidence/live-arena/consistency-check.md`.
 - [x] `T099` Stage A revision 2: apply N1-N9, database clock and lock-wait rules, conditional time analysis, allocated vs displayed counters with concurrent allocation, privacy alignment of Core `PRV-001`, CONSTITUTION and `AGENTS.md`. Depends: T096-T098. DoD: checker, lint and tests re-run and reported.
 
-Stage B snapshot (2026-10-29): see `docs/sdd/evidence/phase-3/README.md`. T032/T033 implemented and tested (61 unit, 24 integration against real Postgres+GoTrue, 1 HTTP e2e). T014, T030, T031 and T035 stay in progress: the Supabase CLI stack could not pull images, hosted Auth verification (LA-ACC-016) is pending, and the real roster file (N6) has not been inspected. Two pre-existing public e2e specs fail (homepage heading, cause map).
+Stage B snapshot (2026-10-30): see `docs/sdd/evidence/phase-3/README.md` and ADR-005. T032/T033 implemented and tested. CI on draft PR #6 ran the official Supabase CLI stack: `supabase test db` and 31 integration tests pass. T014, T030, T031 and T035 stay in progress until hosted-project Auth evidence (T102, LA-ACC-016), the real roster file check (N6, T103) and a green CI run including the browser e2e step (T101) exist.
 
 Re-scope snapshot (2026-10-29, revision 2): stage A approved by the owner subject to the final revision-2 items, which are applied (T099). Stage B (database test harness, MSSV sign-in, roster import) is authorized; gameplay, the official question bank and realtime leaderboards are not part of stage B. Decisions O1-O14 and N1-N9 are applied; remaining open items (N6, N9, `LA-CONTENT-014`) are listed in `live-arena-game-spec.md` §12.2.1.
 
@@ -67,6 +67,12 @@ Re-scope snapshot (2026-10-29, revision 2): stage A approved by the owner subjec
 - [x] `T033` Implement admin reset-to-default, session revocation and display-name editing. Depends: T031,T032. DoD: reset revokes the active sessions and the old session cannot act; display-name edits audited (`LA-PRV-003`).
 - [ ] `T034` Implement Student Passport and progress sync. Depends: T025,T031. DoD: profile, 15 markers, two result cards with provisional/official labels, rehearsal results excluded (`LA-AC-030`), review availability.
 - [-] `T035` Identity security/RLS/E2E gate. Depends: T030-T034. DoD: ACC/ACCESS/LA-ACC and security acceptance tests pass on Supabase, not only on plain PostgreSQL.
+
+- [x] `T100` Fix two legacy public e2e specs that failed on the base branch (home heading, cause map). Cause confirmed on `origin/main`: the homepage was rewritten (h1 is now the Ngàn cân cold-open) and the cause map was rebuilt as case tabs + six-layer chain (commits `706867e`, `5934c4a`), leaving the specs describing the old UI. DoD: both rewritten to the current UI with the same intent (UX-AC-004/005), no test skipped or disabled; the homepage axe scan runs under reduced motion because axe read a mid-fade frame as a 1.02:1 contrast failure; steady-state scan has 0 violations in both motion modes; 14/14 e2e pass on desktop and mobile, homepage spec stable over 24 runs.
+- [-] `T101` Run browser e2e in CI. Depends: T100. DoD: the `database` job runs `playwright test` against the Supabase CLI stack and is green on the draft PR.
+- [ ] `T102` Verify Supabase Auth short-password behaviour on a hosted test project (`LA-ACC-016`). Blocked: needs a hosted project URL and keys supplied by the owner outside the repository. DoD: `scripts/db/verify-hosted-auth.mjs` output recorded in the phase-3 evidence.
+- [ ] `T103` Check the real class file with `npm --prefix web run roster:check` and files saved by Excel, Google Sheets and WPS. Blocked: needs the owner's files (never committed). DoD: results recorded; N6 pattern/row limit decided; if the minimal XLSX reader is incompatible, a replacement library is proposed.
+- [ ] `T104` Resolve dev-tool advisories (`vitest` moderate, `vite` high) when npm can bump `vitest` to 4.1.12 or newer without the `edgesOut` failure, and add `npm audit --omit=dev` to CI.
 
 ## Phase 4 - Competition and Core games
 

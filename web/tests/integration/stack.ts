@@ -17,9 +17,13 @@ export const stack = {
 };
 
 // Test-only values generated per run; none is a real secret or the production default password.
+// The shared classroom password is a single character, so the test one is also a single random
+// letter: it exercises the one-character path without ever writing the real value in the repo.
+export const defaultPassword = "abcdefghjkmnpqrstuvwxyz"[Math.floor(Math.random() * 23)];
+
 export const testSecrets = {
   AUTH_PASSWORD_PEPPER: `pepper-${crypto.randomUUID()}-${crypto.randomUUID()}`,
-  ROSTER_DEFAULT_PASSWORD: "1",
+  ROSTER_DEFAULT_PASSWORD: defaultPassword,
   INTERNAL_AUTH_EMAIL_DOMAIN: "auth.invalid",
 };
 

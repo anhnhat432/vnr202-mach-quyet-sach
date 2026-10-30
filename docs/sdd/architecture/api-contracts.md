@@ -264,11 +264,15 @@ Response `201` với bản xem trước: tổng hàng, số hàng hợp lệ, c�
 
 ### `POST /admin/roster-imports/{id}/apply`
 
-Body `{ "confirmedWarningRows": [12, 37], "displayNameOverrides": { "12": "An N.V." } }`. Áp dụng các hàng hợp lệ và các hàng cảnh báo được xác nhận của một import đã xem trước. Mọi tài khoản dùng mật khẩu mặc định cấu hình phía server. Response `200 applied` hoặc `409 import_not_ready`. Provider failure trả `503 roster_apply_failed`, audit và chạy compensation cho Auth users đã tạo trong batch. Hàng `already_exists` không bị sửa (`LA-ACC-010`).
+Body `{ "confirmedWarningRows": [12, 37], "displayNameOverrides": { "12": "An N.V." } }`. Áp dụng các hàng hợp lệ và các hàng cảnh báo được xác nhận của một import đã xem trước. Mọi tài khoản dùng mật khẩu mặc định cấu hình phía server. Response `200 applied` hoặc `409 import_not_ready`. Provider failure chạy compensation cho Auth users đã tạo (kể cả tài khoản mất phản hồi), xác minh từng lần xóa. Sạch hoàn toàn: `503 roster_apply_failed`, bản nhập `compensated`. Còn sót: `503 roster_cleanup_incomplete`, bản nhập `failed`, phần sót bị khóa và ghi lại (ADR-005). Hàng `already_exists` không bị sửa (`LA-ACC-010`).
 
 ### `PATCH /admin/profiles/{profileId}/display-name`
 
 Body `{ "displayName": "An N.V.", "reason": "string" }`. Tối đa 40 ký tự, chuẩn hóa Unicode, không ký tự điều khiển. Ghi audit; cập nhật `display_name_snapshot` của các lượt trong cuộc thi chưa Finalized (`LA-PRV-005`).
+
+### `POST /admin/roster-imports/{id}/cleanup`
+
+Thử lại việc xóa các tài khoản còn sót của bản nhập có trạng thái `failed` (chỉ những id đã được ghi lại). `200 {removed}` khi sạch; `503 roster_cleanup_incomplete` nếu vẫn còn; `409 import_not_ready` nếu bản nhập không có gì để dọn. Có audit.
 
 ### `POST /admin/profiles/{profileId}/password-resets`
 

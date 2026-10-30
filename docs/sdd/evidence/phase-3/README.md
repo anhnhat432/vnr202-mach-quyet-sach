@@ -1,6 +1,6 @@
 # Giai đoạn B – Báo cáo nghiệm thu (T014, T030–T033)
 
-Ngày: 2026-10-29  
+Ngày: 2026-10-29, cập nhật 2026-10-30 (xử lý rà soát: ADR-005)  
 Phạm vi: hạ tầng kiểm thử DB, đăng nhập MSSV, nhập danh sách lớp `.xlsx`/`.csv`, quản trị tài khoản. **Không** có Game 1, Game 2, ngân hàng câu hỏi thi chính thức hay bảng xếp hạng realtime.  
 Quy tắc không đổi: một lượt/MSSV/game/cuộc thi, hai BXH Top 10 độc lập, luật gameplay đã chốt (chưa có mã nào đụng tới).
 
@@ -19,27 +19,40 @@ Quy tắc không đổi: một lượt/MSSV/game/cuộc thi, hai BXH Top 10 đ�
 | Realtime, Storage, Studio | **Không có** | Có |
 | pgTAP | Gói apt, cài thủ công | Có trong image |
 
-**Hệ quả:** kết quả bên dưới chứng minh logic migration/RLS/Auth chạy đúng trên Postgres và GoTrue thật, nhưng **chưa thay thế** `supabase db reset` + `supabase test db` và kiểm thử trên project Supabase thật (yêu cầu của bạn và ADR-004). Hai việc này vẫn mở (mục 5).
+**Cập nhật 2026-10-30:** CI của Draft PR #6 đã chạy `supabase start` + `supabase test db` + test tích hợp trên **stack Supabase CLI chính thức** (mục 2). Lần chạy đầu *thất bại* vì harness dự phòng cấp quyền bảng rộng hơn Supabase hiện tại; harness nay bỏ default privileges để giống thật và migration `202610300001_identity_grants.sql` cấp quyền tường minh.
+
+**Hệ quả của harness dự phòng:** kết quả cục bộ chứng minh logic migration/RLS/Auth chạy đúng trên Postgres và GoTrue thật, nhưng **chưa thay thế** `supabase db reset` + `supabase test db` và kiểm thử trên project Supabase thật (yêu cầu của bạn và ADR-004). Hai việc này vẫn mở (mục 5).
 
 ## 2. Kết quả chạy thực tế
 
+Cục bộ (harness dự phòng, 2026-10-30):
+
 | Kiểm tra | Kết quả |
 |---|---|
-| `npm run lint` | Sạch (0 lỗi, 0 cảnh báo) |
-| `npx tsc --noEmit` | Sạch |
-| `npm run test` (unit) | **61/61 pass** (29 cũ + 32 mới: MSSV, dẫn xuất mật khẩu, tên hiển thị, CSV, XLSX, bản xem trước, CSRF) |
-| `npm run test:integration` (Postgres + GoTrue + PostgREST thật) | **24/24 pass** |
-| `scripts/db/test-db.sh` (pgTAP) | `identity_rls.sql` 26 assertion pass; `public_content_rls.sql` 6 assertion pass |
-| `npm run build` | Pass; 11 route mới/đổi |
-| E2E mới `auth-roster.spec.ts` (HTTP + trình duyệt thật) | **Pass** (desktop Chromium) |
-| E2E có sẵn (5 spec desktop) | 3 pass, **2 fail có từ trước** — xem mục 4 |
-| `scripts/security/scan-secrets.mjs` (145 file được theo dõi) | 0 phát hiện |
-| `scripts/security/scan-client-bundle.mjs` (25 file client) | 0 phát hiện |
+| `npm run lint`, `tsc --noEmit`, `npm run build` | Sạch / Sạch / Pass (Next 16.4.3) |
+| `npm run test` (unit) | **86/86** (18 file) |
+| `npm run test:integration` (Postgres + GoTrue + PostgREST thật) | **31/31** |
+| pgTAP | `identity_rls.sql` 30 assertion, `public_content_rls.sql` 6, pass |
+| E2E Playwright (`desktop-chromium` + `mobile-chromium`) | **14/14**, gồm 2 bài cũ đã sửa (T100) và `auth-roster.spec.ts` |
+| `npm audit --omit=dev` | **0 lỗ hổng** (trước: `next` critical, `sharp` high, `zod` high, `source-map-js` high) |
+| `npm audit` (cả công cụ dev) | 3 còn lại: `vitest` moderate, `@vitest/mocker` moderate, `vite` high — xem mục 4 |
+| Quét bí mật repo (225 file) / bundle client (25 file) | 0 / 0 |
+
+Trên **stack Supabase CLI chính thức** (GitHub Actions, Draft PR #6, commit `674e93f`, CLI 2.115.0):
+
+| Job | Kết quả |
+|---|---|
+| `web` (lint, typecheck, unit, build) | pass |
+| `security-scan` | pass |
+| `database`: `supabase start` | pass (~1m25s) |
+| `database`: `supabase test db` | pass (2 file pgTAP) — lần chạy trước (`fd7a163`) **fail** 15/26 assertion với `permission denied for table profiles` |
+| `database`: test tích hợp | pass, **31/31** (log đã kiểm tra) |
+| `database`: E2E trong CI | **chưa chạy**: bước thêm sau commit này, chờ lần chạy tiếp theo (T101) |
 
 Kiểm tra đối chứng (bộ test không "xanh rỗng"):
-- Cố ý thêm policy rò rỉ `profiles` và `student_auth_identities` → 3 test tích hợp **fail**, 2 assertion pgTAP **fail**; gỡ policy → pass lại.
-- Nâng giới hạn khóa đăng nhập từ 5 lên 5000 → 2 test **fail**; khôi phục → pass.
-- Chạy bộ quét bundle với một giá trị chắc chắn có trong bundle → 22 phát hiện (bộ quét không mù).
+- Thêm policy rò rỉ → 3 test tích hợp và 2 assertion pgTAP fail. Bỏ giới hạn khóa đăng nhập → 2 test fail. Bộ quét bundle bắt giá trị cố ý để lọt (22 phát hiện).
+- Bù trừ: quay lại hành vi cũ (bỏ qua kết quả xóa) → 2 test fail. IP: quay lại lấy mục đầu `X-Forwarded-For` → 3 test unit và 1 test tích hợp fail.
+- Reader XLSX: gỡ từng bản sửa (sheet ẩn, `_x000D_`, tiền tố namespace, nhận diện Compound File) → mỗi lần đúng 1 test fail.
 
 ## 3. Ánh xạ yêu cầu → bằng chứng
 
@@ -62,34 +75,39 @@ Kiểm tra đối chứng (bộ test không "xanh rỗng"):
 | ACCESS-002/003 | RLS ma trận anon / sinh viên A / sinh viên B / admin (pgTAP + REST với JWT thật) |
 | Không lộ bí mật | Quét repo và bundle ở mục 2; `.env.example` chỉ có placeholder; harness chỉ ghi bí mật sinh ngẫu nhiên vào `.local/` (git-ignored) |
 
-## 4. Vấn đề phát hiện, không thuộc phạm vi sửa
+## 4. Vấn đề đã xử lý và còn lại (rà soát 2026-10-30)
 
-1. **Hai spec E2E có sẵn đang fail, có từ trước Giai đoạn B** (`git status` xác nhận tôi không đụng các file liên quan):
-   - `home.spec.ts` kỳ vọng h1 "Mạch Quyết Sách", nhưng trang chủ được viết lại ở commit `706867e` và h1 hiện là "Ngàn cân treo sợi tóc".
-   - `public-evidence.spec.ts` timeout khi bấm nút trong bản đồ nhân quả.
-   - CI hiện **không chạy E2E** nên không ai phát hiện. Cần một task riêng để cập nhật spec.
-2. **`npm audit` báo `next` 16.0.0–16.4.0 mức critical** (GHSA-h694-7cp9-m8p3: rò cache giữa các giá trị root param trong hàm `'use cache'` lồng nhau) và `sharp` mức high. Dự án ghim `next 16.3.1` theo ADR-001 nên tôi **không tự nâng**. Dự án không dùng `'use cache'` (chưa kiểm tra bằng công cụ), nhưng cần quyết định nâng phiên bản trước khi triển khai production.
-3. Các cảnh báo dev-dependency (`brace-expansion` high, `vitest` moderate) như báo cáo trước; chưa xử lý.
+Đã xử lý (chi tiết ADR-005):
+1. **Next.js** 16.3.1 → 16.4.3, **zod** 4.4.3 → 4.6.7, `source-map-js` 1.2.2; production audit = 0. Build, unit, tích hợp và E2E pass trên 16.4.3.
+2. **IP đăng nhập**: không còn tin mục đầu `X-Forwarded-For` hay `x-real-ip`; đếm `TRUSTED_PROXY_HOPS` từ bên phải; không có IP đáng tin thì bỏ giới hạn IP.
+3. **Bù trừ nhập lớp**: kiểm tra từng lần xóa, thử lại, tìm tài khoản mất phản hồi, xác minh, khóa phần sót, trạng thái `failed` + mã `roster_cleanup_incomplete` + route dọn lại.
+4. **Reader XLSX**: sửa lỗi thật phát hiện nhờ file từ bộ ghi độc lập — sheet ẩn bị đọc nhầm, `_x000D_` không giải mã, không hỗ trợ tiền tố namespace; thêm nhận diện `.xls` cũ/file có mật khẩu.
+5. **E2E cũ** (T100): xác nhận nguyên nhân trên `origin/main` — trang chủ và bản đồ nhân quả đã được viết lại, spec mô tả giao diện cũ; spec được viết lại, không bỏ qua test nào.
+6. **Quyền bảng**: migration cấp quyền tường minh (xem mục 1).
+7. **Mật khẩu mặc định trong test**: test dùng 1 ký tự ngẫu nhiên mỗi lần chạy thay vì giá trị thật của sản phẩm.
+
+Còn lại:
+- `vitest` 4.1.11 (moderate), `@vitest/mocker` (moderate), `vite` (high): chỉ là công cụ dev. Bump `vitest` làm npm 10.9.4 lỗi `edgesOut` trên lockfile này (`npm audit fix` cũng vậy). T104.
+- Cạnh nhỏ về khả năng truy cập thấy khi đọc `cause-map.tsx`: nhãn quan hệ giữa các lớp (`cause-step__rel`) có `aria-hidden="true"`, nên người dùng đọc màn hình không nghe thấy quan hệ mà UX-AC-005 yêu cầu hiển thị. Chưa sửa (giao diện thuộc phạm vi thiết kế của bạn); đề nghị xem xét.
+- Bom giải nén: `fflate` cắt đầu ra theo kích thước khai báo nên không có bom bộ nhớ (đo: tệp khai 100 byte, thật 512 MiB → RSS tăng ~7 MiB), nhưng thời gian CPU vẫn theo kích thước thật (~1,5 s cho 512 MiB; với tệp ≤ 1 MiB và tỷ lệ nén DEFLATE tối đa ~1000:1 thì cận trên cỡ vài giây một yêu cầu). Route chỉ dành cho admin. Chưa có giới hạn tần suất riêng cho route nhập lớp.
 
 ## 5. Chưa làm / chưa được xác minh
 
-- **`supabase start`, `supabase db reset`, `supabase test db` chưa chạy** (không kéo được image). T014 giữ trạng thái đang làm. Cần chạy trên máy có Docker pull được hoặc trong CI.
-- **LA-ACC-016 chưa đạt:** chưa có project Supabase thật để xác minh hành vi mật khẩu ngắn. Script `scripts/db/verify-hosted-auth.mjs` đã sẵn sàng; chạy bằng URL/khóa của project thật rồi dán kết quả vào đây. Ghi nhận từ harness local (GoTrue, `minimum_password_length = 6`): API admin tạo user với mật khẩu 1 ký tự **thành công** và đăng nhập công khai bằng mật khẩu đó **thành công**; đổi mật khẩu tự phục vụ sang 1 ký tự **bị từ chối**. Ứng dụng luôn dùng mật khẩu dẫn xuất 43 ký tự nên không phụ thuộc kết quả này, nhưng kết quả hosted vẫn phải được ghi lại.
-- **Realtime** không thuộc Giai đoạn B và không được kiểm thử.
-- **Giới hạn đăng nhập theo IP (300/10 phút)** chưa đo với cả lớp sau một NAT (P10).
-- **Thời gian phản hồi đăng nhập giữa MSSV tồn tại và không tồn tại** được làm cùng khối lượng việc (cùng dẫn xuất + một lần gọi Auth) nhưng **chưa đo bằng thống kê**; không nên coi là bằng chứng chống dò MSSV theo thời gian.
-- **N6 (mẫu MSSV, giới hạn số hàng) vẫn mở:** chưa có file danh sách thật. Hệ thống chỉ kiểm tra an toàn tối thiểu cho tới khi có file.
-- **Khả năng đọc `.xlsx` thực tế:** reader chỉ được kiểm bằng file sinh trong test; **chưa thử với file Excel/Google Sheets/WPS thật**. Nên thử bằng một bản sao có dữ liệu giả trước khi dùng.
-- **Student Passport (T034)** chưa làm (cần cuộc thi và lượt chơi).
-- Chưa kiểm thử trên mobile Chromium cho các màn đăng nhập/quản trị; chưa kiểm axe cho hai trang mới.
+- **Supabase thật (hosted):** LA-ACC-016 / T102 **chưa làm** vì không có thông tin project. Script `scripts/db/verify-hosted-auth.mjs` sẵn sàng. Ghi nhận từ GoTrue cục bộ (`minimum_password_length = 6`): API admin tạo user với mật khẩu 1 ký tự thành công, đăng nhập công khai bằng nó thành công, đổi mật khẩu tự phục vụ sang 1 ký tự bị từ chối. Ứng dụng luôn dùng mật khẩu dẫn xuất nên không phụ thuộc kết quả này.
+- **Stack Supabase chính thức:** đã có bằng chứng cho `start`, `test db`, test tích hợp (mục 2). **Chưa có** cho E2E và cho `supabase db reset` riêng lẻ (`supabase start` đã áp dụng toàn bộ migration + seed).
+- **File thật từ Excel / Google Sheets / WPS:** **chưa thử** — không có bản nào trong môi trường này. Chỉ thử với file từ XlsxWriter, openpyxl và LibreOffice (xem `web/tests/fixtures/roster/README.md`). Công cụ tự kiểm tra offline: `ROSTER_FILE=/đường/dẫn/lop.xlsx npm --prefix web run roster:check` (che MSSV, không ghi, không tải lên). T103.
+- **N6:** chưa xem danh sách lớp thật; mẫu MSSV và giới hạn số hàng vẫn là cấu hình tùy chọn.
+- **Realtime**, Student Passport (T034), đo thống kê thời gian phản hồi đăng nhập, đo giới hạn IP với NAT lớp học (P10): không thuộc hoặc chưa làm trong Giai đoạn B.
 
 ## 6. Quyết định N9 – đọc `.xlsx`
 
-Không dùng thư viện đọc Excel đầy đủ. Chọn `fflate@0.8.3` (MIT, không phụ thuộc, ghim chính xác) cho giải nén, cộng bộ đọc XML tối giản (`web/src/features/roster/domain/xlsx.ts`) chỉ đọc sheet đầu tiên, shared strings và giá trị đã cache của ô công thức.
+Giữ `fflate@0.8.3` + bộ đọc XML tối giản (`web/src/features/roster/domain/xlsx.ts`), tạm dùng trong giai đoạn thử nghiệm theo chấp thuận của chủ dự án. Chỉ đọc sheet **hiển thị** đầu tiên, shared strings, inline strings, rich text và giá trị cache của ô công thức.
 
-Lý do: `exceljs@4.4.0` không được cập nhật từ 2024-12 và kéo theo `archiver`, `unzipper@0.10`, `tmp`; gói `xlsx` trên npm dừng ở `0.18.5`; `read-excel-file@9.3.x` đổi phiên bản gần như hằng ngày (9.3.11 → 9.3.14 trong 3 tuần) và thêm `worker-f`, `unzipper-esm`. Tôi chỉ so sánh siêu dữ liệu gói, **không** rà CVE từng gói.
+Kiểm thử tương thích (17 test, 15 file mẫu dữ liệu giả sinh bởi `tools/roster-fixtures/generate.py`): số 0 đầu và tiếng Việt (kể cả NFD), ô số bị cảnh báo, ô công thức, hàng tiêu đề lệch xuống dưới ô gộp, sheet ẩn, rich text, ký tự thoát XML/Excel, namespace có tiền tố, đích quan hệ tuyệt đối, chú thích phiên âm, thiếu thuộc tính `r`, file cắt cụt/rác/không phải workbook, `.xls` cũ, file có mật khẩu, mục khai kích thước giả, quá 300 mục.
 
-Đánh đổi: phải tự bảo trì bộ đọc; chỉ hỗ trợ `.xlsx` đơn giản (không `.xls`, không công thức tính lại, ngày tháng là số). Giới hạn bảo vệ zip bomb: ≤ 300 mục, ≤ 16 MiB mỗi mục, ≤ 48 MiB tổng, chỉ giải nén các phần cần dùng.
+Giới hạn chưa chứng minh: **không có file lưu từ Excel, Google Sheets hay WPS**. XlsxWriter mô phỏng sát Excel nhưng không thay thế được. Nếu file thật của bạn không đọc được hoặc đọc sai, phương án thay thế đề xuất là `read-excel-file` (MIT, đang được bảo trì, ghim phiên bản chính xác, chạy trên server) hoặc `exceljs`; quyết định sau khi có kết quả `roster:check` trên file thật và `npm audit` của gói đó. Chưa rà CVE từng gói thay thế.
+
+Đánh đổi vẫn là tự bảo trì bộ đọc; không hỗ trợ `.xls`, công thức không được tính lại. Giới hạn bảo vệ: ≤ 300 mục, ≤ 16 MiB khai báo mỗi mục, ≤ 48 MiB tổng, chỉ giải nén phần cần dùng.
 
 ## 7. Cách chạy lại
 

@@ -118,6 +118,8 @@ Client mutations trực tiếp vào Core tables không có policy.
 
 ## 11. Rate limits
 
+Địa chỉ IP dùng cho giới hạn chỉ lấy từ proxy đáng tin (`TRUSTED_PROXY_HOPS`, ADR-005 §2); `X-Forwarded-For` đầu tiên và `x-real-ip` do client đặt nên không được tin. Không có IP đáng tin thì bỏ giới hạn theo IP.
+
 Initial limits, configurable by environment:
 
 - Sign-in: 5 lần sai/10 phút theo student ID hash; theo IP hash `[ĐỀ XUẤT]` 300 yêu cầu/10 phút để cả lớp sau một NAT Wi-Fi không bị chặn (`LA-ACC-008`).
@@ -146,6 +148,9 @@ Audit bắt buộc cho roster apply, password reset, role/status changes, questi
 Audit row ghi actor, action, target, request ID, redacted before/after và server timestamp. Audit không được sửa từ client.
 
 ## 14. Dependency và deployment checks
+
+- Bảng ở schema `public` phải được `GRANT` tường minh; không dựa vào quyền mặc định của nền tảng (ADR-005 §4). pgTAP kiểm bằng `has_table_privilege`.
+- Trước triển khai: `npm audit --omit=dev` phải bằng 0; nâng `next`/`zod` khi có GHSA (ADR-005 §1).
 
 - Lockfile committed và CI dùng `npm ci`.
 - `npm audit --audit-level=high` hoặc documented exception trước deploy.

@@ -4,7 +4,7 @@
 export type SheetCell = { text: string; kind: "text" | "number" | "other" };
 
 export class RosterFileError extends Error {
-  constructor(readonly code: "file_too_large" | "invalid_encoding" | "malformed_file" | "unsupported_format") {
+  constructor(readonly code: "file_too_large" | "invalid_encoding" | "malformed_file" | "unsupported_format" | "legacy_or_encrypted") {
     super(code);
   }
 }

@@ -13,10 +13,10 @@ Sản phẩm phải phục vụ nội dung công khai, 60 người chơi đồng
 ### Runtime và phiên bản nền
 
 - Node.js `22.14.0` hoặc mới hơn trong nhánh 22 LTS.
-- Next.js `16.3.1`, React `19.2.8`, TypeScript `7.0.2`.
+- Next.js `16.4.3` (nâng từ 16.3.1 do GHSA, xem ADR-005), React `19.2.8`, TypeScript `7.0.2`.
 - Next.js App Router, React Server Components cho dữ liệu đọc ban đầu và Route Handlers cho API `/api/v1`.
 - Supabase JavaScript `2.112.3` và `@supabase/ssr` `0.12.4` cho session cookie phía server.
-- Zod `4.4.3` cho validation ở biên API và validation JSON content.
+- Zod `4.6.7` (nâng từ 4.4.3 do GHSA, xem ADR-005) cho validation ở biên API và validation JSON content.
 - Vitest `4.1.11` cho unit/integration tests; Playwright `1.62.1` cho end-to-end.
 - Vercel chạy ứng dụng Next.js; Supabase cung cấp PostgreSQL, Auth và Realtime.
 
