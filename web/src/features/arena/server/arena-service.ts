@@ -21,6 +21,8 @@ const MESSAGES: Record<string, string> = {
   attempt_time_over: "Đã hết thời gian lượt thi.",
   review_not_available: "Chỉ xem lại được sau khi cuộc thi kết thúc.",
   readiness_blocked: "Ngân hàng câu hỏi chưa đủ điều kiện để mở cuộc thi.",
+  bank_acknowledgement_required: "Ngân hàng chưa đạt mục tiêu; quản trị viên cần xác nhận rủi ro và nhập lý do.",
+  bank_assessment_required: "Cuộc thi cần được đánh giá ngân hàng trước khi mở.",
   already_voided: "Lượt thi này đã bị vô hiệu.",
   competition_finalized: "Cuộc thi đã công bố kết quả; chỉ có thể ghi chú sự cố.",
   reason_required: "Cần nhập lý do (ít nhất 3 ký tự).",

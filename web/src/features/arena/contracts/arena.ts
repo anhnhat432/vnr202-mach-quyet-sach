@@ -33,7 +33,11 @@ export const createCompetitionBody = z
   })
   .strict();
 
-export const competitionTransitionBody = z.object({ target: z.enum(["scheduled", "open", "start_closed", "settling", "archived"]) }).strict();
+export const competitionTransitionBody = z.object({
+  target: z.enum(["scheduled", "open", "start_closed", "settling", "archived"]),
+  expectedAttempts: z.number().int().min(1).max(500).optional(),
+  bankAcknowledgement: z.object({ expectedAttempts: z.number().int().min(1).max(500), confirmed: z.literal(true), reason: z.string().trim().min(3).max(300) }).strict().optional(),
+}).strict().refine((value) => !value.bankAcknowledgement || (value.target === "scheduled" && (value.expectedAttempts === undefined || value.expectedAttempts === value.bankAcknowledgement.expectedAttempts)));
 
 // Incident actions on one attempt (LA-ADMIN-003). None can change a score, a clock, a rank or create an attempt.
 export const attemptIncidentBody = z
