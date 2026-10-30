@@ -1,5 +1,7 @@
 # Traceability Matrix
 
+Student Passport T034 is partial: `/passport` reads the authenticated student's existing profile and own attempts, excludes rehearsal and voided attempts from the two latest official-result cards, labels the standing and links to the existing post-final review. `passport.test.ts` and `passport-view.test.tsx` cover filtering, sign-in and review-link availability. Per-competition history, class, rank, answer statistics and account-synchronized dossier progress remain open; no hosted or classroom acceptance is claimed.
+
 Status: Phase 2 Checkpoint A1 integration snapshot (2026-08-20)
 Live Arena V1.0 re-scope (2026-10-29): rows for superseded v1.0 rules are marked Superseded and point to their replacements; new rule families are traced in the Live Arena section below. Stage A documents await owner approval and no Live Arena code exists yet.
 Evidence is recorded only for implemented scope. Four new Chapter 1 dossiers are Drafts awaiting human academic review; Core identity, competition, gameplay and realtime rows remain Planned.
