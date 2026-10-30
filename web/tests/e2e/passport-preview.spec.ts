@@ -18,7 +18,8 @@ test("Passport renders a private profile, progress markers and official history"
   await page.goto("/passport");
   await expect(page.getByText("Sinh viên kiểm thử")).toBeVisible();
   await expect(page.getByText(/Hợp nhất để mở đường.*Đã hoàn thành/)).toBeVisible();
-  await expect(page.getByText(/Chưa sẵn sàng/)).toHaveCount(12);
+  await expect(page.locator(".passport__chapters li")).toHaveCount(15);
+  await expect(page.locator(".passport__chapters li").filter({ hasText: "Chưa sẵn sàng" }).locator("a")).toHaveCount(0);
   await expect(page.getByText(/Hạng 4/)).toBeVisible();
   await expect(page.getByText(/Lượt đã bị vô hiệu/)).toBeVisible();
   await expect(page.getByText(/9876 điểm|9877 điểm|Diễn tập kiểm thử/)).toHaveCount(0);
