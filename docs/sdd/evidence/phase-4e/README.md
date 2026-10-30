@@ -18,6 +18,9 @@ Ngày: 2026-10-30. Phạm vi: HTTP API cho hai game và quản trị cuộc thi,
 - Tích hợp `arena-session.test.ts` (3): gắn phiên lần đầu, từ chối phiên khác, tăng `session_version` đúng một lần mỗi lần chuyển, claim khi đăng nhập chỉ tác động lượt đang chơi.
 - Unit: `arena-service.test.ts` (ánh xạ lỗi, body strict, Idempotency-Key), `openapi-contract.test.ts`.
 
+## CI chính thức (Supabase CLI stack)
+Run 26 trên PR #6, commit `b7e1dfb`: `web`, `security-scan` và `database` đều đạt. Job `database`: `supabase test db` (pgTAP) đạt, test tích hợp 124 đạt (gồm toàn bộ test đồng hồ), e2e trình duyệt + `arena-api.spec.ts` đạt. Hai lần đỏ trước đó là lỗi kiểu trong test (`9976773`) và so sánh mốc thời gian bằng `Date` JS làm mất micro giây trong test đua biên (`d3ed5a5`), đều đã sửa; không phải lỗi sản phẩm.
+
 ## Hạn chế
 - Realtime Broadcast và polling theo `version` của BXH chưa có (T053/F); `GET /competitions/current` công khai và Passport chưa làm (dùng `arena/lobby` và leaderboard).
 - `/transfer` và `POST .../attempt` luôn nhận quyền; chưa có xác nhận "Chuyển sang thiết bị này?" ở UI (F).
