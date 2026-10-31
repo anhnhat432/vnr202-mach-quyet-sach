@@ -3,393 +3,6 @@
   "game": "minefield",
   "questions": [
     {
-      "key": "ai-mine-001",
-      "pool": "minefield_main",
-      "chapter": "chapter_1",
-      "topic": "Thành lập Đảng 1930",
-      "type": "single_choice",
-      "difficulty": "easy",
-      "prompt": "Hội nghị hợp nhất đầu năm 1930 đã thành lập tổ chức nào?",
-      "options": [
-        {
-          "id": "a",
-          "label": "Đảng Cộng sản Việt Nam"
-        },
-        {
-          "id": "b",
-          "label": "Hội Việt Nam Cách mạng Thanh niên"
-        },
-        {
-          "id": "c",
-          "label": "Mặt trận Việt Minh"
-        }
-      ],
-      "correctOptionId": "a",
-      "explanation": "Hội nghị đầu năm 1930 thống nhất các tổ chức cộng sản và thành lập Đảng Cộng sản Việt Nam.",
-      "sources": [
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000001",
-          "locator": "Chương I",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'hop-nhat-de-mo-duong' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        },
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000004",
-          "locator": "Slides 3-18",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'hop-nhat-de-mo-duong' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        }
-      ],
-      "aiAssisted": true
-    },
-    {
-      "key": "ai-mine-002",
-      "pool": "minefield_main",
-      "chapter": "chapter_2",
-      "topic": "Hiệp định Geneve",
-      "type": "single_choice",
-      "difficulty": "easy",
-      "prompt": "Hiệp định nào chấm dứt chiến tranh của Pháp ở Đông Dương?",
-      "options": [
-        {
-          "id": "a",
-          "label": "Hiệp định Sơ bộ"
-        },
-        {
-          "id": "b",
-          "label": "Hiệp định Geneve"
-        },
-        {
-          "id": "c",
-          "label": "Hiệp định Paris"
-        }
-      ],
-      "correctOptionId": "b",
-      "explanation": "Chiến thắng Điện Biên Phủ buộc Pháp ký Hiệp định Geneve, chấm dứt chiến tranh.",
-      "sources": [
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000001",
-          "locator": "Chương II - Kháng chiến chống Pháp và Điện Biên Phủ",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        },
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000013",
-          "locator": "Slides 3-15",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        },
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000014",
-          "locator": "Slides 3-16",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        }
-      ],
-      "aiAssisted": true
-    },
-    {
-      "key": "ai-mine-003",
-      "pool": "minefield_main",
-      "chapter": "chapter_1",
-      "topic": "Cách mạng Tháng Tám",
-      "type": "single_choice",
-      "difficulty": "easy",
-      "prompt": "Nhà nước nào ra đời sau Tổng khởi nghĩa tháng 8/1945?",
-      "options": [
-        {
-          "id": "a",
-          "label": "Việt Nam Cộng hòa"
-        },
-        {
-          "id": "b",
-          "label": "Liên bang Đông Dương"
-        },
-        {
-          "id": "c",
-          "label": "Việt Nam Dân chủ Cộng hòa"
-        }
-      ],
-      "correctOptionId": "c",
-      "explanation": "Sau Tổng khởi nghĩa, nước Việt Nam Dân chủ Cộng hòa ra đời, mở ra kỷ nguyên độc lập dân tộc.",
-      "sources": [
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000001",
-          "locator": "Chương I - Giải phóng dân tộc 1939-1945 và Cách mạng Tháng Tám",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'chop-dung-thoi-co' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        },
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000007",
-          "locator": "Slides 3-16",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'chop-dung-thoi-co' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        },
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000008",
-          "locator": "Slides 3-9",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'chop-dung-thoi-co' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        },
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000009",
-          "locator": "Slides 3-12",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'chop-dung-thoi-co' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        },
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000010",
-          "locator": "Slides 3-9",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'chop-dung-thoi-co' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        }
-      ],
-      "aiAssisted": true
-    },
-    {
-      "key": "ai-mine-004",
-      "pool": "minefield_main",
-      "chapter": "chapter_2",
-      "topic": "Đường lối kháng chiến",
-      "type": "single_choice",
-      "difficulty": "medium",
-      "prompt": "Kháng chiến toàn quốc dựa vào điều gì là chính?",
-      "options": [
-        {
-          "id": "a",
-          "label": "Sức mình"
-        },
-        {
-          "id": "b",
-          "label": "Viện trợ nước ngoài"
-        },
-        {
-          "id": "c",
-          "label": "Lực lượng đồng minh"
-        }
-      ],
-      "correctOptionId": "a",
-      "explanation": "Đường lối kháng chiến toàn dân, toàn diện, lâu dài, dựa vào sức mình là chính.",
-      "sources": [
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000001",
-          "locator": "Chương II - Đường lối kháng chiến chống Pháp",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'khi-hoa-hoan-khong-con-du-dia' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        },
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000012",
-          "locator": "Slides 3-18",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'khi-hoa-hoan-khong-con-du-dia' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        }
-      ],
-      "aiAssisted": true
-    },
-    {
-      "key": "ai-mine-005",
-      "pool": "minefield_main",
-      "chapter": "chapter_2",
-      "topic": "Kháng chiến toàn quốc",
-      "type": "single_choice",
-      "difficulty": "medium",
-      "prompt": "Cơ quan đầu não kháng chiến chuyển lên đâu năm 1946?",
-      "options": [
-        {
-          "id": "a",
-          "label": "Tây Nguyên"
-        },
-        {
-          "id": "b",
-          "label": "Việt Bắc"
-        },
-        {
-          "id": "c",
-          "label": "Nam Bộ"
-        }
-      ],
-      "correctOptionId": "b",
-      "explanation": "Vừa chiến đấu giam chân địch, vừa chuyển cơ quan đầu não lên Việt Bắc.",
-      "sources": [
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000001",
-          "locator": "Chương II - Đường lối kháng chiến chống Pháp",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'khi-hoa-hoan-khong-con-du-dia' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        },
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000012",
-          "locator": "Slides 3-18",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'khi-hoa-hoan-khong-con-du-dia' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        }
-      ],
-      "aiAssisted": true
-    },
-    {
-      "key": "ai-mine-006",
-      "pool": "minefield_main",
-      "chapter": "chapter_2",
-      "topic": "Điện Biên Phủ",
-      "type": "single_choice",
-      "difficulty": "medium",
-      "prompt": "Bộ Chính trị chọn điểm quyết chiến chiến lược nào?",
-      "options": [
-        {
-          "id": "a",
-          "label": "Hà Nội"
-        },
-        {
-          "id": "b",
-          "label": "Huế"
-        },
-        {
-          "id": "c",
-          "label": "Điện Biên Phủ"
-        }
-      ],
-      "correctOptionId": "c",
-      "explanation": "Bộ Chính trị quyết định chọn Điện Biên Phủ làm điểm quyết chiến chiến lược.",
-      "sources": [
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000001",
-          "locator": "Chương II - Kháng chiến chống Pháp và Điện Biên Phủ",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        },
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000013",
-          "locator": "Slides 3-15",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        },
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000014",
-          "locator": "Slides 3-16",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        }
-      ],
-      "aiAssisted": true
-    },
-    {
-      "key": "ai-mine-007",
-      "pool": "minefield_main",
-      "chapter": "chapter_2",
-      "topic": "Hai nhiệm vụ chiến lược",
-      "type": "single_choice",
-      "difficulty": "medium",
-      "prompt": "Chiến lược nào của Mỹ bị thất bại giai đoạn 1954–1965?",
-      "options": [
-        {
-          "id": "a",
-          "label": "Chiến tranh đặc biệt"
-        },
-        {
-          "id": "b",
-          "label": "Việt Nam hóa chiến tranh"
-        },
-        {
-          "id": "c",
-          "label": "Chiến tranh cục bộ"
-        }
-      ],
-      "correctOptionId": "a",
-      "explanation": "Cách mạng miền Nam chuyển sang thế tiến công, làm thất bại chiến lược 'Chiến tranh đặc biệt' của Mỹ.",
-      "sources": [
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000001",
-          "locator": "Chương II - Một Đảng lãnh đạo hai nhiệm vụ chiến lược",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'mot-dat-nuoc-hai-nhiem-vu-chien-luoc' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        },
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000015",
-          "locator": "Slides 3-18",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'mot-dat-nuoc-hai-nhiem-vu-chien-luoc' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        }
-      ],
-      "aiAssisted": true
-    },
-    {
-      "key": "ai-mine-008",
-      "pool": "minefield_main",
-      "chapter": "chapter_2",
-      "topic": "Giải phóng miền Nam",
-      "type": "single_choice",
-      "difficulty": "hard",
-      "prompt": "Cuộc tiến công nào giải phóng hoàn toàn miền Nam?",
-      "options": [
-        {
-          "id": "a",
-          "label": "Chiến dịch Biên giới 1950"
-        },
-        {
-          "id": "b",
-          "label": "Tổng tiến công mùa Xuân 1975"
-        },
-        {
-          "id": "c",
-          "label": "Tổng tiến công Tết Mậu Thân 1968"
-        }
-      ],
-      "correctOptionId": "b",
-      "explanation": "Đảng tổ chức Tổng tiến công mùa Xuân 1975, giải phóng hoàn toàn miền Nam.",
-      "sources": [
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000001",
-          "locator": "Chương II - Kháng chiến chống Mỹ và thống nhất đất nước",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'tu-doi-dau-cuc-bo-den-toan-thang' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        },
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000016",
-          "locator": "Slides 3-20",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'tu-doi-dau-cuc-bo-den-toan-thang' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        },
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000017",
-          "locator": "Slides 3-18",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'tu-doi-dau-cuc-bo-den-toan-thang' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        },
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000018",
-          "locator": "Slides 3-12",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'tu-doi-dau-cuc-bo-den-toan-thang' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        }
-      ],
-      "aiAssisted": true
-    },
-    {
-      "key": "ai-mine-009",
-      "pool": "minefield_main",
-      "chapter": "chapter_2",
-      "topic": "Kinh nghiệm lãnh đạo",
-      "type": "single_choice",
-      "difficulty": "hard",
-      "prompt": "Đánh bại các chiến lược của Mỹ cần kết hợp mặt trận nào?",
-      "options": [
-        {
-          "id": "a",
-          "label": "Quân sự, kinh tế, văn hóa"
-        },
-        {
-          "id": "b",
-          "label": "Chính trị, kinh tế, tôn giáo"
-        },
-        {
-          "id": "c",
-          "label": "Quân sự, chính trị, ngoại giao"
-        }
-      ],
-      "correctOptionId": "c",
-      "explanation": "Đảng kiên trì kết hợp đấu tranh quân sự, chính trị và ngoại giao.",
-      "sources": [
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000001",
-          "locator": "Chương II - Kháng chiến chống Mỹ và thống nhất đất nước",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'tu-doi-dau-cuc-bo-den-toan-thang' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        },
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000016",
-          "locator": "Slides 3-20",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'tu-doi-dau-cuc-bo-den-toan-thang' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        },
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000017",
-          "locator": "Slides 3-18",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'tu-doi-dau-cuc-bo-den-toan-thang' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        },
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000018",
-          "locator": "Slides 3-12",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'tu-doi-dau-cuc-bo-den-toan-thang' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        }
-      ],
-      "aiAssisted": true
-    },
-    {
       "key": "t6-mine-001",
       "pool": "minefield_main",
       "chapter": "chapter_3",
@@ -990,28 +603,28 @@
       "topic": "Hội nghị TW 4 khóa XII (2016)",
       "type": "single_choice",
       "difficulty": "hard",
-      "prompt": "Hội nghị TW 4 khóa XII (10/2016) nêu 27 biểu hiện của hiện tượng nào?",
+      "prompt": "Nghị quyết TW 4 khóa XII (10/2016) nhằm ngăn chặn, đẩy lùi điều gì?",
       "options": [
         {
           "id": "a",
-          "label": "Tự phê bình và phê bình"
+          "label": "Khủng hoảng tài chính - tiền tệ"
         },
         {
           "id": "b",
-          "label": "Tự chủ, tự lực, tự cường"
+          "label": "Suy thoái, tự diễn biến, tự chuyển hóa"
         },
         {
           "id": "c",
-          "label": "Tự diễn biến, tự chuyển hóa"
+          "label": "Nguy cơ tụt hậu về kinh tế"
         }
       ],
-      "correctOptionId": "c",
-      "explanation": "Nghị quyết 04-NQ/TW (30/10/2016) chỉ rõ 27 biểu hiện 'tự diễn biến', 'tự chuyển hóa' trong nội bộ.",
+      "correctOptionId": "b",
+      "explanation": "Nghị quyết 04-NQ/TW (30/10/2016) về tăng cường xây dựng, chỉnh đốn Đảng; ngăn chặn, đẩy lùi sự suy thoái về tư tưởng chính trị, đạo đức, lối sống, những biểu hiện 'tự diễn biến', 'tự chuyển hóa' trong nội bộ.",
       "sources": [
         {
           "sourceId": "10000000-0000-0000-0000-000000000001",
           "locator": "Chương 3, mục II, tr. 381, 382",
-          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc. Giáo trình tr. 382 viết gọn '27 biểu hiện tự diễn biến, tự chuyển hóa'; theo văn bản Nghị quyết, 27 biểu hiện chia ba nhóm (tư tưởng chính trị; đạo đức, lối sống; tự diễn biến, tự chuyển hóa). Câu này không hỏi con số 27."
         }
       ],
       "aiAssisted": true
@@ -1077,6 +690,303 @@
         {
           "sourceId": "10000000-0000-0000-0000-000000000001",
           "locator": "Chương 3, mục II, tr. 315",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-mine-022",
+      "pool": "minefield_main",
+      "chapter": "chapter_3",
+      "topic": "Đại hội XI (2011)",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "Đại hội XI của Đảng họp vào thời gian nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Tháng 4/2011"
+        },
+        {
+          "id": "b",
+          "label": "Tháng 1/2011"
+        },
+        {
+          "id": "c",
+          "label": "Tháng 6/2011"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Đại hội XI họp tại Hà Nội từ ngày 12 đến ngày 19/1/2011.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 335",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-mine-023",
+      "pool": "minefield_main",
+      "chapter": "chapter_3",
+      "topic": "Nhiệm vụ sau Đại hội VIII",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "Sau Đại hội VIII, lĩnh vực nào được coi là nhiệm vụ trọng tâm?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Quốc phòng"
+        },
+        {
+          "id": "b",
+          "label": "Đối ngoại"
+        },
+        {
+          "id": "c",
+          "label": "Phát triển kinh tế"
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "Sau Đại hội VIII, Trung ương chỉ đạo coi phát triển kinh tế là nhiệm vụ trọng tâm, phát huy tối đa nội lực, nâng cao hiệu quả hợp tác quốc tế.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 288",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-mine-024",
+      "pool": "minefield_main",
+      "chapter": "chapter_3",
+      "topic": "Tổng quan các kỳ Đại hội 1991–2021",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "Các Đại hội VII đến XIII được tổ chức cách nhau bao nhiêu năm?",
+      "options": [
+        {
+          "id": "a",
+          "label": "5 năm"
+        },
+        {
+          "id": "b",
+          "label": "4 năm"
+        },
+        {
+          "id": "c",
+          "label": "10 năm"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Các kỳ Đại hội lần lượt họp năm 1991, 1996, 2001, 2006, 2011, 2016 và 2021, mỗi nhiệm kỳ 5 năm.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 272, 285, 296, 310, 335, 367, 386",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-mine-025",
+      "pool": "minefield_main",
+      "chapter": "chapter_3",
+      "topic": "Thời gian các kỳ Đại hội",
+      "type": "pair_choice",
+      "difficulty": "medium",
+      "prompt": "Cặp nào ghép đúng giữa Đại hội và thời gian họp?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Đại hội X – 12 đến 19/1/2006"
+        },
+        {
+          "id": "b",
+          "label": "Đại hội IX – 19 đến 22/4/2001"
+        },
+        {
+          "id": "c",
+          "label": "Đại hội XI – 20 đến 28/1/2011"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Đại hội IX họp 19–22/4/2001; Đại hội X họp 18–25/4/2006; Đại hội XI họp 12–19/1/2011; Đại hội XII họp 20–28/1/2016.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 296, 310, 335, 367",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-mine-026",
+      "pool": "minefield_main",
+      "chapter": "chapter_3",
+      "topic": "Chủ đề Đại hội X",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Chủ đề Đại hội X bắt đầu bằng nội dung nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Tăng cường xây dựng, chỉnh đốn Đảng"
+        },
+        {
+          "id": "b",
+          "label": "Khơi dậy khát vọng phát triển"
+        },
+        {
+          "id": "c",
+          "label": "Nâng cao năng lực lãnh đạo của Đảng"
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "Chủ đề Đại hội X: 'Nâng cao năng lực lãnh đạo và sức chiến đấu của Đảng, phát huy sức mạnh toàn dân tộc, đẩy mạnh toàn diện công cuộc đổi mới, sớm đưa nước ta ra khỏi tình trạng kém phát triển'. Hai lựa chọn còn lại mở đầu chủ đề Đại hội XIII.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 310, 387",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-mine-027",
+      "pool": "minefield_main",
+      "chapter": "chapter_3",
+      "topic": "Nhiệm vụ Đại hội XI",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Yêu cầu xuyên suốt trong Chiến lược 2011–2020 của Đại hội XI là gì?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Phát triển nhanh gắn với bền vững"
+        },
+        {
+          "id": "b",
+          "label": "Ưu tiên tuyệt đối công nghiệp nặng"
+        },
+        {
+          "id": "c",
+          "label": "Tăng trưởng chủ yếu nhờ vốn đầu tư"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Quan điểm phát triển của Chiến lược 2011–2020: phát triển nhanh gắn liền với phát triển bền vững là yêu cầu xuyên suốt.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 348",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-mine-028",
+      "pool": "minefield_main",
+      "chapter": "chapter_3",
+      "topic": "Nhiệm vụ Đại hội IX",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Đại hội IX tạo nền tảng để đến năm 2020 nước ta cơ bản trở thành nước gì?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Nước phát triển, định hướng XHCN"
+        },
+        {
+          "id": "b",
+          "label": "Nước công nghiệp theo hướng hiện đại"
+        },
+        {
+          "id": "c",
+          "label": "Nước có thu nhập trung bình"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Chiến lược 2001–2010 của Đại hội IX: đưa nước ta ra khỏi tình trạng kém phát triển, tạo nền tảng để đến năm 2020 nước ta cơ bản trở thành một nước công nghiệp theo hướng hiện đại.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 297",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-mine-029",
+      "pool": "minefield_main",
+      "chapter": "chapter_3",
+      "topic": "Chủ đề Đại hội X",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "'Sớm đưa nước ta ra khỏi tình trạng kém phát triển' thuộc chủ đề Đại hội nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Đại hội XII"
+        },
+        {
+          "id": "b",
+          "label": "Đại hội XIII"
+        },
+        {
+          "id": "c",
+          "label": "Đại hội X"
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "Cụm này là phần cuối chủ đề Đại hội X (2006). Chủ đề Đại hội XII hướng tới nước công nghiệp theo hướng hiện đại; chủ đề Đại hội XIII hướng tới nước phát triển vào giữa thế kỷ XXI.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 310, 367, 387",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-mine-030",
+      "pool": "minefield_main",
+      "chapter": "chapter_3",
+      "topic": "Mục tiêu giữa thế kỷ XXI",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "Cương lĩnh 2011 đặt mục tiêu đến giữa thế kỷ XXI nước ta trở thành gì?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Nước công nghiệp hiện đại"
+        },
+        {
+          "id": "b",
+          "label": "Nước phát triển, thu nhập cao"
+        },
+        {
+          "id": "c",
+          "label": "Nước nông - công nghiệp"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Cương lĩnh 2011: đến giữa thế kỷ XXI xây dựng nước ta thành nước công nghiệp hiện đại, theo định hướng XHCN. Đại hội XIII nâng mục tiêu lên trở thành nước phát triển, theo định hướng XHCN.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 340, 389",
           "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
         }
       ],

@@ -1,26 +1,49 @@
 # Ngân hàng câu hỏi Chủ đề 6 – Các kỳ Đại hội Đảng 1991–2021
 
-Ngày: 2026-10-31. Task: `T114` (một phần). Nguồn: *Giáo trình Lịch sử Đảng Cộng sản Việt Nam* (Bộ GD&ĐT, NXB Chính trị quốc gia Sự thật, 2021), Chương 3, mục II, tr. 272–397; nguồn `10000000-0000-0000-0000-000000000001` trong sổ nguồn (`verified`).
+Ngày: 2026-10-31 (bản 2, sau rà soát của nhóm). Task: `T114`. Nguồn: *Giáo trình Lịch sử Đảng Cộng sản Việt Nam* (Bộ GD&ĐT, NXB Chính trị quốc gia Sự thật, 2021), Chương 3, mục II, tr. 272–397; nguồn `10000000-0000-0000-0000-000000000001` trong sổ nguồn (`verified`).
 
 ## Yêu cầu của nhóm
-Chủ đề 6 (đề bài của nhóm): có bao nhiêu kỳ đại hội Đảng từ 1991 đến 2021; mỗi kỳ trình bày thời gian, địa điểm, khẩu hiệu/tinh thần chung và các nhiệm vụ cơ bản. Giáo trình xác nhận **7 kỳ**: VII (1991), VIII (1996), IX (2001), X (2006), XI (2011), XII (2016), XIII (2021).
+Chủ đề 6: có bao nhiêu kỳ Đại hội Đảng từ 1991 đến 2021; mỗi kỳ trình bày thời gian, địa điểm, khẩu hiệu/tinh thần chung và các nhiệm vụ cơ bản. Giáo trình xác nhận **7 kỳ**: VII (1991), VIII (1996), IX (2001), X (2006), XI (2011), XII (2016), XIII (2021), đều họp tại Hà Nội.
 
-## Đã làm
-- 56 câu nháp mới, key `t6-race-001..029`, `t6-mine-001..021`, `t6-defuse-001..006`, mọi câu `chapter_3`, `aiAssisted: true`, ghi trang giáo trình cụ thể trong `locator` (vd. `Chương 3, mục II, tr. 272`).
-- Phân bố đúng hồ sơ 87 câu: `race` 15/21/9, `minefield_main` 9/12/9, `minefield_defuse` 12 (dễ/vừa/khó).
-- Nội dung phủ: thời gian, địa điểm, số đại biểu, nhân sự lãnh đạo (Tổng Bí thư, Bộ Chính trị, Ban Chấp hành), văn kiện chính (Cương lĩnh 1991, Cương lĩnh 2011, các Chiến lược), chủ đề và nhiệm vụ trọng tâm, bài học, các nghị quyết Trung ương và mốc đối ngoại (bình thường hóa với Trung Quốc 1991, ASEAN và quan hệ với Hoa Kỳ 1995, WTO 2006).
-- Câu hỏi ngắn trong giới hạn thử nghiệm (đề ≤ 80, đáp án ≤ 40 ký tự); không có cảnh báo từ validator.
+## Trạng thái ngân hàng
+- **87 câu, tất cả thuộc Chủ đề 6** (key `t6-*`, `chapter_3`, `aiAssisted: true`), 0 Published. Mỗi câu ghi trang giáo trình trong `locator`.
+- Phân bố đúng hồ sơ 87: `race` 15/21/9, `minefield_main` 9/12/9, `minefield_defuse` 12 (dễ/vừa/khó).
+- 31 câu `ai-*` ngoài chủ đề đã chuyển sang `docs/sdd/content/questions-archive/` (không xóa).
+
+## Thay đổi sau rà soát
+| Câu | Vấn đề | Xử lý |
+|---|---|---|
+| `t6-defuse-004` | Hỏi năm "gia nhập WTO", dễ tranh cãi 2006/2007 | Hỏi năm WTO **chấp thuận** việc gia nhập (2006); giải thích nêu thành viên có hiệu lực 11/1/2007 |
+| `t6-race-011` | Gắn mốc 11/2006 với tư cách thành viên | Chỉ hỏi "thành viên thứ mấy" (150) |
+| `t6-race-022` | Nhãn "Gia nhập WTO (11/2006)" | Đổi thành "WTO chấp thuận gia nhập (11/2006)"; đáp án không đổi |
+| `t6-mine-019` | Quy 27 biểu hiện về riêng nhóm "tự diễn biến, tự chuyển hóa" | Hỏi mục đích Nghị quyết 04-NQ/TW, không hỏi con số 27; ghi chú ba nhóm biểu hiện cho người duyệt |
+| `t6-race-027` | Số ủy viên Bộ Chính trị khóa XII không gắn thời điểm | Hỏi Bộ Chính trị "được bầu tại Đại hội XII" |
+| `t6-defuse-005` | Trùng nội dung với `t6-mine-003` (Nông Đức Mạnh) | Thay bằng câu "30 năm thực hiện Cương lĩnh 1991" (Đại hội XIII) |
+
+Mốc WTO đã đối chiếu với trang chính thức của WTO (*Accessions: Viet Nam*): Đại hội đồng chấp thuận ngày 7/11/2006, thành viên từ 11/1/2007. Trang này **chưa** được thêm vào sổ nguồn, vì xác minh nguồn là việc của người duyệt; mốc này được ghi trong `usageNote` của ba câu WTO.
+
+## 31 câu mới theo khung đề bài
+| Nhóm nội dung | Số câu | Ví dụ key |
+|---|---|---|
+| Thời gian họp (VIII, X, XI, XII, XIII, ghép cặp IX–XII) | 7 | `t6-race-031..033`, `t6-race-036`, `t6-mine-022`, `t6-mine-025`, `t6-defuse-007` |
+| Chủ đề/tinh thần (VII, IX, X, XII, XIII) | 7 | `t6-race-034`, `t6-race-037`, `t6-race-038`, `t6-race-043`, `t6-mine-026`, `t6-mine-029`, `t6-defuse-008` |
+| Nhiệm vụ cơ bản/trọng tâm (VII, VIII, IX, X, XI, XII, XIII) | 7 | `t6-race-035`, `t6-race-039..041`, `t6-mine-023`, `t6-mine-027`, `t6-mine-028` |
+| Văn kiện, mục tiêu, quyết định | 7 | `t6-race-042`, `t6-race-044`, `t6-race-045`, `t6-mine-030`, `t6-defuse-010..012` |
+| Tổng số kỳ, chu kỳ, so sánh | 3 | `t6-race-030`, `t6-mine-024`, `t6-defuse-009` |
+
+Câu mức khó mới chủ yếu kiểm tra **phân biệt giữa các kỳ** (chủ đề nào thuộc Đại hội nào, đặc trưng được bổ sung ở kỳ nào, mục tiêu giữa thế kỷ XXI của Cương lĩnh 2011 so với Đại hội XIII), không dựa vào con số khó nhớ.
 
 ## Kiểm tra đã chạy
-- `node scripts/content/questions.mjs validate`: 87 câu, 0 lỗi, 0 cảnh báo, độ phủ 87/87 (168 → 87/168).
-- Vị trí đáp án đúng của 56 câu mới: A 20, B 19, C 17 (cân bằng). Câu hai lựa chọn của `race`: dễ 3/15, vừa 1/21, khó 0/9, trong giới hạn 1/3 mỗi ô.
-- Unit `question-bank.test.ts` và `bank-confirmation.test.ts`: 16 test đạt.
-- Gói duyệt học thuật được tạo lại: `docs/sdd/content/reviews/question-bank-drafts-review-pack.md` (87 câu).
+- `node scripts/content/questions.mjs validate`: 87 câu, 0 lỗi, 0 cảnh báo (đề ≤ 80, đáp án ≤ 40 ký tự).
+- Câu hai lựa chọn của `race`: dễ 1/15, vừa 1/21, khó 0/9. Vị trí đáp án đúng: A 32, B 31, C 24.
+- File lưu trữ vẫn hợp lệ: `validate docs/sdd/content/questions-archive/*.json` không lỗi.
+- Unit `question-bank.test.ts`, `bank-confirmation.test.ts`: 16 test đạt.
+- Gói duyệt tạo lại: `docs/sdd/content/reviews/question-bank-drafts-review-pack.md` (87 câu).
 
-## Hạn chế
-- **Tất cả là Draft, chưa có người duyệt học thuật, 0 Published** (`LA-CONTENT-004`, `T115`). AI soạn nháp, không được duyệt hoặc xuất bản.
-- Bản giáo trình là **ảnh scan**, không có lớp chữ. Số liệu và số trang được đọc bằng mắt từ ảnh; các con số dễ nhầm giữa các kỳ (số đại biểu, số ủy viên, số nghị quyết) cần đối chiếu lại trên sách gốc. Trường hợp đặc biệt: Đại hội VII và X cùng 1.176 đại biểu, nên không có câu hỏi nào dựa riêng vào con số này.
-- Các đáp án gây nhiễu (người, năm, số nghị quyết) do AI chọn và chỉ được đối chiếu với giáo trình khi nằm trong phạm vi các trang đã đọc; chưa kiểm tra độc lập.
-- Chưa đọc các trang 374–379 (Đại hội XII, sau đại hội) và 398–407 (bài học kinh nghiệm, hạn chế của đổi mới); chưa có câu hỏi nào dựa vào các trang đó.
-- Chưa chạy được import vào Supabase (cần service-role key và actor admin, không có trong môi trường này) và chưa chạy bộ test tích hợp cần database.
-- 56 câu mới đều thuộc `chapter_3`; ngân hàng gộp với 31 câu cũ (chương 1–2), nên một lượt chơi có thể trộn câu Chủ đề 6 với câu về giai đoạn 1930–1975 vì bộ cấp phát chỉ dùng chương làm tiêu chí phụ khi chọn câu. Nếu cuộc thi chỉ dùng Chủ đề 6, cần quyết định riêng (lọc theo tiền tố `t6-` hoặc retire các câu cũ); chưa làm việc này. Với 56 câu, mỗi ô blueprint chỉ vừa đủ cho một lượt (race dễ 9/5, vừa 14/7, khó 6/3; main dễ 6/3, vừa 8/4, khó 7/3; gỡ bom 6/3), nên độ lộ đáp án giữa các người chơi cao hơn so với bank 87 câu.
+## Hạn chế còn lại
+- **Tất cả là Draft, chưa có người duyệt học thuật** (`LA-CONTENT-004`, `T115`).
+- Giáo trình là **ảnh scan**; số liệu và số trang đọc bằng mắt, người duyệt cần đối chiếu sách gốc.
+- **Khẩu hiệu/chủ đề chính thức của Đại hội VIII, IX, XI** và khẩu hiệu "Đoàn kết - Dân chủ - Kỷ cương - Sáng tạo - Phát triển" của Đại hội XIII **không có** trong các trang giáo trình đã đọc. Ngân hàng chỉ dùng chủ đề/tinh thần có trong giáo trình (VII tr. 277, X tr. 310, XII tr. 367, XIII tr. 387) và đặc điểm của IX (Đại hội mở đầu thế kỷ XXI, tr. 296). Muốn hỏi các khẩu hiệu kia cần bổ sung một nguồn chính thức vào sổ nguồn và người duyệt xác minh trước.
+- Chưa đọc tr. 374–379 và 398–407.
+- Chưa import vào Supabase và chưa chạy test tích hợp cần database. Nếu database đã có các câu `ai-*`, phải retire thủ công.
+- Đáp án gây nhiễu do AI chọn, chưa được kiểm tra độc lập.

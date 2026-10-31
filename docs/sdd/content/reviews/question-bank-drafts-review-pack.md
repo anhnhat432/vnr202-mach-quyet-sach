@@ -4,117 +4,6 @@
 
 Tổng: 87 câu · phủ mục tiêu 87: 87/87 · phủ mục tiêu 168: 87/168
 
-## ai-defuse-001 · **AI soạn nháp**
-
-- Trò chơi/nhóm: minefield_defuse · độ khó: easy · chương: chapter_1 · dạng: defuse_ab
-- Chủ đề: Thành lập Đảng 1930
-
-**Ai chủ trì hội nghị hợp nhất đầu năm 1930?**
-
-- A. Nguyễn Ái Quốc  ← đáp án đúng
-- B. Trần Phú
-
-Giải thích: Hội nghị đầu năm 1930 do Nguyễn Ái Quốc chủ trì.
-
-Nguồn:
-- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương I (Dữ kiện lấy từ hồ sơ 'hop-nhat-de-mo-duong' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 4 - Thành lập Đảng và Cương lĩnh chính trị đầu tiên — Slides 3-18 (Dữ kiện lấy từ hồ sơ 'hop-nhat-de-mo-duong' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-
-Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
-
-## ai-defuse-002 · **AI soạn nháp**
-
-- Trò chơi/nhóm: minefield_defuse · độ khó: easy · chương: chapter_2 · dạng: defuse_ab
-- Chủ đề: Điện Biên Phủ
-
-**Điện Biên Phủ kéo dài bao lâu?**
-
-- A. 36 ngày đêm
-- B. 56 ngày đêm  ← đáp án đúng
-
-Giải thích: Chiến dịch Điện Biên Phủ kéo dài 56 ngày đêm.
-
-Nguồn:
-- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương II - Kháng chiến chống Pháp và Điện Biên Phủ (Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 13 - Kháng chiến chống Pháp và Đại hội II — Slides 3-15 (Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 14 - Điện Biên Phủ và Hiệp định Geneve — Slides 3-16 (Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-
-Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
-
-## ai-defuse-003 · **AI soạn nháp**
-
-- Trò chơi/nhóm: minefield_defuse · độ khó: easy · chương: chapter_2 · dạng: defuse_ab
-- Chủ đề: Kháng chiến toàn quốc
-
-**Kháng chiến toàn quốc được phát động ngày nào?**
-
-- A. 19/12/1946  ← đáp án đúng
-- B. 2/9/1945
-
-Giải thích: Kháng chiến toàn quốc được phát động ngày 19/12/1946.
-
-Nguồn:
-- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương II - Đường lối kháng chiến chống Pháp (Dữ kiện lấy từ hồ sơ 'khi-hoa-hoan-khong-con-du-dia' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 12 - Đường lối kháng chiến toàn quốc và tổ chức thực hiện 1946-1950 — Slides 3-18 (Dữ kiện lấy từ hồ sơ 'khi-hoa-hoan-khong-con-du-dia' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-
-Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
-
-## ai-defuse-004 · **AI soạn nháp**
-
-- Trò chơi/nhóm: minefield_defuse · độ khó: easy · chương: chapter_3 · dạng: defuse_ab
-- Chủ đề: Đổi mới 1986
-
-**Đại hội nào mở đường đổi mới toàn diện?**
-
-- A. Đại hội IV (1976)
-- B. Đại hội VI (1986)  ← đáp án đúng
-
-Giải thích: Đại hội VI năm 1986 mở đường cho đổi mới toàn diện.
-
-Nguồn:
-- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương III (Dữ kiện lấy từ hồ sơ 'doi-moi-hay-tut-hau' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 22 - Đại hội VI và đường lối đổi mới toàn diện — Slides 3-26 (Dữ kiện lấy từ hồ sơ 'doi-moi-hay-tut-hau' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-
-Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
-
-## ai-defuse-005 · **AI soạn nháp**
-
-- Trò chơi/nhóm: minefield_defuse · độ khó: easy · chương: chapter_2 · dạng: defuse_ab
-- Chủ đề: Hiệp định Paris
-
-**Hiệp định nào buộc Mỹ rút quân?**
-
-- A. Hiệp định Paris  ← đáp án đúng
-- B. Hiệp định Geneve
-
-Giải thích: Việc ký Hiệp định Paris buộc Mỹ rút quân.
-
-Nguồn:
-- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương II - Kháng chiến chống Mỹ và thống nhất đất nước (Dữ kiện lấy từ hồ sơ 'tu-doi-dau-cuc-bo-den-toan-thang' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 16 - Các chiến lược chiến tranh của Mỹ và vai trò hậu phương miền Bắc — Slides 3-20 (Dữ kiện lấy từ hồ sơ 'tu-doi-dau-cuc-bo-den-toan-thang' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 17 - Hiệp định Paris và Tổng tiến công 1975 — Slides 3-18 (Dữ kiện lấy từ hồ sơ 'tu-doi-dau-cuc-bo-den-toan-thang' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 18 - Ý nghĩa, hạn chế và kinh nghiệm lãnh đạo 1945-1975 — Slides 3-12 (Dữ kiện lấy từ hồ sơ 'tu-doi-dau-cuc-bo-den-toan-thang' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-
-Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
-
-## ai-defuse-006 · **AI soạn nháp**
-
-- Trò chơi/nhóm: minefield_defuse · độ khó: easy · chương: chapter_2 · dạng: defuse_ab
-- Chủ đề: Hai nhiệm vụ chiến lược
-
-**Sau 1954, miền Bắc là gì của cách mạng cả nước?**
-
-- A. Tiền tuyến lớn
-- B. Hậu phương lớn  ← đáp án đúng
-
-Giải thích: Miền Bắc là hậu phương lớn, miền Nam là tiền tuyến lớn.
-
-Nguồn:
-- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương II - Một Đảng lãnh đạo hai nhiệm vụ chiến lược (Dữ kiện lấy từ hồ sơ 'mot-dat-nuoc-hai-nhiem-vu-chien-luoc' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 15 - Một Đảng lãnh đạo hai nhiệm vụ chiến lược 1954-1965 — Slides 3-18 (Dữ kiện lấy từ hồ sơ 'mot-dat-nuoc-hai-nhiem-vu-chien-luoc' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-
-Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
-
 ## t6-defuse-001 · **AI soạn nháp**
 
 - Trò chơi/nhóm: minefield_defuse · độ khó: easy · chương: chapter_3 · dạng: defuse_ab
@@ -171,32 +60,32 @@ Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — G
 - Trò chơi/nhóm: minefield_defuse · độ khó: easy · chương: chapter_3 · dạng: defuse_ab
 - Chủ đề: Gia nhập WTO (2006)
 
-**Việt Nam gia nhập WTO vào năm nào?**
+**WTO chấp thuận việc Việt Nam gia nhập vào năm nào?**
 
 - A. 2006  ← đáp án đúng
 - B. 2001
 
-Giải thích: Tháng 11/2006, Việt Nam chính thức là thành viên thứ 150 của Tổ chức Thương mại thế giới.
+Giải thích: Tháng 11/2006, WTO chấp thuận việc Việt Nam gia nhập; Việt Nam là thành viên thứ 150 và tư cách thành viên có hiệu lực từ 11/1/2007.
 
 Nguồn:
-- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 332 (Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc.)
+- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 332 (Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc. Lưu ý mốc WTO: theo wto.org (Accessions: Viet Nam), Đại hội đồng WTO chấp thuận ngày 7/11/2006, tư cách thành viên có hiệu lực từ 11/1/2007; giáo trình ghi gộp là 11/2006.)
 
 Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
 
 ## t6-defuse-005 · **AI soạn nháp**
 
 - Trò chơi/nhóm: minefield_defuse · độ khó: easy · chương: chapter_3 · dạng: defuse_ab
-- Chủ đề: Đại hội X (2006)
+- Chủ đề: Đại hội XIII (2021)
 
-**Nông Đức Mạnh được bầu lại làm Tổng Bí thư tại Đại hội nào?**
+**Đại hội XIII đánh giá bao nhiêu năm thực hiện Cương lĩnh năm 1991?**
 
-- A. Đại hội XII
-- B. Đại hội X  ← đáp án đúng
+- A. 20 năm
+- B. 30 năm  ← đáp án đúng
 
-Giải thích: Đại hội X (2006) bầu lại đồng chí Nông Đức Mạnh làm Tổng Bí thư.
+Giải thích: Đại hội XIII đánh giá 35 năm đổi mới, 30 năm thực hiện Cương lĩnh năm 1991 và 10 năm thực hiện Cương lĩnh (bổ sung, phát triển năm 2011).
 
 Nguồn:
-- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 310 (Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc.)
+- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 387 (Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc.)
 
 Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
 
@@ -217,183 +106,105 @@ Nguồn:
 
 Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
 
-## ai-mine-001 · **AI soạn nháp**
+## t6-defuse-007 · **AI soạn nháp**
 
-- Trò chơi/nhóm: minefield_main · độ khó: easy · chương: chapter_1 · dạng: single_choice
-- Chủ đề: Thành lập Đảng 1930
+- Trò chơi/nhóm: minefield_defuse · độ khó: easy · chương: chapter_3 · dạng: defuse_ab
+- Chủ đề: Đại hội XII (2016)
 
-**Hội nghị hợp nhất đầu năm 1930 đã thành lập tổ chức nào?**
+**Đại hội XII của Đảng họp vào tháng nào năm 2016?**
 
-- A. Đảng Cộng sản Việt Nam  ← đáp án đúng
-- B. Hội Việt Nam Cách mạng Thanh niên
-- C. Mặt trận Việt Minh
+- A. Tháng 1  ← đáp án đúng
+- B. Tháng 6
 
-Giải thích: Hội nghị đầu năm 1930 thống nhất các tổ chức cộng sản và thành lập Đảng Cộng sản Việt Nam.
+Giải thích: Đại hội XII họp từ ngày 20 đến ngày 28/1/2016.
 
 Nguồn:
-- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương I (Dữ kiện lấy từ hồ sơ 'hop-nhat-de-mo-duong' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 4 - Thành lập Đảng và Cương lĩnh chính trị đầu tiên — Slides 3-18 (Dữ kiện lấy từ hồ sơ 'hop-nhat-de-mo-duong' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
+- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 367 (Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc.)
 
 Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
 
-## ai-mine-002 · **AI soạn nháp**
+## t6-defuse-008 · **AI soạn nháp**
 
-- Trò chơi/nhóm: minefield_main · độ khó: easy · chương: chapter_2 · dạng: single_choice
-- Chủ đề: Hiệp định Geneve
+- Trò chơi/nhóm: minefield_defuse · độ khó: easy · chương: chapter_3 · dạng: defuse_ab
+- Chủ đề: Đại hội IX (2001)
 
-**Hiệp định nào chấm dứt chiến tranh của Pháp ở Đông Dương?**
+**Đại hội nào là Đại hội mở đầu thế kỷ XXI?**
 
-- A. Hiệp định Sơ bộ
-- B. Hiệp định Geneve  ← đáp án đúng
-- C. Hiệp định Paris
+- A. Đại hội X
+- B. Đại hội IX  ← đáp án đúng
 
-Giải thích: Chiến thắng Điện Biên Phủ buộc Pháp ký Hiệp định Geneve, chấm dứt chiến tranh.
+Giải thích: Đại hội IX (19–22/4/2001) là Đại hội mở đầu thế kỷ XXI.
 
 Nguồn:
-- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương II - Kháng chiến chống Pháp và Điện Biên Phủ (Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 13 - Kháng chiến chống Pháp và Đại hội II — Slides 3-15 (Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 14 - Điện Biên Phủ và Hiệp định Geneve — Slides 3-16 (Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
+- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 296 (Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc.)
 
 Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
 
-## ai-mine-003 · **AI soạn nháp**
+## t6-defuse-009 · **AI soạn nháp**
 
-- Trò chơi/nhóm: minefield_main · độ khó: easy · chương: chapter_1 · dạng: single_choice
-- Chủ đề: Cách mạng Tháng Tám
+- Trò chơi/nhóm: minefield_defuse · độ khó: easy · chương: chapter_3 · dạng: defuse_ab
+- Chủ đề: So sánh các kỳ Đại hội
 
-**Nhà nước nào ra đời sau Tổng khởi nghĩa tháng 8/1945?**
+**Đại hội nào có số đại biểu đông nhất trong các kỳ VII–XIII?**
 
-- A. Việt Nam Cộng hòa
-- B. Liên bang Đông Dương
-- C. Việt Nam Dân chủ Cộng hòa  ← đáp án đúng
+- A. Đại hội XIII  ← đáp án đúng
+- B. Đại hội XI
 
-Giải thích: Sau Tổng khởi nghĩa, nước Việt Nam Dân chủ Cộng hòa ra đời, mở ra kỷ nguyên độc lập dân tộc.
+Giải thích: Đại hội XIII có 1.587 đại biểu, đông nhất trong các kỳ VII–XIII (Đại hội XI có 1.377, Đại hội XII hơn 1.510).
 
 Nguồn:
-- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương I - Giải phóng dân tộc 1939-1945 và Cách mạng Tháng Tám (Dữ kiện lấy từ hồ sơ 'chop-dung-thoi-co' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 7 - Chuyển hướng chiến lược 1939-1941 — Slides 3-16 (Dữ kiện lấy từ hồ sơ 'chop-dung-thoi-co' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 8 - Chuẩn bị lực lượng và căn cứ 1941-1944 — Slides 3-9 (Dữ kiện lấy từ hồ sơ 'chop-dung-thoi-co' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 9 - Cao trào kháng Nhật và Tổng khởi nghĩa — Slides 3-12 (Dữ kiện lấy từ hồ sơ 'chop-dung-thoi-co' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 10 - Tính chất, ý nghĩa và bài học Cách mạng Tháng Tám — Slides 3-9 (Dữ kiện lấy từ hồ sơ 'chop-dung-thoi-co' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
+- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 335, 367, 386 (Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc.)
 
 Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
 
-## ai-mine-004 · **AI soạn nháp**
+## t6-defuse-010 · **AI soạn nháp**
 
-- Trò chơi/nhóm: minefield_main · độ khó: medium · chương: chapter_2 · dạng: single_choice
-- Chủ đề: Đường lối kháng chiến
+- Trò chơi/nhóm: minefield_defuse · độ khó: easy · chương: chapter_3 · dạng: defuse_ab
+- Chủ đề: Đại hội VII (1991)
 
-**Kháng chiến toàn quốc dựa vào điều gì là chính?**
+**Đại hội VII thông qua Chiến lược ổn định và phát triển KT-XH đến năm nào?**
 
-- A. Sức mình  ← đáp án đúng
-- B. Viện trợ nước ngoài
-- C. Lực lượng đồng minh
+- A. 2010
+- B. 2000  ← đáp án đúng
 
-Giải thích: Đường lối kháng chiến toàn dân, toàn diện, lâu dài, dựa vào sức mình là chính.
+Giải thích: Đại hội VII thông qua Chiến lược ổn định và phát triển kinh tế - xã hội đến năm 2000.
 
 Nguồn:
-- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương II - Đường lối kháng chiến chống Pháp (Dữ kiện lấy từ hồ sơ 'khi-hoa-hoan-khong-con-du-dia' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 12 - Đường lối kháng chiến toàn quốc và tổ chức thực hiện 1946-1950 — Slides 3-18 (Dữ kiện lấy từ hồ sơ 'khi-hoa-hoan-khong-con-du-dia' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
+- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 272 (Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc.)
 
 Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
 
-## ai-mine-005 · **AI soạn nháp**
+## t6-defuse-011 · **AI soạn nháp**
 
-- Trò chơi/nhóm: minefield_main · độ khó: medium · chương: chapter_2 · dạng: single_choice
-- Chủ đề: Kháng chiến toàn quốc
+- Trò chơi/nhóm: minefield_defuse · độ khó: easy · chương: chapter_3 · dạng: defuse_ab
+- Chủ đề: Sau Đại hội VII
 
-**Cơ quan đầu não kháng chiến chuyển lên đâu năm 1946?**
+**Hiến pháp năm 1992 được Quốc hội thông qua sau Đại hội nào?**
 
-- A. Tây Nguyên
-- B. Việt Bắc  ← đáp án đúng
-- C. Nam Bộ
+- A. Đại hội VII  ← đáp án đúng
+- B. Đại hội X
 
-Giải thích: Vừa chiến đấu giam chân địch, vừa chuyển cơ quan đầu não lên Việt Bắc.
+Giải thích: Sau Đại hội VII, tại kỳ họp thứ 11 (4/1992), Quốc hội thông qua Hiến pháp năm 1992.
 
 Nguồn:
-- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương II - Đường lối kháng chiến chống Pháp (Dữ kiện lấy từ hồ sơ 'khi-hoa-hoan-khong-con-du-dia' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 12 - Đường lối kháng chiến toàn quốc và tổ chức thực hiện 1946-1950 — Slides 3-18 (Dữ kiện lấy từ hồ sơ 'khi-hoa-hoan-khong-con-du-dia' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
+- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 277 (Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc.)
 
 Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
 
-## ai-mine-006 · **AI soạn nháp**
+## t6-defuse-012 · **AI soạn nháp**
 
-- Trò chơi/nhóm: minefield_main · độ khó: medium · chương: chapter_2 · dạng: single_choice
-- Chủ đề: Điện Biên Phủ
+- Trò chơi/nhóm: minefield_defuse · độ khó: easy · chương: chapter_3 · dạng: defuse_ab
+- Chủ đề: Quan điểm Đại hội XIII
 
-**Bộ Chính trị chọn điểm quyết chiến chiến lược nào?**
+**Theo Đại hội XIII, phát triển KT-XH là trung tâm, còn xây dựng Đảng là gì?**
 
-- A. Hà Nội
-- B. Huế
-- C. Điện Biên Phủ  ← đáp án đúng
+- A. Trọng yếu
+- B. Then chốt  ← đáp án đúng
 
-Giải thích: Bộ Chính trị quyết định chọn Điện Biên Phủ làm điểm quyết chiến chiến lược.
-
-Nguồn:
-- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương II - Kháng chiến chống Pháp và Điện Biên Phủ (Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 13 - Kháng chiến chống Pháp và Đại hội II — Slides 3-15 (Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 14 - Điện Biên Phủ và Hiệp định Geneve — Slides 3-16 (Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-
-Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
-
-## ai-mine-007 · **AI soạn nháp**
-
-- Trò chơi/nhóm: minefield_main · độ khó: medium · chương: chapter_2 · dạng: single_choice
-- Chủ đề: Hai nhiệm vụ chiến lược
-
-**Chiến lược nào của Mỹ bị thất bại giai đoạn 1954–1965?**
-
-- A. Chiến tranh đặc biệt  ← đáp án đúng
-- B. Việt Nam hóa chiến tranh
-- C. Chiến tranh cục bộ
-
-Giải thích: Cách mạng miền Nam chuyển sang thế tiến công, làm thất bại chiến lược 'Chiến tranh đặc biệt' của Mỹ.
+Giải thích: Đại hội XIII: phát triển kinh tế - xã hội là trung tâm; xây dựng Đảng là then chốt; phát triển văn hóa là nền tảng tinh thần; bảo đảm quốc phòng, an ninh là trọng yếu.
 
 Nguồn:
-- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương II - Một Đảng lãnh đạo hai nhiệm vụ chiến lược (Dữ kiện lấy từ hồ sơ 'mot-dat-nuoc-hai-nhiem-vu-chien-luoc' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 15 - Một Đảng lãnh đạo hai nhiệm vụ chiến lược 1954-1965 — Slides 3-18 (Dữ kiện lấy từ hồ sơ 'mot-dat-nuoc-hai-nhiem-vu-chien-luoc' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-
-Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
-
-## ai-mine-008 · **AI soạn nháp**
-
-- Trò chơi/nhóm: minefield_main · độ khó: hard · chương: chapter_2 · dạng: single_choice
-- Chủ đề: Giải phóng miền Nam
-
-**Cuộc tiến công nào giải phóng hoàn toàn miền Nam?**
-
-- A. Chiến dịch Biên giới 1950
-- B. Tổng tiến công mùa Xuân 1975  ← đáp án đúng
-- C. Tổng tiến công Tết Mậu Thân 1968
-
-Giải thích: Đảng tổ chức Tổng tiến công mùa Xuân 1975, giải phóng hoàn toàn miền Nam.
-
-Nguồn:
-- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương II - Kháng chiến chống Mỹ và thống nhất đất nước (Dữ kiện lấy từ hồ sơ 'tu-doi-dau-cuc-bo-den-toan-thang' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 16 - Các chiến lược chiến tranh của Mỹ và vai trò hậu phương miền Bắc — Slides 3-20 (Dữ kiện lấy từ hồ sơ 'tu-doi-dau-cuc-bo-den-toan-thang' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 17 - Hiệp định Paris và Tổng tiến công 1975 — Slides 3-18 (Dữ kiện lấy từ hồ sơ 'tu-doi-dau-cuc-bo-den-toan-thang' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 18 - Ý nghĩa, hạn chế và kinh nghiệm lãnh đạo 1945-1975 — Slides 3-12 (Dữ kiện lấy từ hồ sơ 'tu-doi-dau-cuc-bo-den-toan-thang' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-
-Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
-
-## ai-mine-009 · **AI soạn nháp**
-
-- Trò chơi/nhóm: minefield_main · độ khó: hard · chương: chapter_2 · dạng: single_choice
-- Chủ đề: Kinh nghiệm lãnh đạo
-
-**Đánh bại các chiến lược của Mỹ cần kết hợp mặt trận nào?**
-
-- A. Quân sự, kinh tế, văn hóa
-- B. Chính trị, kinh tế, tôn giáo
-- C. Quân sự, chính trị, ngoại giao  ← đáp án đúng
-
-Giải thích: Đảng kiên trì kết hợp đấu tranh quân sự, chính trị và ngoại giao.
-
-Nguồn:
-- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương II - Kháng chiến chống Mỹ và thống nhất đất nước (Dữ kiện lấy từ hồ sơ 'tu-doi-dau-cuc-bo-den-toan-thang' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 16 - Các chiến lược chiến tranh của Mỹ và vai trò hậu phương miền Bắc — Slides 3-20 (Dữ kiện lấy từ hồ sơ 'tu-doi-dau-cuc-bo-den-toan-thang' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 17 - Hiệp định Paris và Tổng tiến công 1975 — Slides 3-18 (Dữ kiện lấy từ hồ sơ 'tu-doi-dau-cuc-bo-den-toan-thang' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 18 - Ý nghĩa, hạn chế và kinh nghiệm lãnh đạo 1945-1975 — Slides 3-12 (Dữ kiện lấy từ hồ sơ 'tu-doi-dau-cuc-bo-den-toan-thang' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
+- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 388 (Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc.)
 
 Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
 
@@ -726,16 +537,16 @@ Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — G
 - Trò chơi/nhóm: minefield_main · độ khó: hard · chương: chapter_3 · dạng: single_choice
 - Chủ đề: Hội nghị TW 4 khóa XII (2016)
 
-**Hội nghị TW 4 khóa XII (10/2016) nêu 27 biểu hiện của hiện tượng nào?**
+**Nghị quyết TW 4 khóa XII (10/2016) nhằm ngăn chặn, đẩy lùi điều gì?**
 
-- A. Tự phê bình và phê bình
-- B. Tự chủ, tự lực, tự cường
-- C. Tự diễn biến, tự chuyển hóa  ← đáp án đúng
+- A. Khủng hoảng tài chính - tiền tệ
+- B. Suy thoái, tự diễn biến, tự chuyển hóa  ← đáp án đúng
+- C. Nguy cơ tụt hậu về kinh tế
 
-Giải thích: Nghị quyết 04-NQ/TW (30/10/2016) chỉ rõ 27 biểu hiện 'tự diễn biến', 'tự chuyển hóa' trong nội bộ.
+Giải thích: Nghị quyết 04-NQ/TW (30/10/2016) về tăng cường xây dựng, chỉnh đốn Đảng; ngăn chặn, đẩy lùi sự suy thoái về tư tưởng chính trị, đạo đức, lối sống, những biểu hiện 'tự diễn biến', 'tự chuyển hóa' trong nội bộ.
 
 Nguồn:
-- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 381, 382 (Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc.)
+- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 381, 382 (Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc. Giáo trình tr. 382 viết gọn '27 biểu hiện tự diễn biến, tự chuyển hóa'; theo văn bản Nghị quyết, 27 biểu hiện chia ba nhóm (tư tưởng chính trị; đạo đức, lối sống; tự diễn biến, tự chuyển hóa). Câu này không hỏi con số 27.)
 
 Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
 
@@ -775,312 +586,165 @@ Nguồn:
 
 Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
 
-## ai-race-001 · **AI soạn nháp**
+## t6-mine-022 · **AI soạn nháp**
 
-- Trò chơi/nhóm: race · độ khó: easy · chương: chapter_1 · dạng: single_choice
-- Chủ đề: Thành lập Đảng 1930
+- Trò chơi/nhóm: minefield_main · độ khó: easy · chương: chapter_3 · dạng: single_choice
+- Chủ đề: Đại hội XI (2011)
 
-**Ai chủ trì hội nghị hợp nhất các tổ chức cộng sản đầu năm 1930?**
+**Đại hội XI của Đảng họp vào thời gian nào?**
 
-- A. Nguyễn Ái Quốc  ← đáp án đúng
-- B. Trần Phú
-- C. Lê Hồng Phong
+- A. Tháng 4/2011
+- B. Tháng 1/2011  ← đáp án đúng
+- C. Tháng 6/2011
 
-Giải thích: Hội nghị đầu năm 1930 do Nguyễn Ái Quốc chủ trì đã thống nhất các tổ chức cộng sản và thành lập Đảng Cộng sản Việt Nam.
+Giải thích: Đại hội XI họp tại Hà Nội từ ngày 12 đến ngày 19/1/2011.
 
 Nguồn:
-- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương I (Dữ kiện lấy từ hồ sơ 'hop-nhat-de-mo-duong' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 4 - Thành lập Đảng và Cương lĩnh chính trị đầu tiên — Slides 3-18 (Dữ kiện lấy từ hồ sơ 'hop-nhat-de-mo-duong' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
+- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 335 (Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc.)
 
 Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
 
-## ai-race-002 · **AI soạn nháp**
+## t6-mine-023 · **AI soạn nháp**
 
-- Trò chơi/nhóm: race · độ khó: easy · chương: chapter_1 · dạng: before_after
-- Chủ đề: Trình tự sự kiện
+- Trò chơi/nhóm: minefield_main · độ khó: easy · chương: chapter_3 · dạng: single_choice
+- Chủ đề: Nhiệm vụ sau Đại hội VIII
 
-**Sự kiện nào xảy ra trước?**
+**Sau Đại hội VIII, lĩnh vực nào được coi là nhiệm vụ trọng tâm?**
 
-- A. Tổng khởi nghĩa (tháng 8/1945)
-- B. Thành lập Đảng (đầu năm 1930)  ← đáp án đúng
+- A. Quốc phòng
+- B. Đối ngoại
+- C. Phát triển kinh tế  ← đáp án đúng
 
-Giải thích: Đảng Cộng sản Việt Nam được thành lập đầu năm 1930, trước Tổng khởi nghĩa tháng 8/1945.
+Giải thích: Sau Đại hội VIII, Trung ương chỉ đạo coi phát triển kinh tế là nhiệm vụ trọng tâm, phát huy tối đa nội lực, nâng cao hiệu quả hợp tác quốc tế.
 
 Nguồn:
-- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương I (Dữ kiện lấy từ hồ sơ 'hop-nhat-de-mo-duong' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 4 - Thành lập Đảng và Cương lĩnh chính trị đầu tiên — Slides 3-18 (Dữ kiện lấy từ hồ sơ 'hop-nhat-de-mo-duong' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
+- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 288 (Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc.)
 
 Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
 
-## ai-race-003 · **AI soạn nháp**
+## t6-mine-024 · **AI soạn nháp**
 
-- Trò chơi/nhóm: race · độ khó: easy · chương: chapter_2 · dạng: single_choice
-- Chủ đề: Kháng chiến toàn quốc
+- Trò chơi/nhóm: minefield_main · độ khó: easy · chương: chapter_3 · dạng: single_choice
+- Chủ đề: Tổng quan các kỳ Đại hội 1991–2021
 
-**Kháng chiến toàn quốc chống Pháp được phát động vào ngày nào?**
+**Các Đại hội VII đến XIII được tổ chức cách nhau bao nhiêu năm?**
 
-- A. 2/9/1945
-- B. 7/5/1954
-- C. 19/12/1946  ← đáp án đúng
+- A. 5 năm  ← đáp án đúng
+- B. 4 năm
+- C. 10 năm
 
-Giải thích: Kháng chiến toàn quốc được phát động ngày 19/12/1946.
+Giải thích: Các kỳ Đại hội lần lượt họp năm 1991, 1996, 2001, 2006, 2011, 2016 và 2021, mỗi nhiệm kỳ 5 năm.
 
 Nguồn:
-- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương II - Đường lối kháng chiến chống Pháp (Dữ kiện lấy từ hồ sơ 'khi-hoa-hoan-khong-con-du-dia' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 12 - Đường lối kháng chiến toàn quốc và tổ chức thực hiện 1946-1950 — Slides 3-18 (Dữ kiện lấy từ hồ sơ 'khi-hoa-hoan-khong-con-du-dia' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
+- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 272, 285, 296, 310, 335, 367, 386 (Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc.)
 
 Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
 
-## ai-race-004 · **AI soạn nháp**
+## t6-mine-025 · **AI soạn nháp**
 
-- Trò chơi/nhóm: race · độ khó: easy · chương: chapter_2 · dạng: single_choice
-- Chủ đề: Điện Biên Phủ
+- Trò chơi/nhóm: minefield_main · độ khó: medium · chương: chapter_3 · dạng: pair_choice
+- Chủ đề: Thời gian các kỳ Đại hội
 
-**Chiến dịch Điện Biên Phủ kéo dài bao nhiêu ngày đêm?**
+**Cặp nào ghép đúng giữa Đại hội và thời gian họp?**
 
-- A. 56 ngày đêm  ← đáp án đúng
-- B. 36 ngày đêm
-- C. 100 ngày đêm
+- A. Đại hội X – 12 đến 19/1/2006
+- B. Đại hội IX – 19 đến 22/4/2001  ← đáp án đúng
+- C. Đại hội XI – 20 đến 28/1/2011
 
-Giải thích: Tập đoàn cứ điểm Điện Biên Phủ bị tiêu diệt hoàn toàn sau 56 ngày đêm.
+Giải thích: Đại hội IX họp 19–22/4/2001; Đại hội X họp 18–25/4/2006; Đại hội XI họp 12–19/1/2011; Đại hội XII họp 20–28/1/2016.
 
 Nguồn:
-- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương II - Kháng chiến chống Pháp và Điện Biên Phủ (Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 13 - Kháng chiến chống Pháp và Đại hội II — Slides 3-15 (Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 14 - Điện Biên Phủ và Hiệp định Geneve — Slides 3-16 (Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
+- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 296, 310, 335, 367 (Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc.)
 
 Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
 
-## ai-race-005 · **AI soạn nháp**
+## t6-mine-026 · **AI soạn nháp**
 
-- Trò chơi/nhóm: race · độ khó: easy · chương: chapter_3 · dạng: single_choice
-- Chủ đề: Đổi mới 1986
+- Trò chơi/nhóm: minefield_main · độ khó: medium · chương: chapter_3 · dạng: single_choice
+- Chủ đề: Chủ đề Đại hội X
 
-**Đại hội nào mở đường cho đổi mới toàn diện?**
+**Chủ đề Đại hội X bắt đầu bằng nội dung nào?**
 
-- A. Đại hội VIII (1996)
-- B. Đại hội VI (1986)  ← đáp án đúng
-- C. Đại hội IV (1976)
+- A. Tăng cường xây dựng, chỉnh đốn Đảng
+- B. Khơi dậy khát vọng phát triển
+- C. Nâng cao năng lực lãnh đạo của Đảng  ← đáp án đúng
 
-Giải thích: Đại hội VI năm 1986 mở đường cho đổi mới toàn diện.
+Giải thích: Chủ đề Đại hội X: 'Nâng cao năng lực lãnh đạo và sức chiến đấu của Đảng, phát huy sức mạnh toàn dân tộc, đẩy mạnh toàn diện công cuộc đổi mới, sớm đưa nước ta ra khỏi tình trạng kém phát triển'. Hai lựa chọn còn lại mở đầu chủ đề Đại hội XIII.
 
 Nguồn:
-- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương III (Dữ kiện lấy từ hồ sơ 'doi-moi-hay-tut-hau' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 22 - Đại hội VI và đường lối đổi mới toàn diện — Slides 3-26 (Dữ kiện lấy từ hồ sơ 'doi-moi-hay-tut-hau' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
+- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 310, 387 (Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc.)
 
 Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
 
-## ai-race-006 · **AI soạn nháp**
+## t6-mine-027 · **AI soạn nháp**
 
-- Trò chơi/nhóm: race · độ khó: easy · chương: chapter_2 · dạng: before_after
-- Chủ đề: Trình tự sự kiện
+- Trò chơi/nhóm: minefield_main · độ khó: medium · chương: chapter_3 · dạng: single_choice
+- Chủ đề: Nhiệm vụ Đại hội XI
 
-**Sự kiện nào xảy ra sau?**
+**Yêu cầu xuyên suốt trong Chiến lược 2011–2020 của Đại hội XI là gì?**
 
-- A. Kháng chiến toàn quốc (12/1946)
-- B. Hiệp định Geneve (1954)  ← đáp án đúng
+- A. Phát triển nhanh gắn với bền vững  ← đáp án đúng
+- B. Ưu tiên tuyệt đối công nghiệp nặng
+- C. Tăng trưởng chủ yếu nhờ vốn đầu tư
 
-Giải thích: Kháng chiến toàn quốc bắt đầu ngày 19/12/1946; Hiệp định Geneve được ký sau chiến thắng Điện Biên Phủ năm 1954.
+Giải thích: Quan điểm phát triển của Chiến lược 2011–2020: phát triển nhanh gắn liền với phát triển bền vững là yêu cầu xuyên suốt.
 
 Nguồn:
-- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương II - Kháng chiến chống Pháp và Điện Biên Phủ (Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 13 - Kháng chiến chống Pháp và Đại hội II — Slides 3-15 (Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 14 - Điện Biên Phủ và Hiệp định Geneve — Slides 3-16 (Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
+- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 348 (Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc.)
 
 Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
 
-## ai-race-007 · **AI soạn nháp**
+## t6-mine-028 · **AI soạn nháp**
 
-- Trò chơi/nhóm: race · độ khó: medium · chương: chapter_1 · dạng: single_choice
-- Chủ đề: Thống nhất 1929-1930
+- Trò chơi/nhóm: minefield_main · độ khó: medium · chương: chapter_3 · dạng: single_choice
+- Chủ đề: Nhiệm vụ Đại hội IX
 
-**Mâu thuẫn chính của giai đoạn 1929–1930 là gì?**
+**Đại hội IX tạo nền tảng để đến năm 2020 nước ta cơ bản trở thành nước gì?**
 
-- A. Cần thống nhất, nhưng tổ chức chia rẽ  ← đáp án đúng
-- B. Thiếu vũ khí để khởi nghĩa
-- C. Thiếu người biết chữ trong phong trào
+- A. Nước phát triển, định hướng XHCN
+- B. Nước công nghiệp theo hướng hiện đại  ← đáp án đúng
+- C. Nước có thu nhập trung bình
 
-Giải thích: Yêu cầu thống nhất lực lượng cách mạng đối lập với tình trạng chia rẽ tổ chức và thiếu một cương lĩnh chung.
+Giải thích: Chiến lược 2001–2010 của Đại hội IX: đưa nước ta ra khỏi tình trạng kém phát triển, tạo nền tảng để đến năm 2020 nước ta cơ bản trở thành một nước công nghiệp theo hướng hiện đại.
 
 Nguồn:
-- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương I (Dữ kiện lấy từ hồ sơ 'hop-nhat-de-mo-duong' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 4 - Thành lập Đảng và Cương lĩnh chính trị đầu tiên — Slides 3-18 (Dữ kiện lấy từ hồ sơ 'hop-nhat-de-mo-duong' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
+- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 297 (Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc.)
 
 Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
 
-## ai-race-008 · **AI soạn nháp**
+## t6-mine-029 · **AI soạn nháp**
 
-- Trò chơi/nhóm: race · độ khó: medium · chương: chapter_1 · dạng: single_choice
-- Chủ đề: Phong trào 1930-1935
+- Trò chơi/nhóm: minefield_main · độ khó: hard · chương: chapter_3 · dạng: single_choice
+- Chủ đề: Chủ đề Đại hội X
 
-**Sau đàn áp 1930–1931, Đảng thực tế đã làm gì?**
+**'Sớm đưa nước ta ra khỏi tình trạng kém phát triển' thuộc chủ đề Đại hội nào?**
 
-- A. Rút khỏi hoạt động trong nước
-- B. Bảo toàn, tổng kết, khôi phục tổ chức  ← đáp án đúng
-- C. Phát động ngay tổng khởi nghĩa
+- A. Đại hội XII
+- B. Đại hội XIII
+- C. Đại hội X  ← đáp án đúng
 
-Giải thích: Đảng và cán bộ còn lại kiên trì khôi phục tổ chức, xây dựng chương trình hành động và tiến tới Đại hội I năm 1935.
+Giải thích: Cụm này là phần cuối chủ đề Đại hội X (2006). Chủ đề Đại hội XII hướng tới nước công nghiệp theo hướng hiện đại; chủ đề Đại hội XIII hướng tới nước phát triển vào giữa thế kỷ XXI.
 
 Nguồn:
-- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương I - Phong trào 1930-1935 (Dữ kiện lấy từ hồ sơ 'giu-mach-phong-trao' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 5 - Phong trào 1930-1931 và khôi phục 1932-1935 — Slides 3-18 (Dữ kiện lấy từ hồ sơ 'giu-mach-phong-trao' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
+- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 310, 367, 387 (Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc.)
 
 Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
 
-## ai-race-009 · **AI soạn nháp**
+## t6-mine-030 · **AI soạn nháp**
 
-- Trò chơi/nhóm: race · độ khó: medium · chương: chapter_1 · dạng: single_choice
-- Chủ đề: Phong trào dân chủ 1936-1939
+- Trò chơi/nhóm: minefield_main · độ khó: hard · chương: chapter_3 · dạng: single_choice
+- Chủ đề: Mục tiêu giữa thế kỷ XXI
 
-**Giai đoạn 1936–1939, Đảng kết hợp những hình thức đấu tranh nào?**
+**Cương lĩnh 2011 đặt mục tiêu đến giữa thế kỷ XXI nước ta trở thành gì?**
 
-- A. Chỉ hoạt động bí mật
-- B. Chỉ đấu tranh vũ trang
-- C. Cả công khai lẫn nửa hợp pháp  ← đáp án đúng
+- A. Nước công nghiệp hiện đại  ← đáp án đúng
+- B. Nước phát triển, thu nhập cao
+- C. Nước nông - công nghiệp
 
-Giải thích: Đảng xây dựng mặt trận rộng rãi và kết hợp các hình thức công khai, nửa công khai, hợp pháp và nửa hợp pháp.
-
-Nguồn:
-- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương I - Phong trào dân chủ 1936-1939 (Dữ kiện lấy từ hồ sơ 'linh-hoat-trong-cua-so-dan-chu' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 6 - Phong trào dân chủ 1936-1939 — Slides 3-11 (Dữ kiện lấy từ hồ sơ 'linh-hoat-trong-cua-so-dan-chu' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-
-Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
-
-## ai-race-010 · **AI soạn nháp**
-
-- Trò chơi/nhóm: race · độ khó: medium · chương: chapter_2 · dạng: single_choice
-- Chủ đề: Bảo vệ chính quyền 1945-1946
-
-**Đường lối bảo vệ chính quyền 1945–1946 kết hợp điều gì?**
-
-- A. Chống đói, dốt; ngoại giao linh hoạt  ← đáp án đúng
-- B. Chỉ tập trung quân sự
-- C. Chỉ nhờ viện trợ bên ngoài
-
-Giải thích: Đường lối kết hợp chống đói, chống dốt, xây dựng nhà nước mới, trấn áp phản cách mạng và ngoại giao linh hoạt.
+Giải thích: Cương lĩnh 2011: đến giữa thế kỷ XXI xây dựng nước ta thành nước công nghiệp hiện đại, theo định hướng XHCN. Đại hội XIII nâng mục tiêu lên trở thành nước phát triển, theo định hướng XHCN.
 
 Nguồn:
-- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương II (Dữ kiện lấy từ hồ sơ 'giu-chinh-quyen-giua-vong-vay' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 11 - Xây dựng và bảo vệ chính quyền cách mạng 1945-1946 — Slides 3-18 (Dữ kiện lấy từ hồ sơ 'giu-chinh-quyen-giua-vong-vay' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-
-Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
-
-## ai-race-011 · **AI soạn nháp**
-
-- Trò chơi/nhóm: race · độ khó: medium · chương: chapter_2 · dạng: single_choice
-- Chủ đề: Hai nhiệm vụ chiến lược
-
-**Sau 1954, vai trò của miền Bắc và miền Nam là gì?**
-
-- A. Cả hai cùng là hậu phương
-- B. Bắc: hậu phương lớn; Nam: tiền tuyến lớn  ← đáp án đúng
-- C. Nam: hậu phương lớn; Bắc: tiền tuyến lớn
-
-Giải thích: Miền Bắc là hậu phương lớn, miền Nam là tiền tuyến lớn.
-
-Nguồn:
-- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương II - Một Đảng lãnh đạo hai nhiệm vụ chiến lược (Dữ kiện lấy từ hồ sơ 'mot-dat-nuoc-hai-nhiem-vu-chien-luoc' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 15 - Một Đảng lãnh đạo hai nhiệm vụ chiến lược 1954-1965 — Slides 3-18 (Dữ kiện lấy từ hồ sơ 'mot-dat-nuoc-hai-nhiem-vu-chien-luoc' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-
-Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
-
-## ai-race-012 · **AI soạn nháp**
-
-- Trò chơi/nhóm: race · độ khó: medium · chương: chapter_2 · dạng: single_choice
-- Chủ đề: Đường lối kháng chiến
-
-**Đường lối kháng chiến toàn quốc được tóm tắt thế nào?**
-
-- A. Đánh nhanh thắng nhanh nhờ viện trợ
-- B. Cố thủ ở các thành thị lớn
-- C. Toàn dân, toàn diện, lâu dài, tự lực  ← đáp án đúng
-
-Giải thích: Đường lối kháng chiến là toàn dân, toàn diện, lâu dài và dựa vào sức mình là chính.
-
-Nguồn:
-- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương II - Đường lối kháng chiến chống Pháp (Dữ kiện lấy từ hồ sơ 'khi-hoa-hoan-khong-con-du-dia' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 12 - Đường lối kháng chiến toàn quốc và tổ chức thực hiện 1946-1950 — Slides 3-18 (Dữ kiện lấy từ hồ sơ 'khi-hoa-hoan-khong-con-du-dia' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-
-Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
-
-## ai-race-013 · **AI soạn nháp**
-
-- Trò chơi/nhóm: race · độ khó: medium · chương: chapter_3 · dạng: single_choice
-- Chủ đề: Đổi mới 1986
-
-**Từ Đại hội VI, lĩnh vực nào là trọng tâm đổi mới ban đầu?**
-
-- A. Đổi mới kinh tế  ← đáp án đúng
-- B. Đổi mới quân sự
-- C. Đổi mới nghệ thuật
-
-Giải thích: Đại hội VI coi đổi mới kinh tế là trọng tâm ban đầu.
-
-Nguồn:
-- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương III (Dữ kiện lấy từ hồ sơ 'doi-moi-hay-tut-hau' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 22 - Đại hội VI và đường lối đổi mới toàn diện — Slides 3-26 (Dữ kiện lấy từ hồ sơ 'doi-moi-hay-tut-hau' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-
-Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
-
-## ai-race-014 · **AI soạn nháp**
-
-- Trò chơi/nhóm: race · độ khó: hard · chương: chapter_2 · dạng: single_choice
-- Chủ đề: Hiệp định Geneve
-
-**Hiệp định Geneve công nhận điều gì với ba nước Đông Dương?**
-
-- A. Chia thành các vùng chiếm đóng
-- B. Độc lập, chủ quyền, thống nhất, toàn vẹn  ← đáp án đúng
-- C. Chỉ độc lập, chưa có chủ quyền
-
-Giải thích: Hiệp định Geneve buộc Pháp công nhận độc lập, chủ quyền, thống nhất và toàn vẹn lãnh thổ ba nước Đông Dương.
-
-Nguồn:
-- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương II - Kháng chiến chống Pháp và Điện Biên Phủ (Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 13 - Kháng chiến chống Pháp và Đại hội II — Slides 3-15 (Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 14 - Điện Biên Phủ và Hiệp định Geneve — Slides 3-16 (Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-
-Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
-
-## ai-race-015 · **AI soạn nháp**
-
-- Trò chơi/nhóm: race · độ khó: hard · chương: chapter_2 · dạng: single_choice
-- Chủ đề: Điện Biên Phủ
-
-**Phương châm tác chiến ở Điện Biên Phủ là gì?**
-
-- A. Đánh nhanh, thắng nhanh
-- B. Vây lấn, không giao chiến
-- C. Đánh chắc, tiến chắc  ← đáp án đúng
-
-Giải thích: Bộ Chính trị chọn phương châm 'đánh chắc, tiến chắc' cho chiến dịch Điện Biên Phủ.
-
-Nguồn:
-- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương II - Kháng chiến chống Pháp và Điện Biên Phủ (Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 13 - Kháng chiến chống Pháp và Đại hội II — Slides 3-15 (Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 14 - Điện Biên Phủ và Hiệp định Geneve — Slides 3-16 (Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-
-Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
-
-## ai-race-016 · **AI soạn nháp**
-
-- Trò chơi/nhóm: race · độ khó: hard · chương: chapter_1 · dạng: single_choice
-- Chủ đề: Tổng khởi nghĩa 8/1945
-
-**Đảng phát động Tổng khởi nghĩa 8/1945 vào thời điểm nào?**
-
-- A. Nhật đầu hàng, bộ máy địch khủng hoảng  ← đáp án đúng
-- B. Khi quân Pháp quay lại Đông Dương
-- C. Ngay sau Đại hội I năm 1935
-
-Giải thích: Đảng quyết định phát động Tổng khởi nghĩa khi Nhật đầu hàng và bộ máy cai trị khủng hoảng trong tháng 8/1945.
-
-Nguồn:
-- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương I - Giải phóng dân tộc 1939-1945 và Cách mạng Tháng Tám (Dữ kiện lấy từ hồ sơ 'chop-dung-thoi-co' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 7 - Chuyển hướng chiến lược 1939-1941 — Slides 3-16 (Dữ kiện lấy từ hồ sơ 'chop-dung-thoi-co' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 8 - Chuẩn bị lực lượng và căn cứ 1941-1944 — Slides 3-9 (Dữ kiện lấy từ hồ sơ 'chop-dung-thoi-co' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 9 - Cao trào kháng Nhật và Tổng khởi nghĩa — Slides 3-12 (Dữ kiện lấy từ hồ sơ 'chop-dung-thoi-co' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
-- VNR202 Session 10 - Tính chất, ý nghĩa và bài học Cách mạng Tháng Tám — Slides 3-9 (Dữ kiện lấy từ hồ sơ 'chop-dung-thoi-co' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể.)
+- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 340, 389 (Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc.)
 
 Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
 
@@ -1268,16 +932,16 @@ Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — G
 - Trò chơi/nhóm: race · độ khó: medium · chương: chapter_3 · dạng: single_choice
 - Chủ đề: Gia nhập WTO (2006)
 
-**Tháng 11/2006, Việt Nam là thành viên thứ mấy của WTO?**
+**Việt Nam là thành viên thứ mấy của Tổ chức Thương mại thế giới (WTO)?**
 
 - A. Thứ 120
 - B. Thứ 160
 - C. Thứ 150  ← đáp án đúng
 
-Giải thích: Tháng 11/2006, sau hơn 10 năm đàm phán, Việt Nam chính thức là thành viên thứ 150 của Tổ chức Thương mại thế giới.
+Giải thích: Việt Nam là thành viên thứ 150 của WTO: WTO chấp thuận việc gia nhập tháng 11/2006, tư cách thành viên có hiệu lực từ 11/1/2007.
 
 Nguồn:
-- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 332 (Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc.)
+- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 332 (Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc. Lưu ý mốc WTO: theo wto.org (Accessions: Viet Nam), Đại hội đồng WTO chấp thuận ngày 7/11/2006, tư cách thành viên có hiệu lực từ 11/1/2007; giáo trình ghi gộp là 11/2006.)
 
 Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
 
@@ -1468,13 +1132,13 @@ Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — G
 
 **Mốc nào xảy ra muộn hơn?**
 
-- A. Gia nhập WTO (11/2006)  ← đáp án đúng
+- A. WTO chấp thuận gia nhập (11/2006)  ← đáp án đúng
 - B. Gia nhập ASEAN (7/1995)
 
-Giải thích: Việt Nam gia nhập ASEAN ngày 28/7/1995, còn gia nhập WTO vào tháng 11/2006, muộn hơn.
+Giải thích: Việt Nam gia nhập ASEAN ngày 28/7/1995; WTO chấp thuận việc Việt Nam gia nhập vào tháng 11/2006 (thành viên từ 11/1/2007), muộn hơn.
 
 Nguồn:
-- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 281, 332 (Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc.)
+- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 281, 332 (Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc. Lưu ý mốc WTO: theo wto.org (Accessions: Viet Nam), Đại hội đồng WTO chấp thuận ngày 7/11/2006, tư cách thành viên có hiệu lực từ 11/1/2007; giáo trình ghi gộp là 11/2006.)
 
 Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
 
@@ -1555,13 +1219,13 @@ Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — G
 - Trò chơi/nhóm: race · độ khó: hard · chương: chapter_3 · dạng: single_choice
 - Chủ đề: Đại hội XII (2016)
 
-**Bộ Chính trị khóa XII có bao nhiêu đồng chí?**
+**Bộ Chính trị được bầu tại Đại hội XII có bao nhiêu đồng chí?**
 
 - A. 19  ← đáp án đúng
 - B. 14
 - C. 18
 
-Giải thích: Đại hội XII bầu Bộ Chính trị gồm 19 đồng chí (khóa X và XI gồm 14, khóa XIII gồm 18).
+Giải thích: Bộ Chính trị được bầu tại Đại hội XII (1/2016) gồm 19 đồng chí (khóa X và XI khi được bầu gồm 14, khóa XIII gồm 18).
 
 Nguồn:
 - Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 310, 335, 367, 387 (Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc.)
@@ -1601,5 +1265,293 @@ Giải thích: Hội nghị Trung ương 3 khóa VII (6/1992) lần đầu tiên
 
 Nguồn:
 - Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 281 (Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc.)
+
+Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
+
+## t6-race-030 · **AI soạn nháp**
+
+- Trò chơi/nhóm: race · độ khó: easy · chương: chapter_3 · dạng: single_choice
+- Chủ đề: Tổng quan các kỳ Đại hội 1991–2021
+
+**Từ năm 1991 đến năm 2021, Đảng tổ chức bao nhiêu kỳ Đại hội toàn quốc?**
+
+- A. 7 kỳ  ← đáp án đúng
+- B. 6 kỳ
+- C. 8 kỳ
+
+Giải thích: Giai đoạn 1991–2021 có 7 kỳ Đại hội đại biểu toàn quốc: VII (1991), VIII (1996), IX (2001), X (2006), XI (2011), XII (2016), XIII (2021).
+
+Nguồn:
+- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 272, 285, 296, 310, 335, 367, 386 (Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc.)
+
+Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
+
+## t6-race-031 · **AI soạn nháp**
+
+- Trò chơi/nhóm: race · độ khó: easy · chương: chapter_3 · dạng: single_choice
+- Chủ đề: Đại hội VIII (1996)
+
+**Đại hội VIII của Đảng họp vào năm nào?**
+
+- A. 1991
+- B. 1996  ← đáp án đúng
+- C. 2001
+
+Giải thích: Đại hội VIII họp tại Hà Nội từ ngày 28/6 đến ngày 1/7/1996.
+
+Nguồn:
+- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 285 (Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc.)
+
+Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
+
+## t6-race-032 · **AI soạn nháp**
+
+- Trò chơi/nhóm: race · độ khó: easy · chương: chapter_3 · dạng: single_choice
+- Chủ đề: Đại hội X (2006)
+
+**Đại hội X của Đảng họp vào tháng nào năm 2006?**
+
+- A. Tháng 1
+- B. Tháng 6
+- C. Tháng 4  ← đáp án đúng
+
+Giải thích: Đại hội X họp tại Hà Nội từ ngày 18 đến ngày 25/4/2006.
+
+Nguồn:
+- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 310 (Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc.)
+
+Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
+
+## t6-race-033 · **AI soạn nháp**
+
+- Trò chơi/nhóm: race · độ khó: easy · chương: chapter_3 · dạng: single_choice
+- Chủ đề: Đại hội XII (2016)
+
+**Đại hội XII của Đảng họp vào năm nào?**
+
+- A. 2016  ← đáp án đúng
+- B. 2011
+- C. 2021
+
+Giải thích: Đại hội XII họp từ ngày 20 đến ngày 28/1/2016.
+
+Nguồn:
+- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 367 (Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc.)
+
+Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
+
+## t6-race-034 · **AI soạn nháp**
+
+- Trò chơi/nhóm: race · độ khó: easy · chương: chapter_3 · dạng: single_choice
+- Chủ đề: Tinh thần Đại hội XII
+
+**Đại hội XII được khẳng định là Đại hội của tinh thần nào?**
+
+- A. Độc lập - Tự do - Hạnh phúc
+- B. Đoàn kết - Dân chủ - Kỷ cương - Đổi mới  ← đáp án đúng
+- C. Dân giàu - Nước mạnh - Văn minh
+
+Giải thích: Giáo trình khẳng định Đại hội XII là Đại hội 'Đoàn kết - Dân chủ - Kỷ cương - Đổi mới'.
+
+Nguồn:
+- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 367 (Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc.)
+
+Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
+
+## t6-race-035 · **AI soạn nháp**
+
+- Trò chơi/nhóm: race · độ khó: easy · chương: chapter_3 · dạng: single_choice
+- Chủ đề: Nhiệm vụ Đại hội X
+
+**Đại hội X xác định nhiệm vụ then chốt là gì?**
+
+- A. Phát triển kinh tế
+- B. Phát triển văn hóa
+- C. Xây dựng, chỉnh đốn Đảng  ← đáp án đúng
+
+Giải thích: Đại hội X xác định nhiệm vụ then chốt là xây dựng, chỉnh đốn Đảng, thành tố đầu tiên trong chủ đề Đại hội.
+
+Nguồn:
+- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 312 (Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc.)
+
+Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
+
+## t6-race-036 · **AI soạn nháp**
+
+- Trò chơi/nhóm: race · độ khó: medium · chương: chapter_3 · dạng: single_choice
+- Chủ đề: Đại hội XIII (2021)
+
+**Đại hội XIII họp từ ngày 25/1/2021 đến ngày nào?**
+
+- A. 1/2/2021  ← đáp án đúng
+- B. 28/1/2021
+- C. 19/1/2021
+
+Giải thích: Đại hội XIII họp từ ngày 25/1 đến ngày 1/2/2021. (Đại hội XII bế mạc 28/1/2016, Đại hội XI bế mạc 19/1/2011.)
+
+Nguồn:
+- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 335, 367, 386 (Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc.)
+
+Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
+
+## t6-race-037 · **AI soạn nháp**
+
+- Trò chơi/nhóm: race · độ khó: medium · chương: chapter_3 · dạng: single_choice
+- Chủ đề: Tinh thần Đại hội VII
+
+**'Trí tuệ - đổi mới, dân chủ - kỷ cương - đoàn kết' là tinh thần Đại hội nào?**
+
+- A. Đại hội XII
+- B. Đại hội VII  ← đáp án đúng
+- C. Đại hội X
+
+Giải thích: Đại hội VII được đánh giá là 'Đại hội của trí tuệ - đổi mới, dân chủ - kỷ cương - đoàn kết'. Đại hội XII là Đại hội 'Đoàn kết - Dân chủ - Kỷ cương - Đổi mới'.
+
+Nguồn:
+- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 277, 367 (Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc.)
+
+Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
+
+## t6-race-038 · **AI soạn nháp**
+
+- Trò chơi/nhóm: race · độ khó: medium · chương: chapter_3 · dạng: single_choice
+- Chủ đề: Chủ đề Đại hội XII
+
+**Chủ đề Đại hội XII phấn đấu sớm đưa nước ta cơ bản trở thành nước gì?**
+
+- A. Nước phát triển, thu nhập cao
+- B. Nước nông nghiệp tiên tiến
+- C. Nước công nghiệp theo hướng hiện đại  ← đáp án đúng
+
+Giải thích: Chủ đề Đại hội XII kết thúc bằng: 'phấn đấu sớm đưa nước ta cơ bản trở thành nước công nghiệp theo hướng hiện đại'.
+
+Nguồn:
+- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 367 (Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc.)
+
+Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
+
+## t6-race-039 · **AI soạn nháp**
+
+- Trò chơi/nhóm: race · độ khó: medium · chương: chapter_3 · dạng: single_choice
+- Chủ đề: Nhiệm vụ Đại hội VII
+
+**Mục tiêu tổng quát 5 năm 1991–1995 của Đại hội VII là gì?**
+
+- A. Cơ bản ra khỏi khủng hoảng  ← đáp án đúng
+- B. Trở thành nước công nghiệp
+- C. Gia nhập Tổ chức Thương mại thế giới
+
+Giải thích: Mục tiêu tổng quát 1991–1995: vượt qua khó khăn thử thách, ổn định và phát triển kinh tế - xã hội, tăng cường ổn định chính trị, đưa nước ta cơ bản ra khỏi tình trạng khủng hoảng.
+
+Nguồn:
+- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 277 (Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc.)
+
+Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
+
+## t6-race-040 · **AI soạn nháp**
+
+- Trò chơi/nhóm: race · độ khó: medium · chương: chapter_3 · dạng: single_choice
+- Chủ đề: Nhiệm vụ Đại hội XII
+
+**Trong sáu nhiệm vụ trọng tâm của Đại hội XII, nhiệm vụ đầu tiên là gì?**
+
+- A. Đẩy mạnh hội nhập quốc tế
+- B. Tăng cường xây dựng, chỉnh đốn Đảng  ← đáp án đúng
+- C. Phát triển văn hóa, con người
+
+Giải thích: Nhiệm vụ trọng tâm thứ nhất của Đại hội XII: tăng cường xây dựng, chỉnh đốn Đảng; ngăn chặn, đẩy lùi suy thoái, 'tự diễn biến', 'tự chuyển hóa'; xây dựng đội ngũ cán bộ cấp chiến lược.
+
+Nguồn:
+- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 369, 370 (Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc.)
+
+Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
+
+## t6-race-041 · **AI soạn nháp**
+
+- Trò chơi/nhóm: race · độ khó: medium · chương: chapter_3 · dạng: single_choice
+- Chủ đề: Nhiệm vụ Đại hội XIII
+
+**Nhiệm vụ trọng tâm nào của Đại hội XIII gắn với bối cảnh năm 2021?**
+
+- A. Vượt khủng hoảng tài chính khu vực
+- B. Đàm phán gia nhập WTO
+- C. Kiểm soát đại dịch Covid-19  ← đáp án đúng
+
+Giải thích: Một trong sáu nhiệm vụ trọng tâm của Đại hội XIII là tập trung kiểm soát đại dịch Covid-19, tiêm chủng đại trà vắc xin; phục hồi, phát triển kinh tế - xã hội.
+
+Nguồn:
+- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 390 (Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc.)
+
+Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
+
+## t6-race-042 · **AI soạn nháp**
+
+- Trò chơi/nhóm: race · độ khó: medium · chương: chapter_3 · dạng: single_choice
+- Chủ đề: Mục tiêu Đại hội XIII
+
+**Mốc 2025 trong mục tiêu của Đại hội XIII gắn với kỷ niệm sự kiện nào?**
+
+- A. 50 năm giải phóng miền Nam  ← đáp án đúng
+- B. 100 năm thành lập Đảng
+- C. 100 năm thành lập nước
+
+Giải thích: Đại hội XIII đề ra nhiệm vụ 5 năm 2021–2025 (kỷ niệm 50 năm giải phóng hoàn toàn miền Nam, thống nhất đất nước), mục tiêu đến 2030 (100 năm thành lập Đảng) và tầm nhìn 2045 (100 năm thành lập nước).
+
+Nguồn:
+- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 387 (Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc.)
+
+Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
+
+## t6-race-043 · **AI soạn nháp**
+
+- Trò chơi/nhóm: race · độ khó: hard · chương: chapter_3 · dạng: single_choice
+- Chủ đề: Chủ đề Đại hội XIII
+
+**Chủ đề Đại hội nào có cụm 'khơi dậy khát vọng phát triển đất nước'?**
+
+- A. Đại hội XII
+- B. Đại hội XIII  ← đáp án đúng
+- C. Đại hội X
+
+Giải thích: Cụm 'khơi dậy khát vọng phát triển đất nước' nằm trong chủ đề Đại hội XIII; chủ đề Đại hội XII và X không có cụm này.
+
+Nguồn:
+- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 310, 367, 387 (Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc.)
+
+Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
+
+## t6-race-044 · **AI soạn nháp**
+
+- Trò chơi/nhóm: race · độ khó: hard · chương: chapter_3 · dạng: single_choice
+- Chủ đề: Mục tiêu XHCN qua các Đại hội
+
+**'Dân giàu, nước mạnh, xã hội công bằng, văn minh' bổ sung tại Đại hội nào?**
+
+- A. Đại hội X
+- B. Đại hội XI
+- C. Đại hội VIII  ← đáp án đúng
+
+Giải thích: Đại hội VIII bổ sung đặc trưng tổng quát 'Dân giàu, nước mạnh, xã hội công bằng, văn minh'. Đại hội X bổ sung thêm 'dân chủ'; Cương lĩnh 2011 diễn đạt 'dân giàu, nước mạnh, dân chủ, công bằng, văn minh'.
+
+Nguồn:
+- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 285, 311, 339 (Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc.)
+
+Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
+
+## t6-race-045 · **AI soạn nháp**
+
+- Trò chơi/nhóm: race · độ khó: hard · chương: chapter_3 · dạng: single_choice
+- Chủ đề: Tư tưởng Hồ Chí Minh
+
+**Đại hội nào lần đầu khẳng định tư tưởng Hồ Chí Minh là nền tảng tư tưởng?**
+
+- A. Đại hội VII  ← đáp án đúng
+- B. Đại hội IX
+- C. Đại hội VIII
+
+Giải thích: Tại Đại hội VII, lần đầu tiên Đảng khẳng định lấy chủ nghĩa Mác - Lênin và tư tưởng Hồ Chí Minh làm nền tảng tư tưởng. Đại hội IX làm rõ những nội dung cơ bản của tư tưởng Hồ Chí Minh.
+
+Nguồn:
+- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 276, 296 (Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc.)
 
 Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
