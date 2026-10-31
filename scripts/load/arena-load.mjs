@@ -13,7 +13,7 @@ import fs from "node:fs";
 import { createClient } from "../../web/node_modules/@supabase/supabase-js/dist/index.mjs";
 import pg from "../../web/node_modules/pg/lib/index.js";
 import { generateFixtures } from "../lib/question-bank.mjs";
-import { loadReadinessProblems } from "./load-results.mjs";
+import { loadReadinessProblems, isSettledContentRejection, isTransferredHeartbeatRejection } from "./load-results.mjs";
 
 const arg = (name, fallback) => {
   const i = process.argv.indexOf(`--${name}`);
@@ -53,6 +53,8 @@ const rand = (a, b) => a + Math.random() * (b - a);
 // ---- metrics ------------------------------------------------------------------------------------
 const samples = {};
 const errors = {};
+const expectedRejections = {};
+const expectedRejection = (name) => (expectedRejections[name] = (expectedRejections[name] ?? 0) + 1);
 const note = (name, ms) => (samples[name] ??= []).push(ms);
 const fail = (name) => (errors[name] = (errors[name] ?? 0) + 1);
 const chaos = { f5Resume: 0, f5ContentSame: 0, duplicateSubmit: 0, duplicateIdentical: 0, offlineGap: 0, transfer: 0, oldDeviceRejected: 0 };
@@ -244,6 +246,13 @@ async function getContent(s, attemptId, allocationId, label) {
     const r = await s.call("POST", `/arena/attempts/${attemptId}/interactions/${allocationId}/content`);
     if (r.status < 300) { note(label, r.ms); return r.data; }
     if (r.status === 425) { await sleep(Number(r.error?.details?.find((d) => d.field === "availableInMs")?.message ?? 300)); continue; }
+    if (r.status === 409 && ["interaction_expired", "interaction_not_open"].includes(r.error?.code)) {
+      const current = await s.call("GET", `/arena/attempts/${attemptId}`);
+      if (current.status < 300 && isSettledContentRejection(r, current.data, allocationId)) {
+        expectedRejection(`content_${r.error.code}`);
+        return null;
+      }
+    }
     fail(`content_${r.status}_${r.error?.code}`);
     return null;
   }
@@ -262,7 +271,14 @@ async function play(p, publicId, scores, authenticatedSession) {
   const attemptId = proj.attempt.id;
   const record = (projection) => { proj = projection; scores.push({ name: p.name, score: projection.attempt.score, at: now() }); };
   let transferred = false;
-  const hb = setInterval(() => void s.call("POST", `/arena/attempts/${attemptId}/heartbeat`).then((r) => r.status < 300 ? note("heartbeat", r.ms) : fail(`heartbeat_${r.status}`)), 10000);
+  const heartbeats = [];
+  const hb = setInterval(() => {
+    heartbeats.push(s.call("POST", `/arena/attempts/${attemptId}/heartbeat`).then((r) => {
+      if (r.status < 300) note("heartbeat", r.ms);
+      else if (isTransferredHeartbeatRejection(r, transferred)) expectedRejection("heartbeat_stale_session");
+      else fail(`heartbeat_${r.status}_${r.error?.code}`);
+    }).catch(() => fail("heartbeat_network_failure")));
+  }, 10000);
 
   const answer = async (allocationId, readyAt) => {
     // the browser asks for the question before it is released (reveal / next-question gap), so the request
@@ -359,6 +375,7 @@ async function play(p, publicId, scores, authenticatedSession) {
     }
   } finally {
     clearInterval(hb);
+    await Promise.all(heartbeats);
   }
 }
 
@@ -436,12 +453,12 @@ const report = {
   latencyMs: Object.fromEntries(["sign_in", "start", "cell_open", "content_minefield", "content_race_longpoll", "content_after_release", "content_refetch", "submit", "heartbeat", "transfer", "board_read"].map((k) => [k, { n: samples[k]?.length ?? 0, p50: pct(samples[k], 50), p95: pct(samples[k], 95), p99: pct(samples[k], 99), max: pct(samples[k], 100) }])),
   top10Propagation: { scoreChanges, changesSeenOnBoards: visibleEvents, samples: prop.length, p50: pct(prop, 50), p95: pct(prop, 95), p99: pct(prop, 99), max: pct(prop, 100) },
   viewers: { subscribedChannelsAtStart: subscribedAtStart, channelsExpected: (VIEWERS + 1) * 2, hintsReceived: vstats.hints, hintsPerViewerPerMinute: Math.round(vstats.hints / (VIEWERS + 1) / (playMs / 60000)), viewerBoardReads: vstats.reads, cdn: CDN, originBoardReads: cdnStats.origin, originReadsPerSecond: Math.round(cdnStats.origin / (playMs / 1000)), channelErrors: vstats.channelErrors },
-  chaos, errors, invariants: inv,
+  chaos, errors, expectedRejections, invariants: inv,
 };
 const row = (k, v) => `${k.padEnd(18)} n=${String(v.n).padStart(5)}  p50=${String(v.p50).padStart(5)}  p95=${String(v.p95).padStart(5)}  p99=${String(v.p99).padStart(5)}  max=${String(v.max).padStart(5)} ms`;
 console.log(Object.entries(report.latencyMs).map(([k, v]) => row(k, v)).join("\n"));
 console.log(row("top10_propagation", { n: prop.length, ...report.top10Propagation }));
-console.log(JSON.stringify({ top10Propagation: report.top10Propagation, viewers: report.viewers, chaos, errors, invariants: inv }, null, 2));
+console.log(JSON.stringify({ top10Propagation: report.top10Propagation, viewers: report.viewers, chaos, errors, expectedRejections, invariants: inv }, null, 2));
 if (OUT) fs.writeFileSync(OUT, JSON.stringify(report, null, 2));
 
 if (!KEEP) {

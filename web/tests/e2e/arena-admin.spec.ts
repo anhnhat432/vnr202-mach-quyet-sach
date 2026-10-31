@@ -81,7 +81,7 @@ test("admin runs a rehearsal end to end; the student reviews answers only after 
   await page.getByLabel("Tên").fill(name);
   await page.getByRole("button", { name: "Tạo (Nháp)" }).click();
   await expect(page.getByRole("heading", { name })).toBeVisible();
-  await page.getByRole("button", { name: /lên lịch/ }).click();
+  await page.getByRole("button", { name: /Kiểm tra & chuẩn bị/ }).click();
   await page.getByRole("button", { name: "Mở cuộc thi" }).click();
   await expect(page.getByText(/Đang mở · nhãn bảng: Diễn tập/)).toBeVisible();
 

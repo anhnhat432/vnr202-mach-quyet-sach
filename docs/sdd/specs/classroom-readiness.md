@@ -15,6 +15,8 @@ Owner authorized end-to-end delivery on 2026-10-31, supplied 39 unique student I
 
 ## Contracts and validation
 
+Owner clarified that advance time configuration is inconvenient. CLASS-009: prepare a Draft/Scheduled competition in advance; the admin's Open click starts an explicit admission window (default 60 minutes, bounded 1-1440). Server atomically sets opens_at/deadline and calls the existing confirmed transition gate. Reopening cannot reset time or attempts. Existing fixed-window API callers remain compatible. UI calls Scheduled "Đã chuẩn bị"; this changes presentation, not the lifecycle. Existing valid attempts keep their full duration after admissions close.
+
 New migration adds profiles.requires_display_name and roster_import_rows.requires_display_name, default false for backward compatibility; no applied migration is edited. A service-role-only name-setup RPC derives the actor from the verified route, locks profile/name allocation, checks active student status and records audit. An insert guard on attempts enforces the onboarding gate independently of the client.
 
 Trace CLASS-001..004 to roster domain/service/UI, login response and name setup UI/route, migration and unit/integration/browser tests. Trace CLASS-005 to sign-in and login UI tests. Run unit, lint, typecheck, build, secret scan, document checks, pgTAP/integration and desktop/mobile end-to-end CI. Record deployment SHA, hosted smoke, account import counts and synthetic load evidence without secrets or real IDs in committed evidence.

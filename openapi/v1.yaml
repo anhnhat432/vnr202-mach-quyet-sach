@@ -156,6 +156,7 @@ paths:
               required: [target]
               properties:
                 target: { enum: [scheduled, open, start_closed, settling, archived] }
+                startWindowMinutes: { type: integer, minimum: 1, maximum: 1440, description: "Only for target open; starts the admission window at the server's Open time. Omit to preserve an existing fixed window." }
                 expectedAttempts: { type: integer, minimum: 1, maximum: 500 }
                 bankAcknowledgement:
                   type: object

@@ -1,4 +1,15 @@
 // A load report is not success merely because the runner reached its final print statement.
+export function isSettledContentRejection(response, projection, allocationId) {
+  if (response.status !== 409 || !["interaction_expired", "interaction_not_open"].includes(response.error?.code)) return false;
+  if (["completed", "timed_out"].includes(projection?.attempt?.state)) return true;
+  if (projection?.attempt?.state !== "active") return false;
+  return !projection.interaction || projection.interaction.allocationId !== allocationId || projection.interaction.remainingMs === 0;
+}
+
+export function isTransferredHeartbeatRejection(response, transferred) {
+  return transferred && response.status === 409 && response.error?.code === "stale_session";
+}
+
 export function loadReadinessProblems(report) {
   const problems = [];
   const invariant = report.invariants;
