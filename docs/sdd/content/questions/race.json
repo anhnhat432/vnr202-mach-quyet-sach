@@ -1478,6 +1478,158 @@
         }
       ],
       "aiAssisted": true
+    },
+    {
+      "key": "t6-race-046",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Phương châm Đại hội XIII",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "'Đoàn kết - Dân chủ - Kỷ cương - Sáng tạo - Phát triển' là của Đại hội nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Đại hội XIII"
+        },
+        {
+          "id": "b",
+          "label": "Đại hội XII"
+        },
+        {
+          "id": "c",
+          "label": "Đại hội XI"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Đại hội XIII (2021) được tiến hành với phương châm 'Đoàn kết - Dân chủ - Kỷ cương - Sáng tạo - Phát triển'. Đại hội XII là Đại hội 'Đoàn kết - Dân chủ - Kỷ cương - Đổi mới'.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000025",
+          "locator": "Bài ngày 25/01/2021, đoạn nêu phương châm Đại hội",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). Nguồn báo chí/cổng thông tin đang chờ người duyệt xác minh (sources-pending.json)."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 367",
+          "usageNote": "Đối chiếu với giáo trình để phân biệt các kỳ Đại hội."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-047",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Chủ đề Đại hội IX",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Chủ đề Báo cáo chính trị Đại hội IX mở đầu bằng cụm nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Nâng cao năng lực lãnh đạo của Đảng"
+        },
+        {
+          "id": "b",
+          "label": "Phát huy sức mạnh toàn dân tộc"
+        },
+        {
+          "id": "c",
+          "label": "Tăng cường xây dựng Đảng trong sạch"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Báo cáo chính trị Đại hội IX: 'Phát huy sức mạnh toàn dân tộc, tiếp tục đổi mới, đẩy mạnh công nghiệp hóa, hiện đại hóa, xây dựng và bảo vệ Tổ quốc Việt Nam xã hội chủ nghĩa'. Hai lựa chọn còn lại mở đầu chủ đề Đại hội X và Đại hội XII.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000023",
+          "locator": "Đoạn nêu tên Báo cáo chính trị Đại hội IX",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). Nguồn báo chí/cổng thông tin đang chờ người duyệt xác minh (sources-pending.json)."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 310, 367",
+          "usageNote": "Đối chiếu với giáo trình để phân biệt các kỳ Đại hội."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-048",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Chủ đề Đại hội XI",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "Chủ đề Đại hội XI tạo nền tảng để đến năm nào nước ta thành nước công nghiệp?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Năm 2030"
+        },
+        {
+          "id": "b",
+          "label": "Năm 2045"
+        },
+        {
+          "id": "c",
+          "label": "Năm 2020"
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "Chủ đề Đại hội XI: '... tạo nền tảng để đến năm 2020 Việt Nam trở thành một nước công nghiệp theo hướng hiện đại'. Mốc 2030 và 2045 là mục tiêu, tầm nhìn của Đại hội XIII.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000024",
+          "locator": "Bài ngày 12/01/2011, đoạn nêu chủ đề Đại hội",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). Nguồn báo chí/cổng thông tin đang chờ người duyệt xác minh (sources-pending.json)."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 387",
+          "usageNote": "Đối chiếu với giáo trình để phân biệt các kỳ Đại hội."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-049",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Tinh thần Đại hội IX",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "'Trí tuệ, Dân chủ, Đoàn kết, Đổi mới' là tinh thần của Đại hội nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Đại hội IX"
+        },
+        {
+          "id": "b",
+          "label": "Đại hội XII"
+        },
+        {
+          "id": "c",
+          "label": "Đại hội XIII"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Đại hội IX (2001) được đánh giá là Đại hội của 'Trí tuệ, Dân chủ, Đoàn kết, Đổi mới'. Đại hội XII là 'Đoàn kết - Dân chủ - Kỷ cương - Đổi mới'; Đại hội XIII là 'Đoàn kết - Dân chủ - Kỷ cương - Sáng tạo - Phát triển'. Không dùng Đại hội VII làm phương án vì tinh thần Đại hội VII ('trí tuệ - đổi mới, dân chủ - kỷ cương - đoàn kết') có các từ gần trùng.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000023",
+          "locator": "Đoạn mô tả tinh thần Đại hội IX",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). Nguồn báo chí/cổng thông tin đang chờ người duyệt xác minh (sources-pending.json)."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 277, 367",
+          "usageNote": "Đối chiếu với giáo trình để phân biệt các kỳ Đại hội."
+        }
+      ],
+      "aiAssisted": true
     }
   ]
 }

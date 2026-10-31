@@ -991,6 +991,44 @@
         }
       ],
       "aiAssisted": true
+    },
+    {
+      "key": "t6-mine-031",
+      "pool": "minefield_main",
+      "chapter": "chapter_3",
+      "topic": "Chủ đề Đại hội XI",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Chủ đề Đại hội nào nêu 'tạo nền tảng để đến năm 2020' thành nước công nghiệp?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Đại hội XII"
+        },
+        {
+          "id": "b",
+          "label": "Đại hội XI"
+        },
+        {
+          "id": "c",
+          "label": "Đại hội XIII"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Cụm 'tạo nền tảng để đến năm 2020 Việt Nam trở thành một nước công nghiệp theo hướng hiện đại' nằm trong chủ đề Đại hội XI. Chủ đề Đại hội XII nói 'sớm đưa nước ta cơ bản trở thành nước công nghiệp theo hướng hiện đại'; Đại hội XIII hướng tới nước phát triển vào giữa thế kỷ XXI.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000024",
+          "locator": "Bài ngày 12/01/2011, đoạn nêu chủ đề Đại hội",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). Nguồn báo chí/cổng thông tin đang chờ người duyệt xác minh (sources-pending.json)."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 367, 387",
+          "usageNote": "Đối chiếu với giáo trình để phân biệt các kỳ Đại hội."
+        }
+      ],
+      "aiAssisted": true
     }
   ]
 }

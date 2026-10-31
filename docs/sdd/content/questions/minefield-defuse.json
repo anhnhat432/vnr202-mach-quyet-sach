@@ -349,6 +349,40 @@
         }
       ],
       "aiAssisted": true
+    },
+    {
+      "key": "t6-defuse-013",
+      "pool": "minefield_defuse",
+      "chapter": "chapter_3",
+      "topic": "Phương châm Đại hội XIII",
+      "type": "defuse_ab",
+      "difficulty": "easy",
+      "prompt": "Phương châm Đại hội XIII thêm cụm nào so với tinh thần Đại hội XII?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Trí tuệ - Đổi mới"
+        },
+        {
+          "id": "b",
+          "label": "Sáng tạo - Phát triển"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Đại hội XII: 'Đoàn kết - Dân chủ - Kỷ cương - Đổi mới'. Đại hội XIII: 'Đoàn kết - Dân chủ - Kỷ cương - Sáng tạo - Phát triển'.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000025",
+          "locator": "Bài ngày 25/01/2021, đoạn nêu phương châm Đại hội",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). Nguồn báo chí/cổng thông tin đang chờ người duyệt xác minh (sources-pending.json)."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 367",
+          "usageNote": "Đối chiếu với giáo trình để phân biệt các kỳ Đại hội."
+        }
+      ],
+      "aiAssisted": true
     }
   ]
 }

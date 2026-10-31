@@ -2,7 +2,7 @@
 
 > **Trạng thái:** tất cả câu dưới đây là **Draft**, chưa được người duyệt học thuật xem xét và **chưa được Published**. AI chỉ soạn nháp; chỉ quản trị viên/giảng viên mới được duyệt và xuất bản.
 
-Tổng: 87 câu · phủ mục tiêu 87: 87/87 · phủ mục tiêu 168: 87/168
+Tổng: 93 câu · phủ mục tiêu 87: 87/87 · phủ mục tiêu 168: 93/168
 
 ## t6-defuse-001 · **AI soạn nháp**
 
@@ -205,6 +205,24 @@ Giải thích: Đại hội XIII: phát triển kinh tế - xã hội là trung 
 
 Nguồn:
 - Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 388 (Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc.)
+
+Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
+
+## t6-defuse-013 · **AI soạn nháp**
+
+- Trò chơi/nhóm: minefield_defuse · độ khó: easy · chương: chapter_3 · dạng: defuse_ab
+- Chủ đề: Phương châm Đại hội XIII
+
+**Phương châm Đại hội XIII thêm cụm nào so với tinh thần Đại hội XII?**
+
+- A. Trí tuệ - Đổi mới
+- B. Sáng tạo - Phát triển  ← đáp án đúng
+
+Giải thích: Đại hội XII: 'Đoàn kết - Dân chủ - Kỷ cương - Đổi mới'. Đại hội XIII: 'Đoàn kết - Dân chủ - Kỷ cương - Sáng tạo - Phát triển'.
+
+Nguồn:
+- Đại hội đại biểu toàn quốc lần thứ XIII của Đảng - Đại hội "Đoàn kết - Dân chủ - Kỷ cương - Sáng tạo - Phát triển" — Bài ngày 25/01/2021, đoạn nêu phương châm Đại hội (Chủ đề 6 (Đại hội VII–XIII). Nguồn báo chí/cổng thông tin đang chờ người duyệt xác minh (sources-pending.json).)
+- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 367 (Đối chiếu với giáo trình để phân biệt các kỳ Đại hội.)
 
 Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
 
@@ -745,6 +763,25 @@ Giải thích: Cương lĩnh 2011: đến giữa thế kỷ XXI xây dựng nư�
 
 Nguồn:
 - Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 340, 389 (Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc.)
+
+Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
+
+## t6-mine-031 · **AI soạn nháp**
+
+- Trò chơi/nhóm: minefield_main · độ khó: medium · chương: chapter_3 · dạng: single_choice
+- Chủ đề: Chủ đề Đại hội XI
+
+**Chủ đề Đại hội nào nêu 'tạo nền tảng để đến năm 2020' thành nước công nghiệp?**
+
+- A. Đại hội XII
+- B. Đại hội XI  ← đáp án đúng
+- C. Đại hội XIII
+
+Giải thích: Cụm 'tạo nền tảng để đến năm 2020 Việt Nam trở thành một nước công nghiệp theo hướng hiện đại' nằm trong chủ đề Đại hội XI. Chủ đề Đại hội XII nói 'sớm đưa nước ta cơ bản trở thành nước công nghiệp theo hướng hiện đại'; Đại hội XIII hướng tới nước phát triển vào giữa thế kỷ XXI.
+
+Nguồn:
+- Sáng nay khai mạc Đại hội Đảng XI — Bài ngày 12/01/2011, đoạn nêu chủ đề Đại hội (Chủ đề 6 (Đại hội VII–XIII). Nguồn báo chí/cổng thông tin đang chờ người duyệt xác minh (sources-pending.json).)
+- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 367, 387 (Đối chiếu với giáo trình để phân biệt các kỳ Đại hội.)
 
 Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
 
@@ -1553,5 +1590,81 @@ Giải thích: Tại Đại hội VII, lần đầu tiên Đảng khẳng địn
 
 Nguồn:
 - Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 276, 296 (Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc.)
+
+Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
+
+## t6-race-046 · **AI soạn nháp**
+
+- Trò chơi/nhóm: race · độ khó: easy · chương: chapter_3 · dạng: single_choice
+- Chủ đề: Phương châm Đại hội XIII
+
+**'Đoàn kết - Dân chủ - Kỷ cương - Sáng tạo - Phát triển' là của Đại hội nào?**
+
+- A. Đại hội XIII  ← đáp án đúng
+- B. Đại hội XII
+- C. Đại hội XI
+
+Giải thích: Đại hội XIII (2021) được tiến hành với phương châm 'Đoàn kết - Dân chủ - Kỷ cương - Sáng tạo - Phát triển'. Đại hội XII là Đại hội 'Đoàn kết - Dân chủ - Kỷ cương - Đổi mới'.
+
+Nguồn:
+- Đại hội đại biểu toàn quốc lần thứ XIII của Đảng - Đại hội "Đoàn kết - Dân chủ - Kỷ cương - Sáng tạo - Phát triển" — Bài ngày 25/01/2021, đoạn nêu phương châm Đại hội (Chủ đề 6 (Đại hội VII–XIII). Nguồn báo chí/cổng thông tin đang chờ người duyệt xác minh (sources-pending.json).)
+- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 367 (Đối chiếu với giáo trình để phân biệt các kỳ Đại hội.)
+
+Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
+
+## t6-race-047 · **AI soạn nháp**
+
+- Trò chơi/nhóm: race · độ khó: medium · chương: chapter_3 · dạng: single_choice
+- Chủ đề: Chủ đề Đại hội IX
+
+**Chủ đề Báo cáo chính trị Đại hội IX mở đầu bằng cụm nào?**
+
+- A. Nâng cao năng lực lãnh đạo của Đảng
+- B. Phát huy sức mạnh toàn dân tộc  ← đáp án đúng
+- C. Tăng cường xây dựng Đảng trong sạch
+
+Giải thích: Báo cáo chính trị Đại hội IX: 'Phát huy sức mạnh toàn dân tộc, tiếp tục đổi mới, đẩy mạnh công nghiệp hóa, hiện đại hóa, xây dựng và bảo vệ Tổ quốc Việt Nam xã hội chủ nghĩa'. Hai lựa chọn còn lại mở đầu chủ đề Đại hội X và Đại hội XII.
+
+Nguồn:
+- Đại hội IX của Đảng: Mở đường tiến vào thế kỷ mới, thiên niên kỷ mới — Đoạn nêu tên Báo cáo chính trị Đại hội IX (Chủ đề 6 (Đại hội VII–XIII). Nguồn báo chí/cổng thông tin đang chờ người duyệt xác minh (sources-pending.json).)
+- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 310, 367 (Đối chiếu với giáo trình để phân biệt các kỳ Đại hội.)
+
+Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
+
+## t6-race-048 · **AI soạn nháp**
+
+- Trò chơi/nhóm: race · độ khó: hard · chương: chapter_3 · dạng: single_choice
+- Chủ đề: Chủ đề Đại hội XI
+
+**Chủ đề Đại hội XI tạo nền tảng để đến năm nào nước ta thành nước công nghiệp?**
+
+- A. Năm 2030
+- B. Năm 2045
+- C. Năm 2020  ← đáp án đúng
+
+Giải thích: Chủ đề Đại hội XI: '... tạo nền tảng để đến năm 2020 Việt Nam trở thành một nước công nghiệp theo hướng hiện đại'. Mốc 2030 và 2045 là mục tiêu, tầm nhìn của Đại hội XIII.
+
+Nguồn:
+- Sáng nay khai mạc Đại hội Đảng XI — Bài ngày 12/01/2011, đoạn nêu chủ đề Đại hội (Chủ đề 6 (Đại hội VII–XIII). Nguồn báo chí/cổng thông tin đang chờ người duyệt xác minh (sources-pending.json).)
+- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 387 (Đối chiếu với giáo trình để phân biệt các kỳ Đại hội.)
+
+Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
+
+## t6-race-049 · **AI soạn nháp**
+
+- Trò chơi/nhóm: race · độ khó: hard · chương: chapter_3 · dạng: single_choice
+- Chủ đề: Tinh thần Đại hội IX
+
+**'Trí tuệ, Dân chủ, Đoàn kết, Đổi mới' là tinh thần của Đại hội nào?**
+
+- A. Đại hội IX  ← đáp án đúng
+- B. Đại hội XII
+- C. Đại hội XIII
+
+Giải thích: Đại hội IX (2001) được đánh giá là Đại hội của 'Trí tuệ, Dân chủ, Đoàn kết, Đổi mới'. Đại hội XII là 'Đoàn kết - Dân chủ - Kỷ cương - Đổi mới'; Đại hội XIII là 'Đoàn kết - Dân chủ - Kỷ cương - Sáng tạo - Phát triển'. Không dùng Đại hội VII làm phương án vì tinh thần Đại hội VII ('trí tuệ - đổi mới, dân chủ - kỷ cương - đoàn kết') có các từ gần trùng.
+
+Nguồn:
+- Đại hội IX của Đảng: Mở đường tiến vào thế kỷ mới, thiên niên kỷ mới — Đoạn mô tả tinh thần Đại hội IX (Chủ đề 6 (Đại hội VII–XIII). Nguồn báo chí/cổng thông tin đang chờ người duyệt xác minh (sources-pending.json).)
+- Giáo trình Lịch sử Đảng Cộng sản Việt Nam dành cho sinh viên khối không chuyên — Chương 3, mục II, tr. 277, 367 (Đối chiếu với giáo trình để phân biệt các kỳ Đại hội.)
 
 Quyết định của người duyệt: ☐ Duyệt  ☐ Sửa  ☐ Loại — Ghi chú: ______
