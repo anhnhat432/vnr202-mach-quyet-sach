@@ -314,7 +314,9 @@ Câu hỏi (Giai đoạn C, đã triển khai):
 - `POST /admin/question-versions/{id}/transitions` — body `{action: review|publish|reject|retire, note?}`; người thực hiện luôn là admin đang đăng nhập. Lỗi: `422 publication_requirements_failed` (thiếu người duyệt/nguồn đã xác minh/ghi chú cho nội dung do AI soạn), `409 invalid_content_transition`, `403 forbidden`, `404`.
 - `GET /admin/question-bank/readiness?kind=official|rehearsal&competitionId&expectedAttempts` — báo cáo sẵn sàng (blocker và mục tiêu 168 câu riêng).
 
-Chưa triển khai: `GET/PATCH /admin/questions/{id}` riêng lẻ (dùng POST theo `key`), giao diện quản trị (T055).
+Giao diện quản trị (T055/T117) hỗ trợ chọn nhóm và ghi chú học thuật chung theo `question-bank-bulk-review.md`. Duyệt và xuất bản là hai xác nhận riêng của người quản trị; từng phiên bản vẫn gọi endpoint transitions hiện có, có kiểm tra và audit riêng. Nhóm không phải một giao dịch nguyên khối; giao diện báo kết quả từng câu, dừng khi mất xác nhận và tải lại trạng thái thay vì tự gửi lại.
+
+Chưa triển khai: `GET/PATCH /admin/questions/{id}` riêng lẻ (dùng POST theo `key`).
 
 Dossier:
 - `GET/POST /admin/dossiers`

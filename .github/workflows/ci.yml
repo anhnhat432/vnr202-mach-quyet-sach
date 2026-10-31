@@ -79,3 +79,11 @@ jobs:
           export E2E_REALTIME=1 # Realtime runs in this stack: the Broadcast-to-browser check is mandatory
           npx playwright install --with-deps chromium
           npx playwright test
+      - name: Grouped question review browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: question-bank-bulk-e2e
+          path: web/test-results/**/question-bank-bulk-*.png
+          if-no-files-found: ignore
+          retention-days: 3

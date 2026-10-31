@@ -85,6 +85,8 @@ Evidence is recorded only for implemented scope. Four new Chapter 1 dossiers are
 
 ## Stage F evidence (UI, leaderboards, projector, admin, 2026-10-30)
 
+T117 grouped human review: `QB-BULK-001..007` in `specs/question-bank-bulk-review.md` map to `question-bank-admin.tsx`, `question-bulk-actions.tsx`, `tests/unit/question-bank-admin.test.tsx` and `tests/e2e/question-bank-bulk.spec.ts`. The unchanged transition route, `transition_question_version` and `question-governance.test.ts` retain server authorization, academic checks and per-version audit. Validation evidence: `evidence/question-bank-bulk-review.md`.
+
 | Rule family | Test |
 | --- | --- |
 | LA-TRY-004/006 (F5, transfer only after confirmation), LA-TIME-007 (display-only clock) | `tests/e2e/arena-ui.spec.ts` (F5 keeps question/score/clock; dialog before transfer; old device locked) |
