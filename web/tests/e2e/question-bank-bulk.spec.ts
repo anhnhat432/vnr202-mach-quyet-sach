@@ -58,6 +58,12 @@ test("a human can confirm a shared-note group then separately publish it, with p
   await page.getByRole("button", { name: "Duyệt đã chọn (3)", exact: true }).click();
   await page.getByLabel("Ghi chú học thuật chung", { exact: true }).fill("Đã đối chiếu nhóm giả lập, tr. 5.");
   await page.getByRole("checkbox", { name: /Tôi đã đối chiếu đáp án/ }).check();
+  // Root scrollWidth alone misses clipping while the confirmation makes the grid wider.
+  // Assert the actual form, note and buttons while they are present (not after submission).
+  await expect.poll(() => page.evaluate(() => [...document.querySelectorAll(".adm__ready, .adm__bulk, .adm__bulk-form, .adm__bulk-form textarea, .adm__bulk-form button")].every((element) => {
+    const bounds = element.getBoundingClientRect();
+    return bounds.left >= 0 && bounds.right <= innerWidth + 1;
+  }))).toBe(true);
   await page.screenshot({ path: testInfo.outputPath("question-bank-bulk-confirmation.png") });
   await confirm.click();
   await expect(page.getByText("Đã xử lý: 3 thành công · 0 lỗi · 0 chưa rõ · 0 chưa gửi.", { exact: true })).toBeVisible();

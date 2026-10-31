@@ -4554,7 +4554,7 @@ main {
 
 /* ---- admin (stage F5) ---------------------------------------------------------------------------- */
 .adm { display: grid; grid-template-columns: minmax(18rem, 22rem) 1fr; gap: 1.2rem; margin-top: 1.5rem; align-items: start; }
-.adm--single { grid-template-columns: 1fr; }
+.adm.adm--single { grid-template-columns: minmax(0, 1fr); overflow-wrap: anywhere; }
 @media (max-width: 960px) { .adm { grid-template-columns: 1fr; } }
 .adm__panel { display: grid; gap: 0.9rem; padding: 1.2rem; border: 1px solid var(--line); border-radius: var(--radius-card); background: var(--paper-light); }
 .adm__panel h2 { margin: 0; font-family: var(--font-display), sans-serif; font-size: 1.6rem; text-transform: uppercase; }
@@ -4593,7 +4593,7 @@ main {
 .adm__bulk-form { display: grid; gap: 0.7rem; border-top: 1px solid var(--line); padding-top: 0.8rem; }
 .adm__bulk-form h2 { margin: 0; font-size: 1.2rem; }
 .adm__bulk-form > label:not(.adm__check) { display: grid; gap: 0.35rem; font-weight: 600; }
-.adm__bulk-form textarea { width: 100%; min-height: 6rem; resize: vertical; padding: 0.6rem; border: 1px solid var(--line); border-radius: var(--radius-btn); font: inherit; background: white; }
+.adm__bulk-form textarea { width: 100%; min-width: 0; min-height: 6rem; resize: vertical; padding: 0.6rem; border: 1px solid var(--line); border-radius: var(--radius-btn); font: inherit; background: white; }
 .adm__bulk-results { display: grid; gap: 0.6rem; overflow-wrap: anywhere; }
 .adm__bulk-results p { margin: 0; }
 .adm__bulk-results summary { cursor: pointer; font-weight: 600; }
