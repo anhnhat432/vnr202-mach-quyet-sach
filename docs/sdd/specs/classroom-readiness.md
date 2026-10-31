@@ -1,0 +1,20 @@
+# Classroom readiness for 2026-11-02
+
+Owner authorized end-to-end delivery on 2026-10-31, supplied 39 unique student IDs, and requested student-entered display names at first sign-in. Task T118. Hybrid delivery: Standard Core amendment for onboarding; bounded UI, deployment and operations work. Existing publication, timing, score, attempt and privacy boundaries remain unchanged.
+
+## Acceptance rules
+
+- CLASS-001: An explicit admin import option accepts an MSSV-only roster. Preview and confirmation precede account creation. Existing named-roster imports retain their validation; duplicates never overwrite existing students. No real roster or credentials enter Git.
+- CLASS-002: MSSV-only imports mark new student profiles as needing a display name. Placeholder labels are not claimed to be real names. Existing profiles keep their current behavior.
+- CLASS-003: After valid authentication, pending students enter a name before starting either game. The server/database rejects new attempts until this is complete. Authentication still uses MSSV and the server-configured shared password; no password-change step is introduced.
+- CLASS-004: Only the authenticated student may set their first name, using CSRF-protected POST /api/v1/me/display-name. Validate 1-100 characters, normalize whitespace, reject controls and student IDs, abbreviate full names with the existing classroom-name function. Public responses contain only the resulting display name, never the roster or other IDs. Duplicate names receive stable suffixes under a transaction lock. First setup is write-once; subsequent corrections remain an audited admin operation. No student updates score, rank or attempt fields.
+- CLASS-005: Provider 429 and temporary network/5xx failures do not consume the per-account wrong-password allowance. Preserve per-IP protection and 5 failures/10 minutes per student. Return a sanitized 503 for unavailable Auth and show a service message rather than claiming a wrong password. No automatic credential retry after unknown outcomes.
+- CLASS-006: Use the existing Supabase project and admin, preserve existing content and results, and provide one stable class URL. Verify hosted Auth limits separately from local config. Synthetic rehearsal/load data remain clearly labelled and isolated from official results. Do not review/publish real academic content or open the real official competition automatically.
+- CLASS-007: Prepare for up to 70 simultaneous players; actual supplied roster is 39. Report measured load and limitations honestly, including burst throttling and classroom Wi-Fi measurements that require the actual location. Rehearsals authenticate in paced groups before concurrent play; report sign-in pacing explicitly.
+- CLASS-008: Deliver a short Vietnamese runbook for student login/name setup, admin readiness, projector 1/2/0, closure only after legal attempts finish, and a new competition for a clean next round. Missing event time does not justify guessing a schedule.
+
+## Contracts and validation
+
+New migration adds profiles.requires_display_name and roster_import_rows.requires_display_name, default false for backward compatibility; no applied migration is edited. A service-role-only name-setup RPC derives the actor from the verified route, locks profile/name allocation, checks active student status and records audit. An insert guard on attempts enforces the onboarding gate independently of the client.
+
+Trace CLASS-001..004 to roster domain/service/UI, login response and name setup UI/route, migration and unit/integration/browser tests. Trace CLASS-005 to sign-in and login UI tests. Run unit, lint, typecheck, build, secret scan, document checks, pgTAP/integration and desktop/mobile end-to-end CI. Record deployment SHA, hosted smoke, account import counts and synthetic load evidence without secrets or real IDs in committed evidence.

@@ -44,7 +44,7 @@ async function classContext(admin: SupabaseClient, classId: string) {
 
 export async function createRosterPreview(
   deps: RosterDeps,
-  input: { actorId: string; classCode: string; className: string; fileName: string; bytes: Uint8Array; requestId?: string },
+  input: { actorId: string; classCode: string; className: string; fileName: string; bytes: Uint8Array; collectNamesOnSignIn?: boolean; requestId?: string },
 ) {
   const { admin, env } = deps;
   const table = readRosterFile(input.fileName, input.bytes);
@@ -52,6 +52,7 @@ export async function createRosterPreview(
   const context = await classContext(admin, classId);
   const preview = buildRosterPreview(table, {
     ...context,
+    collectNamesOnSignIn: input.collectNamesOnSignIn,
     studentIdPattern: env.ROSTER_STUDENT_ID_PATTERN ? new RegExp(env.ROSTER_STUDENT_ID_PATTERN) : undefined,
     maxRows: env.ROSTER_MAX_ROWS,
   });
@@ -79,6 +80,7 @@ export async function createRosterPreview(
         student_id: row.studentId,
         full_name: row.fullName,
         display_name: row.displayName,
+        requires_display_name: row.requiresDisplayName ?? false,
         student_id_cell_type: row.studentIdCellType,
         row_status: row.status,
         issues: row.issues,
@@ -97,7 +99,7 @@ export async function createRosterPreview(
   return { importId: importRow.id as string, ...preview };
 }
 
-type StoredRow = { row_number: number; student_id: string; full_name: string; display_name: string; row_status: RosterRow["status"] };
+type StoredRow = { row_number: number; student_id: string; full_name: string; display_name: string; requires_display_name: boolean; row_status: RosterRow["status"] };
 
 export async function applyRosterImport(
   deps: RosterDeps,
@@ -123,7 +125,7 @@ export async function applyRosterImport(
 
   const { data: rows } = await admin
     .from("roster_import_rows")
-    .select("row_number, student_id, full_name, display_name, row_status")
+    .select("row_number, student_id, full_name, display_name, requires_display_name, row_status")
     .eq("import_id", input.importId)
     .order("row_number");
   const confirmed = new Set(input.confirmedWarningRows);
@@ -157,6 +159,7 @@ export async function applyRosterImport(
         full_name: row.full_name,
         display_name: names[index],
         display_name_suffix: suffixes[index],
+        requires_display_name: row.requires_display_name ?? false,
         class_id: claimed.class_id,
       });
       if (profileError) throw new Error(profileError.message);

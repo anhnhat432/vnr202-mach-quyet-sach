@@ -67,6 +67,7 @@ export function RosterImport() {
         <label>Mã lớp<input name="classCode" required maxLength={40} /></label>
         <label>Tên lớp<input name="className" maxLength={120} /></label>
         <label>Tệp danh sách (.xlsx hoặc .csv)<input name="file" type="file" accept=".xlsx,.csv" required /></label>
+        <label className="adm__check"><input type="checkbox" name="collectNamesOnSignIn" /> Chỉ nhập MSSV; sinh viên tự nhập tên khi đăng nhập lần đầu.</label>
         <button type="submit" disabled={busy}>Xem trước</button>
       </form>
       <p role="status" aria-live="polite">{message}</p>

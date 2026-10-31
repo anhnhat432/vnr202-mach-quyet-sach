@@ -111,6 +111,8 @@ Re-scope snapshot (2026-10-29, revision 2): stage A approved by the owner subjec
 
 ## Phase 6 - Hardening and public deployment
 
+- [-] `T118` Classroom readiness for 2026-11-02: opt-in MSSV-only roster and student-entered first-login name, Auth overload handling, stable class URL and measured rehearsal up to 70 players. Owner supplied 39 IDs. Spec: `specs/classroom-readiness.md`; plan: `plans/2026-10-31-classroom-readiness.md`. Human academic approval remains T115.
+
 - [ ] `T060` Security headers, CSRF, rate limits, logging redaction and secret scan. Depends: T057. DoD: security-spec acceptance tests.
 - [ ] `T061` Accessibility, reduced motion, performance and cross-browser audit. Depends: T057. DoD: WCAG AA target and mobile/projector evidence. Chromium automated part met in G (axe, keyboard, reduced motion, 360–1920 px); Safari/real devices pending.
 - [ ] `T062` Load test 60 players + 200 viewers. Depends: T057,T060. DoD: rank visibility p95 under one second or documented fix/retest. Local run with Pro-like Realtime quotas and a CDN stand-in: p95 946 ms; Free-like quotas: p95 ≈ 5 s. Real Supabase/Vercel run pending (P2/P7 not claimed).

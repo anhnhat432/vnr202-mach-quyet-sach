@@ -25,6 +25,7 @@ export type RosterRow = {
   fullName: string;
   displayName: string;
   displayNameSuffix: number | null;
+  requiresDisplayName?: boolean;
   studentIdCellType: SheetCell["kind"];
   status: "valid" | "warning" | "error";
   issues: RosterIssue[];
@@ -65,7 +66,7 @@ export class RosterHeaderError extends Error {
 
 export function buildRosterPreview(
   table: SheetCell[][],
-  options: { existingStudentIds: ReadonlySet<string>; takenDisplayNames: ReadonlyMap<string, number>; studentIdPattern?: RegExp; maxRows?: number },
+  options: { existingStudentIds: ReadonlySet<string>; takenDisplayNames: ReadonlyMap<string, number>; studentIdPattern?: RegExp; maxRows?: number; collectNamesOnSignIn?: boolean },
 ): RosterPreview {
   // Class lists exported from Excel often carry title rows; the header is the first of the
   // first ten rows that names both an MSSV column and a full-name column.
@@ -86,14 +87,14 @@ export function buildRosterPreview(
   let columns: Partial<Record<keyof typeof HEADER_ALIASES, number>> = {};
   for (let i = 0; i < Math.min(table.length, 10); i += 1) {
     const found = mapColumns(table[i]);
-    if (found.studentId !== undefined && found.fullName !== undefined) {
+    if (found.studentId !== undefined && (found.fullName !== undefined || options.collectNamesOnSignIn)) {
       headerIndex = i;
       columns = found;
       break;
     }
   }
   if (headerIndex < 0) throw new RosterHeaderError("missing_header");
-  if (columns.studentId === undefined || columns.fullName === undefined) throw new RosterHeaderError("missing_header");
+  if (columns.studentId === undefined || (columns.fullName === undefined && !options.collectNamesOnSignIn)) throw new RosterHeaderError("missing_header");
 
   const seen = new Map<string, number>();
   const draft: RosterRow[] = [];
@@ -101,7 +102,9 @@ export function buildRosterPreview(
     if (cells.every((cell) => cell.text.trim() === "")) return;
     const idCell = cells[columns.studentId!] ?? { text: "", kind: "text" as const };
     const studentId = normalizeStudentId(idCell.text);
-    const fullName = (cells[columns.fullName!]?.text ?? "").normalize("NFC").trim().replace(/\s+/g, " ");
+    const suppliedName = (columns.fullName === undefined ? "" : cells[columns.fullName]?.text ?? "").normalize("NFC").trim().replace(/\s+/g, " ");
+    const requiresDisplayName = !!options.collectNamesOnSignIn;
+    const fullName = requiresDisplayName ? "Chưa đặt tên" : suppliedName;
     const providedDisplay = columns.displayName !== undefined ? cells[columns.displayName]?.text.trim() ?? "" : "";
     const issues: RosterIssue[] = [...checkStudentId(studentId, options.studentIdPattern)];
     if (idCell.kind === "number") issues.push("numeric_cell");
@@ -122,8 +125,9 @@ export function buildRosterPreview(
       rowNumber: headerIndex + offset + 2,
       studentId,
       fullName,
-      displayName: (providedDisplay || classroomDisplayName(fullName)).slice(0, 40),
+      displayName: requiresDisplayName ? "Chưa đặt tên" : (providedDisplay || classroomDisplayName(fullName)).slice(0, 40),
       displayNameSuffix: null,
+      requiresDisplayName,
       studentIdCellType: idCell.kind,
       status: "valid",
       issues,

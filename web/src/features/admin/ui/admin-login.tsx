@@ -21,7 +21,7 @@ export function AdminLoginForm() {
         router.refresh();
         return;
       }
-      setMessage(response.status === 429 ? "Thử lại sau ít phút." : "Email hoặc mật khẩu không đúng.");
+      setMessage(response.status >= 500 ? "Đăng nhập tạm thời gián đoạn. Hãy thử lại sau ít phút." : response.status === 429 ? "Thử lại sau ít phút." : "Email hoặc mật khẩu không đúng.");
     } catch {
       setMessage("Không kết nối được.");
     } finally {

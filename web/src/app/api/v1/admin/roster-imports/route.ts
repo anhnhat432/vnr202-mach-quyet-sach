@@ -19,10 +19,12 @@ export const POST = route(async (request, requestId) => {
   if (!(file instanceof File)) throw new ApiError(422, "validation_error", "Thiếu tệp.");
   const classCode = String(form.get("classCode") ?? "").trim();
   const className = String(form.get("className") ?? classCode).trim();
+  const nameMode = form.get("collectNamesOnSignIn");
+  if (nameMode !== null && nameMode !== "on") throw new ApiError(422, "validation_error", "Chế độ nhập tên không hợp lệ.");
   if (classCode.length < 1 || classCode.length > 40 || className.length > 120) throw new ApiError(422, "validation_error", "Mã lớp không hợp lệ.");
   const preview = await createRosterPreview(
     { admin: ctx.admin, env: ctx.env },
-    { actorId: ctx.actor.userId, classCode, className: className || classCode, fileName: file.name, bytes: new Uint8Array(await file.arrayBuffer()), requestId },
+    { actorId: ctx.actor.userId, classCode, className: className || classCode, fileName: file.name, bytes: new Uint8Array(await file.arrayBuffer()), collectNamesOnSignIn: nameMode === "on", requestId },
   );
   return ok(preview, requestId, { status: 201 });
 });
