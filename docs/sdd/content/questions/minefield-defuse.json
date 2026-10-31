@@ -220,6 +220,180 @@
         }
       ],
       "aiAssisted": true
+    },
+    {
+      "key": "t6-defuse-001",
+      "pool": "minefield_defuse",
+      "chapter": "chapter_3",
+      "topic": "Đối ngoại sau Đại hội VII",
+      "type": "defuse_ab",
+      "difficulty": "easy",
+      "prompt": "Việt Nam và Hoa Kỳ thiết lập quan hệ ngoại giao năm nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "1991"
+        },
+        {
+          "id": "b",
+          "label": "1995"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Ngày 11/7/1995, Việt Nam và Hoa Kỳ thiết lập quan hệ ngoại giao.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 281",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-defuse-002",
+      "pool": "minefield_defuse",
+      "chapter": "chapter_3",
+      "topic": "Cương lĩnh 2011",
+      "type": "defuse_ab",
+      "difficulty": "easy",
+      "prompt": "Cương lĩnh 2011 bổ sung, phát triển Cương lĩnh năm nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "1991"
+        },
+        {
+          "id": "b",
+          "label": "1930"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Cương lĩnh 2011 là bản bổ sung, phát triển Cương lĩnh xây dựng đất nước trong thời kỳ quá độ lên CNXH năm 1991.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 335, 336",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-defuse-003",
+      "pool": "minefield_defuse",
+      "chapter": "chapter_3",
+      "topic": "Đại hội XIII (2021)",
+      "type": "defuse_ab",
+      "difficulty": "easy",
+      "prompt": "Giữa thế kỷ XXI, Đại hội XIII hướng tới nước ta trở thành nước nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Nước đang phát triển thu nhập thấp"
+        },
+        {
+          "id": "b",
+          "label": "Nước phát triển, định hướng XHCN"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Mục tiêu đến giữa thế kỷ XXI: nước ta trở thành nước phát triển, theo định hướng xã hội chủ nghĩa.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 389",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-defuse-004",
+      "pool": "minefield_defuse",
+      "chapter": "chapter_3",
+      "topic": "Gia nhập WTO (2006)",
+      "type": "defuse_ab",
+      "difficulty": "easy",
+      "prompt": "Việt Nam gia nhập WTO vào năm nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "2006"
+        },
+        {
+          "id": "b",
+          "label": "2001"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Tháng 11/2006, Việt Nam chính thức là thành viên thứ 150 của Tổ chức Thương mại thế giới.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 332",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-defuse-005",
+      "pool": "minefield_defuse",
+      "chapter": "chapter_3",
+      "topic": "Đại hội X (2006)",
+      "type": "defuse_ab",
+      "difficulty": "easy",
+      "prompt": "Nông Đức Mạnh được bầu lại làm Tổng Bí thư tại Đại hội nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Đại hội XII"
+        },
+        {
+          "id": "b",
+          "label": "Đại hội X"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Đại hội X (2006) bầu lại đồng chí Nông Đức Mạnh làm Tổng Bí thư.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 310",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-defuse-006",
+      "pool": "minefield_defuse",
+      "chapter": "chapter_3",
+      "topic": "Đại hội XII (2016)",
+      "type": "defuse_ab",
+      "difficulty": "easy",
+      "prompt": "Đại hội XII tổng kết bao nhiêu năm đổi mới?",
+      "options": [
+        {
+          "id": "a",
+          "label": "30 năm"
+        },
+        {
+          "id": "b",
+          "label": "20 năm"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Đại hội XII (1/2016) tổng kết 30 năm đổi mới (1986–2016).",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 367, 368",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
     }
   ]
 }

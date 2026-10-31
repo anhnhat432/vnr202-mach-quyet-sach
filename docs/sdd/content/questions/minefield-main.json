@@ -388,6 +388,699 @@
         }
       ],
       "aiAssisted": true
+    },
+    {
+      "key": "t6-mine-001",
+      "pool": "minefield_main",
+      "chapter": "chapter_3",
+      "topic": "Đại hội VII (1991)",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "Văn kiện nào cùng Chiến lược đến năm 2000 được Đại hội VII thông qua?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Cương lĩnh chính trị đầu tiên (1930)"
+        },
+        {
+          "id": "b",
+          "label": "Luận cương chính trị (10/1930)"
+        },
+        {
+          "id": "c",
+          "label": "Cương lĩnh năm 1991"
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "Đại hội VII thông qua Cương lĩnh xây dựng đất nước trong thời kỳ quá độ lên CNXH (Cương lĩnh 1991) và Chiến lược ổn định và phát triển kinh tế - xã hội đến năm 2000.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 272",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-mine-002",
+      "pool": "minefield_main",
+      "chapter": "chapter_3",
+      "topic": "Đại hội IX (2001)",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "Đại hội IX của Đảng họp vào năm nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "2001"
+        },
+        {
+          "id": "b",
+          "label": "1996"
+        },
+        {
+          "id": "c",
+          "label": "2006"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Đại hội IX họp tại Hà Nội từ ngày 19 đến ngày 22/4/2001.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 296",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-mine-003",
+      "pool": "minefield_main",
+      "chapter": "chapter_3",
+      "topic": "Đại hội X (2006)",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "Ai được bầu lại làm Tổng Bí thư tại Đại hội X?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Lê Khả Phiêu"
+        },
+        {
+          "id": "b",
+          "label": "Nông Đức Mạnh"
+        },
+        {
+          "id": "c",
+          "label": "Nguyễn Phú Trọng"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Đại hội X (2006) bầu lại đồng chí Nông Đức Mạnh làm Tổng Bí thư của Đảng.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 310",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-mine-004",
+      "pool": "minefield_main",
+      "chapter": "chapter_3",
+      "topic": "Đại hội XII (2016)",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "Nguyễn Phú Trọng được bầu lại làm gì tại Đại hội XII?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Chủ tịch nước"
+        },
+        {
+          "id": "b",
+          "label": "Thủ tướng Chính phủ"
+        },
+        {
+          "id": "c",
+          "label": "Tổng Bí thư"
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "Đại hội XII bầu lại đồng chí Nguyễn Phú Trọng làm Tổng Bí thư. Đến ngày 23/10/2018, đồng chí còn được bầu giữ thêm cương vị Chủ tịch nước.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 367, 384",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-mine-005",
+      "pool": "minefield_main",
+      "chapter": "chapter_3",
+      "topic": "Đại hội XI (2011)",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "Trước Đại hội XI, cả nước vừa kỷ niệm sự kiện nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "1.000 năm Thăng Long - Hà Nội"
+        },
+        {
+          "id": "b",
+          "label": "50 năm giải phóng miền Nam"
+        },
+        {
+          "id": "c",
+          "label": "100 năm thành lập nước"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Đại hội XI họp từ 12 đến 19/1/2011, khi cả nước vừa kỷ niệm 1.000 năm Thăng Long - Hà Nội.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 335",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-mine-006",
+      "pool": "minefield_main",
+      "chapter": "chapter_3",
+      "topic": "Cương lĩnh 2011",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "Cương lĩnh (bổ sung, phát triển năm 2011) được thông qua tại Đại hội nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Đại hội X"
+        },
+        {
+          "id": "b",
+          "label": "Đại hội XI"
+        },
+        {
+          "id": "c",
+          "label": "Đại hội XII"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Đại hội XI thông qua Cương lĩnh xây dựng đất nước trong thời kỳ quá độ lên CNXH (bổ sung, phát triển năm 2011).",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 335",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-mine-007",
+      "pool": "minefield_main",
+      "chapter": "chapter_3",
+      "topic": "Đại hội VII (1991)",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Đại hội VII họp từ ngày 24/6/1991 đến ngày nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "28/6/1991"
+        },
+        {
+          "id": "b",
+          "label": "1/7/1991"
+        },
+        {
+          "id": "c",
+          "label": "27/6/1991"
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "Đại hội VII họp tại Hà Nội từ ngày 24 đến ngày 27/6/1991.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 272",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-mine-008",
+      "pool": "minefield_main",
+      "chapter": "chapter_3",
+      "topic": "Số đại biểu các kỳ Đại hội",
+      "type": "pair_choice",
+      "difficulty": "medium",
+      "prompt": "Cặp nào ghép đúng giữa Đại hội và số đại biểu dự Đại hội?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Đại hội VIII – 1.198 đại biểu"
+        },
+        {
+          "id": "b",
+          "label": "Đại hội IX – 1.377 đại biểu"
+        },
+        {
+          "id": "c",
+          "label": "Đại hội XI – 1.168 đại biểu"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Đại hội VIII có 1.198 đại biểu; Đại hội IX có 1.168; Đại hội XI có 1.377. (Đại hội VII và X cùng có 1.176; Đại hội XII hơn 1.510; Đại hội XIII 1.587.)",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 272, 285, 296, 310, 335, 367, 386",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-mine-009",
+      "pool": "minefield_main",
+      "chapter": "chapter_3",
+      "topic": "Chiến lược đến năm 2000",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Chiến lược đến năm 2000 đặt mục tiêu GDP năm 2000 so với 1990 thế nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Tăng gấp ba"
+        },
+        {
+          "id": "b",
+          "label": "Tăng gấp đôi"
+        },
+        {
+          "id": "c",
+          "label": "Tăng thêm 50%"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Chiến lược ổn định và phát triển kinh tế - xã hội đến năm 2000 đặt mục tiêu ra khỏi khủng hoảng và đưa GDP năm 2000 tăng gấp đôi so với năm 1990.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 275",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-mine-010",
+      "pool": "minefield_main",
+      "chapter": "chapter_3",
+      "topic": "Cương lĩnh 1991",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Cương lĩnh 1991 nêu mấy đặc trưng cơ bản của xã hội XHCN?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Năm đặc trưng"
+        },
+        {
+          "id": "b",
+          "label": "Tám đặc trưng"
+        },
+        {
+          "id": "c",
+          "label": "Sáu đặc trưng"
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "Cương lĩnh 1991 nêu sáu đặc trưng cơ bản của xã hội XHCN mà nhân dân ta xây dựng.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 273",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-mine-011",
+      "pool": "minefield_main",
+      "chapter": "chapter_3",
+      "topic": "Đại hội VIII (1996)",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Đại hội VIII rút ra mấy bài học chủ yếu qua 10 năm đổi mới?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Sáu bài học"
+        },
+        {
+          "id": "b",
+          "label": "Năm bài học"
+        },
+        {
+          "id": "c",
+          "label": "Bảy bài học"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Tổng kết 10 năm đổi mới (1986–1996), Đại hội VIII nêu sáu bài học chủ yếu.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 286",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-mine-012",
+      "pool": "minefield_main",
+      "chapter": "chapter_3",
+      "topic": "Khủng hoảng khu vực 1997",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Khủng hoảng tài chính - tiền tệ khu vực bùng phát từ tháng 7 năm nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "1991"
+        },
+        {
+          "id": "b",
+          "label": "1997"
+        },
+        {
+          "id": "c",
+          "label": "2001"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Nước ta vượt qua cuộc khủng hoảng tài chính - tiền tệ khu vực từ tháng 7/1997; đến năm 2000, GDP tăng bình quân khoảng 7%/năm.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 289",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-mine-013",
+      "pool": "minefield_main",
+      "chapter": "chapter_3",
+      "topic": "Văn hóa thời Đại hội VIII",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Nghị quyết TW 5 khóa VIII (1998) được coi như tuyên ngôn về lĩnh vực nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Giáo dục"
+        },
+        {
+          "id": "b",
+          "label": "Quốc phòng"
+        },
+        {
+          "id": "c",
+          "label": "Văn hóa"
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "Nghị quyết Trung ương 5 khóa VIII về xây dựng nền văn hóa tiên tiến, đậm đà bản sắc dân tộc được coi như tuyên ngôn văn hóa của Đảng thời kỳ công nghiệp hóa, hiện đại hóa.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 293, 295",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-mine-014",
+      "pool": "minefield_main",
+      "chapter": "chapter_3",
+      "topic": "Dân chủ cơ sở",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Chỉ thị 30-CT/TW về Quy chế dân chủ ở cơ sở được ban hành năm nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "1998"
+        },
+        {
+          "id": "b",
+          "label": "1993"
+        },
+        {
+          "id": "c",
+          "label": "2003"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Bộ Chính trị ban hành Chỉ thị số 30-CT/TW ngày 18/2/1998 về xây dựng và thực hiện Quy chế dân chủ ở cơ sở.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 292",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-mine-015",
+      "pool": "minefield_main",
+      "chapter": "chapter_3",
+      "topic": "Hội nghị giữa nhiệm kỳ khóa VII",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "Hội nghị đại biểu giữa nhiệm kỳ khóa VII (1/1994) chỉ rõ mấy nguy cơ?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Ba nguy cơ"
+        },
+        {
+          "id": "b",
+          "label": "Bốn nguy cơ"
+        },
+        {
+          "id": "c",
+          "label": "Năm nguy cơ"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Bốn nguy cơ: tụt hậu xa hơn về kinh tế; chệch hướng XHCN; nạn tham nhũng và tệ quan liêu; âm mưu 'diễn biến hòa bình' của các thế lực thù địch.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 282, 283",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-mine-016",
+      "pool": "minefield_main",
+      "chapter": "chapter_3",
+      "topic": "Đại hội X (2006)",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "Đại hội X bổ sung đặc trưng nào của CNXH so với Cương lĩnh 1991?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Nền kinh tế kế hoạch hóa tập trung"
+        },
+        {
+          "id": "b",
+          "label": "Chế độ công hữu tuyệt đối"
+        },
+        {
+          "id": "c",
+          "label": "Có Nhà nước pháp quyền XHCN"
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "Đại hội X bổ sung hai đặc trưng: 'Dân giàu, nước mạnh, công bằng, dân chủ, văn minh' và 'có Nhà nước pháp quyền xã hội chủ nghĩa'.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 311",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-mine-017",
+      "pool": "minefield_main",
+      "chapter": "chapter_3",
+      "topic": "Cương lĩnh 2011",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "Cương lĩnh 2011 bổ sung hai vấn đề toàn cầu nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Chống khủng bố, biến đổi khí hậu"
+        },
+        {
+          "id": "b",
+          "label": "Dịch bệnh, thiếu hụt năng lượng"
+        },
+        {
+          "id": "c",
+          "label": "Di cư, an ninh mạng"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Cương lĩnh 2011 bổ sung hai vấn đề toàn cầu là chống khủng bố và ứng phó với biến đổi khí hậu toàn cầu.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 338",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-mine-018",
+      "pool": "minefield_main",
+      "chapter": "chapter_3",
+      "topic": "Đại hội XIII (2021)",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "Ba đột phá của Đại hội XIII: thể chế, nhân lực chất lượng cao và gì?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Công nghiệp quốc phòng"
+        },
+        {
+          "id": "b",
+          "label": "Kết cấu hạ tầng đồng bộ, hiện đại"
+        },
+        {
+          "id": "c",
+          "label": "Du lịch và dịch vụ"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Ba đột phá: hoàn thiện đồng bộ thể chế phát triển; phát triển nguồn nhân lực chất lượng cao; xây dựng hệ thống kết cấu hạ tầng đồng bộ, hiện đại.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 392, 393",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-mine-019",
+      "pool": "minefield_main",
+      "chapter": "chapter_3",
+      "topic": "Hội nghị TW 4 khóa XII (2016)",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "Hội nghị TW 4 khóa XII (10/2016) nêu 27 biểu hiện của hiện tượng nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Tự phê bình và phê bình"
+        },
+        {
+          "id": "b",
+          "label": "Tự chủ, tự lực, tự cường"
+        },
+        {
+          "id": "c",
+          "label": "Tự diễn biến, tự chuyển hóa"
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "Nghị quyết 04-NQ/TW (30/10/2016) chỉ rõ 27 biểu hiện 'tự diễn biến', 'tự chuyển hóa' trong nội bộ.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 381, 382",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-mine-020",
+      "pool": "minefield_main",
+      "chapter": "chapter_3",
+      "topic": "Giáo dục sau Đại hội XI",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "Nghị quyết về đổi mới căn bản giáo dục - đào tạo (11/2013) mang số nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Nghị quyết 29-NQ/TW"
+        },
+        {
+          "id": "b",
+          "label": "Nghị quyết 33-NQ/TW"
+        },
+        {
+          "id": "c",
+          "label": "Nghị quyết 36-NQ/TW"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Nghị quyết 29-NQ/TW (4/11/2013) là về đổi mới căn bản, toàn diện giáo dục và đào tạo; 33-NQ/TW (2014) về văn hóa, con người; 36-NQ/TW (2018) về chiến lược biển.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 360, 361, 380",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-mine-021",
+      "pool": "minefield_main",
+      "chapter": "chapter_3",
+      "topic": "Chiến lược biển (2007)",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "Chiến lược biển đến năm 2020: kinh tế biển đóng góp khoảng bao nhiêu % GDP?",
+      "options": [
+        {
+          "id": "a",
+          "label": "30 - 35%"
+        },
+        {
+          "id": "b",
+          "label": "53 - 55%"
+        },
+        {
+          "id": "c",
+          "label": "70 - 75%"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Nghị quyết 09-NQ/TW (9/2/2007) đặt mục tiêu đến năm 2020 kinh tế biển đóng góp khoảng 53–55% GDP và 55–60% kim ngạch xuất khẩu.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 315",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
     }
   ]
 }
