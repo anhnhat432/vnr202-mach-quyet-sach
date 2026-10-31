@@ -4554,7 +4554,7 @@ main {
 
 /* ---- admin (stage F5) ---------------------------------------------------------------------------- */
 .adm { display: grid; grid-template-columns: minmax(18rem, 22rem) 1fr; gap: 1.2rem; margin-top: 1.5rem; align-items: start; }
-.adm--single { grid-template-columns: 1fr; }
+.adm.adm--single { grid-template-columns: minmax(0, 1fr); overflow-wrap: anywhere; }
 @media (max-width: 960px) { .adm { grid-template-columns: 1fr; } }
 .adm__panel { display: grid; gap: 0.9rem; padding: 1.2rem; border: 1px solid var(--line); border-radius: var(--radius-card); background: var(--paper-light); }
 .adm__panel h2 { margin: 0; font-family: var(--font-display), sans-serif; font-size: 1.6rem; text-transform: uppercase; }
@@ -4585,6 +4585,19 @@ main {
 .adm__monitor th, .adm__monitor td { padding: 0.4rem 0.5rem; border-bottom: 1px solid var(--line); text-align: left; white-space: nowrap; }
 .adm__monitor th { color: var(--ink-soft); font-weight: 600; }
 .adm__filters { display: flex; flex-wrap: wrap; gap: 0.8rem; }
+.adm__check { display: flex; align-items: flex-start; gap: 0.5rem; font: inherit; cursor: pointer; }
+.adm__check input { flex: 0 0 auto; width: 1.1rem; height: 1.1rem; margin-top: 0.15rem; accent-color: var(--evidence-teal); }
+.adm__bulk { display: grid; gap: 0.8rem; padding: 1rem; border: 1px solid var(--line); border-radius: var(--radius-card); background: var(--paper-light); }
+.adm__bulk .adm__actions { align-items: center; }
+.adm__bulk .adm__actions strong { margin-right: auto; }
+.adm__bulk-form { display: grid; gap: 0.7rem; border-top: 1px solid var(--line); padding-top: 0.8rem; }
+.adm__bulk-form h2 { margin: 0; font-size: 1.2rem; }
+.adm__bulk-form > label:not(.adm__check) { display: grid; gap: 0.35rem; font-weight: 600; }
+.adm__bulk-form textarea { width: 100%; min-width: 0; min-height: 6rem; resize: vertical; padding: 0.6rem; border: 1px solid var(--line); border-radius: var(--radius-btn); font: inherit; background: white; }
+.adm__bulk-results { display: grid; gap: 0.6rem; overflow-wrap: anywhere; }
+.adm__bulk-results p { margin: 0; }
+.adm__bulk-results summary { cursor: pointer; font-weight: 600; }
+.adm__bulk-results ul { max-height: 18rem; overflow-y: auto; padding-left: 1.4rem; }
 .adm__questions { display: grid; gap: 0.8rem; margin: 0; padding: 0; list-style: none; }
 .adm__questions > li { display: grid; gap: 0.4rem; padding: 1rem; border: 1px solid var(--line); border-radius: var(--radius-card); background: var(--paper-light); }
 .adm__questions header { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center; color: var(--ink-soft); font-size: 0.85rem; }
