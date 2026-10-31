@@ -14,7 +14,7 @@ type MonitorRow = { attemptId: string; profileId: string; accountStatus: string;
 type AuditRow = { at: string; action: string; targetType: string; actor: string; after: { reason?: string } | null };
 type Disclosed = { kind: string; competitionState: string; questions: Array<{ versionId: string; game: string; pool: string; difficulty: string; chapter: string; prompt: string; confirmed: boolean; disclosedBy: Array<{ competition: string; at: string }> | null }> };
 type IncidentAction = "note" | "void_attempt" | "revoke_sessions" | "lock_account" | "unlock_account";
-type Readiness = { ready: boolean; blockers: string[]; target: { meetsTarget: boolean } };
+type Readiness = { ready: boolean; blockers: string[]; classSize: number | null; target: { meetsTarget: boolean; expectedAttempts: number; maxPerQuestion: number }; games: Record<string, { slots: Array<{ pool: string; difficulty: string; needed: number; available: number; expectedAllocationsPerQuestion: number | null }> }> };
 
 const STATE_LABEL: Record<string, string> = { draft: "Nháp", scheduled: "Đã lên lịch", open: "Đang mở", start_closed: "Đóng nhận lượt", settling: "Chốt kết quả", finalized: "Đã kết thúc", archived: "Lưu trữ" };
 const NEXT_ACTIONS: Record<string, Array<{ target: string; label: string }>> = {
@@ -54,9 +54,12 @@ export function CompetitionAdmin() {
   const [readiness, setReadiness] = useState<Readiness | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
-  const [form, setForm] = useState({ name: "Diễn tập Live Arena", minutes: 60 });
+  const [form, setForm] = useState<{ name: string; minutes: number; kind: "rehearsal" | "official" }>({ name: "Diễn tập Live Arena", minutes: 60, kind: "rehearsal" });
   const [incidentFor, setIncidentFor] = useState<string | null>(null);
   const [auditTick, setAuditTick] = useState(0);
+  const [expectedAttempts, setExpectedAttempts] = useState(60);
+  const [acknowledgeRisk, setAcknowledgeRisk] = useState(false);
+  const [bankReason, setBankReason] = useState("");
 
   const load = useCallback(async () => {
     try {
@@ -88,13 +91,13 @@ export function CompetitionAdmin() {
     };
     const first = window.setTimeout(() => void pull(), 0);
     const timer = window.setInterval(() => void pull(), 4000);
-    request<Readiness>("GET", `/admin/competitions/${selected}/readiness`).then((r) => alive && setReadiness(r)).catch(() => undefined);
+    request<Readiness>("GET", `/admin/competitions/${selected}/readiness?expectedAttempts=${expectedAttempts}`).then((r) => alive && setReadiness(r)).catch(() => undefined);
     return () => {
       alive = false;
       window.clearTimeout(first);
       window.clearInterval(timer);
     };
-  }, [selected, auditTick]);
+  }, [selected, auditTick, expectedAttempts]);
 
   function incidentDone(text: string) {
     setIncidentFor(null);
@@ -108,12 +111,12 @@ export function CompetitionAdmin() {
     setMessage(null);
     try {
       const c = await request<{ id: string }>("POST", "/admin/competitions", {
-        body: { name: form.name, kind: "rehearsal", opensAt: new Date(Date.now() - 60_000).toISOString(), startDeadlineAt: new Date(Date.now() + form.minutes * 60_000).toISOString() },
+        body: { name: form.name, kind: form.kind, opensAt: new Date(Date.now() - 60_000).toISOString(), startDeadlineAt: new Date(Date.now() + form.minutes * 60_000).toISOString() },
         key: newKey("create"),
       });
       setSelected(c.id);
       await load();
-      setMessage("Đã tạo cuộc thi diễn tập (Nháp).");
+      setMessage(form.kind === "official" ? "Đã tạo cuộc thi chính thức (Nháp)." : "Đã tạo cuộc thi diễn tập (Nháp).");
     } catch (e) {
       setMessage(errorText(e));
     } finally {
@@ -128,7 +131,10 @@ export function CompetitionAdmin() {
     setMessage(null);
     try {
       if (target === "finalize") await request("POST", `/admin/competitions/${current.id}/finalize`);
-      else await request("POST", `/admin/competitions/${current.id}/transitions`, { body: { target } });
+      else {
+        const belowTarget = current.kind === "official" && target === "scheduled" && readiness && !readiness.target.meetsTarget;
+        await request("POST", `/admin/competitions/${current.id}/transitions`, { body: { target, ...(target === "scheduled" ? { expectedAttempts } : {}), ...(belowTarget ? { bankAcknowledgement: { expectedAttempts, confirmed: acknowledgeRisk, reason: bankReason } } : {}) } });
+      }
       await load();
       setMessage(`Đã chuyển: ${STATE_LABEL[target === "finalize" ? "finalized" : target]}.`);
     } catch (e) {
@@ -161,7 +167,7 @@ export function CompetitionAdmin() {
           <ul className="adm__list">
             {list.map((c) => (
               <li key={c.id}>
-                <button type="button" aria-pressed={c.id === selected} onClick={() => setSelected(c.id)}>
+                <button type="button" aria-pressed={c.id === selected} onClick={() => { setSelected(c.id); setAcknowledgeRisk(false); setBankReason(""); setReadiness(null); }}>
                   <strong>{c.name}</strong>
                   <span>{c.kind === "rehearsal" ? "Diễn tập" : "Chính thức"} · {STATE_LABEL[c.state] ?? c.state} · {c.attempts} lượt ({c.active} đang chơi)</span>
                 </button>
@@ -170,7 +176,8 @@ export function CompetitionAdmin() {
           </ul>
         )}
         <form className="adm__create" onSubmit={(e) => { e.preventDefault(); void create(); }}>
-          <h3>Tạo cuộc thi diễn tập</h3>
+          <h3>Tạo cuộc thi</h3>
+          <label>Loại cuộc thi<select value={form.kind} onChange={(e) => { const kind = e.target.value as "rehearsal" | "official"; setForm({ ...form, kind, name: form.name === "Diễn tập Live Arena" || form.name === "Cuộc thi Live Arena" ? (kind === "official" ? "Cuộc thi Live Arena" : "Diễn tập Live Arena") : form.name }); }}><option value="rehearsal">Diễn tập</option><option value="official">Chính thức</option></select></label>
           <label>Tên<input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} minLength={3} maxLength={120} required /></label>
           <label>Nhận lượt mới trong (phút)<input type="number" min={5} max={720} value={form.minutes} onChange={(e) => setForm({ ...form, minutes: Number(e.target.value) })} /></label>
           <p className="adm__hint">Diễn tập dùng câu giả lập [GIẢ LẬP]; không bao giờ có nhãn Chính thức. Cuộc thi chính thức chỉ lên lịch được khi đủ câu Published do người duyệt học thuật duyệt.</p>
@@ -192,15 +199,23 @@ export function CompetitionAdmin() {
                 <Link href="/live-arena/bang-xep-hang" target="_blank">Bảng xếp hạng <ExternalLink aria-hidden size={12} /></Link>
               </div>
             </header>
-            {readiness && current.state === "draft" ? (
-              <p className={`adm__ready ${readiness.ready ? "is-ok" : "is-bad"}`}>
-                {readiness.ready ? "Ngân hàng câu đủ điều kiện." : `Chưa đủ điều kiện: ${readiness.blockers.join(", ")}`}
-                {readiness.target && !readiness.target.meetsTarget ? " · Chưa đạt mục tiêu 168 câu (chỉ cảnh báo)." : ""}
-              </p>
-            ) : null}
+            {current.state === "draft" && current.kind === "official" ? <label>Sĩ số dự kiến <input type="number" min={1} max={500} value={expectedAttempts} onChange={(e) => { setExpectedAttempts(Number(e.target.value)); setAcknowledgeRisk(false); setReadiness(null); }} /></label> : null}
+            {readiness && current.state === "draft" ? <div className={`adm__ready ${readiness.ready ? "is-ok" : "is-bad"}`}>
+              <p>{readiness.ready ? "Ngân hàng câu đủ điều kiện bắt buộc." : `Chưa đủ điều kiện: ${readiness.blockers.join(", ")}`}</p>
+              {current.kind === "official" && readiness.classSize != null ? <p role={readiness.classSize !== readiness.target.expectedAttempts ? "alert" : undefined}>Danh sách lớp hiện có {readiness.classSize} sinh viên{readiness.classSize !== readiness.target.expectedAttempts ? `, khác sĩ số dự kiến ${readiness.target.expectedAttempts}. Hãy kiểm tra trước khi xác nhận.` : "."}</p> : null}
+              {current.kind === "official" && !readiness.target.meetsTarget ? <>
+                <p>Sĩ số dự kiến {readiness.target.expectedAttempts}: chưa đạt mục tiêu tối đa {readiness.target.maxPerQuestion} lượt phân bổ mỗi câu. Một câu có thể được nhiều sinh viên nhận, tăng rủi ro chia sẻ đáp án.</p>
+                <p>Tổng còn thiếu {Object.values(readiness.games).flatMap((game) => game.slots).reduce((sum, slot) => sum + Math.max(0, Math.ceil(readiness.target.expectedAttempts * slot.needed / readiness.target.maxPerQuestion) - slot.available), 0)} câu theo cơ cấu mục tiêu.</p>
+                <ul>{Object.entries(readiness.games).flatMap(([game, info]) => info.slots.map((slot) => {
+                  const missing = Math.max(0, Math.ceil(readiness.target.expectedAttempts * slot.needed / readiness.target.maxPerQuestion) - slot.available);
+                  return missing ? <li key={`${game}-${slot.pool}-${slot.difficulty}`}>{game} · {slot.pool} · {slot.difficulty}: thiếu {missing} câu so với mục tiêu; dự kiến {slot.expectedAllocationsPerQuestion ?? "—"} lượt/câu.</li> : null;
+                }))}</ul>
+                {readiness.ready ? <><label><input type="checkbox" checked={acknowledgeRisk} onChange={(e) => setAcknowledgeRisk(e.target.checked)} /> Tôi đã xem và chấp nhận rủi ro phân bổ lặp.</label><label>Lý do xác nhận <textarea value={bankReason} minLength={3} maxLength={300} onChange={(e) => setBankReason(e.target.value)} /></label></> : null}
+              </> : null}
+            </div> : null}
             <div className="adm__actions">
               {(NEXT_ACTIONS[current.state] ?? []).map((a) => (
-                <button key={a.target} type="button" disabled={busy} onClick={() => void act(a.target)}>
+                <button key={a.target} type="button" disabled={busy || (a.target === "scheduled" && current.kind === "official" && (!readiness || !readiness.ready || (!readiness.target.meetsTarget && (!acknowledgeRisk || bankReason.trim().length < 3))))} onClick={() => void act(a.target)}>
                   {a.target === "open" ? <Play aria-hidden size={16} /> : a.target === "start_closed" ? <Square aria-hidden size={16} /> : null} {a.label}
                 </button>
               ))}

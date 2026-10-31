@@ -11,6 +11,33 @@ servers:
 security:
   - supabaseSession: []
 paths:
+  /passport/progress:
+    get:
+      summary: Private dossier progress for the authenticated student
+      responses: { "200": { $ref: "#/components/responses/Ok" }, "401": { $ref: "#/components/responses/Error" } }
+    post:
+      summary: Save a validated stage of a Published dossier for the authenticated student
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [slug, state, ownerId, expectedVersion]
+              properties:
+                slug: { type: string, maxLength: 150 }
+                ownerId: { type: string, format: uuid, description: "Identity returned by GET; must match the current authenticated student" }
+                expectedVersion: { type: integer, minimum: 0, description: "0 for a new record; otherwise the version last read or saved" }
+                state:
+                  type: object
+                  additionalProperties: false
+                  required: [stage, selectedEvidence, selectedDecision]
+                  properties:
+                    stage: { type: string, enum: [briefing, evidence, decision, consequences, comparison, connections] }
+                    selectedEvidence: { type: array, maxItems: 30, items: { type: string } }
+                    selectedDecision: { type: string, maxLength: 100 }
+      responses: { "200": { $ref: "#/components/responses/Ok" }, "401": { $ref: "#/components/responses/Error" }, "404": { $ref: "#/components/responses/Error" }, "409": { description: progress_conflict | session_changed }, "422": { $ref: "#/components/responses/Error" } }
   /arena/lobby:
     get:
       summary: Open competition and the student's per-game attempt state
@@ -96,6 +123,7 @@ paths:
   /admin/competitions/{id}/readiness:
     get:
       summary: Question-bank readiness for this competition (admin)
+      parameters: [ { name: expectedAttempts, in: query, required: false, schema: { type: integer, minimum: 1, maximum: 500, default: 60 } } ]
       responses: { "200": { $ref: "#/components/responses/Ok" } }
   /admin/competitions/{id}/monitor:
     get:
@@ -108,8 +136,22 @@ paths:
         required: true
         content:
           application/json:
-            schema: { type: object, additionalProperties: false, required: [target], properties: { target: { enum: [scheduled, open, start_closed, settling, archived] } } }
-      responses: { "200": { $ref: "#/components/responses/Ok" }, "409": { description: illegal_transition | another_competition_open }, "422": { description: readiness_blocked } }
+            schema:
+              type: object
+              additionalProperties: false
+              required: [target]
+              properties:
+                target: { enum: [scheduled, open, start_closed, settling, archived] }
+                expectedAttempts: { type: integer, minimum: 1, maximum: 500 }
+                bankAcknowledgement:
+                  type: object
+                  additionalProperties: false
+                  required: [expectedAttempts, confirmed, reason]
+                  properties:
+                    expectedAttempts: { type: integer, minimum: 1, maximum: 500 }
+                    confirmed: { const: true }
+                    reason: { type: string, minLength: 3, maxLength: 300 }
+      responses: { "200": { $ref: "#/components/responses/Ok" }, "409": { description: illegal_transition | another_competition_open }, "422": { description: readiness_blocked | bank_acknowledgement_required | bank_assessment_required } }
   /admin/competitions/{id}/finalize:
     post:
       summary: Settling→Finalized (admin); 409 attempts_still_active until every attempt has ended

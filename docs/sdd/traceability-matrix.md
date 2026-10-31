@@ -1,5 +1,7 @@
 # Traceability Matrix
 
+Student Passport T025/T034: profile/class, fifteen status markers, account-scoped progress and official non-void history use server projections; private progress has no client table permissions. `passport.test.ts`, `passport-view.test.tsx`, `dossier-progress.test.ts`, `arena-admin.test.ts` and `passport.spec.ts` cover grouping, validation, access and transfer. Versioned writes reject stale progress; `offline-progress.test.ts` and `passport-offline.spec.ts` cover local drafts, retry and explicit conflict choices, including a production-build offline reload. Isolated CI verification and hosted/classroom acceptance remain open.
+
 Status: Phase 2 Checkpoint A1 integration snapshot (2026-08-20)
 Live Arena V1.0 re-scope (2026-10-29): rows for superseded v1.0 rules are marked Superseded and point to their replacements; new rule families are traced in the Live Arena section below. Stage A documents await owner approval and no Live Arena code exists yet.
 Evidence is recorded only for implemented scope. Four new Chapter 1 dossiers are Drafts awaiting human academic review; Core identity, competition, gameplay and realtime rows remain Planned.
@@ -48,7 +50,7 @@ Evidence is recorded only for implemented scope. Four new Chapter 1 dossiers are
 | LA-ANTI-001..007, LA-AC-020 | T047,T048,T060 | bundle/public API/event leak scans | anti-AI and answer-sharing rehearsal (P5) | Planned |
 | LA-IDEM-001..004, LA-AC-017 | T044,T045,T047 | duplicate key / concurrent request tests | retry under flaky network | Implemented in database (stage D, concurrency tests) |
 | LA-ADMIN-001..004 | T056 | audit and no-auto/no-replacement-attempt tests | incident drill | Planned |
-| LA-CONTENT-001..014, LA-AC-021, LA-AC-029..030 | T040,T048,T055,T110,T111,T113,T114,T115,T116 | question validator; fixture-blocking and disclosed-question readiness tests; rehearsal separation test | review pack for real bank; exposure report (P9) | Governance, fixtures separation, disclosure, readiness and the 31 AI drafts implemented and tested in stage C (`question_bank.sql` 52 assertions, `question-governance.test.ts`, `question-allocation.test.ts`, `question-bank.test.ts`, `question-bank.spec.ts`); no reviewer appointed so nothing is Published; LA-CONTENT-014 acknowledgement path still proposed (T116) |
+| LA-CONTENT-001..014, LA-AC-021, LA-AC-029..030 | T040,T048,T055,T110,T111,T113,T114,T115,T116 | question validator; fixture-blocking and disclosed-question readiness tests; rehearsal separation test; `competition-core.test.ts` bank acknowledgement and hard blockers | review pack for real bank; exposure report (P9) | Governance and 31 AI drafts; no reviewer appointed so nothing is Published. LA-CONTENT-014 approved by owner and implemented with audited acknowledgement; isolated integration passed, final browser/hosted acceptance pending. |
 | LA-UX-001..006, UX-AC-016..017 | T050-T054,T061 | keyboard/reduced-motion/sound tests | laptop and projector review | Planned |
 | LA-NFR-001..002, LA-AC-016 | T062,T066,T067 | load script; latency report | 60 players + 200 viewers rehearsal | Planned |
 | Stage A documentation consistency | T098,T099 | `node tools/sdd/check-live-arena-docs.mjs` | `docs/sdd/evidence/live-arena/consistency-check.md` | Passing at revision 2 (structural only, not semantic) |

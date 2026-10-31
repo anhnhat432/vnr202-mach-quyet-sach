@@ -104,7 +104,10 @@ export function useLeaderboard(publicId: string | null, game: Game) {
   useEffect(() => {
     if (!publicId) return;
     const first = window.setTimeout(() => void fetchBoard(), 0);
-    const interval = window.setInterval(() => void fetchBoard(), channel === "live" ? LIVE_SYNC_MS : FALLBACK_SYNC_MS);
+    const syncMs = channel === "live" ? LIVE_SYNC_MS : FALLBACK_SYNC_MS;
+    const interval = window.setInterval(() => {
+      if (performance.now() - lastRead.current >= syncMs - 50) void fetchBoard();
+    }, syncMs);
     const resync = () => void fetchBoard();
     const onVisible = () => { if (document.visibilityState === "visible") resync(); };
     window.addEventListener("online", resync);

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { ArenaApiError, request } from "@/features/arena/client/api";
 
@@ -24,12 +24,20 @@ export function QuestionBankAdmin() {
   const [readiness, setReadiness] = useState<Readiness | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const seq = useRef(0);
+  const abort = useRef<AbortController | null>(null);
 
   const load = useCallback(async () => {
+    const current = ++seq.current;
+    abort.current?.abort();
+    const controller = new AbortController();
+    abort.current = controller;
     const q = new URLSearchParams(Object.entries(filter).filter(([, v]) => v) as Array<[string, string]>);
     try {
-      setItems(await request<Question[]>("GET", `/admin/questions?${q.toString()}`));
+      const next = await request<Question[]>("GET", `/admin/questions?${q.toString()}`, { signal: controller.signal });
+      if (current === seq.current) setItems(next);
     } catch (e) {
+      if ((e as Error).name === "AbortError" || current !== seq.current) return;
       setMessage(e instanceof ArenaApiError ? e.message : "Không tải được ngân hàng câu hỏi.");
     }
   }, [filter]);
@@ -37,8 +45,18 @@ export function QuestionBankAdmin() {
   useEffect(() => {
     const t = window.setTimeout(() => void load(), 0);
     request<Readiness>("GET", "/admin/question-bank/readiness?kind=official").then(setReadiness).catch(() => undefined);
-    return () => window.clearTimeout(t);
+    return () => {
+      window.clearTimeout(t);
+      abort.current?.abort();
+    };
   }, [load]);
+
+  function updateFilter(patch: Partial<typeof filter>) {
+    seq.current += 1;
+    abort.current?.abort();
+    setItems(null);
+    setFilter((current) => ({ ...current, ...patch }));
+  }
 
   async function transition(version: Version, action: string) {
     const note = action === "review" || action === "reject" || action === "retire"
@@ -66,9 +84,9 @@ export function QuestionBankAdmin() {
         </p>
       ) : null}
       <div className="adm__filters">
-        <label>Nguồn<select value={filter.origin} onChange={(e) => setFilter({ ...filter, origin: e.target.value })}><option value="bank">Ngân hàng thật</option><option value="fixture">Giả lập</option></select></label>
-        <label>Game<select value={filter.game} onChange={(e) => setFilter({ ...filter, game: e.target.value })}><option value="">Cả hai</option><option value="minefield">Bãi Mìn</option><option value="race">Đường Đua</option></select></label>
-        <label>Trạng thái<select value={filter.status} onChange={(e) => setFilter({ ...filter, status: e.target.value })}><option value="">Tất cả</option><option value="draft">Nháp</option><option value="reviewed">Đã duyệt</option><option value="published">Đã xuất bản</option></select></label>
+        <label>Nguồn<select value={filter.origin} onChange={(e) => updateFilter({ origin: e.target.value })}><option value="bank">Ngân hàng thật</option><option value="fixture">Giả lập</option></select></label>
+        <label>Game<select value={filter.game} onChange={(e) => updateFilter({ game: e.target.value })}><option value="">Cả hai</option><option value="minefield">Bãi Mìn</option><option value="race">Đường Đua</option></select></label>
+        <label>Trạng thái<select value={filter.status} onChange={(e) => updateFilter({ status: e.target.value })}><option value="">Tất cả</option><option value="draft">Nháp</option><option value="reviewed">Đã duyệt</option><option value="published">Đã xuất bản</option></select></label>
       </div>
       {message ? <p className="adm__message" role="status">{message}</p> : null}
       {items === null ? <p>Đang tải…</p> : items.length === 0 ? <p>Không có câu hỏi phù hợp.</p> : (

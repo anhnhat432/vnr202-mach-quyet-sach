@@ -4,6 +4,12 @@ Trạng thái: Approved for planning; sửa đổi v1.1 cho Live Arena V1.0 (202
 Base path: `/api/v1`  
 Format: JSON UTF-8, camelCase ở API, snake_case trong PostgreSQL
 
+### Student Passport progress (T025/T034)
+
+`GET /passport/progress` trả `ownerId` của phiên và các hàng tiến độ của chính sinh viên (`dossier_id`, `state`, `completed_at`, `version`); `POST /passport/progress` nhận `slug`, `state`, `ownerId` đã đọc và `expectedVersion` (0 khi chưa có bản lưu). Server luôn lấy profile từ phiên và từ chối nếu `ownerId` không khớp; giá trị này không chọn tài khoản để ghi. Server kiểm tra CSRF, chỉ nhận hồ sơ Published và kiểm tra dữ kiện/phương án thuộc hồ sơ. Ghi có điều kiện theo phiên bản, trả `409 progress_conflict` khi bản server đã đổi. Chặng cuối ghi dấu hoàn thành.
+
+Tiến độ chưa đồng bộ được lưu tại thiết bị; trên máy dùng chung người học cần kiểm tra bản thiết bị trước khi chọn dùng. Khi phiên bản server thay đổi hoặc không xác định, hệ thống yêu cầu chọn bản; không tự ghi đè. Khi chọn bản tài khoản, bản thiết bị được lưu dự phòng cục bộ.
+
 ## 1. Envelope
 
 Success:

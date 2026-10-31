@@ -25,6 +25,10 @@ jobs:
       - run: npm run typecheck
       - run: npm run test
       - run: npm run build
+      - name: Offline dossier reload against production build
+        run: |
+          npx playwright install --with-deps chromium
+          E2E_PRODUCTION=1 npx playwright test tests/e2e/passport-offline.spec.ts --project=desktop-chromium --workers=1
 
   security-scan:
     runs-on: ubuntu-latest

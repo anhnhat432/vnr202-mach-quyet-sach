@@ -16,6 +16,11 @@ Nguồn: Core Platform Spec (kèm Amendment v1.1), Live Arena Game Spec, Product
 
 ## 1. Identity và roster
 
+### `student_dossier_progress` (T025/T034)
+
+- Khóa `(profile_id, dossier_id)`; lưu trạng thái chặng, dữ kiện và phương án đã chọn trong `state`, cùng `completed_at` và `updated_at`. Dấu hoàn thành được giữ khi người học quay lại chặng trước.
+- RLS bật, không cấp quyền client trực tiếp. Route server xác thực sinh viên, kiểm tra trạng thái theo hồ sơ Published và lấy `profile_id` từ phiên; RPC chỉ dành cho service role. Không dùng tiến độ để tính điểm thi.
+
 ### `classes`
 
 - `id`, `code`, `name`, `is_active`, `created_at`.

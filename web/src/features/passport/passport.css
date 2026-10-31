@@ -1,0 +1,12 @@
+.passport { display: grid; gap: 1.25rem; }
+.passport-header .eyebrow { color: #fff; }
+.passport__panel { border: 1px solid #d8c9b3; border-radius: 1rem; background: #fffdf8; padding: clamp(1.25rem, 3vw, 2.5rem); }
+.passport__panel h2 { margin: 0 0 1rem; font-size: clamp(1.4rem, 2vw, 2rem); }
+.passport__panel h3 { margin: 1rem 0 .65rem; font-size: 1.05rem; }
+.passport__panel p { margin: .4rem 0; }
+.passport__chapters, .passport__games { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: 1rem; }
+.passport__chapters ul { padding-left: 1.15rem; }
+.passport__chapters li { margin: .65rem 0; }
+.passport__competition { border-top: 1px solid #e5d9ca; margin-top: 1.5rem; padding-top: .5rem; }
+.passport__games article { padding: 1rem; border: 1px solid #e5d9ca; border-radius: .75rem; background: #f8f2e9; }
+.passport__games article h3 { margin-top: 0; }

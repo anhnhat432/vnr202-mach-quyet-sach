@@ -3,636 +3,1630 @@
   "game": "race",
   "questions": [
     {
-      "key": "ai-race-001",
-      "pool": "race",
-      "chapter": "chapter_1",
-      "topic": "Thành lập Đảng 1930",
-      "type": "single_choice",
-      "difficulty": "easy",
-      "prompt": "Ai chủ trì hội nghị hợp nhất các tổ chức cộng sản đầu năm 1930?",
-      "options": [
-        {
-          "id": "a",
-          "label": "Nguyễn Ái Quốc"
-        },
-        {
-          "id": "b",
-          "label": "Trần Phú"
-        },
-        {
-          "id": "c",
-          "label": "Lê Hồng Phong"
-        }
-      ],
-      "correctOptionId": "a",
-      "explanation": "Hội nghị đầu năm 1930 do Nguyễn Ái Quốc chủ trì đã thống nhất các tổ chức cộng sản và thành lập Đảng Cộng sản Việt Nam.",
-      "sources": [
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000001",
-          "locator": "Chương I",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'hop-nhat-de-mo-duong' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        },
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000004",
-          "locator": "Slides 3-18",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'hop-nhat-de-mo-duong' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        }
-      ],
-      "aiAssisted": true
-    },
-    {
-      "key": "ai-race-002",
-      "pool": "race",
-      "chapter": "chapter_1",
-      "topic": "Trình tự sự kiện",
-      "type": "before_after",
-      "difficulty": "easy",
-      "prompt": "Sự kiện nào xảy ra trước?",
-      "options": [
-        {
-          "id": "a",
-          "label": "Tổng khởi nghĩa (tháng 8/1945)"
-        },
-        {
-          "id": "b",
-          "label": "Thành lập Đảng (đầu năm 1930)"
-        }
-      ],
-      "correctOptionId": "b",
-      "explanation": "Đảng Cộng sản Việt Nam được thành lập đầu năm 1930, trước Tổng khởi nghĩa tháng 8/1945.",
-      "sources": [
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000001",
-          "locator": "Chương I",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'hop-nhat-de-mo-duong' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        },
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000004",
-          "locator": "Slides 3-18",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'hop-nhat-de-mo-duong' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        }
-      ],
-      "aiAssisted": true
-    },
-    {
-      "key": "ai-race-003",
-      "pool": "race",
-      "chapter": "chapter_2",
-      "topic": "Kháng chiến toàn quốc",
-      "type": "single_choice",
-      "difficulty": "easy",
-      "prompt": "Kháng chiến toàn quốc chống Pháp được phát động vào ngày nào?",
-      "options": [
-        {
-          "id": "a",
-          "label": "2/9/1945"
-        },
-        {
-          "id": "b",
-          "label": "7/5/1954"
-        },
-        {
-          "id": "c",
-          "label": "19/12/1946"
-        }
-      ],
-      "correctOptionId": "c",
-      "explanation": "Kháng chiến toàn quốc được phát động ngày 19/12/1946.",
-      "sources": [
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000001",
-          "locator": "Chương II - Đường lối kháng chiến chống Pháp",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'khi-hoa-hoan-khong-con-du-dia' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        },
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000012",
-          "locator": "Slides 3-18",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'khi-hoa-hoan-khong-con-du-dia' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        }
-      ],
-      "aiAssisted": true
-    },
-    {
-      "key": "ai-race-004",
-      "pool": "race",
-      "chapter": "chapter_2",
-      "topic": "Điện Biên Phủ",
-      "type": "single_choice",
-      "difficulty": "easy",
-      "prompt": "Chiến dịch Điện Biên Phủ kéo dài bao nhiêu ngày đêm?",
-      "options": [
-        {
-          "id": "a",
-          "label": "56 ngày đêm"
-        },
-        {
-          "id": "b",
-          "label": "36 ngày đêm"
-        },
-        {
-          "id": "c",
-          "label": "100 ngày đêm"
-        }
-      ],
-      "correctOptionId": "a",
-      "explanation": "Tập đoàn cứ điểm Điện Biên Phủ bị tiêu diệt hoàn toàn sau 56 ngày đêm.",
-      "sources": [
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000001",
-          "locator": "Chương II - Kháng chiến chống Pháp và Điện Biên Phủ",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        },
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000013",
-          "locator": "Slides 3-15",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        },
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000014",
-          "locator": "Slides 3-16",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        }
-      ],
-      "aiAssisted": true
-    },
-    {
-      "key": "ai-race-005",
+      "key": "t6-race-001",
       "pool": "race",
       "chapter": "chapter_3",
-      "topic": "Đổi mới 1986",
+      "topic": "Đại hội VII (1991)",
       "type": "single_choice",
       "difficulty": "easy",
-      "prompt": "Đại hội nào mở đường cho đổi mới toàn diện?",
+      "prompt": "Đại hội VII của Đảng họp tại Hà Nội vào năm nào?",
       "options": [
         {
           "id": "a",
-          "label": "Đại hội VIII (1996)"
+          "label": "1986"
         },
         {
           "id": "b",
-          "label": "Đại hội VI (1986)"
+          "label": "1991"
         },
         {
           "id": "c",
-          "label": "Đại hội IV (1976)"
+          "label": "1996"
         }
       ],
       "correctOptionId": "b",
-      "explanation": "Đại hội VI năm 1986 mở đường cho đổi mới toàn diện.",
+      "explanation": "Đại hội VII họp tại Hà Nội từ ngày 24 đến ngày 27/6/1991.",
       "sources": [
         {
           "sourceId": "10000000-0000-0000-0000-000000000001",
-          "locator": "Chương III",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'doi-moi-hay-tut-hau' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        },
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000022",
-          "locator": "Slides 3-26",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'doi-moi-hay-tut-hau' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+          "locator": "Chương 3, mục II, tr. 272",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
         }
       ],
       "aiAssisted": true
     },
     {
-      "key": "ai-race-006",
-      "pool": "race",
-      "chapter": "chapter_2",
-      "topic": "Trình tự sự kiện",
-      "type": "before_after",
-      "difficulty": "easy",
-      "prompt": "Sự kiện nào xảy ra sau?",
-      "options": [
-        {
-          "id": "a",
-          "label": "Kháng chiến toàn quốc (12/1946)"
-        },
-        {
-          "id": "b",
-          "label": "Hiệp định Geneve (1954)"
-        }
-      ],
-      "correctOptionId": "b",
-      "explanation": "Kháng chiến toàn quốc bắt đầu ngày 19/12/1946; Hiệp định Geneve được ký sau chiến thắng Điện Biên Phủ năm 1954.",
-      "sources": [
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000001",
-          "locator": "Chương II - Kháng chiến chống Pháp và Điện Biên Phủ",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        },
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000013",
-          "locator": "Slides 3-15",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        },
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000014",
-          "locator": "Slides 3-16",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        }
-      ],
-      "aiAssisted": true
-    },
-    {
-      "key": "ai-race-007",
-      "pool": "race",
-      "chapter": "chapter_1",
-      "topic": "Thống nhất 1929-1930",
-      "type": "single_choice",
-      "difficulty": "medium",
-      "prompt": "Mâu thuẫn chính của giai đoạn 1929–1930 là gì?",
-      "options": [
-        {
-          "id": "a",
-          "label": "Cần thống nhất, nhưng tổ chức chia rẽ"
-        },
-        {
-          "id": "b",
-          "label": "Thiếu vũ khí để khởi nghĩa"
-        },
-        {
-          "id": "c",
-          "label": "Thiếu người biết chữ trong phong trào"
-        }
-      ],
-      "correctOptionId": "a",
-      "explanation": "Yêu cầu thống nhất lực lượng cách mạng đối lập với tình trạng chia rẽ tổ chức và thiếu một cương lĩnh chung.",
-      "sources": [
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000001",
-          "locator": "Chương I",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'hop-nhat-de-mo-duong' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        },
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000004",
-          "locator": "Slides 3-18",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'hop-nhat-de-mo-duong' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        }
-      ],
-      "aiAssisted": true
-    },
-    {
-      "key": "ai-race-008",
-      "pool": "race",
-      "chapter": "chapter_1",
-      "topic": "Phong trào 1930-1935",
-      "type": "single_choice",
-      "difficulty": "medium",
-      "prompt": "Sau đàn áp 1930–1931, Đảng thực tế đã làm gì?",
-      "options": [
-        {
-          "id": "a",
-          "label": "Rút khỏi hoạt động trong nước"
-        },
-        {
-          "id": "b",
-          "label": "Bảo toàn, tổng kết, khôi phục tổ chức"
-        },
-        {
-          "id": "c",
-          "label": "Phát động ngay tổng khởi nghĩa"
-        }
-      ],
-      "correctOptionId": "b",
-      "explanation": "Đảng và cán bộ còn lại kiên trì khôi phục tổ chức, xây dựng chương trình hành động và tiến tới Đại hội I năm 1935.",
-      "sources": [
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000001",
-          "locator": "Chương I - Phong trào 1930-1935",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'giu-mach-phong-trao' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        },
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000005",
-          "locator": "Slides 3-18",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'giu-mach-phong-trao' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        }
-      ],
-      "aiAssisted": true
-    },
-    {
-      "key": "ai-race-009",
-      "pool": "race",
-      "chapter": "chapter_1",
-      "topic": "Phong trào dân chủ 1936-1939",
-      "type": "single_choice",
-      "difficulty": "medium",
-      "prompt": "Giai đoạn 1936–1939, Đảng kết hợp những hình thức đấu tranh nào?",
-      "options": [
-        {
-          "id": "a",
-          "label": "Chỉ hoạt động bí mật"
-        },
-        {
-          "id": "b",
-          "label": "Chỉ đấu tranh vũ trang"
-        },
-        {
-          "id": "c",
-          "label": "Cả công khai lẫn nửa hợp pháp"
-        }
-      ],
-      "correctOptionId": "c",
-      "explanation": "Đảng xây dựng mặt trận rộng rãi và kết hợp các hình thức công khai, nửa công khai, hợp pháp và nửa hợp pháp.",
-      "sources": [
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000001",
-          "locator": "Chương I - Phong trào dân chủ 1936-1939",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'linh-hoat-trong-cua-so-dan-chu' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        },
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000006",
-          "locator": "Slides 3-11",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'linh-hoat-trong-cua-so-dan-chu' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        }
-      ],
-      "aiAssisted": true
-    },
-    {
-      "key": "ai-race-010",
-      "pool": "race",
-      "chapter": "chapter_2",
-      "topic": "Bảo vệ chính quyền 1945-1946",
-      "type": "single_choice",
-      "difficulty": "medium",
-      "prompt": "Đường lối bảo vệ chính quyền 1945–1946 kết hợp điều gì?",
-      "options": [
-        {
-          "id": "a",
-          "label": "Chống đói, dốt; ngoại giao linh hoạt"
-        },
-        {
-          "id": "b",
-          "label": "Chỉ tập trung quân sự"
-        },
-        {
-          "id": "c",
-          "label": "Chỉ nhờ viện trợ bên ngoài"
-        }
-      ],
-      "correctOptionId": "a",
-      "explanation": "Đường lối kết hợp chống đói, chống dốt, xây dựng nhà nước mới, trấn áp phản cách mạng và ngoại giao linh hoạt.",
-      "sources": [
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000001",
-          "locator": "Chương II",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'giu-chinh-quyen-giua-vong-vay' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        },
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000011",
-          "locator": "Slides 3-18",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'giu-chinh-quyen-giua-vong-vay' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        }
-      ],
-      "aiAssisted": true
-    },
-    {
-      "key": "ai-race-011",
-      "pool": "race",
-      "chapter": "chapter_2",
-      "topic": "Hai nhiệm vụ chiến lược",
-      "type": "single_choice",
-      "difficulty": "medium",
-      "prompt": "Sau 1954, vai trò của miền Bắc và miền Nam là gì?",
-      "options": [
-        {
-          "id": "a",
-          "label": "Cả hai cùng là hậu phương"
-        },
-        {
-          "id": "b",
-          "label": "Bắc: hậu phương lớn; Nam: tiền tuyến lớn"
-        },
-        {
-          "id": "c",
-          "label": "Nam: hậu phương lớn; Bắc: tiền tuyến lớn"
-        }
-      ],
-      "correctOptionId": "b",
-      "explanation": "Miền Bắc là hậu phương lớn, miền Nam là tiền tuyến lớn.",
-      "sources": [
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000001",
-          "locator": "Chương II - Một Đảng lãnh đạo hai nhiệm vụ chiến lược",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'mot-dat-nuoc-hai-nhiem-vu-chien-luoc' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        },
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000015",
-          "locator": "Slides 3-18",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'mot-dat-nuoc-hai-nhiem-vu-chien-luoc' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        }
-      ],
-      "aiAssisted": true
-    },
-    {
-      "key": "ai-race-012",
-      "pool": "race",
-      "chapter": "chapter_2",
-      "topic": "Đường lối kháng chiến",
-      "type": "single_choice",
-      "difficulty": "medium",
-      "prompt": "Đường lối kháng chiến toàn quốc được tóm tắt thế nào?",
-      "options": [
-        {
-          "id": "a",
-          "label": "Đánh nhanh thắng nhanh nhờ viện trợ"
-        },
-        {
-          "id": "b",
-          "label": "Cố thủ ở các thành thị lớn"
-        },
-        {
-          "id": "c",
-          "label": "Toàn dân, toàn diện, lâu dài, tự lực"
-        }
-      ],
-      "correctOptionId": "c",
-      "explanation": "Đường lối kháng chiến là toàn dân, toàn diện, lâu dài và dựa vào sức mình là chính.",
-      "sources": [
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000001",
-          "locator": "Chương II - Đường lối kháng chiến chống Pháp",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'khi-hoa-hoan-khong-con-du-dia' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        },
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000012",
-          "locator": "Slides 3-18",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'khi-hoa-hoan-khong-con-du-dia' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        }
-      ],
-      "aiAssisted": true
-    },
-    {
-      "key": "ai-race-013",
+      "key": "t6-race-002",
       "pool": "race",
       "chapter": "chapter_3",
-      "topic": "Đổi mới 1986",
+      "topic": "Đại hội VII (1991)",
       "type": "single_choice",
-      "difficulty": "medium",
-      "prompt": "Từ Đại hội VI, lĩnh vực nào là trọng tâm đổi mới ban đầu?",
+      "difficulty": "easy",
+      "prompt": "Ai được bầu làm Tổng Bí thư tại Đại hội VII?",
       "options": [
         {
           "id": "a",
-          "label": "Đổi mới kinh tế"
+          "label": "Nguyễn Văn Linh"
         },
         {
           "id": "b",
-          "label": "Đổi mới quân sự"
+          "label": "Lê Khả Phiêu"
         },
         {
           "id": "c",
-          "label": "Đổi mới nghệ thuật"
-        }
-      ],
-      "correctOptionId": "a",
-      "explanation": "Đại hội VI coi đổi mới kinh tế là trọng tâm ban đầu.",
-      "sources": [
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000001",
-          "locator": "Chương III",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'doi-moi-hay-tut-hau' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        },
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000022",
-          "locator": "Slides 3-26",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'doi-moi-hay-tut-hau' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        }
-      ],
-      "aiAssisted": true
-    },
-    {
-      "key": "ai-race-014",
-      "pool": "race",
-      "chapter": "chapter_2",
-      "topic": "Hiệp định Geneve",
-      "type": "single_choice",
-      "difficulty": "hard",
-      "prompt": "Hiệp định Geneve công nhận điều gì với ba nước Đông Dương?",
-      "options": [
-        {
-          "id": "a",
-          "label": "Chia thành các vùng chiếm đóng"
-        },
-        {
-          "id": "b",
-          "label": "Độc lập, chủ quyền, thống nhất, toàn vẹn"
-        },
-        {
-          "id": "c",
-          "label": "Chỉ độc lập, chưa có chủ quyền"
-        }
-      ],
-      "correctOptionId": "b",
-      "explanation": "Hiệp định Geneve buộc Pháp công nhận độc lập, chủ quyền, thống nhất và toàn vẹn lãnh thổ ba nước Đông Dương.",
-      "sources": [
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000001",
-          "locator": "Chương II - Kháng chiến chống Pháp và Điện Biên Phủ",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        },
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000013",
-          "locator": "Slides 3-15",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        },
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000014",
-          "locator": "Slides 3-16",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        }
-      ],
-      "aiAssisted": true
-    },
-    {
-      "key": "ai-race-015",
-      "pool": "race",
-      "chapter": "chapter_2",
-      "topic": "Điện Biên Phủ",
-      "type": "single_choice",
-      "difficulty": "hard",
-      "prompt": "Phương châm tác chiến ở Điện Biên Phủ là gì?",
-      "options": [
-        {
-          "id": "a",
-          "label": "Đánh nhanh, thắng nhanh"
-        },
-        {
-          "id": "b",
-          "label": "Vây lấn, không giao chiến"
-        },
-        {
-          "id": "c",
-          "label": "Đánh chắc, tiến chắc"
+          "label": "Đỗ Mười"
         }
       ],
       "correctOptionId": "c",
-      "explanation": "Bộ Chính trị chọn phương châm 'đánh chắc, tiến chắc' cho chiến dịch Điện Biên Phủ.",
+      "explanation": "Tại Đại hội VII (1991), đồng chí Đỗ Mười được bầu làm Tổng Bí thư của Đảng.",
       "sources": [
         {
           "sourceId": "10000000-0000-0000-0000-000000000001",
-          "locator": "Chương II - Kháng chiến chống Pháp và Điện Biên Phủ",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        },
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000013",
-          "locator": "Slides 3-15",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        },
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000014",
-          "locator": "Slides 3-16",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+          "locator": "Chương 3, mục II, tr. 272",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
         }
       ],
       "aiAssisted": true
     },
     {
-      "key": "ai-race-016",
+      "key": "t6-race-003",
       "pool": "race",
-      "chapter": "chapter_1",
-      "topic": "Tổng khởi nghĩa 8/1945",
+      "chapter": "chapter_3",
+      "topic": "Đại hội XI (2011)",
       "type": "single_choice",
-      "difficulty": "hard",
-      "prompt": "Đảng phát động Tổng khởi nghĩa 8/1945 vào thời điểm nào?",
+      "difficulty": "easy",
+      "prompt": "Ai được bầu làm Tổng Bí thư tại Đại hội XI?",
       "options": [
         {
           "id": "a",
-          "label": "Nhật đầu hàng, bộ máy địch khủng hoảng"
+          "label": "Nguyễn Phú Trọng"
         },
         {
           "id": "b",
-          "label": "Khi quân Pháp quay lại Đông Dương"
+          "label": "Nông Đức Mạnh"
         },
         {
           "id": "c",
-          "label": "Ngay sau Đại hội I năm 1935"
+          "label": "Đỗ Mười"
         }
       ],
       "correctOptionId": "a",
-      "explanation": "Đảng quyết định phát động Tổng khởi nghĩa khi Nhật đầu hàng và bộ máy cai trị khủng hoảng trong tháng 8/1945.",
+      "explanation": "Đại hội XI (1/2011) bầu đồng chí Nguyễn Phú Trọng làm Tổng Bí thư của Đảng.",
       "sources": [
         {
           "sourceId": "10000000-0000-0000-0000-000000000001",
-          "locator": "Chương I - Giải phóng dân tộc 1939-1945 và Cách mạng Tháng Tám",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'chop-dung-thoi-co' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+          "locator": "Chương 3, mục II, tr. 335",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-004",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Đại hội XIII (2021)",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "Đại hội XIII của Đảng họp vào năm nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "2016"
         },
         {
-          "sourceId": "10000000-0000-0000-0000-000000000007",
-          "locator": "Slides 3-16",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'chop-dung-thoi-co' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+          "id": "b",
+          "label": "2021"
         },
         {
-          "sourceId": "10000000-0000-0000-0000-000000000008",
-          "locator": "Slides 3-9",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'chop-dung-thoi-co' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+          "id": "c",
+          "label": "2011"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Đại hội XIII diễn ra từ ngày 25/1 đến ngày 1/2/2021 tại Thủ đô Hà Nội.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 386",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-005",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Đại hội X (2006)",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "Đại hội X (2006) họp sau bao nhiêu năm đổi mới?",
+      "options": [
+        {
+          "id": "a",
+          "label": "10 năm"
         },
         {
-          "sourceId": "10000000-0000-0000-0000-000000000009",
-          "locator": "Slides 3-12",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'chop-dung-thoi-co' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+          "id": "b",
+          "label": "30 năm"
         },
         {
-          "sourceId": "10000000-0000-0000-0000-000000000010",
-          "locator": "Slides 3-9",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'chop-dung-thoi-co' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+          "id": "c",
+          "label": "20 năm"
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "Đại hội X họp từ 18 đến 25/4/2006, khi đất nước đã trải qua 20 năm đổi mới (từ 1986).",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 310",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-006",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Trình tự các kỳ Đại hội",
+      "type": "before_after",
+      "difficulty": "easy",
+      "prompt": "Đại hội nào họp trước?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Đại hội XI (2011)"
+        },
+        {
+          "id": "b",
+          "label": "Đại hội XII (2016)"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Đại hội XI họp tháng 1/2011, trước Đại hội XII họp tháng 1/2016.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 335, 367",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-007",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Đại hội IX (2001)",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "Chiến lược phát triển KT-XH 2001–2010 do Đại hội nào thông qua?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Đại hội VIII"
+        },
+        {
+          "id": "b",
+          "label": "Đại hội IX"
+        },
+        {
+          "id": "c",
+          "label": "Đại hội X"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Đại hội IX (4/2001) thông qua Chiến lược phát triển kinh tế - xã hội 2001–2010.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 296",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-008",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Địa điểm họp Đại hội VII–XIII",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "Đại hội VII đến Đại hội XIII đều họp tại thành phố nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Thành phố Hồ Chí Minh"
+        },
+        {
+          "id": "b",
+          "label": "Huế"
+        },
+        {
+          "id": "c",
+          "label": "Hà Nội"
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "Cả bảy kỳ Đại hội từ VII (1991) đến XIII (2021) đều họp tại Thủ đô Hà Nội.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 272, 285, 296, 310, 335, 367, 386",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-009",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Đại hội XIII (2021)",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "Ai được bầu lại làm Tổng Bí thư tại Đại hội XIII?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Nguyễn Phú Trọng"
+        },
+        {
+          "id": "b",
+          "label": "Nông Đức Mạnh"
+        },
+        {
+          "id": "c",
+          "label": "Lê Khả Phiêu"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Đại hội XIII bầu Ban Chấp hành Trung ương khóa XIII; đồng chí Nguyễn Phú Trọng được bầu lại làm Tổng Bí thư.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 387",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-010",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Đối ngoại sau Đại hội VII",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Việt Nam trở thành thành viên đầy đủ của ASEAN vào năm nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "1991"
+        },
+        {
+          "id": "b",
+          "label": "1995"
+        },
+        {
+          "id": "c",
+          "label": "1999"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Ngày 28/7/1995, Việt Nam trở thành thành viên đầy đủ của ASEAN.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 281",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-011",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Gia nhập WTO (2006)",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Việt Nam là thành viên thứ mấy của Tổ chức Thương mại thế giới (WTO)?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Thứ 120"
+        },
+        {
+          "id": "b",
+          "label": "Thứ 160"
+        },
+        {
+          "id": "c",
+          "label": "Thứ 150"
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "Việt Nam là thành viên thứ 150 của WTO: WTO chấp thuận việc gia nhập tháng 11/2006, tư cách thành viên có hiệu lực từ 11/1/2007.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 332",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc. Lưu ý mốc WTO: theo wto.org (Accessions: Viet Nam), Đại hội đồng WTO chấp thuận ngày 7/11/2006, tư cách thành viên có hiệu lực từ 11/1/2007; giáo trình ghi gộp là 11/2006."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-012",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Đại hội XI (2011)",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Đại hội nào có 1.377 đại biểu dự Đại hội?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Đại hội XI"
+        },
+        {
+          "id": "b",
+          "label": "Đại hội VIII"
+        },
+        {
+          "id": "c",
+          "label": "Đại hội XII"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Dự Đại hội XI có 1.377 đại biểu, thay mặt cho 3,6 triệu đảng viên.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 335",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-013",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Đại hội VIII (1996)",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Đại hội VIII (1996) tiếp tục bầu ai làm Tổng Bí thư?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Lê Khả Phiêu"
+        },
+        {
+          "id": "b",
+          "label": "Đỗ Mười"
+        },
+        {
+          "id": "c",
+          "label": "Nông Đức Mạnh"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Đại hội VIII họp 28/6–1/7/1996; đồng chí Đỗ Mười tiếp tục làm Tổng Bí thư.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 285",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-014",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Khóa VIII (12/1997)",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Hội nghị TW 4 khóa VIII (12/1997) bầu ai làm Tổng Bí thư?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Đỗ Mười"
+        },
+        {
+          "id": "b",
+          "label": "Nông Đức Mạnh"
+        },
+        {
+          "id": "c",
+          "label": "Lê Khả Phiêu"
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "Hội nghị Trung ương 4 khóa VIII (12/1997) bầu đồng chí Lê Khả Phiêu làm Tổng Bí thư.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 291",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-015",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Đại hội VIII (1996)",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Đại hội VIII đưa đất nước sang thời kỳ nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Đẩy mạnh công nghiệp hóa, hiện đại hóa"
+        },
+        {
+          "id": "b",
+          "label": "Khôi phục kinh tế sau chiến tranh"
+        },
+        {
+          "id": "c",
+          "label": "Kế hoạch hóa tập trung, bao cấp"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Đại hội VIII đánh dấu bước ngoặt của Đảng, đưa đất nước sang thời kỳ mới: đẩy mạnh công nghiệp hóa, hiện đại hóa.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 288",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-016",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Đại hội XI (2011)",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Chiến lược phát triển KT-XH 2011–2020 do Đại hội nào thông qua?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Đại hội X"
+        },
+        {
+          "id": "b",
+          "label": "Đại hội XI"
+        },
+        {
+          "id": "c",
+          "label": "Đại hội XII"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Đại hội XI thông qua Cương lĩnh 2011 (bổ sung, phát triển) và Chiến lược phát triển kinh tế - xã hội 2011–2020.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 335",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-017",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Cương lĩnh 1991",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Cương lĩnh 1991 nêu mấy bài học lớn từ hơn 60 năm Đảng lãnh đạo?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Sáu bài học"
+        },
+        {
+          "id": "b",
+          "label": "Bảy bài học"
+        },
+        {
+          "id": "c",
+          "label": "Năm bài học"
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "Cương lĩnh 1991 tổng kết hơn 60 năm Đảng lãnh đạo cách mạng và nêu năm bài học lớn.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 272, 273",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-018",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Cương lĩnh 2011",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Cương lĩnh 2011 nêu mấy phương hướng cơ bản xây dựng CNXH?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Tám phương hướng"
+        },
+        {
+          "id": "b",
+          "label": "Bảy phương hướng"
+        },
+        {
+          "id": "c",
+          "label": "Sáu phương hướng"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Cương lĩnh 2011 nêu tám phương hướng cơ bản (Cương lĩnh 1991 nêu bảy phương hướng lớn).",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 273, 340",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-019",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Đại hội XIII (2021)",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Đại hội XIII gắn với đánh giá bao nhiêu năm đổi mới?",
+      "options": [
+        {
+          "id": "a",
+          "label": "30 năm"
+        },
+        {
+          "id": "b",
+          "label": "35 năm"
+        },
+        {
+          "id": "c",
+          "label": "25 năm"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Đại hội XIII gắn việc tổng kết thực hiện Nghị quyết Đại hội XII với đánh giá 35 năm tiến hành công cuộc đổi mới.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 387",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-020",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Đại hội XIII (2021)",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Mốc 2030 mà Đại hội XIII nêu gắn với kỷ niệm sự kiện nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "50 năm giải phóng miền Nam"
+        },
+        {
+          "id": "b",
+          "label": "100 năm thành lập nước"
+        },
+        {
+          "id": "c",
+          "label": "100 năm thành lập Đảng"
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "Đại hội XIII xác định mục tiêu đến năm 2030 (100 năm thành lập Đảng) và tầm nhìn đến năm 2045 (100 năm thành lập nước).",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 387",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-021",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Đối ngoại sau Đại hội VII",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Việt Nam và Trung Quốc bình thường hóa quan hệ từ thời điểm nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Tháng 11/1991"
+        },
+        {
+          "id": "b",
+          "label": "Tháng 7/1995"
+        },
+        {
+          "id": "c",
+          "label": "Tháng 1/1994"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Từ tháng 11/1991, Việt Nam và Trung Quốc bình thường hóa quan hệ.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 280",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-022",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Hội nhập quốc tế 1991–2006",
+      "type": "before_after",
+      "difficulty": "medium",
+      "prompt": "Mốc nào xảy ra muộn hơn?",
+      "options": [
+        {
+          "id": "a",
+          "label": "WTO chấp thuận gia nhập (11/2006)"
+        },
+        {
+          "id": "b",
+          "label": "Gia nhập ASEAN (7/1995)"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Việt Nam gia nhập ASEAN ngày 28/7/1995; WTO chấp thuận việc Việt Nam gia nhập vào tháng 11/2006 (thành viên từ 11/1/2007), muộn hơn.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 281, 332",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc. Lưu ý mốc WTO: theo wto.org (Accessions: Viet Nam), Đại hội đồng WTO chấp thuận ngày 7/11/2006, tư cách thành viên có hiệu lực từ 11/1/2007; giáo trình ghi gộp là 11/2006."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-023",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Thành tựu đổi mới",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Năm 2008, Việt Nam đạt thành tựu nào sau hơn 20 năm đổi mới?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Chấm dứt khủng hoảng KT-XH"
+        },
+        {
+          "id": "b",
+          "label": "Trở thành nước công nghiệp"
+        },
+        {
+          "id": "c",
+          "label": "Ra khỏi tình trạng nước nghèo"
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "Năm 2008 Việt Nam ra khỏi tình trạng nước nghèo, vào nhóm nước thu nhập trung bình. Khủng hoảng kinh tế - xã hội đã chấm dứt từ năm 1996.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 319, 394",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-024",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Cương lĩnh 2011",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "Cương lĩnh 2011 yêu cầu giải quyết tốt mấy mối quan hệ lớn?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Tám mối quan hệ"
+        },
+        {
+          "id": "b",
+          "label": "Sáu mối quan hệ"
+        },
+        {
+          "id": "c",
+          "label": "Bảy mối quan hệ"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Cương lĩnh 2011 yêu cầu giải quyết tốt tám mối quan hệ lớn, từ đổi mới - ổn định - phát triển đến Đảng lãnh đạo, Nhà nước quản lý, nhân dân làm chủ.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 341",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-025",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Đại hội X (2006)",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "Đại hội X cho phép đảng viên được làm gì về kinh tế?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Chỉ làm kinh tế nhà nước"
+        },
+        {
+          "id": "b",
+          "label": "Làm kinh tế tư nhân (kể cả tư bản)"
+        },
+        {
+          "id": "c",
+          "label": "Chỉ làm kinh tế tập thể"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Đại hội X cho phép đảng viên làm kinh tế tư nhân, kể cả tư bản tư nhân, nhưng phải tuân thủ Điều lệ Đảng, nghị quyết của Đảng và pháp luật Nhà nước.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 313",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-026",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Đại hội XIII (2021)",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "BCH Trung ương khóa XIII có bao nhiêu ủy viên chính thức?",
+      "options": [
+        {
+          "id": "a",
+          "label": "160"
+        },
+        {
+          "id": "b",
+          "label": "175"
+        },
+        {
+          "id": "c",
+          "label": "180"
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "Ban Chấp hành Trung ương khóa XIII gồm 200 đồng chí: 180 ủy viên chính thức và 20 ủy viên dự khuyết.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 386, 387",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-027",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Đại hội XII (2016)",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "Bộ Chính trị được bầu tại Đại hội XII có bao nhiêu đồng chí?",
+      "options": [
+        {
+          "id": "a",
+          "label": "19"
+        },
+        {
+          "id": "b",
+          "label": "14"
+        },
+        {
+          "id": "c",
+          "label": "18"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Bộ Chính trị được bầu tại Đại hội XII (1/2016) gồm 19 đồng chí (khóa X và XI khi được bầu gồm 14, khóa XIII gồm 18).",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 310, 335, 367, 387",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-028",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Chiến lược 2011–2020",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "Ba đột phá chiến lược của Chiến lược 2011–2020 là gì?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Thể chế, khoa học, quốc phòng"
+        },
+        {
+          "id": "b",
+          "label": "Thể chế, nhân lực, kết cấu hạ tầng"
+        },
+        {
+          "id": "c",
+          "label": "Nông nghiệp, công nghiệp, dịch vụ"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Ba đột phá: hoàn thiện thể chế kinh tế thị trường định hướng XHCN; phát triển nhanh nguồn nhân lực, nhất là nhân lực chất lượng cao; xây dựng hệ thống kết cấu hạ tầng đồng bộ.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 349",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-029",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Hội nghị TW 3 khóa VII (6/1992)",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "Hội nghị TW 3 khóa VII (6/1992) lần đầu nêu chủ trương gì?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Cho phép đảng viên làm kinh tế tư nhân"
+        },
+        {
+          "id": "b",
+          "label": "Xây dựng Nhà nước pháp quyền XHCN"
+        },
+        {
+          "id": "c",
+          "label": "Tự đổi mới, tự chỉnh đốn Đảng"
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "Hội nghị Trung ương 3 khóa VII (6/1992) lần đầu tiên đưa ra chủ trương tự đổi mới, tự chỉnh đốn Đảng.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 281",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-030",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Tổng quan các kỳ Đại hội 1991–2021",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "Từ năm 1991 đến năm 2021, Đảng tổ chức bao nhiêu kỳ Đại hội toàn quốc?",
+      "options": [
+        {
+          "id": "a",
+          "label": "7 kỳ"
+        },
+        {
+          "id": "b",
+          "label": "6 kỳ"
+        },
+        {
+          "id": "c",
+          "label": "8 kỳ"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Giai đoạn 1991–2021 có 7 kỳ Đại hội đại biểu toàn quốc: VII (1991), VIII (1996), IX (2001), X (2006), XI (2011), XII (2016), XIII (2021).",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 272, 285, 296, 310, 335, 367, 386",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-031",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Đại hội VIII (1996)",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "Đại hội VIII của Đảng họp vào năm nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "1991"
+        },
+        {
+          "id": "b",
+          "label": "1996"
+        },
+        {
+          "id": "c",
+          "label": "2001"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Đại hội VIII họp tại Hà Nội từ ngày 28/6 đến ngày 1/7/1996.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 285",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-032",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Đại hội X (2006)",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "Đại hội X của Đảng họp vào tháng nào năm 2006?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Tháng 1"
+        },
+        {
+          "id": "b",
+          "label": "Tháng 6"
+        },
+        {
+          "id": "c",
+          "label": "Tháng 4"
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "Đại hội X họp tại Hà Nội từ ngày 18 đến ngày 25/4/2006.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 310",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-033",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Đại hội XII (2016)",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "Đại hội XII của Đảng họp vào năm nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "2016"
+        },
+        {
+          "id": "b",
+          "label": "2011"
+        },
+        {
+          "id": "c",
+          "label": "2021"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Đại hội XII họp từ ngày 20 đến ngày 28/1/2016.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 367",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-034",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Tinh thần Đại hội XII",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "Đại hội XII được khẳng định là Đại hội của tinh thần nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Độc lập - Tự do - Hạnh phúc"
+        },
+        {
+          "id": "b",
+          "label": "Đoàn kết - Dân chủ - Kỷ cương - Đổi mới"
+        },
+        {
+          "id": "c",
+          "label": "Dân giàu - Nước mạnh - Văn minh"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Giáo trình khẳng định Đại hội XII là Đại hội 'Đoàn kết - Dân chủ - Kỷ cương - Đổi mới'.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 367",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-035",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Nhiệm vụ Đại hội X",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "Đại hội X xác định nhiệm vụ then chốt là gì?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Phát triển kinh tế"
+        },
+        {
+          "id": "b",
+          "label": "Phát triển văn hóa"
+        },
+        {
+          "id": "c",
+          "label": "Xây dựng, chỉnh đốn Đảng"
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "Đại hội X xác định nhiệm vụ then chốt là xây dựng, chỉnh đốn Đảng, thành tố đầu tiên trong chủ đề Đại hội.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 312",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-036",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Đại hội XIII (2021)",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Đại hội XIII họp từ ngày 25/1/2021 đến ngày nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "1/2/2021"
+        },
+        {
+          "id": "b",
+          "label": "28/1/2021"
+        },
+        {
+          "id": "c",
+          "label": "19/1/2021"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Đại hội XIII họp từ ngày 25/1 đến ngày 1/2/2021. (Đại hội XII bế mạc 28/1/2016, Đại hội XI bế mạc 19/1/2011.)",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 335, 367, 386",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-037",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Tinh thần Đại hội VII",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "'Trí tuệ - đổi mới, dân chủ - kỷ cương - đoàn kết' là tinh thần Đại hội nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Đại hội XII"
+        },
+        {
+          "id": "b",
+          "label": "Đại hội VII"
+        },
+        {
+          "id": "c",
+          "label": "Đại hội X"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Đại hội VII được đánh giá là 'Đại hội của trí tuệ - đổi mới, dân chủ - kỷ cương - đoàn kết'. Đại hội XII là Đại hội 'Đoàn kết - Dân chủ - Kỷ cương - Đổi mới'.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 277, 367",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-038",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Chủ đề Đại hội XII",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Chủ đề Đại hội XII phấn đấu sớm đưa nước ta cơ bản trở thành nước gì?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Nước phát triển, thu nhập cao"
+        },
+        {
+          "id": "b",
+          "label": "Nước nông nghiệp tiên tiến"
+        },
+        {
+          "id": "c",
+          "label": "Nước công nghiệp theo hướng hiện đại"
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "Chủ đề Đại hội XII kết thúc bằng: 'phấn đấu sớm đưa nước ta cơ bản trở thành nước công nghiệp theo hướng hiện đại'.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 367",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-039",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Nhiệm vụ Đại hội VII",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Mục tiêu tổng quát 5 năm 1991–1995 của Đại hội VII là gì?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Cơ bản ra khỏi khủng hoảng"
+        },
+        {
+          "id": "b",
+          "label": "Trở thành nước công nghiệp"
+        },
+        {
+          "id": "c",
+          "label": "Gia nhập Tổ chức Thương mại thế giới"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Mục tiêu tổng quát 1991–1995: vượt qua khó khăn thử thách, ổn định và phát triển kinh tế - xã hội, tăng cường ổn định chính trị, đưa nước ta cơ bản ra khỏi tình trạng khủng hoảng.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 277",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-040",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Nhiệm vụ Đại hội XII",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Trong sáu nhiệm vụ trọng tâm của Đại hội XII, nhiệm vụ đầu tiên là gì?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Đẩy mạnh hội nhập quốc tế"
+        },
+        {
+          "id": "b",
+          "label": "Tăng cường xây dựng, chỉnh đốn Đảng"
+        },
+        {
+          "id": "c",
+          "label": "Phát triển văn hóa, con người"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Nhiệm vụ trọng tâm thứ nhất của Đại hội XII: tăng cường xây dựng, chỉnh đốn Đảng; ngăn chặn, đẩy lùi suy thoái, 'tự diễn biến', 'tự chuyển hóa'; xây dựng đội ngũ cán bộ cấp chiến lược.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 369, 370",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-041",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Nhiệm vụ Đại hội XIII",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Nhiệm vụ trọng tâm nào của Đại hội XIII gắn với bối cảnh năm 2021?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Vượt khủng hoảng tài chính khu vực"
+        },
+        {
+          "id": "b",
+          "label": "Đàm phán gia nhập WTO"
+        },
+        {
+          "id": "c",
+          "label": "Kiểm soát đại dịch Covid-19"
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "Một trong sáu nhiệm vụ trọng tâm của Đại hội XIII là tập trung kiểm soát đại dịch Covid-19, tiêm chủng đại trà vắc xin; phục hồi, phát triển kinh tế - xã hội.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 390",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-042",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Mục tiêu Đại hội XIII",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Mốc 2025 trong mục tiêu của Đại hội XIII gắn với kỷ niệm sự kiện nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "50 năm giải phóng miền Nam"
+        },
+        {
+          "id": "b",
+          "label": "100 năm thành lập Đảng"
+        },
+        {
+          "id": "c",
+          "label": "100 năm thành lập nước"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Đại hội XIII đề ra nhiệm vụ 5 năm 2021–2025 (kỷ niệm 50 năm giải phóng hoàn toàn miền Nam, thống nhất đất nước), mục tiêu đến 2030 (100 năm thành lập Đảng) và tầm nhìn 2045 (100 năm thành lập nước).",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 387",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-043",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Chủ đề Đại hội XIII",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "Chủ đề Đại hội nào có cụm 'khơi dậy khát vọng phát triển đất nước'?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Đại hội XII"
+        },
+        {
+          "id": "b",
+          "label": "Đại hội XIII"
+        },
+        {
+          "id": "c",
+          "label": "Đại hội X"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Cụm 'khơi dậy khát vọng phát triển đất nước' nằm trong chủ đề Đại hội XIII; chủ đề Đại hội XII và X không có cụm này.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 310, 367, 387",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-044",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Mục tiêu XHCN qua các Đại hội",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "'Dân giàu, nước mạnh, xã hội công bằng, văn minh' bổ sung tại Đại hội nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Đại hội X"
+        },
+        {
+          "id": "b",
+          "label": "Đại hội XI"
+        },
+        {
+          "id": "c",
+          "label": "Đại hội VIII"
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "Đại hội VIII bổ sung đặc trưng tổng quát 'Dân giàu, nước mạnh, xã hội công bằng, văn minh'. Đại hội X bổ sung thêm 'dân chủ'; Cương lĩnh 2011 diễn đạt 'dân giàu, nước mạnh, dân chủ, công bằng, văn minh'.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 285, 311, 339",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-045",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Tư tưởng Hồ Chí Minh",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "Đại hội nào lần đầu khẳng định tư tưởng Hồ Chí Minh là nền tảng tư tưởng?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Đại hội VII"
+        },
+        {
+          "id": "b",
+          "label": "Đại hội IX"
+        },
+        {
+          "id": "c",
+          "label": "Đại hội VIII"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Tại Đại hội VII, lần đầu tiên Đảng khẳng định lấy chủ nghĩa Mác - Lênin và tư tưởng Hồ Chí Minh làm nền tảng tư tưởng. Đại hội IX làm rõ những nội dung cơ bản của tư tưởng Hồ Chí Minh.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 276, 296",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-046",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Phương châm Đại hội XIII",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "'Đoàn kết - Dân chủ - Kỷ cương - Sáng tạo - Phát triển' là của Đại hội nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Đại hội XIII"
+        },
+        {
+          "id": "b",
+          "label": "Đại hội XII"
+        },
+        {
+          "id": "c",
+          "label": "Đại hội XI"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Đại hội XIII (2021) được tiến hành với phương châm 'Đoàn kết - Dân chủ - Kỷ cương - Sáng tạo - Phát triển'. Đại hội XII là Đại hội 'Đoàn kết - Dân chủ - Kỷ cương - Đổi mới'.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000025",
+          "locator": "Bài ngày 25/01/2021, đoạn nêu phương châm Đại hội",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). Nguồn báo chí/cổng thông tin đang chờ người duyệt xác minh (sources-pending.json)."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 367",
+          "usageNote": "Đối chiếu với giáo trình để phân biệt các kỳ Đại hội."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-047",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Chủ đề Đại hội IX",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Chủ đề Báo cáo chính trị Đại hội IX mở đầu bằng cụm nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Nâng cao năng lực lãnh đạo của Đảng"
+        },
+        {
+          "id": "b",
+          "label": "Phát huy sức mạnh toàn dân tộc"
+        },
+        {
+          "id": "c",
+          "label": "Tăng cường xây dựng Đảng trong sạch"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Báo cáo chính trị Đại hội IX: 'Phát huy sức mạnh toàn dân tộc, tiếp tục đổi mới, đẩy mạnh công nghiệp hóa, hiện đại hóa, xây dựng và bảo vệ Tổ quốc Việt Nam xã hội chủ nghĩa'. Hai lựa chọn còn lại mở đầu chủ đề Đại hội X và Đại hội XII.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000023",
+          "locator": "Đoạn nêu tên Báo cáo chính trị Đại hội IX",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). Nguồn báo chí/cổng thông tin đang chờ người duyệt xác minh (sources-pending.json)."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 310, 367",
+          "usageNote": "Đối chiếu với giáo trình để phân biệt các kỳ Đại hội."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-048",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Chủ đề Đại hội XI",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "Chủ đề Đại hội XI tạo nền tảng để đến năm nào nước ta thành nước công nghiệp?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Năm 2030"
+        },
+        {
+          "id": "b",
+          "label": "Năm 2045"
+        },
+        {
+          "id": "c",
+          "label": "Năm 2020"
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "Chủ đề Đại hội XI: '... tạo nền tảng để đến năm 2020 Việt Nam trở thành một nước công nghiệp theo hướng hiện đại'. Mốc 2030 và 2045 là mục tiêu, tầm nhìn của Đại hội XIII.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000024",
+          "locator": "Bài ngày 12/01/2011, đoạn nêu chủ đề Đại hội",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). Nguồn báo chí/cổng thông tin đang chờ người duyệt xác minh (sources-pending.json)."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 387",
+          "usageNote": "Đối chiếu với giáo trình để phân biệt các kỳ Đại hội."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-race-049",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Tinh thần Đại hội IX",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "'Trí tuệ, Dân chủ, Đoàn kết, Đổi mới' là tinh thần của Đại hội nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Đại hội IX"
+        },
+        {
+          "id": "b",
+          "label": "Đại hội XII"
+        },
+        {
+          "id": "c",
+          "label": "Đại hội XIII"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Đại hội IX (2001) được đánh giá là Đại hội của 'Trí tuệ, Dân chủ, Đoàn kết, Đổi mới'. Đại hội XII là 'Đoàn kết - Dân chủ - Kỷ cương - Đổi mới'; Đại hội XIII là 'Đoàn kết - Dân chủ - Kỷ cương - Sáng tạo - Phát triển'. Không dùng Đại hội VII làm phương án vì tinh thần Đại hội VII ('trí tuệ - đổi mới, dân chủ - kỷ cương - đoàn kết') có các từ gần trùng.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000023",
+          "locator": "Đoạn mô tả tinh thần Đại hội IX",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). Nguồn báo chí/cổng thông tin đang chờ người duyệt xác minh (sources-pending.json)."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 277, 367",
+          "usageNote": "Đối chiếu với giáo trình để phân biệt các kỳ Đại hội."
         }
       ],
       "aiAssisted": true

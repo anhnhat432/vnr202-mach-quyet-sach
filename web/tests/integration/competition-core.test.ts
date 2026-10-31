@@ -1,5 +1,9 @@
 // @vitest-environment node
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
+import { generateFixtures } from "../../../scripts/lib/question-bank.mjs";
+import { questionInputSchema } from "@/features/questions/contracts/question";
+import { transitionQuestionVersion, upsertQuestionDraft } from "@/features/questions/server/question-service";
+import { serviceClient } from "./stack";
 
 import {
   ArenaError, T0, assertNoPublishedBankQuestions, at, call, clearFixtures, content, correctOption, createWorld, exposure, expectError, key, loadFixtures,
@@ -9,6 +13,7 @@ import {
 // Competition core on a real Postgres: state machine, snapshot, one attempt per student/game,
 // server-controlled content release, timing boundaries, device transfer and the display counter.
 const worlds: World[] = [];
+const bankKeys: string[] = [];
 const track = async (options?: Parameters<typeof createWorld>[0]) => {
   const w = await createWorld(options);
   worlds.push(w);
@@ -22,6 +27,11 @@ beforeAll(async () => {
 });
 // Only one competition can be open at a time, so every test releases its world.
 afterEach(async () => {
+  if (bankKeys.length) {
+    await pool.query("delete from public.competitions where id = any($1::uuid[])", [worlds.map((world) => world.competitionId)]);
+    const { error } = await serviceClient().from("questions").delete().in("external_key", bankKeys.splice(0));
+    if (error) throw error;
+  }
   while (worlds.length) await worlds.pop()!.cleanup();
 });
 afterAll(async () => {
@@ -41,6 +51,40 @@ describe("competition state machine and snapshot (T040)", () => {
     const { rows } = await pool.query("select g.game_type, g.config_locked_at is not null as locked, (select count(*)::int from public.competition_question_snapshots s where s.competition_game_id = g.id) as n from public.competition_games g where g.competition_id = $1 order by 1", [rehearsal.competitionId]);
     expect(rows).toEqual([{ game_type: "minefield", locked: true, n: 42 }, { game_type: "race", locked: true, n: 45 }]);
   });
+
+  it("does not permit an acknowledgement to bypass the mandatory official bank rules", async () => {
+    const w = await track({ kind: "official", open: false });
+    const privileges = (await pool.query("select has_function_privilege('service_role', 'public.transition_competition_unchecked(uuid,uuid,public.competition_state)', 'execute') as bypass")).rows[0];
+    expect(privileges.bypass).toBe(false);
+    await expectError(call("transition_competition_confirmed", [w.competitionId, w.adminId, "scheduled", 60, true, "Chấp nhận rủi ro"], T0), "QA422", "readiness_blocked");
+    const { rows } = await pool.query("select state from public.competitions where id = $1", [w.competitionId]);
+    expect(rows[0].state).toBe("draft");
+  });
+
+  it("requires a reason and records the exact readiness assessment before scheduling an official competition below target", async () => {
+    const w = await track({ kind: "official", open: false });
+    const needed: Record<string, number> = { "minefield_main/easy": 3, "minefield_main/medium": 4, "minefield_main/hard": 3, "minefield_defuse/easy": 3, "race/easy": 5, "race/medium": 7, "race/hard": 3 };
+    const counts: Record<string, number> = {};
+    const admin = serviceClient();
+    for (const q of generateFixtures("dev87", { keyPrefix: `testbank${w.tag.toLowerCase()}` })) {
+      const slot = `${q.pool}/${q.difficulty}`;
+      if ((counts[slot] ?? 0) >= (needed[slot] ?? 0) || (q.pool === "race" && q.options.length !== 3)) continue;
+      counts[slot] = (counts[slot] ?? 0) + 1;
+      bankKeys.push(q.key);
+      const input = questionInputSchema.parse({ ...q, sources: [{ sourceId: "10000000-0000-0000-0000-000000000001", locator: "test" }] });
+      const created = await upsertQuestionDraft(admin, w.adminId, input);
+      await transitionQuestionVersion(admin, w.adminId, created.versionId, "review");
+      await transitionQuestionVersion(admin, w.adminId, created.versionId, "publish");
+    }
+    expect(counts).toEqual(needed);
+    await expectError(call("transition_competition_confirmed", [w.competitionId, w.adminId, "scheduled", 60, false, null], T0), "QA422", "bank_acknowledgement_required");
+    await expectError(call("transition_competition_confirmed", [w.competitionId, w.adminId, "scheduled", 60, true, " "], T0), "QA422", "bank_acknowledgement_required");
+    await call("transition_competition_confirmed", [w.competitionId, w.adminId, "scheduled", 60, true, "Đã hiểu rủi ro chia sẻ"], T0);
+    const audit = (await pool.query("select actor_profile_id, after_redacted from public.audit_logs where target_id = $1 and action = 'competition.bank_assessment'", [w.competitionId])).rows;
+    expect(audit).toHaveLength(1);
+    expect(audit[0]).toMatchObject({ actor_profile_id: w.adminId, after_redacted: { expectedAttempts: 60, confirmed: true, reason: "Đã hiểu rủi ro chia sẻ", readiness: { ready: true, target: { meetsTarget: false } } } });
+    await w.transition("open", T0);
+  }, 120000);
 
   it("enforces legal transitions, admin-only, and one open competition", async () => {
     const w = await track({ open: false });

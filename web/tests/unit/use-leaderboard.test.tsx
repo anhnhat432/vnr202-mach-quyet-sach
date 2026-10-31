@@ -84,4 +84,17 @@ describe("useLeaderboard hint scheduling", () => {
     expect(reads).toEqual(["v:1000000", "settle:3"]); // the unconfirmed version is dropped before the settle read
     unmount();
   });
+
+  it("skips a periodic 15 s tick that lands right after a recent hinted read", async () => {
+    const { unmount } = renderHook(() => useLeaderboard(PUBLIC_ID, "race"));
+    await act(async () => { await vi.advanceTimersByTimeAsync(10); });
+    await act(async () => { statusCb?.("SUBSCRIBED"); });
+    await act(async () => { await vi.advanceTimersByTimeAsync(13_000); });
+    serverVersion = 2;
+    await act(async () => { hint(2); await vi.advanceTimersByTimeAsync(1300); }); // read at 13.2s + settle at 14.2s
+    reads.length = 0;
+    await act(async () => { await vi.advanceTimersByTimeAsync(1000); }); // crosses the 15.0s mark since SUBSCRIBED
+    expect(reads).toEqual([]);
+    unmount();
+  });
 });

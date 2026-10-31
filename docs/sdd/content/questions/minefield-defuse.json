@@ -3,220 +3,383 @@
   "game": "minefield",
   "questions": [
     {
-      "key": "ai-defuse-001",
-      "pool": "minefield_defuse",
-      "chapter": "chapter_1",
-      "topic": "Thành lập Đảng 1930",
-      "type": "defuse_ab",
-      "difficulty": "easy",
-      "prompt": "Ai chủ trì hội nghị hợp nhất đầu năm 1930?",
-      "options": [
-        {
-          "id": "a",
-          "label": "Nguyễn Ái Quốc"
-        },
-        {
-          "id": "b",
-          "label": "Trần Phú"
-        }
-      ],
-      "correctOptionId": "a",
-      "explanation": "Hội nghị đầu năm 1930 do Nguyễn Ái Quốc chủ trì.",
-      "sources": [
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000001",
-          "locator": "Chương I",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'hop-nhat-de-mo-duong' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        },
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000004",
-          "locator": "Slides 3-18",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'hop-nhat-de-mo-duong' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        }
-      ],
-      "aiAssisted": true
-    },
-    {
-      "key": "ai-defuse-002",
-      "pool": "minefield_defuse",
-      "chapter": "chapter_2",
-      "topic": "Điện Biên Phủ",
-      "type": "defuse_ab",
-      "difficulty": "easy",
-      "prompt": "Điện Biên Phủ kéo dài bao lâu?",
-      "options": [
-        {
-          "id": "a",
-          "label": "36 ngày đêm"
-        },
-        {
-          "id": "b",
-          "label": "56 ngày đêm"
-        }
-      ],
-      "correctOptionId": "b",
-      "explanation": "Chiến dịch Điện Biên Phủ kéo dài 56 ngày đêm.",
-      "sources": [
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000001",
-          "locator": "Chương II - Kháng chiến chống Pháp và Điện Biên Phủ",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        },
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000013",
-          "locator": "Slides 3-15",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        },
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000014",
-          "locator": "Slides 3-16",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        }
-      ],
-      "aiAssisted": true
-    },
-    {
-      "key": "ai-defuse-003",
-      "pool": "minefield_defuse",
-      "chapter": "chapter_2",
-      "topic": "Kháng chiến toàn quốc",
-      "type": "defuse_ab",
-      "difficulty": "easy",
-      "prompt": "Kháng chiến toàn quốc được phát động ngày nào?",
-      "options": [
-        {
-          "id": "a",
-          "label": "19/12/1946"
-        },
-        {
-          "id": "b",
-          "label": "2/9/1945"
-        }
-      ],
-      "correctOptionId": "a",
-      "explanation": "Kháng chiến toàn quốc được phát động ngày 19/12/1946.",
-      "sources": [
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000001",
-          "locator": "Chương II - Đường lối kháng chiến chống Pháp",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'khi-hoa-hoan-khong-con-du-dia' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        },
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000012",
-          "locator": "Slides 3-18",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'khi-hoa-hoan-khong-con-du-dia' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        }
-      ],
-      "aiAssisted": true
-    },
-    {
-      "key": "ai-defuse-004",
+      "key": "t6-defuse-001",
       "pool": "minefield_defuse",
       "chapter": "chapter_3",
-      "topic": "Đổi mới 1986",
+      "topic": "Đối ngoại sau Đại hội VII",
       "type": "defuse_ab",
       "difficulty": "easy",
-      "prompt": "Đại hội nào mở đường đổi mới toàn diện?",
+      "prompt": "Việt Nam và Hoa Kỳ thiết lập quan hệ ngoại giao năm nào?",
       "options": [
         {
           "id": "a",
-          "label": "Đại hội IV (1976)"
+          "label": "1991"
         },
         {
           "id": "b",
-          "label": "Đại hội VI (1986)"
+          "label": "1995"
         }
       ],
       "correctOptionId": "b",
-      "explanation": "Đại hội VI năm 1986 mở đường cho đổi mới toàn diện.",
+      "explanation": "Ngày 11/7/1995, Việt Nam và Hoa Kỳ thiết lập quan hệ ngoại giao.",
       "sources": [
         {
           "sourceId": "10000000-0000-0000-0000-000000000001",
-          "locator": "Chương III",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'doi-moi-hay-tut-hau' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        },
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000022",
-          "locator": "Slides 3-26",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'doi-moi-hay-tut-hau' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+          "locator": "Chương 3, mục II, tr. 281",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
         }
       ],
       "aiAssisted": true
     },
     {
-      "key": "ai-defuse-005",
+      "key": "t6-defuse-002",
       "pool": "minefield_defuse",
-      "chapter": "chapter_2",
-      "topic": "Hiệp định Paris",
+      "chapter": "chapter_3",
+      "topic": "Cương lĩnh 2011",
       "type": "defuse_ab",
       "difficulty": "easy",
-      "prompt": "Hiệp định nào buộc Mỹ rút quân?",
+      "prompt": "Cương lĩnh 2011 bổ sung, phát triển Cương lĩnh năm nào?",
       "options": [
         {
           "id": "a",
-          "label": "Hiệp định Paris"
+          "label": "1991"
         },
         {
           "id": "b",
-          "label": "Hiệp định Geneve"
+          "label": "1930"
         }
       ],
       "correctOptionId": "a",
-      "explanation": "Việc ký Hiệp định Paris buộc Mỹ rút quân.",
+      "explanation": "Cương lĩnh 2011 là bản bổ sung, phát triển Cương lĩnh xây dựng đất nước trong thời kỳ quá độ lên CNXH năm 1991.",
       "sources": [
         {
           "sourceId": "10000000-0000-0000-0000-000000000001",
-          "locator": "Chương II - Kháng chiến chống Mỹ và thống nhất đất nước",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'tu-doi-dau-cuc-bo-den-toan-thang' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        },
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000016",
-          "locator": "Slides 3-20",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'tu-doi-dau-cuc-bo-den-toan-thang' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        },
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000017",
-          "locator": "Slides 3-18",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'tu-doi-dau-cuc-bo-den-toan-thang' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
-        },
-        {
-          "sourceId": "10000000-0000-0000-0000-000000000018",
-          "locator": "Slides 3-12",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'tu-doi-dau-cuc-bo-den-toan-thang' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+          "locator": "Chương 3, mục II, tr. 335, 336",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
         }
       ],
       "aiAssisted": true
     },
     {
-      "key": "ai-defuse-006",
+      "key": "t6-defuse-003",
       "pool": "minefield_defuse",
-      "chapter": "chapter_2",
-      "topic": "Hai nhiệm vụ chiến lược",
+      "chapter": "chapter_3",
+      "topic": "Đại hội XIII (2021)",
       "type": "defuse_ab",
       "difficulty": "easy",
-      "prompt": "Sau 1954, miền Bắc là gì của cách mạng cả nước?",
+      "prompt": "Giữa thế kỷ XXI, Đại hội XIII hướng tới nước ta trở thành nước nào?",
       "options": [
         {
           "id": "a",
-          "label": "Tiền tuyến lớn"
+          "label": "Nước đang phát triển thu nhập thấp"
         },
         {
           "id": "b",
-          "label": "Hậu phương lớn"
+          "label": "Nước phát triển, định hướng XHCN"
         }
       ],
       "correctOptionId": "b",
-      "explanation": "Miền Bắc là hậu phương lớn, miền Nam là tiền tuyến lớn.",
+      "explanation": "Mục tiêu đến giữa thế kỷ XXI: nước ta trở thành nước phát triển, theo định hướng xã hội chủ nghĩa.",
       "sources": [
         {
           "sourceId": "10000000-0000-0000-0000-000000000001",
-          "locator": "Chương II - Một Đảng lãnh đạo hai nhiệm vụ chiến lược",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'mot-dat-nuoc-hai-nhiem-vu-chien-luoc' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+          "locator": "Chương 3, mục II, tr. 389",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-defuse-004",
+      "pool": "minefield_defuse",
+      "chapter": "chapter_3",
+      "topic": "Gia nhập WTO (2006)",
+      "type": "defuse_ab",
+      "difficulty": "easy",
+      "prompt": "WTO chấp thuận việc Việt Nam gia nhập vào năm nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "2006"
         },
         {
-          "sourceId": "10000000-0000-0000-0000-000000000015",
-          "locator": "Slides 3-18",
-          "usageNote": "Dữ kiện lấy từ hồ sơ 'mot-dat-nuoc-hai-nhiem-vu-chien-luoc' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+          "id": "b",
+          "label": "2001"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Tháng 11/2006, WTO chấp thuận việc Việt Nam gia nhập; Việt Nam là thành viên thứ 150 và tư cách thành viên có hiệu lực từ 11/1/2007.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 332",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc. Lưu ý mốc WTO: theo wto.org (Accessions: Viet Nam), Đại hội đồng WTO chấp thuận ngày 7/11/2006, tư cách thành viên có hiệu lực từ 11/1/2007; giáo trình ghi gộp là 11/2006."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-defuse-005",
+      "pool": "minefield_defuse",
+      "chapter": "chapter_3",
+      "topic": "Đại hội XIII (2021)",
+      "type": "defuse_ab",
+      "difficulty": "easy",
+      "prompt": "Đại hội XIII đánh giá bao nhiêu năm thực hiện Cương lĩnh năm 1991?",
+      "options": [
+        {
+          "id": "a",
+          "label": "20 năm"
+        },
+        {
+          "id": "b",
+          "label": "30 năm"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Đại hội XIII đánh giá 35 năm đổi mới, 30 năm thực hiện Cương lĩnh năm 1991 và 10 năm thực hiện Cương lĩnh (bổ sung, phát triển năm 2011).",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 387",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-defuse-006",
+      "pool": "minefield_defuse",
+      "chapter": "chapter_3",
+      "topic": "Đại hội XII (2016)",
+      "type": "defuse_ab",
+      "difficulty": "easy",
+      "prompt": "Đại hội XII tổng kết bao nhiêu năm đổi mới?",
+      "options": [
+        {
+          "id": "a",
+          "label": "30 năm"
+        },
+        {
+          "id": "b",
+          "label": "20 năm"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Đại hội XII (1/2016) tổng kết 30 năm đổi mới (1986–2016).",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 367, 368",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-defuse-007",
+      "pool": "minefield_defuse",
+      "chapter": "chapter_3",
+      "topic": "Đại hội XII (2016)",
+      "type": "defuse_ab",
+      "difficulty": "easy",
+      "prompt": "Đại hội XII của Đảng họp vào tháng nào năm 2016?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Tháng 1"
+        },
+        {
+          "id": "b",
+          "label": "Tháng 6"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Đại hội XII họp từ ngày 20 đến ngày 28/1/2016.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 367",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-defuse-008",
+      "pool": "minefield_defuse",
+      "chapter": "chapter_3",
+      "topic": "Đại hội IX (2001)",
+      "type": "defuse_ab",
+      "difficulty": "easy",
+      "prompt": "Đại hội nào là Đại hội mở đầu thế kỷ XXI?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Đại hội X"
+        },
+        {
+          "id": "b",
+          "label": "Đại hội IX"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Đại hội IX (19–22/4/2001) là Đại hội mở đầu thế kỷ XXI.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 296",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-defuse-009",
+      "pool": "minefield_defuse",
+      "chapter": "chapter_3",
+      "topic": "So sánh các kỳ Đại hội",
+      "type": "defuse_ab",
+      "difficulty": "easy",
+      "prompt": "Đại hội nào có số đại biểu đông nhất trong các kỳ VII–XIII?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Đại hội XIII"
+        },
+        {
+          "id": "b",
+          "label": "Đại hội XI"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Đại hội XIII có 1.587 đại biểu, đông nhất trong các kỳ VII–XIII (Đại hội XI có 1.377, Đại hội XII hơn 1.510).",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 335, 367, 386",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-defuse-010",
+      "pool": "minefield_defuse",
+      "chapter": "chapter_3",
+      "topic": "Đại hội VII (1991)",
+      "type": "defuse_ab",
+      "difficulty": "easy",
+      "prompt": "Đại hội VII thông qua Chiến lược ổn định và phát triển KT-XH đến năm nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "2010"
+        },
+        {
+          "id": "b",
+          "label": "2000"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Đại hội VII thông qua Chiến lược ổn định và phát triển kinh tế - xã hội đến năm 2000.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 272",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-defuse-011",
+      "pool": "minefield_defuse",
+      "chapter": "chapter_3",
+      "topic": "Sau Đại hội VII",
+      "type": "defuse_ab",
+      "difficulty": "easy",
+      "prompt": "Hiến pháp năm 1992 được Quốc hội thông qua sau Đại hội nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Đại hội VII"
+        },
+        {
+          "id": "b",
+          "label": "Đại hội X"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Sau Đại hội VII, tại kỳ họp thứ 11 (4/1992), Quốc hội thông qua Hiến pháp năm 1992.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 277",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-defuse-012",
+      "pool": "minefield_defuse",
+      "chapter": "chapter_3",
+      "topic": "Quan điểm Đại hội XIII",
+      "type": "defuse_ab",
+      "difficulty": "easy",
+      "prompt": "Theo Đại hội XIII, phát triển KT-XH là trung tâm, còn xây dựng Đảng là gì?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Trọng yếu"
+        },
+        {
+          "id": "b",
+          "label": "Then chốt"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Đại hội XIII: phát triển kinh tế - xã hội là trung tâm; xây dựng Đảng là then chốt; phát triển văn hóa là nền tảng tinh thần; bảo đảm quốc phòng, an ninh là trọng yếu.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 388",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-defuse-013",
+      "pool": "minefield_defuse",
+      "chapter": "chapter_3",
+      "topic": "Phương châm Đại hội XIII",
+      "type": "defuse_ab",
+      "difficulty": "easy",
+      "prompt": "Phương châm Đại hội XIII thêm cụm nào so với tinh thần Đại hội XII?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Trí tuệ - Đổi mới"
+        },
+        {
+          "id": "b",
+          "label": "Sáng tạo - Phát triển"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Đại hội XII: 'Đoàn kết - Dân chủ - Kỷ cương - Đổi mới'. Đại hội XIII: 'Đoàn kết - Dân chủ - Kỷ cương - Sáng tạo - Phát triển'.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000025",
+          "locator": "Bài ngày 25/01/2021, đoạn nêu phương châm Đại hội",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). Nguồn báo chí/cổng thông tin đang chờ người duyệt xác minh (sources-pending.json)."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 367",
+          "usageNote": "Đối chiếu với giáo trình để phân biệt các kỳ Đại hội."
         }
       ],
       "aiAssisted": true

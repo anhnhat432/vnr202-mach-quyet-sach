@@ -53,9 +53,11 @@ test("Broadcast hint reaches viewer and projector browsers; boards follow within
   await page.click("button[type=submit]");
   await page.waitForURL("**/live-arena");
   await page.goto("/live-arena/duong-dua");
+  const startSettled = viewer.waitForResponse((r) => r.url().includes(`/api/v1/arena/leaderboards/${world.publicId}/race`) && r.url().includes("settle=1"));
   await page.getByRole("button", { name: "Bắt đầu lượt thi" }).click();
   await expect(viewer.locator(".ax-lb__row", { hasText: s.name })).toBeVisible({ timeout: 5000 }); // the start itself is a board change
   await expect(page.locator(".ax-question:not(.is-expired)")).toBeVisible({ timeout: 10000 });
+  await startSettled; // let the start hint's 1 s server pacing window and 1.2 s client settle read finish
 
   const framesBefore = frames.length;
   const answered = page.waitForResponse((r) => r.url().includes("/answers") && r.request().method() === "POST");
