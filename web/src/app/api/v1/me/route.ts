@@ -8,7 +8,7 @@ import { createServiceRoleClient } from "@/lib/supabase/service-role";
 // Redacted profile of the signed-in user: never MSSV of others, never internal email.
 export const GET = route(async (request) => {
   const { actor, supabase } = await requireActor();
-  const { data, error } = await supabase.from("profiles").select("role, full_name, display_name, student_id, class_id").eq("id", actor.userId).maybeSingle();
+  const { data, error } = await supabase.from("profiles").select("role, full_name, display_name, student_id, class_id, requires_display_name").eq("id", actor.userId).maybeSingle();
   if (error) throw error;
   if (!data) return ok({ role: actor.role }, requestIdFrom(request));
   let className: string | null = null;
@@ -17,5 +17,5 @@ export const GET = route(async (request) => {
     if (result.error) throw result.error;
     className = result.data?.name ?? null;
   }
-  return ok({ role: data.role, fullName: data.full_name, displayName: data.display_name, studentId: data.student_id, className }, requestIdFrom(request));
+  return ok({ role: data.role, fullName: data.full_name, displayName: data.display_name, studentId: data.student_id, className, requiresDisplayName: data.requires_display_name }, requestIdFrom(request));
 });

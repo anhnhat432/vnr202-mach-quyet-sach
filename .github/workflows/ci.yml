@@ -79,11 +79,35 @@ jobs:
           export E2E_REALTIME=1 # Realtime runs in this stack: the Broadcast-to-browser check is mandatory
           npx playwright install --with-deps chromium
           npx playwright test
+          # Keep the same throwaway environment for the production-mode synthetic rehearsal.
+          npm run build
+          npm run start > "$RUNNER_TEMP/classroom-load-server.log" 2>&1 &
+          classroom_server_pid=$!
+          trap 'kill "$classroom_server_pid" 2>/dev/null || true' EXIT
+          for i in $(seq 1 60); do curl --silent --fail http://127.0.0.1:3000/ > /dev/null && break; sleep 1; done
+          node --test ../scripts/load/load-results.test.mjs
+          node ../scripts/load/arena-load.mjs --players 70 --viewers 35 --paced-login --assert --cdn --out "$RUNNER_TEMP/classroom-load-70.json"
+      - name: Synthetic classroom load evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: classroom-load-70
+          path: ${{ runner.temp }}/classroom-load-70.json
+          if-no-files-found: ignore
+          retention-days: 7
       - name: Grouped question review browser evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: question-bank-bulk-e2e
           path: web/test-results/**/question-bank-bulk-*.png
+          if-no-files-found: ignore
+          retention-days: 3
+      - name: First-login name browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: student-name-e2e
+          path: web/test-results/**/student-name-*.png
           if-no-files-found: ignore
           retention-days: 3

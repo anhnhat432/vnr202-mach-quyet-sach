@@ -301,6 +301,10 @@ Body `{ "displayName": "An N.V.", "reason": "string" }`. Tối đa 40 ký tự, 
 
 Thử lại việc xóa các tài khoản còn sót của bản nhập có trạng thái `failed` (chỉ những id đã được ghi lại). `200 {removed}` khi sạch; `503 roster_cleanup_incomplete` nếu vẫn còn; `409 import_not_ready` nếu bản nhập không có gì để dọn. Có audit.
 
+### `POST /me/display-name` (CLASS-001..004)
+
+Authenticated active student, session actor only, same-origin + CSRF. Strict body `{name: string}` (1-100 normalized characters, no controls or student IDs). For profiles imported with `collectNamesOnSignIn=on`, the student sets their name once before any new game attempt. Full names are abbreviated for public display; duplicate public names receive a stable suffix. Response `{displayName}` only. Errors: `401` unauthenticated, `403` non-student/locked/CSRF, `422` invalid input, `409 display_name_already_set`. Correction after first setup remains an admin action. No scoring or attempt changes. `GET /me` and student sign-in include `requiresDisplayName`; sign-in redirects pending students to `/thiet-lap-ten`. Named-roster imports remain unchanged; MSSV-only import is an explicit admin option and retains preview/apply and duplicate protection.
+
 ### `POST /admin/profiles/{profileId}/password-resets`
 
 Không body. Đặt lại mật khẩu về mật khẩu mặc định cấu hình phía server, revoke phiên chơi đang hoạt động và audit. Không trả hoặc log mật khẩu.

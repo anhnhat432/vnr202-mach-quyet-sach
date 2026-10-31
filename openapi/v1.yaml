@@ -11,6 +11,20 @@ servers:
 security:
   - supabaseSession: []
 paths:
+  /me/display-name:
+    post:
+      summary: Set the authenticated student's first classroom display name
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [name]
+              properties:
+                name: { type: string, minLength: 1, maxLength: 100 }
+      responses: { "200": { $ref: "#/components/responses/Ok" }, "401": { $ref: "#/components/responses/Error" }, "403": { $ref: "#/components/responses/Error" }, "409": { $ref: "#/components/responses/Error" }, "422": { $ref: "#/components/responses/Error" } }
   /passport/progress:
     get:
       summary: Private dossier progress for the authenticated student

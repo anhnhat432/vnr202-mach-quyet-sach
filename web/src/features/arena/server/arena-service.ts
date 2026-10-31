@@ -11,6 +11,10 @@ type RpcError = { code?: string; message?: string; details?: string | null };
 const STATUS_BY_SQLSTATE: Record<string, number> = { QA404: 404, QA409: 409, QA410: 410, QA422: 422, QA425: 425, "42501": 403, "55P03": 503, QB001: 503, QB002: 503 };
 
 const MESSAGES: Record<string, string> = {
+  display_name_required: "Hãy nhập tên hiển thị trước khi bắt đầu chơi.",
+  display_name_already_set: "Bạn đã lưu tên. Hãy liên hệ người tổ chức nếu cần sửa.",
+  invalid_display_name: "Tên không hợp lệ. Nhập từ 1–100 ký tự, không có ký tự điều khiển.",
+  student_id_in_name: "Tên hiển thị không được chứa mã sinh viên.",
   stale_session: "Phiên chơi này không còn quyền điều khiển lượt thi. Hãy tiếp tục trên thiết bị đang dùng.",
   another_attempt_active: "Bạn đang chơi một game khác. Hãy hoàn thành lượt đó trước.",
   interaction_pending: "Hãy xử lý câu hỏi đang mở trước.",

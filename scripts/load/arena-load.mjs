@@ -13,6 +13,7 @@ import fs from "node:fs";
 import { createClient } from "../../web/node_modules/@supabase/supabase-js/dist/index.mjs";
 import pg from "../../web/node_modules/pg/lib/index.js";
 import { generateFixtures } from "../lib/question-bank.mjs";
+import { loadReadinessProblems } from "./load-results.mjs";
 
 const arg = (name, fallback) => {
   const i = process.argv.indexOf(`--${name}`);
@@ -23,6 +24,8 @@ const VIEWERS = Number(arg("viewers", 200));
 const BASE = arg("base", "http://127.0.0.1:3000");
 const OUT = arg("out", null);
 const KEEP = process.argv.includes("--keep");
+const PACED_LOGIN = process.argv.includes("--paced-login");
+const ASSERT = process.argv.includes("--assert");
 // --cdn: viewers read the public board through an in-process stand-in for the Vercel CDN that honours
 // the route's `s-maxage` and collapses concurrent misses, so origin reads can be told apart from views.
 const CDN = process.argv.includes("--cdn");
@@ -247,10 +250,10 @@ async function getContent(s, attemptId, allocationId, label) {
   return null;
 }
 
-async function play(p, publicId, scores) {
-  let s = new Session();
-  await sleep(rand(0, 20000)); // a class does not press Start in the same millisecond
-  await s.signIn(p.studentId);
+async function play(p, publicId, scores, authenticatedSession) {
+  let s = authenticatedSession ?? new Session();
+  await sleep(rand(0, authenticatedSession ? 1000 : 20000));
+  if (!authenticatedSession) await s.signIn(p.studentId);
   const accuracy = rand(0.55, 0.95);
   const started = await s.call("POST", `/arena/competitions/${publicId}/games/${p.game}/attempt`, {}, key("start"));
   if (started.status >= 300) { fail(`start_${started.status}_${started.error?.code}`); return; }
@@ -376,6 +379,22 @@ async function invariants(competitionId) {
 // ---- main ---------------------------------------------------------------------------------------
 const world = await setup();
 console.log(`run ${run}: ${PLAYERS} players, ${VIEWERS} viewers + projector, competition ${world.publicId}`);
+const preparedSessions = new Map();
+const loginStarted = now();
+if (PACED_LOGIN) {
+  // Auth's short-burst bucket differs from its five-minute quota. Authenticate before the play
+  // barrier in groups of 20, 30s apart, then start all attempts together. Never hide 429s by retrying.
+  for (let offset = 0; offset < world.players.length; offset += 20) {
+    await Promise.all(world.players.slice(offset, offset + 20).map(async (player) => {
+      const session = new Session();
+      await session.signIn(player.studentId);
+      preparedSessions.set(player.id, session);
+    }));
+    console.log(`authenticated ${preparedSessions.size}/${PLAYERS} synthetic players`);
+    if (offset + 20 < world.players.length) await sleep(30000);
+  }
+}
+const loginPreparationMs = Math.round(now() - loginStarted);
 const seen = new Map();
 const vstats = { reads: 0, hints: 0, subscribed: 0, channelErrors: 0, stopped: false };
 const stops = [];
@@ -387,7 +406,7 @@ await sleep(3000);
 const subscribedAtStart = vstats.subscribed;
 const scores = [];
 const t0 = now();
-await Promise.all(world.players.map((p) => play(p, world.publicId, scores).catch((e) => { fail(`player_crash_${e.message.slice(0, 40)}`); })));
+await Promise.all(world.players.map((p) => play(p, world.publicId, scores, preparedSessions.get(p.id)).catch((e) => { fail(`player_crash_${e.message.slice(0, 40)}`); })));
 const playMs = now() - t0;
 await svc.rpc("reconcile_competition", { p_competition_id: world.competitionId });
 await sleep(3000); // let the boards settle
@@ -412,6 +431,7 @@ for (const ev of scores) {
 }
 const inv = await invariants(world.competitionId);
 const report = {
+  authentication: { paced: PACED_LOGIN, batchSize: PACED_LOGIN ? 20 : null, pauseMs: PACED_LOGIN ? 30000 : null, prepared: preparedSessions.size, preparationMs: loginPreparationMs },
   run, players: PLAYERS, realtimeQuotas: (await pool.query("select max_concurrent_users, max_events_per_second, max_joins_per_second from _realtime.tenants limit 1").catch(() => ({ rows: [] }))).rows[0] ?? null, viewers: VIEWERS + 1, playSeconds: Math.round(playMs / 1000),
   latencyMs: Object.fromEntries(["sign_in", "start", "cell_open", "content_minefield", "content_race_longpoll", "content_after_release", "content_refetch", "submit", "heartbeat", "transfer", "board_read"].map((k) => [k, { n: samples[k]?.length ?? 0, p50: pct(samples[k], 50), p95: pct(samples[k], 95), p99: pct(samples[k], 99), max: pct(samples[k], 100) }])),
   top10Propagation: { scoreChanges, changesSeenOnBoards: visibleEvents, samples: prop.length, p50: pct(prop, 50), p95: pct(prop, 95), p99: pct(prop, 99), max: pct(prop, 100) },
@@ -433,4 +453,6 @@ if (!KEEP) {
   for (const id of ids) await svc.auth.admin.deleteUser(id);
 }
 await pool.end();
-process.exit(0);
+const readinessProblems = loadReadinessProblems(report);
+if (ASSERT && readinessProblems.length) console.error("Load readiness failed:", readinessProblems.join(", "));
+process.exit(ASSERT && readinessProblems.length ? 1 : 0);
