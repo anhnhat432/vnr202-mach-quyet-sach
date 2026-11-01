@@ -14,12 +14,7 @@ export default async function Page() {
   const { data } = await supabase.auth.getUser();
   if (data.user?.app_metadata?.role !== "admin") redirect("/quan-tri/dang-nhap");
   return (
-    <div className="page-shell">
-      <header className="page-intro">
-        <p className="eyebrow">Quản trị</p>
-        <h1>Ngân hàng câu hỏi</h1>
-        <p>Chỉ người duyệt học thuật (tài khoản quản trị) mới duyệt và xuất bản. AI chỉ soạn nháp.</p>
-      </header>
+    <div className="acc-container">
       <QuestionBankAdmin />
     </div>
   );

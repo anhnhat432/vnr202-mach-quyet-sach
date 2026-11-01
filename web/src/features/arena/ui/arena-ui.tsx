@@ -5,6 +5,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import Link from "next/link";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
+import type { Cue } from "@/features/arena/client/sound";
 import type { Feedback } from "@/features/arena/client/use-arena-game";
 import type { Difficulty, Game, PlayerStanding, QuestionContent, Standing } from "@/features/arena/client/types";
 
@@ -127,20 +128,32 @@ export function QuestionPanel(props: {
   now: number;
   answering: boolean;
   onAnswer: (optionId: string) => void;
+  onPlay?: (cue: Cue) => void;
   tone?: "defuse" | "main";
   kicker?: ReactNode;
   limitMs: number;
 }) {
-  const { question, endsAt, now, answering, onAnswer, limitMs } = props;
+  const { question, endsAt, now, answering, onAnswer, onPlay, limitMs } = props;
   const reduce = useReducedMotion();
   const remaining = endsAt === null ? question.remainingMs : Math.max(0, endsAt - now);
   const ratio = Math.max(0, Math.min(1, remaining / Math.max(1, limitMs)));
   const expired = remaining <= 0;
   const firstButton = useRef<HTMLButtonElement | null>(null);
+  const lastCountdownSec = useRef<number | null>(null);
 
   useEffect(() => {
+    lastCountdownSec.current = null;
     firstButton.current?.focus({ preventScroll: true });
   }, [question.allocationId]);
+
+  useEffect(() => {
+    if (answering || expired || remaining <= 0) return;
+    const sec = Math.ceil(remaining / 1000);
+    if (sec <= 3 && sec >= 1 && lastCountdownSec.current !== sec) {
+      lastCountdownSec.current = sec;
+      onPlay?.("countdown");
+    }
+  }, [answering, expired, onPlay, remaining]);
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
@@ -149,12 +162,13 @@ export function QuestionPanel(props: {
       const index = ["1", "2", "3"].indexOf(k) >= 0 ? ["1", "2", "3"].indexOf(k) : ["a", "b", "c"].indexOf(k);
       if (index >= 0 && question.options[index]) {
         event.preventDefault();
+        onPlay?.("tap");
         onAnswer(question.options[index].id);
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [answering, expired, onAnswer, question.options]);
+  }, [answering, expired, onAnswer, onPlay, question.options]);
 
   return (
     <motion.section
@@ -183,7 +197,10 @@ export function QuestionPanel(props: {
             type="button"
             className="ax-option"
             disabled={answering || expired}
-            onClick={() => onAnswer(option.id)}
+            onClick={() => {
+              onPlay?.("tap");
+              onAnswer(option.id);
+            }}
           >
             <kbd>{String.fromCharCode(65 + index)}</kbd>
             <span>{option.label}</span>

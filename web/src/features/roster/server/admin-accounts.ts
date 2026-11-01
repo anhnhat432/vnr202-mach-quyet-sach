@@ -19,10 +19,10 @@ async function loadStudent(admin: SupabaseClient, profileId: string) {
 export async function listStudents(admin: SupabaseClient) {
   const { data } = await admin
     .from("profiles")
-    .select("id, student_id, full_name, display_name, display_name_suffix, status, created_at")
+    .select("id, student_id, full_name, display_name, display_name_suffix, status, created_at, class_id")
     .eq("role", "student")
     .order("student_id");
-  return data ?? [];
+  return (data ?? []).filter((r) => !(r.class_id === null && /^(THU|DEMO)\d+/i.test(String(r.student_id ?? ""))));
 }
 
 export async function revokeSessions({ admin, env }: Deps, action: Action) {

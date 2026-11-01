@@ -35,6 +35,9 @@ const MESSAGES: Record<string, string> = {
   not_needed_for_rehearsal: "Cuộc thi diễn tập không cần xác nhận câu đã công bố.",
   not_disclosed: "Có câu được chọn chưa từng bị công bố đáp án.",
   nothing_selected: "Chưa chọn câu hỏi nào.",
+  rehearsal_account_forbidden: "Tài khoản thử nghiệm chỉ được tham gia phòng thi thử, không được vào cuộc thi chính thức.",
+  official_competition_protected: "Cuộc thi chính thức được bảo vệ, không cho phép xóa hoặc đặt lại.",
+  official_competition_currently_open: "Đang có cuộc thi chính thức mở. Không thể mở hoặc đặt lại phòng thi thử lúc này.",
 };
 
 // Maps a database error token to an API error. Raw SQL text is never forwarded.
@@ -48,7 +51,10 @@ export function mapRpcError(error: RpcError): ApiError {
   }
   if (sqlstate === "55P03") return new ApiError(503, "temporarily_unavailable", "Hệ thống đang bận, hãy thử lại ngay.");
   if (sqlstate === "QB001" || sqlstate === "QB002") return new ApiError(503, "competition_not_ready", "Ngân hàng câu hỏi chưa đủ cho cuộc thi này.");
-  if (sqlstate === "42501") return new ApiError(403, "forbidden", "Bạn không có quyền thực hiện thao tác này.");
+  if (sqlstate === "42501") {
+    const knownCode = /^[a-z_]{3,48}$/.test(token) && MESSAGES[token] ? token : "forbidden";
+    return new ApiError(403, knownCode, MESSAGES[knownCode] ?? "Bạn không có quyền thực hiện thao tác này.");
+  }
   const code = /^[a-z_]{3,48}$/.test(token) ? token : "conflict";
   const message = MESSAGES[code] ?? "Yêu cầu không thực hiện được.";
   const details: ApiError["details"] = [];

@@ -48,15 +48,51 @@ export function MinefieldGame() {
   const flash = useTransient(g.feedback);
   const [focus, setFocus] = useState(0);
   const cellRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const prevPhase = useRef(g.phase);
+  const prevRank = useRef<number | null>(null);
   const { play } = sound;
 
   useEffect(() => {
     const f = g.feedback;
     if (!f) return;
-    if (f.kind === "cell") play(f.result.kind === "chest" ? "chest" : f.result.kind === "bomb" ? "bomb" : f.result.kind === "shield" ? "shield" : f.result.kind === "double" ? "combo" : "tick");
-    if (f.kind === "answer") play(f.result.outcome === "correct" ? "correct" : "wrong");
-    if (f.kind === "timeout") play("wrong");
+    if (f.kind === "cell") {
+      play(
+        f.result.kind === "chest"
+          ? "chest"
+          : f.result.kind === "bomb"
+            ? "bomb"
+            : f.result.kind === "shield"
+              ? "shield"
+              : f.result.kind === "double"
+                ? "double"
+                : "tick",
+      );
+    }
+    if (f.kind === "answer") {
+      const r = f.result;
+      if (r.role === "defuse") {
+        play(r.outcome === "correct" ? "defuse" : r.effect === "shield_consumed" ? "shield_block" : "explode");
+      } else {
+        play(r.outcome === "correct" ? (r.doubleApplied ? "combo" : "correct") : r.outcome === "timed_out" ? "timeout" : "wrong");
+      }
+    }
+    if (f.kind === "timeout") play("timeout");
   }, [g.feedback, play]);
+
+  useEffect(() => {
+    if (prevPhase.current === "playing" && g.phase === "finished" && g.projection) {
+      play(g.projection.attempt.state === "timed_out" ? "timeout" : "finish");
+    }
+    prevPhase.current = g.phase;
+  }, [g.phase, g.projection, play]);
+
+  useEffect(() => {
+    const rank = g.standing?.rank ?? null;
+    if (g.phase === "playing" && rank !== null && prevRank.current !== null && rank < prevRank.current) {
+      play(rank === 1 ? "lead" : "overtake");
+    }
+    if (rank !== null) prevRank.current = rank;
+  }, [g.phase, g.standing, play]);
 
   const p = g.projection;
   const attemptRemaining = g.attemptEndsAt === null ? null : Math.max(0, g.attemptEndsAt - now);
@@ -68,7 +104,21 @@ export function MinefieldGame() {
     return <ArenaFrame game="minefield"><TransferDialog busy={g.busy} onConfirm={g.takeControl} /></ArenaFrame>;
   }
   if (g.phase === "intro" || !p) {
-    return <ArenaFrame game="minefield"><GameIntro game="minefield" lobby={g.lobby} busy={g.busy} notice={g.notice} onStart={g.start} /></ArenaFrame>;
+    return (
+      <ArenaFrame game="minefield">
+        <GameIntro
+          game="minefield"
+          lobby={g.lobby}
+          busy={g.busy}
+          notice={g.notice}
+          sound={sound}
+          onStart={() => {
+            play("start");
+            void g.start();
+          }}
+        />
+      </ArenaFrame>
+    );
   }
   if (g.phase === "finished") {
     return <ArenaFrame game="minefield"><FinishedScreen game="minefield" projection={p} standing={g.standing} /></ArenaFrame>;
@@ -132,7 +182,12 @@ export function MinefieldGame() {
                   onFocus={() => setFocus(cell.index)}
                   disabled={cell.opened ? false : locked}
                   aria-disabled={cell.opened || locked}
-                  onClick={() => { if (!cell.opened && !locked) void g.openCell(cell.index); }}
+                  onClick={() => {
+                    if (!cell.opened && !locked) {
+                      play("tap");
+                      void g.openCell(cell.index);
+                    }
+                  }}
                   initial={cell.opened && !reduce ? { rotateY: 90, scale: 0.9 } : false}
                   animate={{ rotateY: 0, scale: 1 }}
                   transition={{ duration: 0.32, ease: "easeOut" }}
@@ -153,6 +208,7 @@ export function MinefieldGame() {
                   now={now}
                   answering={g.answering}
                   onAnswer={g.answer}
+                  onPlay={play}
                   tone={pending.role === "defuse" ? "defuse" : "main"}
                   limitMs={questionLimitMs("minefield", pending.role, pending.difficulty, pending.sequence)}
                   kicker={pending.role === "defuse"

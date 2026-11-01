@@ -1,6 +1,6 @@
 "use client";
 
-import { Bomb, Flag, Flame, Gem, Keyboard, Lock, Shield, Timer, Trophy, Zap } from "lucide-react";
+import { Bomb, Flag, Flame, Gem, Keyboard, Lock, Shield, Timer, Trophy, Volume2, VolumeX, Zap } from "lucide-react";
 import Link from "next/link";
 
 import type { Game, Lobby, PlayerStanding, Projection } from "@/features/arena/client/types";
@@ -29,7 +29,21 @@ const RULES: Record<Game, { title: string; tagline: string; bullets: Array<{ ico
   },
 };
 
-export function GameIntro({ game, lobby, busy, notice, onStart }: { game: Game; lobby: Lobby | null; busy: boolean; notice: string | null; onStart: () => void }) {
+export function GameIntro({
+  game,
+  lobby,
+  busy,
+  notice,
+  onStart,
+  sound,
+}: {
+  game: Game;
+  lobby: Lobby | null;
+  busy: boolean;
+  notice: string | null;
+  onStart: () => void;
+  sound?: { enabled: boolean; toggle: () => void };
+}) {
   const rules = RULES[game];
   const info = lobby?.games.find((g) => g.game === game);
   const other = lobby?.games.find((g) => g.game !== game && g.state === "active");
@@ -63,7 +77,21 @@ export function GameIntro({ game, lobby, busy, notice, onStart }: { game: Game; 
       <button type="button" className="ax-btn ax-btn--primary ax-btn--xl" onClick={onStart} disabled={busy || closed || Boolean(other)}>
         {closed ? "Đã đóng nhận lượt mới" : busy ? "Đang bắt đầu…" : "Bắt đầu lượt thi"}
       </button>
-      <Link className="ax-btn ax-btn--ghost" href="/live-arena">Về sảnh</Link>
+      <div className="ax-row">
+        <Link className="ax-btn ax-btn--ghost" href="/live-arena">Về sảnh</Link>
+        {sound ? (
+          <button
+            type="button"
+            className="ax-btn ax-btn--ghost"
+            onClick={sound.toggle}
+            aria-pressed={sound.enabled}
+            aria-label={sound.enabled ? "Tắt âm thanh" : "Bật âm thanh"}
+          >
+            {sound.enabled ? <Volume2 aria-hidden size={18} /> : <VolumeX aria-hidden size={18} />}
+            {sound.enabled ? "Âm thanh: Bật" : "Âm thanh: Tắt"}
+          </button>
+        ) : null}
+      </div>
     </CenterCard>
   );
 }

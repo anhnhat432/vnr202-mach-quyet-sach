@@ -157,4 +157,42 @@ describe("admin views and student history", () => {
       await pool.query("delete from public.question_exposures where competition_id = $1", [donor]);
     }
   });
+
+  it("rehearsal isolation: blocks rehearsal accounts from official competitions and resets rehearsal via a new round preserving history", async () => {
+    const w = await createWorld({ students: 1 });
+    worlds.push(w);
+    const [testStudent] = w.students;
+    await pool.query("update public.profiles set is_rehearsal = true, class_id = null where id = $1", [testStudent]);
+
+    // Test student can play in the open rehearsal competition
+    const round1Attempt = await start(w, testStudent, "race", T0);
+    expect(round1Attempt.projection.attempt.state).toBe("active");
+
+    // Admin resets rehearsal ("Chơi thử lại") -> closes Round 1 (preserving attempt & ledger) and opens Round 2
+    const resetResult = await call<{ id: string; publicId: string; closedRehearsalIds: string[] }>(
+      "reset_rehearsal_competition",
+      [w.adminId, "Phòng thi thử #2", 120],
+      at(2000),
+    );
+    expect(resetResult.closedRehearsalIds).toContain(w.competitionId);
+    const newCompId = resetResult.id;
+
+    try {
+      // Old attempt is preserved as timed_out; new rehearsal round has an empty leaderboard and allows a fresh attempt
+      const oldAttState = (await pool.query("select state from public.attempts where id = $1", [round1Attempt.projection.attempt.id])).rows[0].state;
+      expect(oldAttState).toBe("timed_out");
+
+      const newAttempt = await call<{ attempt: { id: string; state: string } }>(
+        "start_or_resume_attempt",
+        [testStudent, newCompId, "race", "idem-round-2"],
+        at(3000),
+      );
+      expect(newAttempt.attempt.state).toBe("active");
+      expect(newAttempt.attempt.id).not.toBe(round1Attempt.projection.attempt.id);
+    } finally {
+      await pool.query("delete from public.audit_logs where target_type = 'competition' and target_id = $1", [newCompId]);
+      await pool.query("delete from public.question_exposures where competition_id = $1", [newCompId]);
+      await pool.query("delete from public.competitions where id = $1", [newCompId]);
+    }
+  });
 });

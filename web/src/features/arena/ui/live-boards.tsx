@@ -1,11 +1,12 @@
 "use client";
 
-import { Crown, Maximize2, TrendingUp } from "lucide-react";
+import { Crown, Maximize2, TrendingUp, Volume2, VolumeX } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useVisibleRefresh } from "@/features/arena/client/use-visible-refresh";
 
 import { currentCompetition, type CurrentCompetition } from "@/features/arena/client/api";
+import { useArenaSound } from "@/features/arena/client/sound";
 import type { Game } from "@/features/arena/client/types";
 import { useLeaderboard } from "@/features/arena/client/use-leaderboard";
 import { useNow } from "@/features/arena/client/use-arena-game";
@@ -67,9 +68,12 @@ export function ProjectorBoards() {
   const comp = useCurrentCompetition();
   const now = useNow(250);
   const reduce = useReducedMotion();
+  const sound = useArenaSound();
   const [zoom, setZoom] = useState<Game | null>(null);
   const mine = useLeaderboard(comp?.publicId ?? null, "minefield");
   const race = useLeaderboard(comp?.publicId ?? null, "race");
+  const announced = useRef(new Set<string>());
+  const { play, toggle } = sound;
 
   useEffect(() => {
     const fromUrl = new URLSearchParams(window.location.search).get("game");
@@ -78,13 +82,14 @@ export function ProjectorBoards() {
       if (e.key === "1") setZoom("minefield");
       if (e.key === "2") setZoom("race");
       if (e.key === "0" || e.key === "Escape") setZoom(null);
+      if (e.key.toLowerCase() === "m") toggle();
     };
     window.addEventListener("keydown", onKey);
     return () => {
       window.clearTimeout(t);
       window.removeEventListener("keydown", onKey);
     };
-  }, []);
+  }, [toggle]);
 
   const toasts = useMemo<Toast[]>(() => {
     const list: Toast[] = [];
@@ -100,6 +105,14 @@ export function ProjectorBoards() {
     }
     return list.slice(0, 3);
   }, [mine, race, now]);
+
+  useEffect(() => {
+    for (const t of toasts) {
+      if (announced.current.has(t.id)) continue;
+      announced.current.add(t.id);
+      play(t.tone === "lead" ? "lead" : "overtake");
+    }
+  }, [play, toasts]);
 
   const players = (mine.board?.players ?? 0) + (race.board?.players ?? 0);
   return (
@@ -117,6 +130,14 @@ export function ProjectorBoards() {
             <button type="button" aria-pressed={zoom === null} onClick={() => setZoom(null)}>Hai bảng</button>
             <button type="button" aria-pressed={zoom === "minefield"} onClick={() => setZoom("minefield")}><Maximize2 aria-hidden size={14} /> Bãi Mìn</button>
             <button type="button" aria-pressed={zoom === "race"} onClick={() => setZoom("race")}><Maximize2 aria-hidden size={14} /> Đường Đua</button>
+            <button
+              type="button"
+              aria-pressed={sound.enabled}
+              aria-label={sound.enabled ? "Tắt âm thanh" : "Bật âm thanh"}
+              onClick={sound.toggle}
+            >
+              {sound.enabled ? <Volume2 aria-hidden size={14} /> : <VolumeX aria-hidden size={14} />} Âm thanh
+            </button>
           </div>
         </div>
       </header>

@@ -14,12 +14,7 @@ export default async function RosterAdminPage() {
   const { data } = await supabase.auth.getUser();
   if (data.user?.app_metadata?.role !== "admin") redirect("/");
   return (
-    <div className="page-shell">
-      <header className="page-intro">
-        <p className="eyebrow">Quản trị</p>
-        <h1>Danh sách lớp</h1>
-        <p>Tải tệp danh sách lớp, kiểm tra bản xem trước rồi mới tạo tài khoản. Tất cả tài khoản dùng mật khẩu mặc định do máy chủ cấu hình; mật khẩu chung không bảo đảm danh tính — chỉ dùng cho thi đua lớp học.</p>
-      </header>
+    <div className="acc-container">
       <RosterImport />
     </div>
   );

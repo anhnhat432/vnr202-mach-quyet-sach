@@ -2,7 +2,7 @@
 
 import { Flag, Flame, Gauge } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 import { useArenaSound } from "@/features/arena/client/sound";
 import { useArenaGame, useNow } from "@/features/arena/client/use-arena-game";
@@ -67,13 +67,49 @@ export function RaceGame() {
   const transient = useTransient(g.feedback, 850);
   // LA-FB-002: feedback never covers the next question; it disappears as soon as that question shows.
   const flash = transient && !(transient.kind === "answer" && g.question && g.question.allocationId !== transient.result.allocationId) ? transient : null;
+  const prevPhase = useRef(g.phase);
+  const prevRank = useRef<number | null>(null);
+  const sprintPlayed = useRef(false);
   const { play } = sound;
 
   useEffect(() => {
     const f = g.feedback;
-    if (f?.kind === "answer") play(f.result.comboBonus ? "combo" : f.result.outcome === "correct" ? "correct" : "wrong");
-    if (f?.kind === "timeout") play("wrong");
+    if (f?.kind === "answer") {
+      play(
+        f.result.comboBonus
+          ? "combo"
+          : f.result.outcome === "correct"
+            ? "correct"
+            : f.result.outcome === "timed_out"
+              ? "timeout"
+              : "wrong",
+      );
+    }
+    if (f?.kind === "timeout") play("timeout");
   }, [g.feedback, play]);
+
+  useEffect(() => {
+    const seq = g.projection?.interaction?.sequence ?? null;
+    if (g.phase === "playing" && seq === 13 && !sprintPlayed.current) {
+      sprintPlayed.current = true;
+      play("sprint");
+    }
+  }, [g.phase, g.projection?.interaction?.sequence, play]);
+
+  useEffect(() => {
+    if (prevPhase.current === "playing" && g.phase === "finished" && g.projection) {
+      play(g.projection.attempt.state === "timed_out" ? "timeout" : "finish");
+    }
+    prevPhase.current = g.phase;
+  }, [g.phase, g.projection, play]);
+
+  useEffect(() => {
+    const rank = g.standing?.rank ?? null;
+    if (g.phase === "playing" && rank !== null && prevRank.current !== null && rank < prevRank.current) {
+      play(rank === 1 ? "lead" : "overtake");
+    }
+    if (rank !== null) prevRank.current = rank;
+  }, [g.phase, g.standing, play]);
 
   const p = g.projection;
   const attemptRemaining = g.attemptEndsAt === null ? null : Math.max(0, g.attemptEndsAt - now);
@@ -82,7 +118,23 @@ export function RaceGame() {
     return <ArenaFrame game="race"><StatusScreen phase={g.phase} onRetry={g.reload} /></ArenaFrame>;
   }
   if (g.phase === "stale") return <ArenaFrame game="race"><TransferDialog busy={g.busy} onConfirm={g.takeControl} /></ArenaFrame>;
-  if (g.phase === "intro" || !p) return <ArenaFrame game="race"><GameIntro game="race" lobby={g.lobby} busy={g.busy} notice={g.notice} onStart={g.start} /></ArenaFrame>;
+  if (g.phase === "intro" || !p) {
+    return (
+      <ArenaFrame game="race">
+        <GameIntro
+          game="race"
+          lobby={g.lobby}
+          busy={g.busy}
+          notice={g.notice}
+          sound={sound}
+          onStart={() => {
+            play("start");
+            void g.start();
+          }}
+        />
+      </ArenaFrame>
+    );
+  }
   if (g.phase === "finished") return <ArenaFrame game="race"><FinishedScreen game="race" projection={p} standing={g.standing} /></ArenaFrame>;
 
   const it = p.interaction;
@@ -115,6 +167,7 @@ export function RaceGame() {
               now={now}
               answering={g.answering}
               onAnswer={g.answer}
+              onPlay={play}
               limitMs={questionLimitMs("race", "main", undefined, it.sequence)}
               kicker={<span className={`ax-chip ax-diff--${raceDifficulty(it.sequence)}`}>Câu {it.sequence}/15 · {DIFFICULTY_LABEL[raceDifficulty(it.sequence)]}</span>}
             />
