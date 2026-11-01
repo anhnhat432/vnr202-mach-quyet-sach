@@ -111,7 +111,7 @@ Re-scope snapshot (2026-10-29, revision 2): stage A approved by the owner subjec
 
 ## Phase 6 - Hardening and public deployment
 
-- [-] `T119` Classroom navigation and session usability: administrator entry/tabs, automatic waiting-state refresh, explicit projector waiting state, private account indicator and CSRF-protected logout. Owner approved 2026-11-01. Spec: `specs/classroom-navigation-session.md`; plan: `plans/2026-11-01-classroom-navigation-session.md`. Preserve official event and academic governance.
+- [x] `T119` Classroom navigation and session usability: administrator entry/tabs, automatic waiting-state refresh, explicit projector waiting state, private account indicator and CSRF-protected logout. Owner approved 2026-11-01. Spec: `specs/classroom-navigation-session.md`; plan: `plans/2026-11-01-classroom-navigation-session.md`; evidence: `evidence/classroom-navigation-session-2026-11-01.md`. Full code CI 41268379408 passes; deployed d5880a5 verified. Official event remains unopened; academic governance preserved.
 
 - [x] `T118` Classroom readiness for 2026-11-02: opt-in MSSV-only roster and student-entered first-login name, Auth overload handling, stable class URL and measured rehearsal up to 70 players. Owner supplied 39 IDs; all accounts created and official competition prepared, unopened. Spec: `specs/classroom-readiness.md`; plan: `plans/2026-10-31-classroom-readiness.md`; evidence: `evidence/classroom-readiness-2026-11-01.md`. Human academic approval remains T115.
 

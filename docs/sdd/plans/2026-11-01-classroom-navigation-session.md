@@ -22,5 +22,5 @@
 ## 3. Acceptance and delivery (CLASS-011..016)
 
 - [x] Extend synthetic first-name browser flow with administrator entry/tabs and student logout. Six new desktop/mobile navigation/waiting/projector tests pass locally against the production build; mocked read responses create no attempts. The real Auth/roster extension runs in isolated CI.
-- [ ] Run unit/type/lint/build/security/SDD gates and full CI, including existing database/realtime/load assertions. No academic bank or real-student gameplay writes.
-- [ ] Update runbook/evidence, commit/push on current branch, update PR9, deploy only the existing class project and verify uploaded source/alias. Leave the official event prepared and unopened; keep a proof screenshot and report remaining onsite checks.
+- [x] Full CI 41268379408 passes: 190 unit tests, 149 pgTAP assertions, ten integration files, 50 browser passes / 12 configured skips, production/offline/security checks and isolated 70-player load. No academic bank or real-student gameplay writes.
+- [x] Update runbook and `evidence/classroom-navigation-session-2026-11-01.md`; commit/push on current branch and update existing PR9 without merge. Deploy only the class project, verify exact d5880a5 source plus nine uploaded hashes and stable alias. Hosted administrator entry/tabs, private account indicator, 39 active roster matches, six locked test profiles, public protection and projector waiting verified. Official event remains prepared/unopened; proof screenshot retained. Classroom network check remains onsite.
