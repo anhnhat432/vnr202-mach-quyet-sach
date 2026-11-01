@@ -34,7 +34,12 @@ test("IDs-only import leads to an authenticated, write-once, privacy-safe first-
   await page.context().clearCookies({ name: "vnr_csrf" });
   const existing = await admin.from("classes").select("id, code, name").eq("is_active", true).maybeSingle();
   const classCode = existing.data?.code ?? `NAME-${run}`;
-  await page.goto("/quan-tri/lop");
+  await page.goto("/");
+  await page.getByRole("navigation", { name: "Tài khoản", exact: true }).getByRole("link", { name: "Vào quản trị", exact: true }).click();
+  await expect(page).toHaveURL(/\/quan-tri\/cuoc-thi$/);
+  await page.getByRole("navigation", { name: "Quản trị", exact: true }).getByRole("link", { name: "Danh sách lớp", exact: true }).click();
+  await expect(page.getByRole("link", { name: "Danh sách lớp", exact: true })).toHaveAttribute("aria-current", "page");
+  await page.screenshot({ path: info.outputPath("student-name-admin-navigation.png") });
   await page.getByLabel("Mã lớp", { exact: true }).fill(classCode);
   await page.getByLabel("Tên lớp", { exact: true }).fill(existing.data?.name ?? "Synthetic first-login test");
   await page.getByRole("checkbox", { name: "Chỉ nhập MSSV; sinh viên tự nhập tên khi đăng nhập lần đầu." }).check();
@@ -85,5 +90,14 @@ test("IDs-only import leads to an authenticated, write-once, privacy-safe first-
     expect(audit.data).toHaveLength(1);
     expect(JSON.stringify(audit.data)).not.toContain(studentId);
     expect(JSON.stringify(audit.data)).not.toContain("Nguyễn Văn An");
+    const account = student.getByRole("navigation", { name: "Tài khoản", exact: true });
+    await expect(account.getByText("An N.V.", { exact: true })).toBeVisible();
+    await expect(account).not.toContainText(studentId);
+    await expect(account).not.toContainText("Nguyễn Văn An");
+    await account.getByRole("button", { name: "Đăng xuất", exact: true }).click();
+    await expect(account.getByText(/Đồng hồ lượt đang chơi vẫn chạy/)).toBeVisible();
+    await account.getByRole("button", { name: "Xác nhận đăng xuất", exact: true }).click();
+    await expect(student).toHaveURL(/\/dang-nhap$/);
+    expect((await student.request.get("/api/v1/me")).status()).toBe(401);
   } finally { await context.close(); }
 });

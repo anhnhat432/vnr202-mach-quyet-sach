@@ -2,7 +2,8 @@
 
 import { Bomb, Flag, LogIn, Trophy } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useVisibleRefresh } from "@/features/arena/client/use-visible-refresh";
 
 import { ArenaApiError, arenaApi } from "@/features/arena/client/api";
 import type { Game, Lobby } from "@/features/arena/client/types";
@@ -18,13 +19,38 @@ export function ArenaHub() {
   const [lobby, setLobby] = useState<Lobby | null>(null);
   const [signedOut, setSignedOut] = useState(false);
   const [failed, setFailed] = useState(false);
+  const [forbidden, setForbidden] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const mounted = useRef(false);
+  const inFlight = useRef(false);
+  const load = useCallback(async () => {
+    if (inFlight.current) return;
+    inFlight.current = true;
+    setRefreshing(true);
+    try {
+      const next = await arenaApi.lobby();
+      if (!mounted.current) return;
+      setLobby(next);
+      setSignedOut(false);
+      setForbidden(false);
+      setFailed(false);
+    } catch (error) {
+      if (!mounted.current) return;
+      if (error instanceof ArenaApiError && error.status === 401) setSignedOut(true);
+      else if (error instanceof ArenaApiError && error.status === 403) setForbidden(true);
+      else setFailed(true);
+    } finally {
+      inFlight.current = false;
+      if (mounted.current) setRefreshing(false);
+    }
+  }, []);
 
   useEffect(() => {
-    arenaApi.lobby().then(setLobby).catch((error) => {
-      if (error instanceof ArenaApiError && error.status === 401) setSignedOut(true);
-      else setFailed(true);
-    });
-  }, []);
+    mounted.current = true;
+    const first = window.setTimeout(() => void load(), 0);
+    return () => { mounted.current = false; window.clearTimeout(first); };
+  }, [load]);
+  useVisibleRefresh(load, !signedOut && !forbidden);
 
   const comp = lobby?.competition ?? null;
   return (
@@ -32,6 +58,8 @@ export function ArenaHub() {
       <section className="hub__status" aria-live="polite">
         {signedOut ? (
           <p>Đăng nhập bằng mã số sinh viên để vào thi. <Link className="hub__link" href="/dang-nhap"><LogIn aria-hidden size={16} /> Đăng nhập</Link></p>
+        ) : forbidden ? (
+          <p>Tài khoản này không có quyền chơi lượt sinh viên. <Link href="/quan-tri/cuoc-thi">Vào quản trị</Link> hoặc đăng xuất để dùng tài khoản sinh viên.</p>
         ) : failed ? (
           <p>Không tải được trạng thái cuộc thi. Hãy tải lại trang.</p>
         ) : !lobby ? (
@@ -42,8 +70,9 @@ export function ArenaHub() {
             {comp.state === "open" ? `nhận lượt mới tới ${new Date(comp.startDeadlineAt).toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" })}` : "đã đóng nhận lượt mới"}
           </p>
         ) : (
-          <p>Chưa có cuộc thi đang mở. Bạn vẫn có thể chơi luyện tập.</p>
+          <p>Đang chờ giảng viên mở cuộc thi. Trang tự cập nhật sau tối đa 10 giây khi đang hiển thị.</p>
         )}
+        {!signedOut && !forbidden ? <button className="hub__refresh" type="button" disabled={refreshing} onClick={() => void load()}>{refreshing ? "Đang kiểm tra…" : "Kiểm tra lại"}</button> : null}
       </section>
       <div className="hub__games">
         {(Object.keys(GAMES) as Game[]).map((game) => {

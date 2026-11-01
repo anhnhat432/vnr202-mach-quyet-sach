@@ -11,6 +11,7 @@ export function SiteFooter() {
         <nav aria-label="Thông tin học thuật">
           <Link href="/phong-phuong-phap">Phòng Phương Pháp</Link>
           <Link href="/nguon-va-ai">Nguồn &amp; AI</Link>
+          <Link href="/quan-tri/dang-nhap">Đăng nhập quản trị</Link>
         </nav>
         <p className="site-footer__note">Một trải nghiệm học lịch sử qua dữ kiện, quyết định và hệ quả.</p>
       </div>

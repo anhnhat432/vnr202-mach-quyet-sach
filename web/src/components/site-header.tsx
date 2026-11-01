@@ -42,6 +42,7 @@ export function SiteHeader() {
           <Link className="arena-link" href="/live-arena" onClick={() => setOpen(false)}>
             Live Arena <span aria-hidden="true">↗</span>
           </Link>
+          <Link href="/quan-tri/cuoc-thi" onClick={() => setOpen(false)}>Quản trị</Link>
         </nav>
       </div>
     </header>

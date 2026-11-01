@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import { ArenaApiError, arenaApi, newKey } from "@/features/arena/client/api";
 import type { CellResult, Game, Lobby, PlayerStanding, Projection, QuestionContent, ResolveResult } from "@/features/arena/client/types";
+import { useVisibleRefresh } from "@/features/arena/client/use-visible-refresh";
 
 // One attempt, driven entirely by server projections. The client only:
 //   - asks for question content when the server says a question exists (never before, never ahead),
@@ -40,6 +41,8 @@ export function useArenaGame(game: Game) {
   const fetchingRef = useRef<string | null>(null);
   const answerKeys = useRef(new Map<string, string>());
   const startKey = useRef<string | null>(null);
+  const lobbyCompetition = useRef<string | null>(null);
+  const loadingLobby = useRef(false);
   const mounted = useRef(true);
   const phaseRef = useRef<Phase>("loading");
   useEffect(() => {
@@ -110,10 +113,16 @@ export function useArenaGame(game: Game) {
   }, [applyProjection, handleError]);
 
   // ---- initial load: lobby, then the attempt for this game if it exists --------------------------
-  const load = useCallback(async () => {
+  const load = useCallback(async (waitingOnly = false) => {
+    if (loadingLobby.current) return;
+    loadingLobby.current = true;
+    const staleWaitingRead = () => waitingOnly && (attemptRef.current !== null || !["no_competition", "intro", "error"].includes(phaseRef.current));
     try {
       const l = await arenaApi.lobby();
-      if (!mounted.current) return;
+      if (!mounted.current || staleWaitingRead()) return;
+      const nextCompetition = l.competition?.publicId ?? null;
+      if (lobbyCompetition.current !== nextCompetition) startKey.current = null;
+      lobbyCompetition.current = nextCompetition;
       setLobby(l);
       if (!l.competition) return setPhase("no_competition");
       const mine = l.games.find((g) => g.game === game);
@@ -126,8 +135,11 @@ export function useArenaGame(game: Game) {
         if (handleError(error, mine.attemptId) === "other") setPhase("error");
       }
     } catch (error) {
+      if (!mounted.current || staleWaitingRead()) return;
       if (error instanceof ArenaApiError && error.status === 401) return setPhase("signed_out");
       setPhase("error");
+    } finally {
+      loadingLobby.current = false;
     }
   }, [applyProjection, game, handleError, loadStanding]);
 
@@ -135,6 +147,9 @@ export function useArenaGame(game: Game) {
     const timer = window.setTimeout(() => void load(), 0);
     return () => window.clearTimeout(timer);
   }, [load]);
+
+  const refreshWaiting = useCallback(() => load(true), [load]);
+  useVisibleRefresh(refreshWaiting, phase === "no_competition" || phase === "intro" || phase === "error");
 
   // ---- start / take control ----------------------------------------------------------------------
   const start = useCallback(async () => {
@@ -370,6 +385,7 @@ export function useArenaGame(game: Game) {
     phase, lobby, projection, question, questionEndsAt, attemptEndsAt, feedback, connection, standing, notice, busy, answering,
     start, takeControl, answer, openCell, refresh, clearNotice: () => setNotice(null),
     reload: () => {
+      if (loadingLobby.current) return;
       setPhase("loading");
       void load();
     },

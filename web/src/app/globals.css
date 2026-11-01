@@ -171,6 +171,16 @@ a {
   text-transform: uppercase;
 }
 
+.account-bar, .admin-navigation { width: min(calc(100% - 2rem), var(--content-max)); margin: 0.65rem auto; display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem 1rem; font-size: 0.85rem; overflow-wrap: anywhere; }
+.account-bar a, .account-bar button, .admin-navigation a, .hub__refresh { padding: 0.45rem 0.7rem; border: 1px solid var(--line); border-radius: 8px; color: var(--ink); background: var(--paper-light); font: inherit; cursor: pointer; }
+.account-bar button:disabled, .hub__refresh:disabled { opacity: 0.6; cursor: wait; }
+.account-bar__confirm { flex-basis: 100%; padding: 0.7rem; border: 1px solid var(--line); border-radius: 8px; background: var(--paper-light); }
+.account-bar__confirm p { margin: 0 0 0.5rem; }
+.account-bar__confirm button { margin-right: 0.5rem; }
+.account-bar [role="alert"] { flex-basis: 100%; margin: 0; color: var(--command-red); }
+.admin-navigation a[aria-current="page"] { border-color: var(--command-red); color: var(--command-red); font-weight: 700; }
+.hub__refresh { margin-top: 0.5rem; }
+
 main {
   min-height: 70vh;
 }
@@ -222,7 +232,7 @@ main {
   font-weight: 600;
 }
 
-@media (max-width: 860px) {
+@media (max-width: 1120px) {
   .nav-toggle {
     display: inline-flex;
   }
@@ -250,6 +260,9 @@ main {
     padding: 0.9rem 0.5rem;
   }
 
+}
+
+@media (max-width: 860px) {
   .site-footer__inner {
     grid-template-columns: 1fr;
     gap: 1rem;

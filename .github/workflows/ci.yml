@@ -108,6 +108,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: student-name-e2e
-          path: web/test-results/**/student-name-*.png
+          path: |
+            web/test-results/**/student-name-*.png
+            web/test-results/**/classroom-*.png
           if-no-files-found: ignore
           retention-days: 3

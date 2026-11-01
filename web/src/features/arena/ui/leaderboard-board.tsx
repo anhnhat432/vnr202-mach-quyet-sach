@@ -22,6 +22,7 @@ export function LeaderboardBoard(props: {
   online: boolean;
   now: number;
   size?: "page" | "projector";
+  waiting?: boolean;
 }) {
   const { game, board, changes, now } = props;
   const reduce = useReducedMotion();
@@ -32,7 +33,7 @@ export function LeaderboardBoard(props: {
         <div>
           <h2 id={`lb-${game}`}>{GAME_TITLE[game]}</h2>
           <p>
-            {board ? <>{board.players} người chơi · {board.completed} đã xong</> : "Đang tải…"}
+            {board ? <>{board.players} người chơi · {board.completed} đã xong</> : props.waiting ? "Đang chờ giảng viên mở cuộc thi." : "Đang tải…"}
           </p>
         </div>
         <div className="ax-lb__meta">

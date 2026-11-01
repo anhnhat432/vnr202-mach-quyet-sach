@@ -2,7 +2,8 @@
 
 import { Crown, Maximize2, TrendingUp } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useVisibleRefresh } from "@/features/arena/client/use-visible-refresh";
 
 import { currentCompetition, type CurrentCompetition } from "@/features/arena/client/api";
 import type { Game } from "@/features/arena/client/types";
@@ -13,17 +14,26 @@ import { GAME_TITLE, LeaderboardBoard } from "@/features/arena/ui/leaderboard-bo
 
 function useCurrentCompetition() {
   const [comp, setComp] = useState<CurrentCompetition | undefined>(undefined);
-  useEffect(() => {
-    let alive = true;
-    const load = () => currentCompetition().then((c) => alive && setComp(c)).catch(() => alive && setComp((v) => v ?? null));
-    const first = window.setTimeout(load, 0);
-    const timer = window.setInterval(load, 30000); // picks up a competition that opens or finalizes later
-    return () => {
-      alive = false;
-      window.clearTimeout(first);
-      window.clearInterval(timer);
-    };
+  const mounted = useRef(false);
+  const pending = useRef(false);
+  const load = useCallback(async () => {
+    if (pending.current) return;
+    pending.current = true;
+    try {
+      const next = await currentCompetition();
+      if (mounted.current) setComp(next);
+    } catch { /* retain the last verified state and retry on the next visible refresh */ }
+    finally { pending.current = false; }
   }, []);
+  useVisibleRefresh(load, true);
+  useEffect(() => {
+    mounted.current = true;
+    const first = window.setTimeout(() => void load(), 0);
+    return () => {
+      mounted.current = false;
+      window.clearTimeout(first);
+    };
+  }, [load]);
   return comp;
 }
 
@@ -111,8 +121,8 @@ export function ProjectorBoards() {
         </div>
       </header>
       <div className="ax-proj__boards">
-        {zoom !== "race" ? <LeaderboardBoard game="minefield" {...mine} now={now} size="projector" /> : null}
-        {zoom !== "minefield" ? <LeaderboardBoard game="race" {...race} now={now} size="projector" /> : null}
+        {zoom !== "race" ? <LeaderboardBoard game="minefield" {...mine} now={now} size="projector" waiting={comp === null} /> : null}
+        {zoom !== "minefield" ? <LeaderboardBoard game="race" {...race} now={now} size="projector" waiting={comp === null} /> : null}
       </div>
       <div className="ax-proj__toasts" aria-live="polite">
         <AnimatePresence>

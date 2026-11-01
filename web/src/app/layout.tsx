@@ -4,6 +4,8 @@ import type { ReactNode } from "react";
 
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { AccountBar } from "@/components/account-bar";
+import { isAuthConfigured } from "@/lib/config/server-env";
 
 import "./globals.css";
 
@@ -35,6 +37,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
           Bỏ qua điều hướng
         </a>
         <SiteHeader />
+        <AccountBar enabled={isAuthConfigured()} />
         <main id="main-content">{children}</main>
         <SiteFooter />
       </body>
