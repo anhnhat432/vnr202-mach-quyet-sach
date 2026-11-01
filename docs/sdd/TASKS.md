@@ -111,6 +111,8 @@ Re-scope snapshot (2026-10-29, revision 2): stage A approved by the owner subjec
 
 ## Phase 6 - Hardening and public deployment
 
+- [x] `T121` Temporarily hide public study entry points at owner request: Hồ sơ, Mạch nguyên nhân, Bằng chứng and Phương pháp, including desktop/mobile menu, homepage cards/chapter shortcuts and footer. Shared presentation flag; routes/content/progress remain unchanged. CLASS-017; plan/evidence: `plans/2026-11-01-hide-public-study-navigation.md`. Local 198 units and six production-browser cases pass; no deployment/merge.
+
 - [-] `T120` Investigate the latest 70-player Auth failure from raw artifacts/server logs, reproduce before fixing, distinguish harness versus product failures and verify corrected CI. No retry-only closure, official Open, academic action, Production deploy or merge. Plan: `plans/2026-11-01-classroom-safety-audit.md`; evidence: `evidence/classroom-safety-audit-2026-11-01.md`.
 
 - [x] `T119` Classroom navigation and session usability: administrator entry/tabs, automatic waiting-state refresh, explicit projector waiting state, private account indicator and CSRF-protected logout. Owner approved 2026-11-01. Spec: `specs/classroom-navigation-session.md`; plan: `plans/2026-11-01-classroom-navigation-session.md`; evidence: `evidence/classroom-navigation-session-2026-11-01.md`. Full code CI 41268379408 passes; deployed d5880a5 verified. Official event remains unopened; academic governance preserved.

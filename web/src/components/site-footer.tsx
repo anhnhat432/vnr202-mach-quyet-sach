@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SHOW_PUBLIC_STUDY_SECTIONS } from "@/lib/config/public-experience";
 
 export function SiteFooter() {
   return (
@@ -9,7 +10,7 @@ export function SiteFooter() {
           <span>FPT University</span>
         </p>
         <nav aria-label="Thông tin học thuật">
-          <Link href="/phong-phuong-phap">Phòng Phương Pháp</Link>
+          {SHOW_PUBLIC_STUDY_SECTIONS && <Link href="/phong-phuong-phap">Phòng Phương Pháp</Link>}
           <Link href="/nguon-va-ai">Nguồn &amp; AI</Link>
           <Link href="/quan-tri/dang-nhap">Đăng nhập quản trị</Link>
         </nav>
