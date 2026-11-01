@@ -54,6 +54,7 @@ const rand = (a, b) => a + Math.random() * (b - a);
 const samples = {};
 const errors = {};
 const expectedRejections = {};
+const requestFailures = [];
 const expectedRejection = (name) => (expectedRejections[name] = (expectedRejections[name] ?? 0) + 1);
 const note = (name, ms) => (samples[name] ??= []).push(ms);
 const fail = (name) => (errors[name] = (errors[name] ?? 0) + 1);
@@ -86,6 +87,9 @@ class Session {
       else this.jar.set(name, value);
     }
     const json = await res.json().catch(() => ({}));
+    if (res.status >= 400 && res.status !== 425 && requestFailures.length < 24) {
+      requestFailures.push({ at: new Date().toISOString(), method, route: path.replace(/[0-9a-f-]{36}/gi, "[id]"), status: res.status, code: json.error?.code, cookieCount: this.jar.size, cookieBytes: [...this.jar].reduce((n, [k, v]) => n + k.length + v.length, 0) });
+    }
     return { status: res.status, ms: now() - t, data: json.data, error: json.error };
   }
   async signIn(studentId) {
@@ -448,6 +452,7 @@ for (const ev of scores) {
 }
 const inv = await invariants(world.competitionId);
 const report = {
+  requestFailures,
   authentication: { paced: PACED_LOGIN, batchSize: PACED_LOGIN ? 20 : null, pauseMs: PACED_LOGIN ? 30000 : null, prepared: preparedSessions.size, preparationMs: loginPreparationMs },
   run, players: PLAYERS, realtimeQuotas: (await pool.query("select max_concurrent_users, max_events_per_second, max_joins_per_second from _realtime.tenants limit 1").catch(() => ({ rows: [] }))).rows[0] ?? null, viewers: VIEWERS + 1, playSeconds: Math.round(playMs / 1000),
   latencyMs: Object.fromEntries(["sign_in", "start", "cell_open", "content_minefield", "content_race_longpoll", "content_after_release", "content_refetch", "submit", "heartbeat", "transfer", "board_read"].map((k) => [k, { n: samples[k]?.length ?? 0, p50: pct(samples[k], 50), p95: pct(samples[k], 95), p99: pct(samples[k], 99), max: pct(samples[k], 100) }])),

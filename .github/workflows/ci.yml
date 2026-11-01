@@ -92,7 +92,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: classroom-load-70
-          path: ${{ runner.temp }}/classroom-load-70.json
+          path: |
+            ${{ runner.temp }}/classroom-load-70.json
+            ${{ runner.temp }}/classroom-load-server.log
           if-no-files-found: ignore
           retention-days: 7
       - name: Grouped question review browser evidence

@@ -25,6 +25,12 @@ export async function requireActor(): Promise<{ actor: Actor; supabase: Awaited<
   const { data, error } = await supabase.auth.getUser(); // validated by Auth server, not just decoded
   const role = data.user?.app_metadata?.role;
   if (error || !data.user || (role !== "student" && role !== "admin")) {
+    // Operational diagnosis only: never log provider messages, tokens or user identity.
+    console.warn("auth verification rejected", {
+      status: typeof error?.status === "number" ? error.status : null,
+      code: error?.code && /^[a-z_]{1,64}$/.test(error.code) ? error.code : null,
+      kind: error ? "provider_error" : data.user ? "invalid_role" : "missing_user",
+    });
     throw new ApiError(401, "unauthenticated", "Bạn cần đăng nhập.");
   }
   return { actor: { userId: data.user.id, role }, supabase };
