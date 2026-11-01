@@ -3,7 +3,7 @@ export function isSettledContentRejection(response, projection, allocationId) {
   if (response.status !== 409 || !["interaction_expired", "interaction_not_open"].includes(response.error?.code)) return false;
   if (["completed", "timed_out"].includes(projection?.attempt?.state)) return true;
   if (projection?.attempt?.state !== "active") return false;
-  return !projection.interaction || projection.interaction.allocationId !== allocationId || projection.interaction.remainingMs === 0;
+  return !projection.interaction || projection.interaction.allocationId !== allocationId || projection.interaction.status === "expired" || projection.interaction.remainingMs === 0;
 }
 
 export function isTransferredHeartbeatRejection(response, transferred) {

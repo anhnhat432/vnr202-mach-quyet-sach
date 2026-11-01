@@ -27,6 +27,15 @@ test('only the deliberately transferred old session may have a stale heartbeat',
  assert.equal(isTransferredHeartbeatRejection({status:409,error:{code:'unexpected'}},true),false);
 });
 
+test('recognizes the authoritative expired projection during reconcile grace without a remainingMs field',()=>{
+ const rejection={status:409,error:{code:'interaction_expired'}};
+ const expired={attempt:{state:'active'},interaction:{allocationId:'a',status:'expired'}};
+ assert.equal(isSettledContentRejection(rejection,expired,'a'),true);
+ assert.equal(isSettledContentRejection(rejection,{...expired,interaction:{allocationId:'a',status:'released',remainingMs:1}},'a'),false);
+ assert.equal(isSettledContentRejection({status:503,error:{code:'interaction_expired'}},expired,'a'),false);
+ assert.equal(isSettledContentRejection({status:409,error:{code:'unexpected'}},expired,'a'),false);
+});
+
 test('duplicate HTTP failures remain failures without a fabricated score mismatch or undefined projection',()=>{
  const denied={status:401,error:{code:'unauthenticated'}};
  assert.deepEqual(assessDuplicateReplies(denied,denied),{problem:'duplicate_http_401_unauthenticated',projection:null});
