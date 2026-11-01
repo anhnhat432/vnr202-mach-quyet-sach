@@ -46,6 +46,8 @@ test("IDs-only import leads to an authenticated, write-once, privacy-safe first-
   const draft = (await preview.json()).data;
   importId = draft.importId;
   expect(draft.rows[0]).toMatchObject({ requiresDisplayName: true, status: "valid" });
+  await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(info.project.use.viewport!.width);
+  await page.screenshot({ path: info.outputPath("student-name-roster-preview.png") });
   if (!existing.data) createdClass = (await admin.from("classes").select("id").eq("code", classCode).single()).data!.id;
   const appliedResponse = page.waitForResponse(response => response.url().endsWith(`/api/v1/admin/roster-imports/${importId}/apply`));
   await page.getByRole("button", { name: "Tạo 1 tài khoản", exact: true }).click();

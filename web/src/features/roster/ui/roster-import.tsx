@@ -69,30 +69,32 @@ export function RosterImport() {
           <p>
             {preview.rows.length} hàng · hợp lệ {preview.validCount} · cảnh báo {preview.warningCount} · lỗi {preview.errorCount}. Chưa có tài khoản nào được tạo.
           </p>
-          <table>
-            <thead><tr><th>Hàng</th><th>MSSV</th><th>Họ tên</th><th>Tên hiển thị</th><th>Trạng thái</th></tr></thead>
-            <tbody>
-              {preview.rows.map((row) => (
-                <tr key={row.rowNumber} data-status={row.status}>
-                  <td>{row.rowNumber}</td>
-                  <td>{row.studentId}</td>
-                  <td>{row.fullName}</td>
-                  <td>
-                    {row.status === "error" ? row.displayName : (
-                      <input aria-label={`Tên hiển thị hàng ${row.rowNumber}`} maxLength={40} value={overrides[row.rowNumber] ?? row.displayName} onChange={(e) => setOverrides({ ...overrides, [row.rowNumber]: e.target.value })} />
-                    )}
-                    {row.displayNameSuffix ? ` (${row.displayNameSuffix})` : ""}
-                  </td>
-                  <td>
-                    {row.status === "valid" ? "Hợp lệ" : row.issues.map((i) => ISSUE_LABEL[i] ?? i).join("; ")}
-                    {row.status === "warning" ? (
-                      <label><input type="checkbox" checked={confirmed.has(row.rowNumber)} onChange={(e) => { const next = new Set(confirmed); if (e.target.checked) next.add(row.rowNumber); else next.delete(row.rowNumber); setConfirmed(next); }} /> Xác nhận</label>
-                    ) : null}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div className="roster-import__table" role="region" aria-label="Chi tiết danh sách xem trước" tabIndex={0}>
+            <table>
+              <thead><tr><th>Hàng</th><th>MSSV</th><th>Họ tên</th><th>Tên hiển thị</th><th>Trạng thái</th></tr></thead>
+              <tbody>
+                {preview.rows.map((row) => (
+                  <tr key={row.rowNumber} data-status={row.status}>
+                    <td>{row.rowNumber}</td>
+                    <td>{row.studentId}</td>
+                    <td>{row.fullName}</td>
+                    <td>
+                      {row.status === "error" ? row.displayName : (
+                        <input aria-label={`Tên hiển thị hàng ${row.rowNumber}`} maxLength={40} value={overrides[row.rowNumber] ?? row.displayName} onChange={(e) => setOverrides({ ...overrides, [row.rowNumber]: e.target.value })} />
+                      )}
+                      {row.displayNameSuffix ? ` (${row.displayNameSuffix})` : ""}
+                    </td>
+                    <td>
+                      {row.status === "valid" ? "Hợp lệ" : row.issues.map((i) => ISSUE_LABEL[i] ?? i).join("; ")}
+                      {row.status === "warning" ? (
+                        <label><input type="checkbox" checked={confirmed.has(row.rowNumber)} onChange={(e) => { const next = new Set(confirmed); if (e.target.checked) next.add(row.rowNumber); else next.delete(row.rowNumber); setConfirmed(next); }} /> Xác nhận</label>
+                      ) : null}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
           <button type="button" onClick={apply} disabled={busy || pendingWarnings > 0 || preview.validCount + confirmed.size === 0}>
             Tạo {preview.validCount + confirmed.size} tài khoản
           </button>
