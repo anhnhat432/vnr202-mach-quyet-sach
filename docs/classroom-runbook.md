@@ -8,14 +8,15 @@ Sảnh chơi: https://vnr202-preview.vercel.app/live-arena
 
 ## Sinh viên
 
-1. Đăng nhập bằng MSSV và mật khẩu người tổ chức cung cấp. Không đăng nhập hộ bạn khác.
+1. Bấm **Đăng nhập sinh viên**, dùng MSSV và mật khẩu người tổ chức cung cấp. Không đăng nhập hộ bạn khác.
 2. Lần đầu, nhập tên bạn muốn dùng trong lớp rồi xác nhận. Nếu nhập họ tên đầy đủ, bảng xếp hạng dùng tên viết tắt; không nhập MSSV vào tên.
 3. Chọn trò chơi và bấm Bắt đầu khi cuộc thi đã mở. Mỗi người có một lượt cho mỗi trò trong cùng cuộc thi, chỉ chơi một trò tại một thời điểm.
 4. Nếu mất mạng hoặc đổi máy, đăng nhập lại để tiếp tục đúng lượt đang chơi. Đồng hồ vẫn chạy. Không tạo tài khoản khác hay gửi đáp án liên tục khi mạng lỗi.
+5. Sảnh và màn hình chờ tự kiểm tra khi trang đang hiển thị, tối đa khoảng 10 giây sau thao tác mở; có thể bấm **Kiểm tra lại**. Trước khi chơi, xem tên tài khoản trên thanh phía trên. Dùng máy chung thì về sảnh, bấm **Đăng xuất**, đọc xác nhận rồi đăng nhập tài khoản khác; đăng xuất không dừng đồng hồ lượt đang chơi.
 
 ## Người tổ chức
 
-- Đăng nhập tài khoản quản trị tại `/quan-tri/dang-nhap`; mở `/quan-tri/cuoc-thi`.
+- Bấm **Quản trị** trên menu hoặc **Đăng nhập quản trị** ở thanh phía trên/chân trang. Sau đăng nhập, menu **Cuộc thi / Danh sách lớp / Ngân hàng câu hỏi** chuyển giữa các trang; không cần nhớ URL. Thanh tài khoản có nút **Đăng xuất**.
 - Chuẩn bị cuộc thi trước buổi học: chọn **Chính thức**, tạo bản nháp, kiểm tra sĩ số thực tế và ngân hàng, rồi **Kiểm tra & chuẩn bị cuộc thi**. Nếu có cảnh báo phân bổ lặp, đọc đánh giá trước khi xác nhận và ghi lý do. Chỉ câu đã được người có thẩm quyền duyệt/xuất bản mới được dùng.
 - Lên lớp, chọn cuộc thi đã chuẩn bị và bấm **Mở cuộc thi**. Mặc định nhận lượt mới trong 60 phút kể từ lần bấm này; có thể đổi số phút trước khi mở. Không cần đặt giờ buổi học trước.
 - Mở `/trinh-chieu` để chiếu hai bảng. Phím **1** phóng Bãi Mìn, **2** phóng Đường Đua, **0** trở lại hai bảng; cũng có các nút tương ứng. Link mở riêng từng bảng là `/trinh-chieu?game=minefield` và `/trinh-chieu?game=race`. Công khai chỉ có tên lớp học, Top 10 và tổng hợp.

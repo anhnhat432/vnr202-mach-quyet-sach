@@ -28,6 +28,7 @@ test("waiting lobby discovers opening, game allows manual refresh, and no attemp
   opened = true;
   await page.getByRole("button", { name: "Kiểm tra lại", exact: true }).click();
   await expect(page.getByRole("button", { name: /Bắt đầu/ })).toBeEnabled();
+  await expect(page.getByRole("link", { name: "Về sảnh", exact: true })).toBeVisible();
   expect(starts).toBe(0);
 });
 

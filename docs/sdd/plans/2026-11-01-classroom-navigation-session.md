@@ -17,7 +17,7 @@
 - [x] Add failing session-bar and server sign-out tests: only display name, cancel is read-only, successful 204 navigates, failed logout stays, provider errors return sanitized 503 without false sign-out audit. Observed old route return 204 on provider failure.
 - [x] Add `web/src/components/account-bar.tsx`, `web/src/features/admin/ui/admin-navigation.tsx`, admin layout and bounded responsive CSS. Wire existing `/me` and CSRF `/auth/sign-out`; header/footer links and root layout. Use auth-configured boolean only; never send server secrets to clients.
 - [x] Make the existing sign-out route validate returned/thrown provider errors before recording success and returning 204. Keep actor/CSRF checks, local scope and cookie deletion.
-- [x] Eleven focused tests and all 188 unit tests pass; lint, typecheck and production build pass.
+- [x] Thirteen focused tests and all 190 unit tests pass; lint, typecheck and production build pass. Additional red/green administrator-in-student-lobby test removes unusable student links. Fullscreen intro/error screens link back to the lobby; account controls remain on the shared shell, without changing gameplay/projector layout. Existing owner-profile and sign-out behavior is documented in API contracts/OpenAPI.
 
 ## 3. Acceptance and delivery (CLASS-011..016)
 

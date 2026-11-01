@@ -63,6 +63,7 @@ export function GameIntro({ game, lobby, busy, notice, onStart }: { game: Game; 
       <button type="button" className="ax-btn ax-btn--primary ax-btn--xl" onClick={onStart} disabled={busy || closed || Boolean(other)}>
         {closed ? "Đã đóng nhận lượt mới" : busy ? "Đang bắt đầu…" : "Bắt đầu lượt thi"}
       </button>
+      <Link className="ax-btn ax-btn--ghost" href="/live-arena">Về sảnh</Link>
     </CenterCard>
   );
 }
@@ -130,6 +131,7 @@ export function StatusScreen({ phase, onRetry }: { phase: "loading" | "signed_ou
       <h1 className="ax-title">Không tải được lượt thi</h1>
       <p className="ax-lead">Kiểm tra kết nối rồi thử lại. Lượt thi của bạn vẫn được giữ trên máy chủ.</p>
       <button type="button" className="ax-btn ax-btn--primary" onClick={onRetry}>Thử lại</button>
+      <Link className="ax-btn ax-btn--ghost" href="/live-arena">Về sảnh</Link>
     </CenterCard>
   );
 }

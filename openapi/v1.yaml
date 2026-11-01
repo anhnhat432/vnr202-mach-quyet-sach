@@ -12,6 +12,14 @@ servers:
 security:
   - supabaseSession: []
 paths:
+  /me:
+    get:
+      summary: No-store profile of the authenticated owner; account bar renders only classroom display name and role
+      responses: { "200": { $ref: "#/components/responses/Ok" }, "401": { $ref: "#/components/responses/Error" } }
+  /auth/sign-out:
+    post:
+      summary: CSRF-protected local-session sign-out; does not change attempts or clocks
+      responses: { "204": { description: "Provider sign-out succeeded, event recorded and form cookie cleared" }, "401": { $ref: "#/components/responses/Error" }, "403": { $ref: "#/components/responses/Error" }, "503": { description: "Sanitized provider failure; no successful sign-out event" } }
   /auth/csrf:
     post:
       summary: Restore the current authenticated actor's lost form token; same-origin only, no business writes

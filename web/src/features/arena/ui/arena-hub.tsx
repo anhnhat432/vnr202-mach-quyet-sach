@@ -85,15 +85,15 @@ export function ArenaHub() {
               <span className="hub__tag">{meta.tag}</span>
               <h2>{meta.title}</h2>
               <p>{meta.body}</p>
-              <Link className="hub__cta" href={meta.href}>{signedOut ? "Xem luật chơi" : label} →</Link>
+              {forbidden ? <p>Đăng nhập tài khoản sinh viên để chơi trò này.</p> : <Link className="hub__cta" href={meta.href}>{signedOut ? "Xem luật chơi" : label} →</Link>}
             </article>
           );
         })}
       </div>
       <div className="hub__links">
         <Link className="hub__link" href="/live-arena/bang-xep-hang"><Trophy aria-hidden size={16} /> Hai bảng xếp hạng trực tiếp</Link>
-        {signedOut ? null : <Link className="hub__link" href="/passport">Hồ sơ học tập</Link>}
-        {signedOut ? null : <Link className="hub__link" href="/live-arena/xem-lai">Xem lại lượt thi của bạn</Link>}
+        {signedOut || forbidden ? null : <Link className="hub__link" href="/passport">Hồ sơ học tập</Link>}
+        {signedOut || forbidden ? null : <Link className="hub__link" href="/live-arena/xem-lai">Xem lại lượt thi của bạn</Link>}
         <Link className="hub__link" href="/live-arena/dong-chay-lich-su">Luyện tập tự do: Dòng Chảy Lịch Sử (không tính điểm)</Link>
       </div>
     </div>

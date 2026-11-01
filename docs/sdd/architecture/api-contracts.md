@@ -71,7 +71,11 @@ Không được công bố trong V1 (`LA-ACC-004`). Nếu được mở lại �
 
 ### `POST /auth/sign-out`
 
-Response `204` và revoke cookie session hiện tại.
+Verified actor + same-origin CSRF. Response `204` only after provider local-session sign-out succeeds; clear the form cookie and record the sign-out event. Errors: `401` unauthenticated, `403 csrf_failed`, `503 service_unavailable` for returned/thrown provider failures (sanitized, no false success event). Logout does not pause, finish, reset or transfer an attempt. The client must not retry an unknown network outcome automatically.
+
+### `GET /me` (private account indicator)
+
+Verified session only, no-store. Existing owner-only profile response includes role, classroom displayName and first-name setup flag (along with the owner's private profile fields used by Passport). The shared account bar renders only role/displayName; no identity enters shared server HTML, public boards or browser storage. UI role hints do not replace server authorization.
 
 ## 4. Public experience
 
