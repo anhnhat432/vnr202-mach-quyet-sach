@@ -22,11 +22,12 @@ export function LoginForm() {
         body: JSON.stringify({ studentId, password }),
       });
       if (response.ok) {
-        router.push("/live-arena");
+        const payload = await response.json();
+        router.push(payload.data?.requiresDisplayName ? "/thiet-lap-ten" : "/live-arena");
         router.refresh();
         return;
       }
-      setMessage(response.status === 429 ? "Thử lại sau ít phút." : response.status === 423 ? "Tài khoản đang bị khóa. Hãy liên hệ giảng viên." : "Mã sinh viên hoặc mật khẩu không đúng.");
+      setMessage(response.status >= 500 ? "Đăng nhập tạm thời gián đoạn. Hãy thử lại sau ít phút." : response.status === 429 ? "Thử lại sau ít phút." : response.status === 423 ? "Tài khoản đang bị khóa. Hãy liên hệ giảng viên." : "Mã sinh viên hoặc mật khẩu không đúng.");
     } catch {
       setMessage("Không kết nối được. Kiểm tra mạng rồi thử lại.");
     } finally {

@@ -13,8 +13,14 @@ test("homepage identifies the product and has no serious axe violations", async 
   await expect(page.getByRole("link", { name: "VNR202 Mạch Quyết Sách - Trang chủ" })).toBeVisible();
   await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
   await expect(page.getByRole("heading", { level: 1 })).not.toBeEmpty();
+  await expect(page.locator('a[href="/ho-so"], a[href^="/ho-so#"], a[href="/mach-nguyen-nhan"], a[href="/ma-tran-bang-chung"], a[href="/phong-phuong-phap"]')).toHaveCount(0);
+  const menu = page.getByRole("button", { name: /Điều hướng chính/ });
+  if (await menu.isVisible()) await menu.click();
+  await expect(page.getByRole("navigation", { name: "Điều hướng chính", exact: true }).getByRole("link", { name: /Live Arena/ })).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "Điều hướng chính", exact: true }).getByRole("link", { name: "Quản trị", exact: true })).toBeVisible();
   const results = await new AxeBuilder({ page }).analyze();
   expect(results.violations.filter((item) => ["serious", "critical"].includes(item.impact ?? ""))).toEqual([]);
+  await page.screenshot({ path: test.info().outputPath("classroom-study-hidden.png"), fullPage: true });
 });
 
 test("homepage sends the public-preview browser security policy", async ({ page }) => {

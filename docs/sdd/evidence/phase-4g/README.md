@@ -1,5 +1,7 @@
 # Phase 4G evidence — automated rehearsal, load, realtime, accessibility
 
+**Current-state qualification (2026-11-01):** the measurements below are historical local Stage G runs, not a current hosted/classroom certification. Latest fb5b1c3 CI 41282363741 has 50 browser passes but its 70-player load fails with 322 authentication errors and 33 Active attempts. Earlier d5880a5 CI passed with identical application code. Read `../classroom-safety-audit-2026-11-01.md` for the comparison, diagnosis and content/environment boundaries. Keep failed evidence; a rerun alone does not establish a fix. Stage G's classroom/hosted gates remain open.
+
 Rehearsal competitions and synthetic `[GIẢ LẬP]` questions only. No Draft question is treated as
 official; official competitions stay blocked by readiness until enough Published, academically
 reviewed questions exist. **P2/P7 are not claimed**: everything below ran on one 4-core sandbox, not on

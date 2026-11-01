@@ -28,7 +28,7 @@ export const POST = route(async (request) => {
     throw new ApiError(401, "invalid_credentials", "Mã sinh viên hoặc mật khẩu không đúng.");
   }
   const csrfToken = issueCsrfToken(env.CSRF_SIGNING_SECRET, result.userId);
-  const response = NextResponse.json({ data: { displayName: result.displayName, role: result.role, csrfToken }, meta: { requestId: requestIdFrom(request) } });
+  const response = NextResponse.json({ data: { displayName: result.displayName, role: result.role, requiresDisplayName: result.requiresDisplayName ?? false, csrfToken }, meta: { requestId: requestIdFrom(request) } });
   response.cookies.set(CSRF_COOKIE, csrfToken, { httpOnly: false, sameSite: "lax", secure: process.env.NODE_ENV === "production", path: "/" });
   return response;
 });

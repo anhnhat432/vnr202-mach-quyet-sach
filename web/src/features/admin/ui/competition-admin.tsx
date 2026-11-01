@@ -16,9 +16,9 @@ type Disclosed = { kind: string; competitionState: string; questions: Array<{ ve
 type IncidentAction = "note" | "void_attempt" | "revoke_sessions" | "lock_account" | "unlock_account";
 type Readiness = { ready: boolean; blockers: string[]; classSize: number | null; target: { meetsTarget: boolean; expectedAttempts: number; maxPerQuestion: number }; games: Record<string, { slots: Array<{ pool: string; difficulty: string; needed: number; available: number; expectedAllocationsPerQuestion: number | null }> }> };
 
-const STATE_LABEL: Record<string, string> = { draft: "Nháp", scheduled: "Đã lên lịch", open: "Đang mở", start_closed: "Đóng nhận lượt", settling: "Chốt kết quả", finalized: "Đã kết thúc", archived: "Lưu trữ" };
+const STATE_LABEL: Record<string, string> = { draft: "Nháp", scheduled: "Đã chuẩn bị", open: "Đang mở", start_closed: "Đóng nhận lượt", settling: "Chốt kết quả", finalized: "Đã kết thúc", archived: "Lưu trữ" };
 const NEXT_ACTIONS: Record<string, Array<{ target: string; label: string }>> = {
-  draft: [{ target: "scheduled", label: "Kiểm tra & lên lịch (chụp ngân hàng câu)" }],
+  draft: [{ target: "scheduled", label: "Kiểm tra & chuẩn bị cuộc thi" }],
   scheduled: [{ target: "open", label: "Mở cuộc thi" }],
   open: [{ target: "start_closed", label: "Đóng nhận lượt mới" }],
   start_closed: [{ target: "settling", label: "Chuyển sang chốt kết quả" }],
@@ -58,6 +58,7 @@ export function CompetitionAdmin() {
   const [incidentFor, setIncidentFor] = useState<string | null>(null);
   const [auditTick, setAuditTick] = useState(0);
   const [expectedAttempts, setExpectedAttempts] = useState(60);
+  const [openMinutes, setOpenMinutes] = useState(60);
   const [acknowledgeRisk, setAcknowledgeRisk] = useState(false);
   const [bankReason, setBankReason] = useState("");
 
@@ -115,6 +116,7 @@ export function CompetitionAdmin() {
         key: newKey("create"),
       });
       setSelected(c.id);
+      setOpenMinutes(form.minutes);
       await load();
       setMessage(form.kind === "official" ? "Đã tạo cuộc thi chính thức (Nháp)." : "Đã tạo cuộc thi diễn tập (Nháp).");
     } catch (e) {
@@ -133,7 +135,7 @@ export function CompetitionAdmin() {
       if (target === "finalize") await request("POST", `/admin/competitions/${current.id}/finalize`);
       else {
         const belowTarget = current.kind === "official" && target === "scheduled" && readiness && !readiness.target.meetsTarget;
-        await request("POST", `/admin/competitions/${current.id}/transitions`, { body: { target, ...(target === "scheduled" ? { expectedAttempts } : {}), ...(belowTarget ? { bankAcknowledgement: { expectedAttempts, confirmed: acknowledgeRisk, reason: bankReason } } : {}) } });
+        await request("POST", `/admin/competitions/${current.id}/transitions`, { body: { target, ...(target === "open" ? { startWindowMinutes: openMinutes } : {}), ...(target === "scheduled" ? { expectedAttempts } : {}), ...(belowTarget ? { bankAcknowledgement: { expectedAttempts, confirmed: acknowledgeRisk, reason: bankReason } } : {}) } });
       }
       await load();
       setMessage(`Đã chuyển: ${STATE_LABEL[target === "finalize" ? "finalized" : target]}.`);
@@ -180,6 +182,7 @@ export function CompetitionAdmin() {
           <label>Loại cuộc thi<select value={form.kind} onChange={(e) => { const kind = e.target.value as "rehearsal" | "official"; setForm({ ...form, kind, name: form.name === "Diễn tập Live Arena" || form.name === "Cuộc thi Live Arena" ? (kind === "official" ? "Cuộc thi Live Arena" : "Diễn tập Live Arena") : form.name }); }}><option value="rehearsal">Diễn tập</option><option value="official">Chính thức</option></select></label>
           <label>Tên<input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} minLength={3} maxLength={120} required /></label>
           <label>Nhận lượt mới trong (phút)<input type="number" min={5} max={720} value={form.minutes} onChange={(e) => setForm({ ...form, minutes: Number(e.target.value) })} /></label>
+          <p className="adm__hint">Thời gian nhận lượt tính từ lúc bạn bấm Mở cuộc thi. Có thể tạo và chuẩn bị bản nháp trước buổi học.</p>
           <p className="adm__hint">Diễn tập dùng câu giả lập [GIẢ LẬP]; không bao giờ có nhãn Chính thức. Cuộc thi chính thức chỉ lên lịch được khi đủ câu Published do người duyệt học thuật duyệt.</p>
           <p className="adm__hint adm__warn" role="note"><ShieldAlert aria-hidden size={14} /> Mật khẩu mặc định chung <b>không bảo đảm danh tính</b>: ai biết MSSV có thể đăng nhập thay. Chỉ dùng cho thi đua lớp học giá trị thấp, không dùng để tính điểm học phần hay trao giải giá trị cao (LA-ACC-006).</p>
           <button type="submit" disabled={busy}>Tạo (Nháp)</button>
@@ -192,7 +195,7 @@ export function CompetitionAdmin() {
             <header className="adm__head">
               <div>
                 <h2>{current.name}</h2>
-                <p>{STATE_LABEL[current.state]} · nhãn bảng: <b>{STANDING_LABEL[current.standing]}</b> · nhận lượt tới {new Date(current.startDeadlineAt).toLocaleString("vi-VN")}</p>
+                <p>{STATE_LABEL[current.state]} · nhãn bảng: <b>{STANDING_LABEL[current.standing]}</b>{current.state === "draft" || current.state === "scheduled" ? " · chờ bạn bấm Mở cuộc thi" : ` · nhận lượt tới ${new Date(current.startDeadlineAt).toLocaleString("vi-VN")}`}</p>
               </div>
               <div className="adm__links">
                 <Link href="/trinh-chieu" target="_blank"><Trophy aria-hidden size={16} /> Trình chiếu <ExternalLink aria-hidden size={12} /></Link>
@@ -200,6 +203,7 @@ export function CompetitionAdmin() {
               </div>
             </header>
             {current.state === "draft" && current.kind === "official" ? <label>Sĩ số dự kiến <input type="number" min={1} max={500} value={expectedAttempts} onChange={(e) => { setExpectedAttempts(Number(e.target.value)); setAcknowledgeRisk(false); setReadiness(null); }} /></label> : null}
+            {current.state === "scheduled" ? <label>Nhận lượt mới sau khi mở (phút)<input type="number" min={1} max={1440} value={openMinutes} onChange={(e) => setOpenMinutes(Number(e.target.value))} /></label> : null}
             {readiness && current.state === "draft" ? <div className={`adm__ready ${readiness.ready ? "is-ok" : "is-bad"}`}>
               <p>{readiness.ready ? "Ngân hàng câu đủ điều kiện bắt buộc." : `Chưa đủ điều kiện: ${readiness.blockers.join(", ")}`}</p>
               {current.kind === "official" && readiness.classSize != null ? <p role={readiness.classSize !== readiness.target.expectedAttempts ? "alert" : undefined}>Danh sách lớp hiện có {readiness.classSize} sinh viên{readiness.classSize !== readiness.target.expectedAttempts ? `, khác sĩ số dự kiến ${readiness.target.expectedAttempts}. Hãy kiểm tra trước khi xác nhận.` : "."}</p> : null}

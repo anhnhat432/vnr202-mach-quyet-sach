@@ -7,13 +7,19 @@ import { assertCsrf, requireActor } from "@/lib/api/guard";
 import { route } from "@/lib/api/handler";
 import { getServerEnv, trustedProxyHops } from "@/lib/config/server-env";
 import { createServiceRoleClient } from "@/lib/supabase/service-role";
+import { ApiError } from "@/lib/api/errors";
 
 export const POST = route(async (request) => {
   const { actor, supabase } = await requireActor();
   await assertCsrf(request, actor.userId);
   const env = getServerEnv();
+  try {
+    const { error } = await supabase.auth.signOut({ scope: "local" });
+    if (error) throw error;
+  } catch {
+    throw new ApiError(503, "service_unavailable", "Đăng xuất tạm thời gián đoạn. Hãy thử lại.");
+  }
   await recordAuthEvent(createServiceRoleClient(env), env.AUTH_PASSWORD_PEPPER, "sign_out", { profileId: actor.userId, ip: clientIp(request, trustedProxyHops(env)) ?? undefined, device: deviceLabel(request) });
-  await supabase.auth.signOut({ scope: "local" });
   const response = new NextResponse(null, { status: 204 });
   response.cookies.delete(CSRF_COOKIE);
   return response;

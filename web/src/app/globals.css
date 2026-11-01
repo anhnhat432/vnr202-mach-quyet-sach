@@ -171,6 +171,16 @@ a {
   text-transform: uppercase;
 }
 
+.account-bar, .admin-navigation { width: min(calc(100% - 2rem), var(--content-max)); margin: 0.65rem auto; display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem 1rem; font-size: 0.85rem; overflow-wrap: anywhere; }
+.account-bar a, .account-bar button, .admin-navigation a, .hub__refresh { padding: 0.45rem 0.7rem; border: 1px solid var(--line); border-radius: 8px; color: var(--ink); background: var(--paper-light); font: inherit; cursor: pointer; }
+.account-bar button:disabled, .hub__refresh:disabled { opacity: 0.6; cursor: wait; }
+.account-bar__confirm { flex-basis: 100%; padding: 0.7rem; border: 1px solid var(--line); border-radius: 8px; background: var(--paper-light); }
+.account-bar__confirm p { margin: 0 0 0.5rem; }
+.account-bar__confirm button { margin-right: 0.5rem; }
+.account-bar [role="alert"] { flex-basis: 100%; margin: 0; color: var(--command-red); }
+.admin-navigation a[aria-current="page"] { border-color: var(--command-red); color: var(--command-red); font-weight: 700; }
+.hub__refresh { margin-top: 0.5rem; }
+
 main {
   min-height: 70vh;
 }
@@ -222,7 +232,7 @@ main {
   font-weight: 600;
 }
 
-@media (max-width: 860px) {
+@media (max-width: 1120px) {
   .nav-toggle {
     display: inline-flex;
   }
@@ -250,6 +260,9 @@ main {
     padding: 0.9rem 0.5rem;
   }
 
+}
+
+@media (max-width: 860px) {
   .site-footer__inner {
     grid-template-columns: 1fr;
     gap: 1rem;
@@ -808,7 +821,7 @@ main {
 
 .cold-more__grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
   gap: 0.9rem;
 }
 
@@ -4529,7 +4542,15 @@ main {
 
 
 .login-message { min-height: 1.5rem; margin: 0.75rem 0 0; color: var(--ink-soft); }
-.roster-import table { width: 100%; border-collapse: collapse; margin-block: 1rem; font-size: 0.95rem; }
+.roster-import { min-width: 0; }
+.roster-import form { display: grid; gap: 0.75rem; }
+.roster-import form > label { min-width: 0; margin-top: 0; }
+.roster-import form input:not([type="checkbox"]) { width: 100%; min-width: 0; max-width: 100%; }
+.roster-import form > .adm__check { display: flex; align-items: flex-start; font-weight: 400; }
+.roster-import .adm__check input { min-height: 1.1rem; }
+.roster-import form > button { justify-self: start; }
+.roster-import__table { max-width: 100%; overflow-x: auto; }
+.roster-import table { width: 100%; min-width: 36rem; border-collapse: collapse; margin-block: 1rem; font-size: 0.95rem; }
 .roster-import th, .roster-import td { border: 1px solid var(--ink); padding: 0.4rem 0.6rem; text-align: left; vertical-align: top; }
 .roster-import tr[data-status="error"] { background: rgba(177, 40, 46, 0.12); }
 .roster-import tr[data-status="warning"] { background: rgba(214, 146, 46, 0.18); }

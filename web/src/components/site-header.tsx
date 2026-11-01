@@ -3,14 +3,18 @@
 import Link from "next/link";
 import { useState } from "react";
 
+import { SHOW_PUBLIC_STUDY_SECTIONS } from "@/lib/config/public-experience";
+
 const navigation = [
   { href: "/ngan-can", label: "Ngàn cân", desc: "Lèo lái chính quyền non trẻ 1945–46 qua sáu khủng hoảng có thật" },
   { href: "/khoanh-khac", label: "Chơi nhanh", desc: "Chạm chọn một quyết định lịch sử — vui, nhẹ, không cần đăng nhập" },
   { href: "/gio-g", label: "Giờ G", desc: "Chế độ dẫn cả lớp cùng chơi trên máy chiếu" },
+  ...(SHOW_PUBLIC_STUDY_SECTIONS ? [
   { href: "/ho-so", label: "Hồ sơ", desc: "15 tình huống lịch sử để bạn ra quyết định" },
   { href: "/mach-nguyen-nhan", label: "Mạch nguyên nhân", desc: "Bản đồ quan hệ nhân – quả giữa các sự kiện" },
   { href: "/ma-tran-bang-chung", label: "Bằng chứng", desc: "Luận điểm nào được nguồn nào xác minh" },
   { href: "/phong-phuong-phap", label: "Phương pháp", desc: "Cách đọc và cách dùng trang này" },
+  ] : []),
 ] as const;
 
 export function SiteHeader() {
@@ -42,6 +46,7 @@ export function SiteHeader() {
           <Link className="arena-link" href="/live-arena" onClick={() => setOpen(false)}>
             Live Arena <span aria-hidden="true">↗</span>
           </Link>
+          <Link href="/quan-tri/cuoc-thi" onClick={() => setOpen(false)}>Quản trị</Link>
         </nav>
       </div>
     </header>

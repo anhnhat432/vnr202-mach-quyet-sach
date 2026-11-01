@@ -9,6 +9,23 @@ const n = (text: string): SheetCell => ({ text, kind: "number" });
 const none = { existingStudentIds: new Set<string>(), takenDisplayNames: new Map<string, number>() };
 
 describe("roster preview (LA-ACC-002, LA-AC-018, LA-AC-028)", () => {
+  it("accepts an IDs-only roster only when first-login naming is explicitly selected", () => {
+    const table = [[t("MSSV")], [t("TEST001")], [t("TEST002")]];
+    expect(() => buildRosterPreview(table, none)).toThrow(RosterHeaderError);
+    const preview = buildRosterPreview(table, { ...none, collectNamesOnSignIn: true });
+    expect(preview.validCount).toBe(2);
+    expect(preview.rows.map((row) => row.requiresDisplayName)).toEqual([true, true]);
+    expect(preview.rows[0].fullName).toBe("Chưa đặt tên");
+    expect(preview.rows[0].displayName).not.toContain("TEST001");
+  });
+
+  it("retains duplicate and numeric-cell checks with first-login naming", () => {
+    const preview = buildRosterPreview([[t("MSSV")], [t("TEST001")], [t("TEST001")], [n("0002")]], { ...none, collectNamesOnSignIn: true });
+    expect(preview.errorCount).toBe(2);
+    expect(preview.warningCount).toBe(1);
+    expect(preview.rows[2].requiresDisplayName).toBe(true);
+  });
+
   it("accepts Vietnamese header aliases, extra columns and a title row above the header", () => {
     const preview = buildRosterPreview(
       [[t("Danh sách lớp")], [t("STT"), t("Mã sinh viên"), t("HỌ VÀ TÊN"), t("Lớp")], [t("1"), t("he001"), t("Nguyễn Văn An"), t("SE1")]],

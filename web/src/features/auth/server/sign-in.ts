@@ -6,6 +6,7 @@ import { deriveProviderPassword, hashIdentifier } from "@/features/auth/domain/p
 import { normalizeStudentId } from "@/features/auth/domain/student-id";
 import { recordAuthEvent } from "@/features/auth/server/audit";
 import type { ServerEnv } from "@/lib/config/server-env";
+import { ApiError } from "@/lib/api/errors";
 
 // LA-ACC-003..009, LA-ACC-015: MSSV + shared default password, no password-change step.
 export const SIGN_IN_LIMITS = {
@@ -23,7 +24,7 @@ export type SignInDeps = {
 };
 
 export type SignInResult =
-  | { ok: true; userId: string; role: "student" | "admin"; displayName: string }
+  | { ok: true; userId: string; role: "student" | "admin"; displayName: string; requiresDisplayName?: boolean }
   | { ok: false; reason: "invalid_credentials" | "rate_limited" | "account_disabled" };
 
 async function rateLimited(admin: SupabaseClient, key: string, rule: { limit: number; windowSeconds: number }, consume: boolean) {
@@ -32,6 +33,13 @@ async function rateLimited(admin: SupabaseClient, key: string, rule: { limit: nu
     : await admin.rpc("rate_limit_exceeded", { p_key_hash: key, p_limit: rule.limit, p_window_seconds: rule.windowSeconds });
   if (error) throw new Error(`rate limit check failed: ${error.message}`);
   return consume ? data === false : data === true;
+}
+
+function classifyUpstreamAuthError(error: { status?: number; code?: string; name?: string } | null): "none" | "rate_limited" | "transient" | "credentials" {
+  if (!error) return "none";
+  if (error.status === 429 || error.code === "over_request_rate_limit") return "rate_limited";
+  if (error.name === "AuthRetryableFetchError" || (typeof error.status === "number" && error.status >= 500)) return "transient";
+  return "credentials";
 }
 
 export async function signInStudent(
@@ -49,7 +57,7 @@ export async function signInStudent(
 
   const { data: profile } = await admin
     .from("profiles")
-    .select("id, status, display_name, student_auth_identities(internal_email)")
+    .select("id, status, display_name, requires_display_name, student_auth_identities(internal_email)")
     .eq("role", "student")
     .eq("student_id", studentId)
     .maybeSingle();
@@ -61,6 +69,9 @@ export async function signInStudent(
   const providerPassword = deriveProviderPassword(env.AUTH_PASSWORD_PEPPER, studentId, input.password);
   const email = internalEmail ?? `${randomUUID()}@${env.INTERNAL_AUTH_EMAIL_DOMAIN}`;
   const { data, error } = await auth.auth.signInWithPassword({ email, password: providerPassword });
+  const authErrorKind = classifyUpstreamAuthError(error as { status?: number; code?: string; name?: string } | null);
+  if (authErrorKind === "rate_limited") return { ok: false, reason: "rate_limited" };
+  if (authErrorKind === "transient") throw new ApiError(503, "temporarily_unavailable", "Đăng nhập tạm thời gián đoạn. Hãy thử lại sau ít phút.");
 
   if (error || !data.user || !profile || !internalEmail) {
     await rateLimited(admin, studentKey, limits.studentFailures, true);
@@ -73,7 +84,7 @@ export async function signInStudent(
     return { ok: false, reason: "account_disabled" };
   }
   await recordAuthEvent(admin, env.AUTH_PASSWORD_PEPPER, "sign_in_success", { profileId: profile.id, studentId, ip: input.ip ?? undefined, device: input.device });
-  return { ok: true, userId: data.user.id, role: "student", displayName: profile.display_name };
+  return { ok: true, userId: data.user.id, role: "student", displayName: profile.display_name, requiresDisplayName: profile.requires_display_name === true };
 }
 
 // Administrators sign in with an email and their own password; the admin role must be in
@@ -90,6 +101,9 @@ export async function signInAdmin(
   if (await rateLimited(admin, accountKey, limits.studentFailures, false)) return { ok: false, reason: "rate_limited" };
 
   const { data, error } = await auth.auth.signInWithPassword({ email, password: input.password });
+  const authErrorKind = classifyUpstreamAuthError(error as { status?: number; code?: string; name?: string } | null);
+  if (authErrorKind === "rate_limited") return { ok: false, reason: "rate_limited" };
+  if (authErrorKind === "transient") throw new ApiError(503, "temporarily_unavailable", "Đăng nhập tạm thời gián đoạn. Hãy thử lại sau ít phút.");
   const user = data?.user;
   const { data: profile } = user
     ? await admin.from("profiles").select("id, role, status, display_name").eq("id", user.id).maybeSingle()

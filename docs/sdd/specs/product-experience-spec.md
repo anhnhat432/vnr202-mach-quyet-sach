@@ -30,6 +30,8 @@ Live Arena là một phân hệ nổi bật nhưng không thay thế phần tr�
 
 ### 3.1 Khu vực công khai
 
+Classroom presentation amendment (owner request 2026-11-01): CLASS-017 in `classroom-navigation-session.md` temporarily hides the four study entry points (Hồ sơ, Mạch nguyên nhân, Bằng chứng, Phương pháp) from the public shell/homepage. Their routes and approved content scope remain available; no content is removed or published by hiding navigation.
+
 - `Trang chủ / Phòng Điều Hành`: giới thiệu luận đề, ba chương, trạng thái Live Arena và lối vào ba trải nghiệm chính.
 - `Phòng Phương Pháp`: chuyển nội dung Chương nhập môn thành hướng dẫn cách đọc sự kiện, phân biệt dữ kiện - nhận định - nguồn và sử dụng phương pháp lịch sử, logic.
 - `Kho Hồ sơ`: danh mục 15 Hồ sơ Quyết sách, lọc theo chương, giai đoạn, chủ đề và trạng thái đã khám phá.

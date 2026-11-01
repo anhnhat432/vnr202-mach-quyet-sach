@@ -8,6 +8,8 @@ Nguồn quyết định: "VNR202 – Live Arena Game Design Specification V1.0",
 
 ## 1. Bối cảnh và mục tiêu
 
+Amendment 2026-10-31, owner authorized: [classroom-readiness.md](classroom-readiness.md), CLASS-001..009, adds opt-in MSSV-only import, a database-enforced first-login name gate, and admission measured from the admin's Open click. This is an explicit extension of onboarding and competition preparation; existing privacy, publication and live game timing rules remain in force.
+
 Live Arena là đấu trường kiến thức lịch sử cho sinh viên một lớp, gồm hai game ngắn, mỗi game có một lượt chơi và một bảng xếp hạng riêng. Sinh viên tự chọn thời điểm chơi trong khung giờ cuộc thi; không cần mọi người bắt đầu cùng lúc.
 
 Nguyên tắc thiết kế:

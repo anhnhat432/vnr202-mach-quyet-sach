@@ -1,0 +1,34 @@
+import { act, cleanup, renderHook } from "@testing-library/react";
+import { afterEach, beforeEach, expect, it, vi } from "vitest";
+import { useArenaGame } from "@/features/arena/client/use-arena-game";
+import { arenaApi } from "@/features/arena/client/api";
+import type { Lobby, Projection } from "@/features/arena/client/types";
+vi.mock("@/features/arena/client/api", async original => ({ ...await original<typeof import("@/features/arena/client/api")>(), arenaApi: { lobby: vi.fn(), start: vi.fn(), standing: vi.fn(), heartbeat: vi.fn() } }));
+const waiting = { competition: null, games: [] } as unknown as Lobby;
+const opened = { competition: { publicId: "synthetic-event", state: "open" }, games: [] } as unknown as Lobby;
+beforeEach(() => { vi.useFakeTimers(); vi.clearAllMocks(); vi.spyOn(document, "visibilityState", "get").mockReturnValue("visible"); vi.mocked(arenaApi.standing).mockResolvedValue({} as never); });
+afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.useRealTimers(); });
+it("picks up admin opening without creating an attempt", async () => {
+  vi.mocked(arenaApi.lobby).mockResolvedValueOnce(waiting).mockResolvedValue(opened);
+  const { result } = renderHook(() => useArenaGame("race"));
+  await act(async () => { await vi.advanceTimersByTimeAsync(1); });
+  expect(result.current.phase).toBe("no_competition");
+  await act(async () => { await vi.advanceTimersByTimeAsync(10000); });
+  expect(result.current.phase).toBe("intro");
+  expect(arenaApi.start).not.toHaveBeenCalled();
+});
+it("discards a late waiting response after an attempt starts", async () => {
+  let resolve!: (value: Lobby) => void;
+  vi.mocked(arenaApi.lobby).mockResolvedValueOnce(opened).mockImplementationOnce(() => new Promise(r => { resolve = r; }));
+  const projection = { attempt: { id: "synthetic-attempt", state: "active", remainingMs: 90000 }, interaction: null } as unknown as Projection;
+  vi.mocked(arenaApi.start).mockResolvedValue({ resumed: false, projection });
+  const { result } = renderHook(() => useArenaGame("race"));
+  await act(async () => { await vi.advanceTimersByTimeAsync(1); });
+  expect(result.current.phase).toBe("intro");
+  await act(async () => { await vi.advanceTimersByTimeAsync(10000); });
+  expect(arenaApi.lobby).toHaveBeenCalledTimes(2);
+  await act(async () => { await result.current.start(); });
+  await act(async () => { resolve(waiting); });
+  expect(result.current.phase).toBe("playing");
+  expect(result.current.projection?.attempt.id).toBe("synthetic-attempt");
+});

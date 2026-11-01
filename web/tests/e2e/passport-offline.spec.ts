@@ -6,6 +6,11 @@ const blank: State = { stage: "briefing", selectedEvidence: [], selectedDecision
 
 async function simulatedServer(page: Page, options: { failLoad?: boolean; failSave?: boolean } = {}) {
   const server = { ...options, ownerId: "c51140ff-7441-4200-9d7a-7e9ceea08377", version: 0, state: blank, posts: 0 };
+  // This simulated authenticated server also supplies the form-token recovery contract.
+  await page.route("**/api/v1/auth/csrf", route => route.fulfill({
+    headers: { "set-cookie": "vnr_csrf=synthetic-passport-token; Path=/; SameSite=Lax", "cache-control": "no-store" },
+    json: { data: { csrfToken: "synthetic-passport-token" } },
+  }));
   await page.route("**/api/v1/passport/progress", async (route) => {
     if (route.request().method() === "GET") {
       if (server.failLoad) return route.abort("internetdisconnected");

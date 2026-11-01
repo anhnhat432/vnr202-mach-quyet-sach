@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 
 import { ArenaHub } from "@/features/arena/ui/arena-hub";
+import { redirectPendingStudent } from "@/features/auth/server/name-setup";
 
 export const metadata: Metadata = { title: "Live Arena" };
 
-export default function LiveArenaPage() {
+export default async function LiveArenaPage() {
+  await redirectPendingStudent();
   return (
     <div className="page-shell arena-page">
       <header className="page-intro">

@@ -31,4 +31,4 @@ if (profileError) {
   console.error("Profile upsert failed:", profileError.message);
   process.exit(1);
 }
-console.log(`Administrator ready: ${email}`);
+console.log(`Administrator ready: ${email} (IMPORT_ACTOR_ID=${userId})`);

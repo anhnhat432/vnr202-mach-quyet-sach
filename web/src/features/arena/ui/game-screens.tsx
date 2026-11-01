@@ -63,6 +63,7 @@ export function GameIntro({ game, lobby, busy, notice, onStart }: { game: Game; 
       <button type="button" className="ax-btn ax-btn--primary ax-btn--xl" onClick={onStart} disabled={busy || closed || Boolean(other)}>
         {closed ? "Đã đóng nhận lượt mới" : busy ? "Đang bắt đầu…" : "Bắt đầu lượt thi"}
       </button>
+      <Link className="ax-btn ax-btn--ghost" href="/live-arena">Về sảnh</Link>
     </CenterCard>
   );
 }
@@ -116,8 +117,9 @@ export function StatusScreen({ phase, onRetry }: { phase: "loading" | "signed_ou
     return (
       <CenterCard>
         <h1 className="ax-title">Chưa có cuộc thi đang mở</h1>
-        <p className="ax-lead">Cuộc thi mở theo lịch của giảng viên. Trong lúc chờ, bạn có thể chơi luyện tập.</p>
+        <p className="ax-lead">Đang chờ giảng viên mở cuộc thi. Trang sẽ tự cập nhật; bạn cũng có thể kiểm tra lại.</p>
         <div className="ax-row">
+          <button type="button" className="ax-btn ax-btn--primary" onClick={onRetry}>Kiểm tra lại</button>
           <Link className="ax-btn ax-btn--ghost" href="/live-arena">Về sảnh</Link>
           <Link className="ax-btn ax-btn--primary" href="/live-arena/dong-chay-lich-su">Luyện tập</Link>
         </div>
@@ -129,6 +131,7 @@ export function StatusScreen({ phase, onRetry }: { phase: "loading" | "signed_ou
       <h1 className="ax-title">Không tải được lượt thi</h1>
       <p className="ax-lead">Kiểm tra kết nối rồi thử lại. Lượt thi của bạn vẫn được giữ trên máy chủ.</p>
       <button type="button" className="ax-btn ax-btn--primary" onClick={onRetry}>Thử lại</button>
+      <Link className="ax-btn ax-btn--ghost" href="/live-arena">Về sảnh</Link>
     </CenterCard>
   );
 }

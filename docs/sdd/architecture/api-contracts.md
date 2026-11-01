@@ -4,6 +4,8 @@ Trạng thái: Approved for planning; sửa đổi v1.1 cho Live Arena V1.0 (202
 Base path: `/api/v1`  
 Format: JSON UTF-8, camelCase ở API, snake_case trong PostgreSQL
 
+Protected-route Auth availability (T120 / CLASS-005 clarification, 2026-11-01): server verification still calls `getUser`; no cached/decoded token bypass is introduced. Provider 429, network `AuthRetryableFetchError` and provider 5xx during user/control-session verification return sanitized `503 temporarily_unavailable`, whether returned or thrown. They must not be reported as `401 unauthenticated`. Missing/revoked sessions and invalid roles retain 401. On any such failure no actor is admitted, no gameplay RPC is called and no mutation is automatically retried. Logs contain only bounded provider status/code, never messages, credentials or identity.
+
 ### Student Passport progress (T025/T034)
 
 `GET /passport/progress` trả `ownerId` của phiên và các hàng tiến độ của chính sinh viên (`dossier_id`, `state`, `completed_at`, `version`); `POST /passport/progress` nhận `slug`, `state`, `ownerId` đã đọc và `expectedVersion` (0 khi chưa có bản lưu). Server luôn lấy profile từ phiên và từ chối nếu `ownerId` không khớp; giá trị này không chọn tài khoản để ghi. Server kiểm tra CSRF, chỉ nhận hồ sơ Published và kiểm tra dữ kiện/phương án thuộc hồ sơ. Ghi có điều kiện theo phiên bản, trả `409 progress_conflict` khi bản server đã đổi. Chặng cuối ghi dấu hoàn thành.
@@ -71,7 +73,11 @@ Không được công bố trong V1 (`LA-ACC-004`). Nếu được mở lại �
 
 ### `POST /auth/sign-out`
 
-Response `204` và revoke cookie session hiện tại.
+Verified actor + same-origin CSRF. Response `204` only after provider local-session sign-out succeeds; clear the form cookie and record the sign-out event. Errors: `401` unauthenticated, `403 csrf_failed`, `503 service_unavailable` for returned/thrown provider failures (sanitized, no false success event). Logout does not pause, finish, reset or transfer an attempt. The client must not retry an unknown network outcome automatically.
+
+### `GET /me` (private account indicator)
+
+Verified session only, no-store. Existing owner-only profile response includes role, classroom displayName and first-name setup flag (along with the owner's private profile fields used by Passport). The shared account bar renders only role/displayName; no identity enters shared server HTML, public boards or browser storage. UI role hints do not replace server authorization.
 
 ## 4. Public experience
 
@@ -300,6 +306,14 @@ Body `{ "displayName": "An N.V.", "reason": "string" }`. Tối đa 40 ký tự, 
 ### `POST /admin/roster-imports/{id}/cleanup`
 
 Thử lại việc xóa các tài khoản còn sót của bản nhập có trạng thái `failed` (chỉ những id đã được ghi lại). `200 {removed}` khi sạch; `503 roster_cleanup_incomplete` nếu vẫn còn; `409 import_not_ready` nếu bản nhập không có gì để dọn. Có audit.
+
+### `POST /auth/csrf` (CLASS-010)
+
+Token recovery: `POST /auth/csrf` (CLASS-010) requires an existing verified session and a same-origin Origin, accepts strict `{}`, and returns no-store `{csrfToken}` plus the secure SameSite cookie. Actor is session-derived. A valid existing actor-bound token is reused to avoid cross-tab rotation races. This endpoint has no business writes and cannot renew an Auth session. Other mutations retain their full CSRF guards.
+
+### `POST /me/display-name` (CLASS-001..004)
+
+Authenticated active student, session actor only, same-origin + CSRF. Strict body `{name: string}` (1-100 normalized characters, no controls or student IDs). For profiles imported with `collectNamesOnSignIn=on`, the student sets their name once before any new game attempt. Full names are never returned publicly: output uses the classroom abbreviation and stable duplicate suffix. Response `{displayName}` only. Errors: `401` unauthenticated, `403` non-student/locked/CSRF, `422` invalid input, `409 display_name_already_set`. Correction after first setup remains an admin action. No scoring or attempt changes. `GET /me` and student sign-in include `requiresDisplayName`; sign-in redirects pending students to `/thiet-lap-ten`. Named-roster imports remain unchanged; MSSV-only import is an explicit admin option and retains preview/apply and duplicate protection.
 
 ### `POST /admin/profiles/{profileId}/password-resets`
 

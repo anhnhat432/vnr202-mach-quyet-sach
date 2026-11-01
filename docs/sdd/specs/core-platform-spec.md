@@ -299,6 +299,8 @@ This Approved version records the Core rules and full 15-dossier scope approved 
 
 ## 16. Amendment v1.1 — Live Arena V1.0 (2026-10-29)
 
+Classroom amendment authorized 2026-10-31: [CLASS-001..009](classroom-readiness.md) adds explicit MSSV-only import with write-once student name setup before any new attempt, and optional server-timed admission from the admin Open click. It amends named-roster onboarding and fixed-window opening only; academic review/publication, game clocks, privacy, scores and attempt limits remain mandatory. Existing named imports and fixed-window API callers retain their behavior.
+
 Source: owner's "Live Arena Game Design Specification V1.0" and decisions Q1–Q14 dated 2026-10-29. Detailed rules: `docs/sdd/specs/live-arena-game-spec.md`. Architecture: `docs/sdd/architecture/ADR-004-live-arena-game-redesign.md`.
 
 This amendment is explicit, not silent: every affected v1.0 rule is marked inline above and listed here. Rules not listed remain in force unchanged.
