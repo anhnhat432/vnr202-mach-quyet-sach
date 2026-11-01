@@ -80,14 +80,40 @@ jobs:
           export E2E_REALTIME=1 # Realtime runs in this stack: the Broadcast-to-browser check is mandatory
           npx playwright install --with-deps chromium
           npx playwright test
-          # Keep the same throwaway environment for the production-mode synthetic rehearsal.
+      - name: Production-mode synthetic classroom load (independent of browser outcome)
+        if: ${{ !cancelled() && (success() || failure()) }}
+        timeout-minutes: 10
+        working-directory: web
+        run: |
+          eval "$(supabase status -o env --workdir .. | sed 's/^/export /')"
+          export SUPABASE_URL="$API_URL" SUPABASE_ANON_KEY="$ANON_KEY" SUPABASE_SERVICE_ROLE_KEY="$SERVICE_ROLE_KEY" SUPABASE_DB_URL="$DB_URL"
+          export NEXT_PUBLIC_SUPABASE_URL="$API_URL" NEXT_PUBLIC_SUPABASE_ANON_KEY="$ANON_KEY" NEXT_PUBLIC_SITE_URL=http://127.0.0.1:3001
+          # A new local-only world/server: never reuse an E2E session or an orphan dev server.
+          export AUTH_PASSWORD_PEPPER="$(openssl rand -hex 32)" CSRF_SIGNING_SECRET="$(openssl rand -hex 32)" INTERNAL_AUTH_EMAIL_DOMAIN=auth.invalid
+          export ROSTER_DEFAULT_PASSWORD="$(openssl rand -hex 1 | cut -c1)"
           npm run build
-          npm run start > "$RUNNER_TEMP/classroom-load-server.log" 2>&1 &
+          npm run start -- --port 3001 > "$RUNNER_TEMP/classroom-load-server.log" 2>&1 &
           classroom_server_pid=$!
           trap 'kill "$classroom_server_pid" 2>/dev/null || true' EXIT
-          for i in $(seq 1 60); do curl --silent --fail http://127.0.0.1:3000/ > /dev/null && break; sleep 1; done
+          classroom_ready=0
+          for i in $(seq 1 60); do
+            kill -0 "$classroom_server_pid" 2>/dev/null || { cat "$RUNNER_TEMP/classroom-load-server.log"; exit 1; }
+            if curl --silent --fail http://127.0.0.1:3001/ > /dev/null; then classroom_ready=1; break; fi
+            sleep 1
+          done
+          test "$classroom_ready" = 1
           node --test ../scripts/load/load-results.test.mjs
-          node ../scripts/load/arena-load.mjs --players 70 --viewers 35 --paced-login --assert --cdn --out "$RUNNER_TEMP/classroom-load-70.json"
+          node ../scripts/load/arena-load.mjs --players 70 --viewers 35 --base http://127.0.0.1:3001 --paced-login --assert --cdn --out "$RUNNER_TEMP/classroom-load-70.json"
+      - name: Browser failure diagnostics (isolated synthetic accounts only)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-failure-diagnostics
+          path: |
+            web/test-results/**/trace.zip
+            web/test-results/**/error-context.md
+          if-no-files-found: ignore
+          retention-days: 3
       - name: Synthetic classroom load evidence
         if: always()
         uses: actions/upload-artifact@v4

@@ -70,7 +70,9 @@ async function correctIndex(page: Page) {
 }
 
 test("admin runs a rehearsal end to end; the student reviews answers only after Finalized", async ({ page, browser }) => {
-  test.setTimeout(120_000);
+  // The real race clock can run for 150s when questions expire; allow that plus cold navigation
+  // and the incident/finalization assertions. A 120s whole-test budget cut off a legal game.
+  test.setTimeout(300_000);
   // --- admin creates, schedules and opens --------------------------------------------------------
   await page.goto("/quan-tri/cuoc-thi");
   await page.waitForURL("**/quan-tri/dang-nhap");
