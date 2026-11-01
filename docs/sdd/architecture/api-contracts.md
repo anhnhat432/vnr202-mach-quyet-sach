@@ -301,6 +301,10 @@ Body `{ "displayName": "An N.V.", "reason": "string" }`. Tối đa 40 ký tự, 
 
 Thử lại việc xóa các tài khoản còn sót của bản nhập có trạng thái `failed` (chỉ những id đã được ghi lại). `200 {removed}` khi sạch; `503 roster_cleanup_incomplete` nếu vẫn còn; `409 import_not_ready` nếu bản nhập không có gì để dọn. Có audit.
 
+### `POST /auth/csrf` (CLASS-010)
+
+Token recovery: `POST /auth/csrf` (CLASS-010) requires an existing verified session and a same-origin Origin, accepts strict `{}`, and returns no-store `{csrfToken}` plus the secure SameSite cookie. Actor is session-derived. A valid existing actor-bound token is reused to avoid cross-tab rotation races. This endpoint has no business writes and cannot renew an Auth session. Other mutations retain their full CSRF guards.
+
 ### `POST /me/display-name` (CLASS-001..004)
 
 Authenticated active student, session actor only, same-origin + CSRF. Strict body `{name: string}` (1-100 normalized characters, no controls or student IDs). For profiles imported with `collectNamesOnSignIn=on`, the student sets their name once before any new game attempt. Full names are never returned publicly: output uses the classroom abbreviation and stable duplicate suffix. Response `{displayName}` only. Errors: `401` unauthenticated, `403` non-student/locked/CSRF, `422` invalid input, `409 display_name_already_set`. Correction after first setup remains an admin action. No scoring or attempt changes. `GET /me` and student sign-in include `requiresDisplayName`; sign-in redirects pending students to `/thiet-lap-ten`. Named-roster imports remain unchanged; MSSV-only import is an explicit admin option and retains preview/apply and duplicate protection.

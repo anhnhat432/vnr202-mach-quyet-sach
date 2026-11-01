@@ -15,6 +15,8 @@ Owner authorized end-to-end delivery on 2026-10-31, supplied 39 unique student I
 
 ## Contracts and validation
 
+CLASS-010: browser restart may preserve Supabase login while losing the session CSRF cookie. Before a mutation with no token, the client obtains one from authenticated, same-origin-only `POST /auth/csrf` with strict empty body. Reuse an existing valid actor-bound token, otherwise issue a new secure SameSite cookie; return no-store. Coalesce concurrent renewal. An explicit 403 csrf_failed is known to precede business writes and may be retried once with the same body/idempotency key after renewal; network/unknown outcomes are never retried. Apply this to JSON and multipart roster requests without weakening any existing mutation guard.
+
 Owner clarified that advance time configuration is inconvenient. CLASS-009: prepare a Draft/Scheduled competition in advance; the admin's Open click starts an explicit admission window (default 60 minutes, bounded 1-1440). Server atomically sets opens_at/deadline and calls the existing confirmed transition gate. Reopening cannot reset time or attempts. Existing fixed-window API callers remain compatible. UI calls Scheduled "Đã chuẩn bị"; this changes presentation, not the lifecycle. Existing valid attempts keep their full duration after admissions close.
 
 New migration adds profiles.requires_display_name and roster_import_rows.requires_display_name, default false for backward compatibility; no applied migration is edited. A service-role-only name-setup RPC derives the actor from the verified route, locks profile/name allocation, checks active student status and records audit. An insert guard on attempts enforces the onboarding gate independently of the client.

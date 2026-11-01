@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { request } from "@/features/arena/client/api";
 
 type Row = { rowNumber: number; studentId: string; fullName: string; displayName: string; displayNameSuffix: number | null; status: "valid" | "warning" | "error"; issues: string[] };
 type Preview = { importId: string; rows: Row[]; validCount: number; warningCount: number; errorCount: number };
@@ -19,10 +20,6 @@ const ISSUE_LABEL: Record<string, string> = {
   row_limit_exceeded: "Vượt giới hạn số hàng",
 };
 
-function csrfToken(): string {
-  return document.cookie.split("; ").find((c) => c.startsWith("vnr_csrf="))?.slice("vnr_csrf=".length) ?? "";
-}
-
 // Admin roster import: upload -> preview with per-row issues -> confirm warnings -> apply (LA-AC-018).
 export function RosterImport() {
   const [preview, setPreview] = useState<Preview | null>(null);
@@ -35,28 +32,24 @@ export function RosterImport() {
     event.preventDefault();
     setBusy(true);
     setMessage(null);
-    const response = await fetch("/api/v1/admin/roster-imports", { method: "POST", headers: { "x-csrf-token": csrfToken() }, body: new FormData(event.currentTarget) });
-    const json = await response.json();
-    setBusy(false);
-    if (!response.ok) return setMessage(json.error?.message ?? "Không đọc được tệp.");
-    setPreview(json.data);
-    setConfirmed(new Set());
-    setOverrides({});
+    const body = new FormData(event.currentTarget);
+    try {
+      setPreview(await request<Preview>("POST", "/admin/roster-imports", { body }));
+      setConfirmed(new Set());
+      setOverrides({});
+    } catch (error) { setMessage(error instanceof Error ? error.message : "Không đọc được tệp."); }
+    finally { setBusy(false); }
   }
 
   async function apply() {
     if (!preview) return;
     setBusy(true);
-    const response = await fetch(`/api/v1/admin/roster-imports/${preview.importId}/apply`, {
-      method: "POST",
-      headers: { "content-type": "application/json", "x-csrf-token": csrfToken() },
-      body: JSON.stringify({ confirmedWarningRows: [...confirmed], displayNameOverrides: overrides }),
-    });
-    const json = await response.json();
-    setBusy(false);
-    if (!response.ok) return setMessage(json.error?.message ?? "Không áp dụng được.");
-    setMessage(`Đã tạo ${json.data.created} tài khoản.`);
-    setPreview(null);
+    try {
+      const result = await request<{ created: number }>("POST", `/admin/roster-imports/${preview.importId}/apply`, { body: { confirmedWarningRows: [...confirmed], displayNameOverrides: overrides } });
+      setMessage(`Đã tạo ${result.created} tài khoản.`);
+      setPreview(null);
+    } catch (error) { setMessage(error instanceof Error ? error.message : "Không áp dụng được."); }
+    finally { setBusy(false); }
   }
 
   const pendingWarnings = preview ? preview.rows.filter((r) => r.status === "warning" && !confirmed.has(r.rowNumber)).length : 0;

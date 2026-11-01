@@ -31,3 +31,10 @@ Architecture: retain existing Auth/roster/arena contracts; add opt-in pending-na
 - [ ] Run the new pgTAP contract and updated browser admin flow in CI; verify the hosted prepared competition remains unopened.
 
 Load correction: CI's first 70-player run completed all 70 with matching ledger/board and 72 subscribed channels, but classified intentional deadline/device rejections as request errors. Rejections are now separately counted only after authoritative projection confirms settlement, or a deliberately transferred session receives exactly stale_session. Unknown failures remain fatal. Keep raw latency metrics; the local CI run is not a hosted latency certification.
+
+## 5. Browser restart recovery (CLASS-010)
+
+- [x] Observed hosted roster request rejected by CSRF after browser restart, despite a valid durable Auth session. Sign-in issues only a session CSRF cookie; there was no recovery path.
+- [x] TDD red: missing endpoint and three failing client assertions; then 13 focused checks green for actor/origin binding, valid-cookie reuse, multipart preservation, coalesced renewal, one bounded pre-write rejection retry and no unknown-outcome retry.
+- [x] Add authenticated same-origin token renewal and use the shared request client for roster forms. Update the isolated browser test to remove the form cookie before uploading/applying through the actual UI.
+- [ ] Complete full gates, deploy, and demonstrate recovery on the existing admin session without another password prompt.

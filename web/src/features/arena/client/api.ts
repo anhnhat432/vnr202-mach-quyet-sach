@@ -22,34 +22,52 @@ function csrfToken(): string {
   return match ? decodeURIComponent(match.slice("vnr_csrf=".length)) : "";
 }
 
+let csrfRenewal: Promise<string> | undefined;
+function renewCsrfToken(): Promise<string> {
+  csrfRenewal ??= request<{ csrfToken: string }>("POST", "/auth/csrf").then((data) => {
+    if (!data?.csrfToken || typeof data.csrfToken !== "string") throw new ArenaApiError(503, "csrf_unavailable", "Không khôi phục được phiên làm việc. Hãy thử lại.");
+    return data.csrfToken;
+  }).finally(() => { csrfRenewal = undefined; });
+  return csrfRenewal;
+}
+
 export function newKey(prefix: string) {
   return `${prefix}-${crypto.randomUUID()}`;
 }
 
 export async function request<T>(method: "GET" | "POST", path: string, options: { body?: unknown; key?: string; signal?: AbortSignal } = {}): Promise<T> {
   const headers: Record<string, string> = {};
+  const multipart = options.body instanceof FormData;
   if (method === "POST") {
-    headers["content-type"] = "application/json";
-    headers["x-csrf-token"] = csrfToken();
+    if (!multipart) headers["content-type"] = "application/json";
+    if (path !== "/auth/csrf") headers["x-csrf-token"] = csrfToken() || await renewCsrfToken();
     if (options.key) headers["idempotency-key"] = options.key;
   }
-  let response: Response;
-  try {
-    response = await fetch(`/api/v1${path}`, { method, headers, body: method === "POST" ? JSON.stringify(options.body ?? {}) : undefined, cache: "no-store", signal: options.signal });
-  } catch (error) {
-    if ((error as Error).name === "AbortError") throw error;
-    throw new ArenaApiError(0, "offline", "Không kết nối được máy chủ.");
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    let response: Response;
+    try {
+      response = await fetch(`/api/v1${path}`, { method, headers, body: method === "POST" ? multipart ? options.body as FormData : JSON.stringify(options.body ?? {}) : undefined, cache: "no-store", signal: options.signal });
+    } catch (error) {
+      if ((error as Error).name === "AbortError") throw error;
+      throw new ArenaApiError(0, "offline", "Không kết nối được máy chủ.");
+    }
+    let payload: { data?: T; error?: { code: string; message: string; details?: ArenaApiError["details"] } } = {};
+    try {
+      payload = await response.json();
+    } catch {
+      /* empty body */
+    }
+    if (!response.ok || payload.error) {
+      // This explicit guard rejection precedes business writes. Never retry a network/unknown outcome.
+      if (attempt === 0 && method === "POST" && path !== "/auth/csrf" && response.status === 403 && payload.error?.code === "csrf_failed") {
+        headers["x-csrf-token"] = await renewCsrfToken();
+        continue;
+      }
+      throw new ArenaApiError(response.status, payload.error?.code ?? "http_error", payload.error?.message ?? "Đã xảy ra lỗi.", payload.error?.details ?? []);
+    }
+    return payload.data as T;
   }
-  let payload: { data?: T; error?: { code: string; message: string; details?: ArenaApiError["details"] } } = {};
-  try {
-    payload = await response.json();
-  } catch {
-    /* empty body */
-  }
-  if (!response.ok || payload.error) {
-    throw new ArenaApiError(response.status, payload.error?.code ?? "http_error", payload.error?.message ?? "Đã xảy ra lỗi.", payload.error?.details ?? []);
-  }
-  return payload.data as T;
+  throw new ArenaApiError(403, "csrf_failed", "Yêu cầu không hợp lệ.");
 }
 
 export const arenaApi = {

@@ -30,19 +30,26 @@ test.afterAll(async () => {
 test("IDs-only import leads to an authenticated, write-once, privacy-safe first-login name", async ({ page, browser }, info) => {
   const signIn = await page.request.post("/api/v1/auth/admin-sign-in", { headers: { origin }, data: { email, password } });
   expect(signIn.status()).toBe(200);
-  const csrf = (await signIn.json()).data.csrfToken as string;
+  // Browser restart can leave the durable Auth session while losing the session-only form cookie.
+  await page.context().clearCookies({ name: "vnr_csrf" });
   const existing = await admin.from("classes").select("id, code, name").eq("is_active", true).maybeSingle();
   const classCode = existing.data?.code ?? `NAME-${run}`;
-  const preview = await page.request.post("/api/v1/admin/roster-imports", { headers: { origin, "x-csrf-token": csrf }, multipart: {
-    classCode, className: existing.data?.name ?? "Synthetic first-login test", collectNamesOnSignIn: "on",
-    file: { name: "synthetic-ids.csv", mimeType: "text/csv", buffer: Buffer.from(`MSSV\n${studentId}\n`) },
-  } });
+  await page.goto("/quan-tri/lop");
+  await page.getByLabel("Mã lớp", { exact: true }).fill(classCode);
+  await page.getByLabel("Tên lớp", { exact: true }).fill(existing.data?.name ?? "Synthetic first-login test");
+  await page.getByRole("checkbox", { name: "Chỉ nhập MSSV; sinh viên tự nhập tên khi đăng nhập lần đầu." }).check();
+  await page.locator('input[type="file"]').setInputFiles({ name: "synthetic-ids.csv", mimeType: "text/csv", buffer: Buffer.from(`MSSV\n${studentId}\n`) });
+  const previewResponse = page.waitForResponse(response => response.url().endsWith("/api/v1/admin/roster-imports") && response.request().method() === "POST");
+  await page.getByRole("button", { name: "Xem trước", exact: true }).click();
+  const preview = await previewResponse;
   expect(preview.status()).toBe(201);
   const draft = (await preview.json()).data;
   importId = draft.importId;
   expect(draft.rows[0]).toMatchObject({ requiresDisplayName: true, status: "valid" });
   if (!existing.data) createdClass = (await admin.from("classes").select("id").eq("code", classCode).single()).data!.id;
-  const applied = await page.request.post(`/api/v1/admin/roster-imports/${importId}/apply`, { headers: { origin, "x-csrf-token": csrf }, data: { confirmedWarningRows: [], displayNameOverrides: {} } });
+  const appliedResponse = page.waitForResponse(response => response.url().endsWith(`/api/v1/admin/roster-imports/${importId}/apply`));
+  await page.getByRole("button", { name: "Tạo 1 tài khoản", exact: true }).click();
+  const applied = await appliedResponse;
   expect(applied.status()).toBe(200);
   const profile = await admin.from("profiles").select("id, requires_display_name").eq("student_id", studentId).single();
   studentProfile = profile.data!.id;

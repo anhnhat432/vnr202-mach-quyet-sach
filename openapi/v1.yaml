@@ -5,12 +5,22 @@ info:
   description: >
     Gameplay and competition-admin endpoints implemented in stage E. All gameplay calls use the profile
     verified from the Supabase Auth session; no body can name a profile, score, time or correctness.
-    Mutating calls need the `x-csrf-token` header (value returned at sign-in) and a same-origin `Origin`.
+    Business mutations need the `x-csrf-token` header and a same-origin `Origin`.
+    Authenticated token renewal uses same-origin POST /auth/csrf without an existing form token.
 servers:
   - url: /api/v1
 security:
   - supabaseSession: []
 paths:
+  /auth/csrf:
+    post:
+      summary: Restore the current authenticated actor's lost form token; same-origin only, no business writes
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object, additionalProperties: false }
+      responses: { "200": { description: "No-store response data.csrfToken and secure SameSite cookie; reuse a valid existing token" }, "401": { $ref: "#/components/responses/Error" }, "403": { $ref: "#/components/responses/Error" }, "422": { $ref: "#/components/responses/Error" } }
   /me/display-name:
     post:
       summary: Set the authenticated student's first classroom display name
