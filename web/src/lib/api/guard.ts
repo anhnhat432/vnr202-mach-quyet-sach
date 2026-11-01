@@ -20,15 +20,41 @@ export type RouteContext = {
   actor: Actor;
 };
 
+function authServiceFailure(error: unknown): ApiError | null {
+  if (!error || typeof error !== "object") return null;
+  const upstream = error as { status?: number; code?: string; name?: string };
+  if (upstream.status !== 429 && !(typeof upstream.status === "number" && upstream.status >= 500) && upstream.name !== "AuthRetryableFetchError") return null;
+  console.warn("auth service unavailable", {
+    at: new Date().toISOString(),
+    status: typeof upstream.status === "number" ? upstream.status : null,
+    code: typeof upstream.code === "string" && /^[a-z_]{1,64}$/.test(upstream.code) ? upstream.code : null,
+  });
+  return new ApiError(503, "temporarily_unavailable", "Dịch vụ xác thực tạm thời gián đoạn. Hãy thử lại sau ít phút.");
+}
+
+async function checkedAuthResult<T extends { error: unknown }>(operation: Promise<T>): Promise<T> {
+  let result: T;
+  try {
+    result = await operation;
+  } catch (error) {
+    throw authServiceFailure(error) ?? error;
+  }
+  const failure = authServiceFailure(result.error);
+  if (failure) throw failure;
+  return result;
+}
+
 export async function requireActor(): Promise<{ actor: Actor; supabase: Awaited<ReturnType<typeof createServerClient>> }> {
   const supabase = await createServerClient();
-  const { data, error } = await supabase.auth.getUser(); // validated by Auth server, not just decoded
+  const { data, error } = await checkedAuthResult(supabase.auth.getUser()); // validated by Auth server, not just decoded
   const role = data.user?.app_metadata?.role;
   if (error || !data.user || (role !== "student" && role !== "admin")) {
     // Operational diagnosis only: never log provider messages, tokens or user identity.
     console.warn("auth verification rejected", {
+      at: new Date().toISOString(),
       status: typeof error?.status === "number" ? error.status : null,
       code: error?.code && /^[a-z_]{1,64}$/.test(error.code) ? error.code : null,
+      name: error?.name && /^[A-Za-z]{1,64}$/.test(error.name) ? error.name : null,
       kind: error ? "provider_error" : data.user ? "invalid_role" : "missing_user",
     });
     throw new ApiError(401, "unauthenticated", "Bạn cần đăng nhập.");
@@ -56,7 +82,7 @@ export async function requireStudent(request: Request, options: { mutating: bool
   const { actor, supabase } = await requireActor();
   if (actor.role !== "student") throw new ApiError(403, "forbidden", "Chỉ sinh viên mới chơi được.");
   if (options.mutating) await assertCsrf(request, actor.userId);
-  const { data } = await supabase.auth.getSession();
+  const { data } = await checkedAuthResult(supabase.auth.getSession());
   const authSessionId = sessionIdFromAccessToken(data.session?.access_token);
   if (!authSessionId) throw new ApiError(401, "unauthenticated", "Bạn cần đăng nhập.");
   const env = getServerEnv();

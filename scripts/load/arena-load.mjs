@@ -13,7 +13,7 @@ import fs from "node:fs";
 import { createClient } from "../../web/node_modules/@supabase/supabase-js/dist/index.mjs";
 import pg from "../../web/node_modules/pg/lib/index.js";
 import { generateFixtures } from "../lib/question-bank.mjs";
-import { loadReadinessProblems, isSettledContentRejection, isTransferredHeartbeatRejection } from "./load-results.mjs";
+import { loadReadinessProblems, isSettledContentRejection, isTransferredHeartbeatRejection, assessDuplicateReplies } from "./load-results.mjs";
 
 const arg = (name, fallback) => {
   const i = process.argv.indexOf(`--${name}`);
@@ -69,7 +69,9 @@ const pct = (xs, p) => {
 class Session {
   jar = new Map();
   csrf = "";
+  game = null;
   async call(method, path, body, key) {
+    const cookieCountBefore = this.jar.size;
     const headers = { origin: BASE, cookie: [...this.jar].map(([k, v]) => `${k}=${v}`).join("; ") };
     if (method === "POST") {
       headers["content-type"] = "application/json";
@@ -87,8 +89,8 @@ class Session {
       else this.jar.set(name, value);
     }
     const json = await res.json().catch(() => ({}));
-    if (res.status >= 400 && res.status !== 425 && requestFailures.length < 24) {
-      requestFailures.push({ at: new Date().toISOString(), method, route: path.replace(/[0-9a-f-]{36}/gi, "[id]"), status: res.status, code: json.error?.code, cookieCount: this.jar.size, cookieBytes: [...this.jar].reduce((n, [k, v]) => n + k.length + v.length, 0) });
+    if ((res.status === 401 || res.status === 403 || res.status >= 500) && requestFailures.length < 24) {
+      requestFailures.push({ at: new Date().toISOString(), game: this.game, method, route: path.replace(/[0-9a-f-]{36}/gi, "[id]"), status: res.status, code: json.error?.code, cookieCountBefore, cookieCount: this.jar.size, cookieBytes: [...this.jar].reduce((n, [k, v]) => n + k.length + v.length, 0) });
     }
     return { status: res.status, ms: now() - t, data: json.data, error: json.error };
   }
@@ -265,6 +267,7 @@ async function getContent(s, attemptId, allocationId, label) {
 
 async function play(p, publicId, scores, authenticatedSession) {
   let s = authenticatedSession ?? new Session();
+  s.game = p.game;
   await sleep(rand(0, authenticatedSession ? 1000 : 20000));
   if (!authenticatedSession) await s.signIn(p.studentId);
   const accuracy = rand(0.55, 0.95);
@@ -310,10 +313,11 @@ async function play(p, publicId, scores, authenticatedSession) {
     if (p.chaos && Math.random() < 0.3) {
       chaos.duplicateSubmit += 1;
       const [a, b] = await Promise.all([1, 2].map(() => s.call("POST", `/arena/attempts/${attemptId}/answers`, { allocationId, optionId }, k)));
-      if (a.status < 300 && b.status < 300 && a.data.result.scoreAfter === b.data.result.scoreAfter && a.data.result.outcome === b.data.result.outcome) chaos.duplicateIdentical += 1;
-      else fail("duplicate_mismatch");
+      const assessment = assessDuplicateReplies(a, b);
+      if (assessment.problem) fail(assessment.problem);
+      else chaos.duplicateIdentical += 1;
       note("submit", a.ms);
-      record(a.data.projection);
+      if (assessment.projection) record(assessment.projection);
       return;
     }
     const r = await s.call("POST", `/arena/attempts/${attemptId}/answers`, { allocationId, optionId }, k);
@@ -331,6 +335,7 @@ async function play(p, publicId, scores, authenticatedSession) {
     if (!p.chaos || transferred || proj.attempt.mainAnswered < 3) return;
     transferred = true;
     const fresh = new Session(); // the student picks up another device
+    fresh.game = p.game;
     await fresh.signIn(p.studentId);
     const blocked = await fresh.call("POST", `/arena/competitions/${publicId}/games/${p.game}/attempt`, {}, key("start"));
     if (blocked.status !== 409) { fail(`transfer_expected_409_${blocked.status}`); return; }
@@ -393,6 +398,7 @@ async function invariants(competitionId) {
     boardMatchesAttempts: (await q("select count(*)::int n from public.leaderboard_entries e join public.competition_games g on g.id = e.competition_game_id join public.attempts a on a.competition_id = g.competition_id and a.profile_id = e.profile_id and a.game_type = g.game_type where g.competition_id = $1 and e.score <> a.score"))[0].n === 0,
     duplicateSubmissions: (await q("select count(*)::int n from (select allocation_id from public.answer_submissions s join public.attempts a on a.id = s.attempt_id where a.competition_id = $1 group by allocation_id having count(*) > 1) x"))[0].n,
     attemptStates: Object.fromEntries((await q("select state::text, count(*)::int n from public.attempts where competition_id = $1 group by 1")).map((r) => [r.state, r.n])),
+    attemptStatesByGame: await q("select game_type::text, state::text, count(*)::int n from public.attempts where competition_id = $1 group by 1,2 order by 1,2"),
     timeouts: (await q("select count(*)::int n from public.attempt_events e join public.attempts a on a.id = e.attempt_id where a.competition_id = $1 and e.event_type = 'timeout'"))[0].n,
   };
 }

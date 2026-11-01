@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { loadReadinessProblems, isSettledContentRejection, isTransferredHeartbeatRejection } from './load-results.mjs';
+import { loadReadinessProblems, isSettledContentRejection, isTransferredHeartbeatRejection, assessDuplicateReplies } from './load-results.mjs';
 const valid = {players:70,errors:{},invariants:{attemptsPerPlayerGame:1,activeAtOnce:0,scoreEqualsLedger:true,boardMatchesAttempts:true,duplicateSubmissions:0,attemptStates:{completed:65,timed_out:5}},viewers:{subscribedChannelsAtStart:72,channelsExpected:72,channelErrors:0},top10Propagation:{samples:10}};
 test('requires every expected player to finish with matching ledger and board',()=>{
  assert.deepEqual(loadReadinessProblems(valid),[]);
@@ -25,4 +25,22 @@ test('only the deliberately transferred old session may have a stale heartbeat',
  assert.equal(isTransferredHeartbeatRejection(stale,true),true);
  assert.equal(isTransferredHeartbeatRejection(stale,false),false);
  assert.equal(isTransferredHeartbeatRejection({status:409,error:{code:'unexpected'}},true),false);
+});
+
+test('duplicate HTTP failures remain failures without a fabricated score mismatch or undefined projection',()=>{
+ const denied={status:401,error:{code:'unauthenticated'}};
+ assert.deepEqual(assessDuplicateReplies(denied,denied),{problem:'duplicate_http_401_unauthenticated',projection:null});
+ const report={...valid,errors:{duplicate_http_401_unauthenticated:1}};
+ assert.ok(loadReadinessProblems(report).includes('request_errors'));
+});
+
+test('duplicate replies distinguish actual result mismatch, malformed success and identical success',()=>{
+ const projection={attempt:{score:100}};
+ const ok={status:200,data:{result:{scoreAfter:100,outcome:'correct'},projection}};
+ assert.deepEqual(assessDuplicateReplies(ok,ok),{problem:null,projection});
+ assert.equal(assessDuplicateReplies(ok,{...ok,data:{...ok.data,result:{scoreAfter:200,outcome:'correct'}}}).problem,'duplicate_result_mismatch');
+ assert.deepEqual(assessDuplicateReplies({status:200},{status:200}),{problem:'duplicate_invalid_response',projection:null});
+ const malformed={status:200,data:{result:{},projection}};
+ assert.deepEqual(assessDuplicateReplies(malformed,malformed),{problem:'duplicate_invalid_response',projection:null});
+ assert.deepEqual(assessDuplicateReplies({status:503,error:{code:'temporarily_unavailable'}},ok),{problem:'duplicate_http_503_temporarily_unavailable',projection});
 });

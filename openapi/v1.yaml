@@ -7,6 +7,9 @@ info:
     verified from the Supabase Auth session; no body can name a profile, score, time or correctness.
     Business mutations need the `x-csrf-token` header and a same-origin `Origin`.
     Authenticated token renewal uses same-origin POST /auth/csrf without an existing form token.
+    Protected routes fail closed with 503 temporarily_unavailable when upstream Auth returns
+    429/5xx or a retryable network failure during verification; missing/revoked sessions retain 401.
+    No failed mutation is automatically retried.
 servers:
   - url: /api/v1
 security:
@@ -15,7 +18,7 @@ paths:
   /me:
     get:
       summary: No-store profile of the authenticated owner; account bar renders only classroom display name and role
-      responses: { "200": { $ref: "#/components/responses/Ok" }, "401": { $ref: "#/components/responses/Error" } }
+      responses: { "200": { $ref: "#/components/responses/Ok" }, "401": { $ref: "#/components/responses/Error" }, "503": { $ref: "#/components/responses/Error" } }
   /auth/sign-out:
     post:
       summary: CSRF-protected local-session sign-out; does not change attempts or clocks

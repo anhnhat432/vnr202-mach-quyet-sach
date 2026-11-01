@@ -4,6 +4,8 @@ Trạng thái: Approved for planning; sửa đổi v1.1 cho Live Arena V1.0 (202
 Base path: `/api/v1`  
 Format: JSON UTF-8, camelCase ở API, snake_case trong PostgreSQL
 
+Protected-route Auth availability (T120 / CLASS-005 clarification, 2026-11-01): server verification still calls `getUser`; no cached/decoded token bypass is introduced. Provider 429, network `AuthRetryableFetchError` and provider 5xx during user/control-session verification return sanitized `503 temporarily_unavailable`, whether returned or thrown. They must not be reported as `401 unauthenticated`. Missing/revoked sessions and invalid roles retain 401. On any such failure no actor is admitted, no gameplay RPC is called and no mutation is automatically retried. Logs contain only bounded provider status/code, never messages, credentials or identity.
+
 ### Student Passport progress (T025/T034)
 
 `GET /passport/progress` trả `ownerId` của phiên và các hàng tiến độ của chính sinh viên (`dossier_id`, `state`, `completed_at`, `version`); `POST /passport/progress` nhận `slug`, `state`, `ownerId` đã đọc và `expectedVersion` (0 khi chưa có bản lưu). Server luôn lấy profile từ phiên và từ chối nếu `ownerId` không khớp; giá trị này không chọn tài khoản để ghi. Server kiểm tra CSRF, chỉ nhận hồ sơ Published và kiểm tra dữ kiện/phương án thuộc hồ sơ. Ghi có điều kiện theo phiên bản, trả `409 progress_conflict` khi bản server đã đổi. Chặng cuối ghi dấu hoàn thành.

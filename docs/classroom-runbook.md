@@ -35,3 +35,15 @@ Diễn tập có thể lấy cả câu thật đã xuất bản. Khi test nội 
 ## Kiểm tra ngay tại lớp
 
 Mở link bằng một điện thoại dùng Wi-Fi lớp và một điện thoại dùng 4G, kiểm tra đăng nhập, tên hiển thị và màn hình máy chiếu trước khi mở cuộc thi thật. Kết quả tải trên môi trường kiểm thử không thay cho việc đo mạng Wi-Fi tại lớp. Mật khẩu chung chỉ phù hợp hoạt động thi đua giá trị thấp, không dùng để xác minh danh tính hay tính điểm học phần.
+
+### Checklist quyết định mở ngày 02/11
+
+- [ ] Người phụ trách học thuật xác nhận đã đối chiếu đáp án, giải thích và nguồn của 93 câu, đặc biệt số liệu và sáu câu khẩu hiệu/chủ đề. Audit hiện có ghi 93 lần duyệt/xuất bản dưới tài khoản admin nhưng ghi chú chỉ là `ok`; trạng thái Published không tự chứng minh việc đối chiếu này.
+- [ ] Kiểm tra báo cáo CI sửa lỗi mới nhất, gồm artifact tải và log server. Không dùng riêng kết quả 50 E2E pass để kết luận tải đã đạt: lần fb5b1c3 có 322 lỗi xác thực và 33 lượt Active. Theo dõi kết luận mới trong `sdd/evidence/classroom-safety-audit-2026-11-01.md`.
+- [ ] Trước giờ chơi khoảng 15–20 phút: một máy dùng Wi-Fi lớp, một máy dùng 4G. Mỗi người tự đăng nhập đúng tài khoản, nhập/kiểm tra tên hiển thị và vào sảnh chờ; thử tải lại hoặc đổi mạng để xác nhận vẫn nhận đúng tài khoản. Chưa bấm Bắt đầu lượt thi chính thức để làm điểm thử.
+- [ ] Mở màn chiếu `/trinh-chieu`, thử chế độ hai bảng và từng game (0/1/2), kiểm tra chữ đọc được ở cuối lớp và màn hình không tắt ngủ. Trước khi Mở, thông báo đang chờ là bình thường. Ghi thời gian kiểm tra, hai loại mạng, thiết bị và lỗi nếu có; không ghi mật khẩu/token.
+- [ ] Trong Quản trị, chọn đúng **VNR202 · Buổi chơi 02/11/2026**, kiểm tra **Đã chuẩn bị**, 0 lượt ở cả hai game, sĩ số thực tế tối đa trong 39 tài khoản hiện có và xác nhận ngân hàng đã lưu. Không chọn cuộc Diễn tập nháp mới hơn chỉ vì nó nằm đầu danh sách.
+- [ ] Khi các điều kiện trên đạt, người tổ chức tự bấm **Mở cuộc thi** với thời lượng nhận lượt mong muốn (mặc định 60 phút). Cho đăng nhập theo nhóm khoảng 20 người, cách nhau 30 giây; kiểm tra sảnh cập nhật và hai bảng hiển thị đúng game.
+- [ ] Giữ nhận lượt đến khi người chơi đã vào cả hai trò. Nếu có lỗi: ghi thời điểm/mạng/triệu chứng và dùng giám sát/sự cố có audit; đăng nhập lại để tiếp tục đúng lượt. Không xóa bảng, sửa điểm hoặc tạo lượt thay thế. Kết thúc khi mọi lượt đã được xử lý và giữ lịch sử.
+
+Môi trường lớp là project riêng với website chính. Tuy vậy, các deployment Preview bên trong project lớp dùng chung database lớp; không chạy thử tải, script dọn dữ liệu hay tự động chơi trên đó. Bài tải/chaos phải dùng stack localhost giả lập. Các gate Production và kiểm chứng đủ 15 hồ sơ vẫn là công việc riêng sau buổi chơi.

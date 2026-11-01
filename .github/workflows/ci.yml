@@ -68,6 +68,7 @@ jobs:
           export SUPABASE_URL="$API_URL" SUPABASE_ANON_KEY="$ANON_KEY" SUPABASE_SERVICE_ROLE_KEY="$SERVICE_ROLE_KEY" SUPABASE_DB_URL="$DB_URL"
           npm run test:integration
       - name: Browser e2e (public pages, auth and roster routes)
+        timeout-minutes: 18
         working-directory: web
         run: |
           eval "$(supabase status -o env --workdir .. | sed 's/^/export /')"

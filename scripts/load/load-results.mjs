@@ -10,6 +10,18 @@ export function isTransferredHeartbeatRejection(response, transferred) {
   return transferred && response.status === 409 && response.error?.code === "stale_session";
 }
 
+// A rejected duplicate request is transport/Auth evidence, not evidence of double scoring.
+// Keep the failure fatal to readiness, while retaining any successful authoritative projection.
+export function assessDuplicateReplies(a, b) {
+  const usable = r => r.status >= 200 && r.status < 300 && Number.isFinite(r.data?.result?.scoreAfter) && typeof r.data?.result?.outcome === 'string' && r.data.result.outcome.length > 0 && Number.isFinite(r.data?.projection?.attempt?.score);
+  const projection = usable(a) ? a.data.projection : usable(b) ? b.data.projection : null;
+  const rejected = [a, b].find(r => r.status < 200 || r.status >= 300);
+  if (rejected) return { problem: `duplicate_http_${rejected.status}_${rejected.error?.code ?? 'unknown'}`, projection };
+  if (!usable(a) || !usable(b)) return { problem: 'duplicate_invalid_response', projection };
+  const identical = a.data.result.scoreAfter === b.data.result.scoreAfter && a.data.result.outcome === b.data.result.outcome;
+  return { problem: identical ? null : 'duplicate_result_mismatch', projection };
+}
+
 export function loadReadinessProblems(report) {
   const problems = [];
   const invariant = report.invariants;
