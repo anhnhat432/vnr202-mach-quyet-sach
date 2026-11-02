@@ -4,13 +4,12 @@ import { expect, test, type Page } from "@playwright/test";
 import { createClient } from "@supabase/supabase-js";
 import { Pool } from "pg";
 
-import { generateFixtures } from "../../../scripts/lib/question-bank.mjs";
 import { deriveProviderPassword } from "../../src/features/auth/domain/provider-password";
 import { env, ready } from "./arena-world";
 
 // End-to-end verification of the Admin Control Center & Closed-Loop Rehearsal Studio on the isolated
 // Supabase stack:
-// 1. RBAC (401 unauthenticated, 403 student), CSRF (403 missing token), invalid-state reset/close.
+// 1. RBAC (401 unauthenticated, 404 non-disclosure for student), CSRF (403 csrf_failed), invalid-state reset/close.
 // 2. Network error handling & "Thử lại" retry recovery + Sandbox DB isolation badge.
 // 3. Provision rehearsal accounts (THU prefix) -> verify is_rehearsal=true & excluded from class roster.
 // 4. Open rehearsal round -> verify question snapshots strictly use origin='fixture' (never 'bank').
@@ -26,7 +25,6 @@ const origin = "http://127.0.0.1:3000";
 const adminEmail = `reh-admin-${run.toLowerCase()}@test.invalid`;
 const adminPassword = `Adm-${crypto.randomUUID()}`;
 const classStudentId = `SV${run}`.slice(0, 12);
-const rehearsalPrefix = `THU`;
 const syntheticBankKey = `reh-e2e-bank-${run.toLowerCase()}`;
 const SEEDED_VERIFIED_SOURCE = "10000000-0000-0000-0000-000000000001";
 
@@ -61,37 +59,6 @@ test("Rehearsal Studio full closed-loop E2E: RBAC, CSRF, network retry, THU acco
     // 0. Setup Isolated Test World
     // =========================================================================
     await pool.query("update public.competitions set state = 'start_closed' where state = 'open'");
-
-    const { rows } = await pool.query("select count(*)::int as n from public.questions where origin = 'fixture'");
-    if (!rows[0].n) {
-      const fixtures = generateFixtures("dev87", { keyPrefix: `reh${run.toLowerCase()}` });
-      const { data: qs } = await svc
-        .from("questions")
-        .insert(
-          fixtures.map((q) => ({
-            external_key: q.key,
-            game_type: q.game,
-            pool: q.pool,
-            chapter: q.chapter,
-            topic: q.topic,
-            question_type: q.type,
-            option_count: q.options.length,
-            difficulty: q.difficulty,
-            origin: "fixture",
-          })),
-        )
-        .select("id, external_key");
-      const ids = new Map(qs!.map((r) => [r.external_key, r.id]));
-      await svc.from("question_versions").insert(
-        fixtures.map((q) => ({
-          question_id: ids.get(q.key),
-          version: 1,
-          status: "published",
-          content_public: { prompt: q.prompt, options: q.options },
-          content_private: { correctOptionId: q.correctOptionId, explanation: q.explanation },
-        })),
-      );
-    }
 
     const a = await svc.auth.admin.createUser({
       email: adminEmail,
@@ -162,7 +129,10 @@ test("Rehearsal Studio full closed-loop E2E: RBAC, CSRF, network retry, THU acco
           "update public.question_versions set status = 'published', published_by = $1, published_at = now() where id = $2",
           [adminId, bv.id],
         );
-        await pool.query("update public.questions set current_version_id = $1 where id = $2", [bv.id, bq.id]);
+        await pool.query("update public.questions set current_version_id = $1, published_version_id = $1 where id = $2", [
+          bv.id,
+          bq.id,
+        ]);
       }
     }
 
@@ -208,7 +178,7 @@ test("Rehearsal Studio full closed-loop E2E: RBAC, CSRF, network retry, THU acco
     // Unauthenticated requests are rejected with 401
     expect((await request.get("/api/v1/admin/rehearsal")).status()).toBe(401);
 
-    // Student requests to rehearsal admin routes are rejected with 403
+    // Student requests to rehearsal admin routes are rejected with 404 (security-spec §4 non-disclosure)
     const studentApiCtx = await browser.newContext({ baseURL: origin });
     const studentLogin = await studentApiCtx.request.post("/api/v1/auth/sign-in", {
       headers: { origin },
@@ -216,23 +186,23 @@ test("Rehearsal Studio full closed-loop E2E: RBAC, CSRF, network retry, THU acco
     });
     expect(studentLogin.status()).toBe(200);
     const studentCsrf = (await studentLogin.json()).data.csrfToken as string;
-    expect((await studentApiCtx.request.get("/api/v1/admin/rehearsal")).status()).toBe(403);
+    expect((await studentApiCtx.request.get("/api/v1/admin/rehearsal")).status()).toBe(404);
     expect(
       (
         await studentApiCtx.request.post("/api/v1/admin/rehearsal/accounts", {
           headers: { origin, "x-csrf-token": studentCsrf },
-          data: { count: 2, prefix: "THU" },
+          data: { count: 2 },
         })
       ).status(),
-    ).toBe(403);
+    ).toBe(404);
     expect(
       (
         await studentApiCtx.request.post("/api/v1/admin/rehearsal/rounds", {
           headers: { origin, "x-csrf-token": studentCsrf },
-          data: { action: "start_or_reset", startWindowMinutes: 60 },
+          data: { action: "open_or_reset", startWindowMinutes: 60 },
         })
       ).status(),
-    ).toBe(403);
+    ).toBe(404);
     await studentApiCtx.close();
 
     // Admin CSRF & invalid-state checks
@@ -244,34 +214,36 @@ test("Rehearsal Studio full closed-loop E2E: RBAC, CSRF, network retry, THU acco
     expect(adminLogin.status()).toBe(200);
     const adminCsrf = (await adminLogin.json()).data.csrfToken as string;
 
-    // Missing CSRF token -> 403 csrf_invalid
+    // Missing CSRF token -> 403 csrf_failed
     const noCsrfAccounts = await adminApiCtx.request.post("/api/v1/admin/rehearsal/accounts", {
       headers: { origin },
-      data: { count: 2, prefix: "THU" },
+      data: { count: 2 },
     });
     expect(noCsrfAccounts.status()).toBe(403);
-    expect((await noCsrfAccounts.json()).error.code).toBe("csrf_invalid");
+    expect((await noCsrfAccounts.json()).error.code).toBe("csrf_failed");
 
     const noCsrfRounds = await adminApiCtx.request.post("/api/v1/admin/rehearsal/rounds", {
       headers: { origin },
-      data: { action: "start_or_reset", startWindowMinutes: 60 },
+      data: { action: "open_or_reset", startWindowMinutes: 60 },
     });
     expect(noCsrfRounds.status()).toBe(403);
-    expect((await noCsrfRounds.json()).error.code).toBe("csrf_invalid");
+    expect((await noCsrfRounds.json()).error.code).toBe("csrf_failed");
 
-    // Invalid state: closing when no rehearsal is open -> 404 rehearsal_not_found
-    await pool.query("update public.competitions set state = 'start_closed' where state = 'open'");
+    // Invalid state: closing when no rehearsal is open or start_closed -> 404 not_found
+    await pool.query(
+      "update public.competitions set state = 'finalized' where kind = 'rehearsal' and state in ('open', 'start_closed')",
+    );
     const closeWhenNone = await adminApiCtx.request.post("/api/v1/admin/rehearsal/rounds", {
       headers: { origin, "x-csrf-token": adminCsrf },
       data: { action: "close" },
     });
     expect(closeWhenNone.status()).toBe(404);
-    expect((await closeWhenNone.json()).error.code).toBe("rehearsal_not_found");
+    expect((await closeWhenNone.json()).error.code).toBe("not_found");
 
     // Invalid payload: startWindowMinutes out of range -> 422 validation_error
     const invalidWindow = await adminApiCtx.request.post("/api/v1/admin/rehearsal/rounds", {
       headers: { origin, "x-csrf-token": adminCsrf },
-      data: { action: "start_or_reset", startWindowMinutes: 1 },
+      data: { action: "open_or_reset", startWindowMinutes: 1 },
     });
     expect(invalidWindow.status()).toBe(422);
     await adminApiCtx.close();
@@ -313,14 +285,13 @@ test("Rehearsal Studio full closed-loop E2E: RBAC, CSRF, network retry, THU acco
       "select count(*)::int as n from public.profiles where role = 'student' and is_rehearsal = false",
     );
 
-    await page.getByLabel("Số lượng tài khoản thử").fill("2");
-    await page.getByLabel("Tiền tố MSSV thử").fill(rehearsalPrefix);
-    await page.getByRole("button", { name: /Tạo \/ Cấp tài khoản thử/ }).click();
+    await page.getByLabel(/Số lượng tài khoản thử/).fill("2");
+    await page.getByRole("button", { name: /Tạo \/ Làm mới .* tài khoản thử/ }).click();
 
-    await expect(page.getByText(/Đã sẵn sàng 2 tài khoản thử/)).toBeVisible({ timeout: 15000 });
-    await expect(page.getByText(/THU001 — An N\.V\./)).toBeVisible();
-    await expect(page.getByText(/THU002 — Bình T\.M\./)).toBeVisible();
-    await expect(page.getByRole("button", { name: "Sao chép tất cả" })).toBeVisible();
+    await expect(page.getByText(/Đã chuẩn bị 2 tài khoản thử/)).toBeVisible({ timeout: 15000 });
+    await expect(page.getByRole("cell", { name: "THU001" })).toBeVisible();
+    await expect(page.getByRole("cell", { name: "THU002" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Sao chép thông tin đăng nhập" })).toBeVisible();
 
     // Verify in DB that THU001 & THU002 have is_rehearsal=true, class_id=null, and official count did not change
     const { rows: thuRows } = await pool.query(
@@ -339,26 +310,29 @@ test("Rehearsal Studio full closed-loop E2E: RBAC, CSRF, network retry, THU acco
     // 4. Open Rehearsal Round #1 & Verify Snapshot Question Origin Isolation
     // =========================================================================
     await page.getByRole("button", { name: "Mở buổi thi thử ngay" }).click();
-    await expect(page.getByText(/Đã mở buổi thi thử mới/)).toBeVisible({ timeout: 15000 });
+    await expect(page.getByText(/Đã mở buổi thi thử/)).toBeVisible({ timeout: 15000 });
     await expect(page.getByText("Đang mở nhận lượt")).toBeVisible();
 
     const { rows: openRehRows } = await pool.query<{ id: string; public_id: string; name: string }>(
       "select id, public_id, name from public.competitions where kind = 'rehearsal' and state = 'open' limit 1",
     );
     expect(openRehRows).toHaveLength(1);
-    const round1Id = openRehRows[0].id;
+    const round1Id = openRehRows[0]!.id;
+    const round1Name = openRehRows[0]!.name;
     createdCompetitionIds.push(round1Id);
 
     // Verify snapshot strictly contains origin='fixture' and 0 origin='bank'
     const { rows: snapOrigins } = await pool.query<{ origin: string; n: number }>(
-      `select q.origin, count(*)::int as n
+      `select s.origin::text as origin, count(*)::int as n
        from public.competition_question_snapshots s
-       join public.questions q on q.id = s.question_id
-       where s.competition_id = $1
-       group by q.origin`,
+       join public.competition_games g on g.id = s.competition_game_id
+       where g.competition_id = $1
+       group by s.origin`,
       [round1Id],
     );
-    expect(snapOrigins).toEqual([{ origin: "fixture", n: 30 }]);
+    expect(snapOrigins).toHaveLength(1);
+    expect(snapOrigins[0]!.origin).toBe("fixture");
+    expect(snapOrigins[0]!.n).toBeGreaterThanOrEqual(87);
 
     // =========================================================================
     // 5. Student THU001 Signs In & Plays Both Đường Đua and Bãi Mìn
@@ -419,10 +393,14 @@ test("Rehearsal Studio full closed-loop E2E: RBAC, CSRF, network retry, THU acco
     await expect(student.locator(".ax-lb--minefield").getByText("An N.V.")).toBeVisible({ timeout: 10000 });
     await expect(student.locator(".ax-lb--race").getByText("An N.V.")).toBeVisible({ timeout: 10000 });
 
-    // Refresh leaderboards in Admin Rehearsal Studio & verify An N.V. appears in both Top 5 tables
+    // Refresh leaderboards in Admin Rehearsal Studio & verify An N.V. appears in both Top 10 panels
     await page.getByRole("button", { name: "Làm mới bảng điểm" }).click();
-    await expect(page.locator("table.acc-table").nth(0).getByText("An N.V.")).toBeVisible({ timeout: 10000 });
-    await expect(page.locator("table.acc-table").nth(1).getByText("An N.V.")).toBeVisible({ timeout: 10000 });
+    await expect(
+      page.locator(".acc-panel-alt", { hasText: "Game 1 · Bãi Mìn Quyết Sách" }).getByText("An N.V."),
+    ).toBeVisible({ timeout: 10000 });
+    await expect(
+      page.locator(".acc-panel-alt", { hasText: "Game 2 · Đường Đua Mốc Quá Độ" }).getByText("An N.V."),
+    ).toBeVisible({ timeout: 10000 });
 
     // Capture live Rehearsal Studio screenshots (Desktop 1440x960 & Mobile 390x844)
     await page.setViewportSize({ width: 1440, height: 960 });
@@ -435,6 +413,7 @@ test("Rehearsal Studio full closed-loop E2E: RBAC, CSRF, network retry, THU acco
     await page.setViewportSize({ width: 1440, height: 960 });
     await page.getByRole("tab", { name: /Điều hành & Giám sát trực tiếp/ }).click();
     await page.getByRole("button", { name: "Làm mới ngay" }).click();
+    await page.getByRole("button", { name: new RegExp(round1Name) }).click();
     await expect(page.locator(".adm__monitor tbody tr", { hasText: "THU001" }).first()).toBeVisible({ timeout: 10000 });
     await page.screenshot({ path: path.join(screenshotDir, "admin-overview-desktop.png"), fullPage: true });
     await page.setViewportSize({ width: 390, height: 844 });
@@ -447,12 +426,14 @@ test("Rehearsal Studio full closed-loop E2E: RBAC, CSRF, network retry, THU acco
     // =========================================================================
     await page.getByRole("tab", { name: /Phòng thi thử khép kín/ }).click();
     await page.getByRole("button", { name: /Chơi thử lại \(Vòng diễn tập mới\)/ }).click();
-    const resetDialog = page.getByRole("dialog", { name: /Bắt đầu vòng thi thử mới/ });
+    const resetDialog = page.getByRole("dialog", { name: /Bắt đầu vòng .* mới/ });
     await expect(resetDialog).toBeVisible();
-    await resetDialog.getByRole("button", { name: /Xác nhận đóng vòng cũ & Mở vòng mới/ }).click();
+    await resetDialog.getByRole("button", { name: "Xác nhận mở vòng diễn tập mới" }).click();
 
-    await expect(page.getByText(/Đã bắt đầu vòng thi thử mới/)).toBeVisible({ timeout: 15000 });
-    await expect(page.getByText("Chưa có lượt chơi nào trong vòng diễn tập hiện tại.")).toHaveCount(2);
+    await expect(page.getByText(/Đã đóng vòng thử cũ .* và mở vòng mới/)).toBeVisible({ timeout: 15000 });
+    await expect(
+      page.getByText("Bảng xếp hạng đang trống — chưa có lượt chơi nào trong vòng thi thử này."),
+    ).toHaveCount(2);
 
     // Verify in DB: Round 1 is finalized with all attempts, scores, and audit logs intact; Round 2 is open
     const { rows: round1State } = await pool.query<{ state: string; attempts: number }>(
@@ -467,13 +448,13 @@ test("Rehearsal Studio full closed-loop E2E: RBAC, CSRF, network retry, THU acco
       "select count(*)::int as n from public.audit_logs where target_id = $1::text",
       [round1Id],
     );
-    expect(round1Audit[0].n).toBeGreaterThan(0);
+    expect(round1Audit[0]!.n).toBeGreaterThan(0);
 
     const { rows: openRehRows2 } = await pool.query<{ id: string }>(
       "select id from public.competitions where kind = 'rehearsal' and state = 'open' limit 1",
     );
     expect(openRehRows2).toHaveLength(1);
-    const round2Id = openRehRows2[0].id;
+    const round2Id = openRehRows2[0]!.id;
     expect(round2Id).not.toBe(round1Id);
     createdCompetitionIds.push(round2Id);
 
@@ -511,7 +492,7 @@ test("Rehearsal Studio full closed-loop E2E: RBAC, CSRF, network retry, THU acco
        returning id`,
       [`Cuộc thi chính thức E2E ${run}`, adminId],
     );
-    const offCompId = offComp[0].id;
+    const offCompId = offComp[0]!.id;
     createdCompetitionIds.push(offCompId);
     await page.goto("/quan-tri/cuoc-thi");
     await page.getByRole("button", { name: new RegExp(`Cuộc thi chính thức E2E ${run}`) }).click();
