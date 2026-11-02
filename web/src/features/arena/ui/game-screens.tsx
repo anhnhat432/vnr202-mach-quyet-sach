@@ -74,9 +74,11 @@ export function GameIntro({
       ) : notice ? (
         <p className="ax-notice" role="alert">{notice}</p>
       ) : null}
-      <button type="button" className="ax-btn ax-btn--primary ax-btn--xl" onClick={onStart} disabled={busy || closed || Boolean(other)}>
-        {closed ? "Đã đóng nhận lượt mới" : busy ? "Đang bắt đầu…" : "Bắt đầu lượt thi"}
-      </button>
+      <div className="ax-cta">
+        <button type="button" className="ax-btn ax-btn--primary ax-btn--xl" onClick={onStart} disabled={busy || closed || Boolean(other)}>
+          {closed ? "Đã đóng nhận lượt mới" : busy ? "Đang bắt đầu…" : "Bắt đầu lượt thi"}
+        </button>
+      </div>
       <div className="ax-row">
         <Link className="ax-btn ax-btn--ghost" href="/live-arena">Về sảnh</Link>
         {sound ? (

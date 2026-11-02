@@ -67,6 +67,9 @@ export function RaceGame() {
   const transient = useTransient(g.feedback, 850);
   // LA-FB-002: feedback never covers the next question; it disappears as soon as that question shows.
   const flash = transient && !(transient.kind === "answer" && g.question && g.question.allocationId !== transient.result.allocationId) ? transient : null;
+  // The sprint banner is a ~1.8 s announcement, not a fixture of question 13: it must not sit on the
+  // question or its countdown while the clock runs.
+  const sprintBanner = useTransient(g.projection?.interaction?.sequence === 13 ? "sprint" : null, 1800);
   const prevPhase = useRef(g.phase);
   const prevRank = useRef<number | null>(null);
   const sprintPlayed = useRef(false);
@@ -154,7 +157,7 @@ export function RaceGame() {
         </div>
         <div className="ax-race__stage">
           <AnimatePresence>
-          {sprint && seq === 13 && !reduce ? (
+          {sprintBanner && seq === 13 && !reduce ? (
             <motion.div key="sprint" className="ax-sprint-banner" initial={{ x: "-100%" }} animate={{ x: "0%" }} exit={{ opacity: 0 }} transition={{ duration: 0.35 }}>
               NƯỚC RÚT · 3 câu Khó · +200
             </motion.div>
