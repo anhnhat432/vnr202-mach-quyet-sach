@@ -184,7 +184,7 @@ export function QuestionBankAdmin() {
 
       {readiness ? (
         <section className="acc-kpi-grid" aria-label="Tổng quan ngân hàng câu hỏi">
-          <div className="acc-kpi-card" data-tone={readiness.ready ? "teal" : "red"}>
+          <div className="acc-kpi-card adm__ready" data-tone={readiness.ready ? "teal" : "red"}>
             <span className="acc-kpi-label">Cuộc thi chính thức</span>
             <span className="acc-kpi-value" style={{ fontSize: "1.15rem" }}>
               {readiness.ready
@@ -284,7 +284,7 @@ export function QuestionBankAdmin() {
             </select>
           </label>
 
-          <label className="acc-field" style={{ gridColumn: "span 2" }}>
+          <label className="acc-field acc-col-span-2">
             <span>Tìm kiếm câu hỏi</span>
             <input
               disabled={locked}

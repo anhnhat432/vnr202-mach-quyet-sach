@@ -43,6 +43,7 @@ type LeaderboardEntry = {
 };
 
 type LeaderboardSnapshot = {
+  players?: number;
   totalParticipants?: number;
   entries?: LeaderboardEntry[];
 };
@@ -58,6 +59,13 @@ export type RehearsalStudioState = {
     minefield: LeaderboardSnapshot | null;
     race: LeaderboardSnapshot | null;
   } | null;
+  environmentInfo?: {
+    host: string;
+    projectRef: string;
+    isProtectedClassDb: boolean;
+    isSandboxIsolated: boolean;
+    previewWriteBlocked: boolean;
+  };
 };
 
 const STATE_LABELS: Record<string, string> = {
@@ -242,7 +250,17 @@ export function RehearsalStudio({
           <code>[GIẢ LẬP]</code>, tách biệt hoàn toàn với câu hỏi <code>Published</code> chính thức. Tài khoản thử (
           <code>THU001...</code>) bị chặn khỏi cuộc thi chính thức và không làm tăng sĩ số lớp.
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "0.5rem" }}>
+          {data?.environmentInfo && (
+            <span
+              className="acc-badge"
+              data-tone={data.environmentInfo.isSandboxIsolated ? "teal" : "amber"}
+              title={`Host: ${data.environmentInfo.host}`}
+            >
+              DB: {data.environmentInfo.projectRef} ·{" "}
+              {data.environmentInfo.isSandboxIsolated ? "Sandbox Cô lập" : "Bảo vệ Lớp"}
+            </span>
+          )}
           <span className="acc-badge" data-tone={data?.fixturesReady ? "teal" : "amber"}>
             Bộ đề giả lập: {data?.fixtureCount ?? 0}/87 câu
           </span>
@@ -260,9 +278,16 @@ export function RehearsalStudio({
       {feedback && (
         <div className="acc-banner" data-tone={feedback.tone} role="status">
           <span>{feedback.text}</span>
-          <button type="button" className="acc-btn" onClick={() => setFeedback(null)}>
-            Đóng
-          </button>
+          <div style={{ display: "flex", gap: "0.45rem" }}>
+            {feedback.tone === "red" && (
+              <button type="button" className="acc-btn acc-btn-amber" onClick={() => void loadStudio()}>
+                Thử lại
+              </button>
+            )}
+            <button type="button" className="acc-btn" onClick={() => setFeedback(null)}>
+              Đóng
+            </button>
+          </div>
         </div>
       )}
 
@@ -560,7 +585,7 @@ export function RehearsalStudio({
                 >
                   <strong>{g.title}</strong>
                   <span className="acc-badge" data-tone="teal">
-                    {board?.totalParticipants ?? entries.length} người chơi
+                    {board?.players ?? board?.totalParticipants ?? entries.length} người chơi
                   </span>
                 </div>
 

@@ -158,41 +158,128 @@ describe("admin views and student history", () => {
     }
   });
 
-  it("rehearsal isolation: blocks rehearsal accounts from official competitions and resets rehearsal via a new round preserving history", async () => {
+  it("rehearsal isolation: blocks THU rehearsal accounts from official competitions, keeps bank questions out of rehearsal snapshots, and resets rehearsal across all states", async () => {
     const w = await createWorld({ students: 1 });
     worlds.push(w);
     const [testStudent] = w.students;
-    await pool.query("update public.profiles set is_rehearsal = true, class_id = null where id = $1", [testStudent]);
+    await pool.query("update public.profiles set student_id = 'THU099', is_rehearsal = true, class_id = null where id = $1", [testStudent]);
 
-    // Test student can play in the open rehearsal competition
-    const round1Attempt = await start(w, testStudent, "race", T0);
-    expect(round1Attempt.projection.attempt.state).toBe("active");
-
-    // Admin resets rehearsal ("Chơi thử lại") -> closes Round 1 (preserving attempt & ledger) and opens Round 2
-    const resetResult = await call<{ id: string; publicId: string; closedRehearsalIds: string[] }>(
-      "reset_rehearsal_competition",
-      [w.adminId, "Phòng thi thử #2", 120],
-      at(2000),
+    // 1. Create a published official bank question and verify it never enters rehearsal eligible_questions or snapshots
+    const srcId = crypto.randomUUID();
+    await pool.query(
+      "insert into public.sources (id, title, author_or_issuer, source_type, verification_status) values ($1, 'Nguồn chính thức', 'VNR202', 'syllabus', 'verified')",
+      [srcId],
     );
-    expect(resetResult.closedRehearsalIds).toContain(w.competitionId);
-    const newCompId = resetResult.id;
+    const bankKey = `adm-iso-bank-${w.tag.toLowerCase()}`;
+    const drafted = (
+      await pool.query(
+        `select version_id from public.upsert_question_draft(
+          $1::uuid, $2,
+          '{"game_type":"race","pool":"race","chapter":"chapter_1","topic":"Chính thức","question_type":"single_choice","option_count":3,"difficulty":"easy"}'::jsonb,
+          '{"prompt":"Câu chính thức không vào rehearsal","options":[{"id":"a","label":"A"},{"id":"b","label":"B"},{"id":"c","label":"C"}]}'::jsonb,
+          '{"correctOptionId":"a","explanation":"Giải thích"}'::jsonb,
+          jsonb_build_array(jsonb_build_object('sourceId', $3::text, 'locator', 'tr.1')),
+          false
+        )`,
+        [w.adminId, bankKey, srcId],
+      )
+    ).rows[0].version_id as string;
+    await call("transition_question_version", [drafted, w.adminId, "review", "ok"]);
+    await call("transition_question_version", [drafted, w.adminId, "publish", "ok"]);
 
+    const createdCompIds: string[] = [];
     try {
-      // Old attempt is preserved as timed_out; new rehearsal round has an empty leaderboard and allows a fresh attempt
+      const bankInRehearsalEligible = (
+        await pool.query(
+          "select count(*)::int as n from public.eligible_questions('race', 'rehearsal', $1) e join public.questions q on q.id = e.question_id where q.origin = 'bank'",
+          [w.competitionId],
+        )
+      ).rows[0].n;
+      expect(bankInRehearsalEligible).toBe(0);
+
+      // Test student can play in the open rehearsal competition
+      const round1Attempt = await start(w, testStudent, "race", T0);
+      expect(round1Attempt.projection.attempt.state).toBe("active");
+
+      // Also create a rehearsal competition in 'scheduled' state to verify reset_rehearsal_competition handles 'scheduled' cleanly
+      const schedCreated = await call<{ id: string }>("create_competition", [
+        w.adminId,
+        `Rehearsal Scheduled ${w.tag}`,
+        "rehearsal",
+        at(-60_000),
+        at(3_600_000),
+      ]);
+      createdCompIds.push(schedCreated.id);
+      await call("transition_competition_confirmed", [schedCreated.id, w.adminId, "scheduled", 60, false, null], T0);
+
+      // 2. Admin resets rehearsal ("Chơi thử lại") -> closes both Round 1 (open) and Scheduled round without illegal_transition
+      const resetResult = await call<{ id: string; publicId: string; closedRehearsalIds: string[] }>(
+        "reset_rehearsal_competition",
+        [w.adminId, "Phòng thi thử #2", 120],
+        at(2000),
+      );
+      createdCompIds.push(resetResult.id);
+      expect(resetResult.closedRehearsalIds).toEqual(expect.arrayContaining([w.competitionId, schedCreated.id]));
+
+      // Verify snapshot of the new rehearsal round contains strictly fixture questions (0 bank questions)
+      const nonFixtureSnapshots = (
+        await pool.query(
+          "select count(*)::int as n from public.competition_question_snapshots s join public.competition_games g on g.id = s.competition_game_id where g.competition_id = $1 and s.origin <> 'fixture'",
+          [resetResult.id],
+        )
+      ).rows[0].n;
+      expect(nonFixtureSnapshots).toBe(0);
+
+      // Old attempt is preserved as timed_out; old round is finalized; new rehearsal round has an empty leaderboard and allows a fresh attempt
       const oldAttState = (await pool.query("select state from public.attempts where id = $1", [round1Attempt.projection.attempt.id])).rows[0].state;
       expect(oldAttState).toBe("timed_out");
+      const schedState = (await pool.query("select state from public.competitions where id = $1", [schedCreated.id])).rows[0].state;
+      expect(schedState).toBe("finalized");
 
-      const newAttempt = await call<{ attempt: { id: string; state: string } }>(
+      const newAttempt = await call<{ projection: { attempt: { id: string; state: string } } }>(
         "start_or_resume_attempt",
-        [testStudent, newCompId, "race", "idem-round-2"],
+        [testStudent, resetResult.publicId, "race", "idem-round-2"],
         at(3000),
       );
-      expect(newAttempt.attempt.state).toBe("active");
-      expect(newAttempt.attempt.id).not.toBe(round1Attempt.projection.attempt.id);
+      expect(newAttempt.projection.attempt.state).toBe("active");
+      expect(newAttempt.projection.attempt.id).not.toBe(round1Attempt.projection.attempt.id);
+
+      // 3. Repeated reset back-to-back opens Round #3 with an empty leaderboard
+      const resetResult2 = await call<{ id: string; publicId: string; closedRehearsalIds: string[] }>(
+        "reset_rehearsal_competition",
+        [w.adminId, "Phòng thi thử #3", 120],
+        at(4000),
+      );
+      createdCompIds.push(resetResult2.id);
+      expect(resetResult2.closedRehearsalIds).toContain(resetResult.id);
+      const lb3 = await call<{ players: number }>("get_leaderboard", [resetResult2.publicId, "race", 10], at(4000));
+      expect(lb3.players).toBe(0);
+
+      // 4. Official competition blocks rehearsal account (rehearsal_account_forbidden) and blocks reset when official is open
+      const official = await createWorld({ students: 1, kind: "official", open: false });
+      worlds.push(official);
+      await pool.query("update public.competitions set state = 'start_closed' where id = $1", [resetResult2.id]);
+      await pool.query("update public.competitions set state = 'open' where id = $1", [official.competitionId]);
+
+      await expectError(
+        call("start_or_resume_attempt", [testStudent, official.publicId, "race", "idem-off-blocked"], at(5000)),
+        "42501",
+        "rehearsal_account_forbidden",
+      );
+      await expectError(
+        call("reset_rehearsal_competition", [w.adminId, "Phòng thi thử bị chặn", 60], at(5000)),
+        "QA409",
+        "official_competition_currently_open",
+      );
     } finally {
-      await pool.query("delete from public.audit_logs where target_type = 'competition' and target_id = $1", [newCompId]);
-      await pool.query("delete from public.question_exposures where competition_id = $1", [newCompId]);
-      await pool.query("delete from public.competitions where id = $1", [newCompId]);
+      for (const cid of createdCompIds) {
+        await pool.query("delete from public.audit_logs where target_type = 'competition' and target_id = $1", [cid]);
+        await pool.query("delete from public.question_exposures where competition_id = $1", [cid]);
+        await pool.query("delete from public.competitions where id = $1", [cid]);
+      }
+      await pool.query("delete from public.audit_logs where target_type = 'question_version' and target_id = $1", [drafted]);
+      await pool.query("delete from public.questions where external_key = $1", [bankKey]);
+      await pool.query("delete from public.sources where id = $1", [srcId]);
     }
   });
 });

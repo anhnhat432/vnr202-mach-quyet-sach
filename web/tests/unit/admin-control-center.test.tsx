@@ -5,7 +5,14 @@ import { CompetitionAdmin } from "@/features/admin/ui/competition-admin";
 import { QuestionBankAdmin } from "@/features/admin/ui/question-bank-admin";
 import { RehearsalStudio } from "@/features/admin/ui/rehearsal-studio";
 import { mapRpcError } from "@/features/arena/server/arena-service";
-import { generateRehearsalFixtures } from "@/features/rehearsal/server/rehearsal-service";
+import {
+  assertRehearsalWriteAllowed,
+  generateRehearsalFixtures,
+  getDatabaseEnvironmentInfo,
+  listRehearsalAccounts,
+  openOrResetRehearsalRound,
+  provisionRehearsalAccounts,
+} from "@/features/rehearsal/server/rehearsal-service";
 import { RosterImport } from "@/features/roster/ui/roster-import";
 
 afterEach(() => {
@@ -41,6 +48,130 @@ describe("Rehearsal isolation & server error mapping", () => {
     const openOfficial = mapRpcError({ code: "QA409", message: "official_competition_currently_open" });
     expect(openOfficial.status).toBe(409);
     expect(openOfficial.code).toBe("official_competition_currently_open");
+  });
+
+  it("fails closed when is_rehearsal or reset_rehearsal_competition is missing, never falling back to normal accounts", async () => {
+    const deleteUser = vi.fn(async () => ({ error: null }));
+    const createUser = vi.fn(async () => ({ data: { user: { id: "new-user-1" } }, error: null }));
+
+    // 1. listRehearsalAccounts fails closed when is_rehearsal column is missing
+    const unmigratedClient = {
+      from: () => ({
+        select: () => ({
+          eq: () => ({
+            eq: () => ({
+              is: () => ({
+                order: async () => ({ data: null, error: { code: "42703", message: "column profiles.is_rehearsal does not exist" } }),
+              }),
+            }),
+          }),
+        }),
+      }),
+    } as never;
+    await expect(listRehearsalAccounts(unmigratedClient)).rejects.toMatchObject({
+      status: 503,
+      code: "rehearsal_isolation_not_ready",
+    });
+
+    // 2. provisionRehearsalAccounts fails closed and rolls back auth user if profile insert fails or is_rehearsal is not true
+    const partialClient = {
+      auth: { admin: { createUser, deleteUser, updateUserById: vi.fn() } },
+      from: (table: string) => {
+        if (table === "profiles") {
+          return {
+            select: () => ({
+              eq: async () => ({ data: [], error: null }),
+            }),
+            insert: () => ({
+              select: () => ({
+                single: async () => ({ data: { id: "new-user-1", is_rehearsal: false, class_id: null }, error: null }),
+              }),
+            }),
+          };
+        }
+        return {};
+      },
+    } as never;
+
+    await expect(
+      provisionRehearsalAccounts(
+        {
+          admin: partialClient,
+          env: {
+            NEXT_PUBLIC_SUPABASE_URL: "http://127.0.0.1:54321",
+            SUPABASE_SERVICE_ROLE_KEY: "service-role-key-for-test-only",
+            AUTH_PASSWORD_PEPPER: "0123456789abcdef0123456789abcdef",
+            ROSTER_DEFAULT_PASSWORD: "a",
+            INTERNAL_AUTH_EMAIL_DOMAIN: "auth.invalid",
+            CSRF_SIGNING_SECRET: "0123456789abcdef0123456789abcdef",
+          },
+        },
+        { actorId: "admin-1", count: 1 },
+      ),
+    ).rejects.toMatchObject({
+      status: 503,
+      code: "rehearsal_isolation_not_ready",
+    });
+    expect(deleteUser).toHaveBeenCalledWith("new-user-1");
+
+    // 3. openOrResetRehearsalRound fails closed when reset_rehearsal_competition RPC is missing (42883)
+    const missingRpcClient = {
+      from: (table: string) => {
+        if (table === "profiles") {
+          return { select: () => ({ limit: async () => ({ data: [{ is_rehearsal: false }], error: null }) }) };
+        }
+        if (table === "competitions") {
+          return {
+            select: () => ({
+              eq: () => ({
+                eq: () => ({ maybeSingle: async () => ({ data: null, error: null }) }),
+              }),
+            }),
+          };
+        }
+        if (table === "questions") {
+          return {
+            select: () => ({
+              eq: async () => ({
+                data: generateRehearsalFixtures(20261030, "fx").map((q, idx) => ({
+                  id: `q-${idx}`,
+                  external_key: q.key,
+                  published_version_id: `v-${idx}`,
+                })),
+                error: null,
+              }),
+            }),
+          };
+        }
+        return {};
+      },
+      rpc: vi.fn(async () => ({ data: null, error: { code: "42883", message: "function reset_rehearsal_competition does not exist" } })),
+    } as never;
+
+    await expect(openOrResetRehearsalRound(missingRpcClient, "admin-1", { startWindowMinutes: 60 })).rejects.toMatchObject({
+      status: 503,
+      code: "rehearsal_isolation_not_ready",
+    });
+  });
+
+  it("blocks Preview mutations when NEXT_PUBLIC_SUPABASE_URL points to the protected class database", () => {
+    expect(getDatabaseEnvironmentInfo("https://gqooookpcuoqkyvjwtpp.supabase.co", "preview")).toMatchObject({
+      projectRef: "gqooookpcuoqkyvjwtpp",
+      isProtectedClassDb: true,
+      isSandboxIsolated: false,
+      previewWriteBlocked: true,
+    });
+    expect(() => assertRehearsalWriteAllowed("https://gqooookpcuoqkyvjwtpp.supabase.co", "preview")).toThrowError(
+      /preview_shares_class_database|database lớp học/,
+    );
+
+    expect(getDatabaseEnvironmentInfo("http://127.0.0.1:54321", "preview")).toMatchObject({
+      projectRef: "local-sandbox",
+      isProtectedClassDb: false,
+      isSandboxIsolated: true,
+      previewWriteBlocked: false,
+    });
+    expect(() => assertRehearsalWriteAllowed("http://127.0.0.1:54321", "preview")).not.toThrow();
   });
 });
 
@@ -170,6 +301,45 @@ describe("RehearsalStudio closed-loop workflow", () => {
     render(<RehearsalStudio />);
     expect(await screen.findByText(/Đang có cuộc thi chính thức mở!/)).toBeVisible();
     expect(screen.getByRole("button", { name: "Mở buổi thi thử ngay" })).toBeDisabled();
+  });
+
+  it("displays network error banner and recovers when clicking Thử lại (retry)", async () => {
+    let attempts = 0;
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => {
+        attempts += 1;
+        if (attempts === 1) {
+          throw new Error("network down");
+        }
+        return {
+          ok: true,
+          json: async () => ({
+            data: {
+              fixtureCount: 87,
+              fixturesReady: true,
+              officialOpen: false,
+              activeRehearsal: null,
+              rehearsalHistory: [],
+              accounts: [],
+              leaderboards: null,
+              environmentInfo: {
+                host: "127.0.0.1:54321",
+                projectRef: "local-sandbox",
+                isProtectedClassDb: false,
+                isSandboxIsolated: true,
+                previewWriteBlocked: false,
+              },
+            },
+          }),
+        };
+      }),
+    );
+
+    render(<RehearsalStudio />);
+    expect(await screen.findByText(/Mất kết nối tới máy chủ khi tải phòng thi thử/)).toBeVisible();
+    fireEvent.click(screen.getByRole("button", { name: "Thử lại" }));
+    expect(await screen.findByText(/DB: local-sandbox · Sandbox Cô lập/)).toBeVisible();
   });
 });
 

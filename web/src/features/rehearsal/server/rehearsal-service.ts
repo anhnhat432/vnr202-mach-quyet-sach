@@ -161,36 +161,70 @@ export type RehearsalAccountItem = {
   updatedAt: string;
 };
 
+const PROTECTED_CLASS_DB_REFS = ["gqooookpcuoqkyvjwtpp", "srmdkhcafeeprvizqhvf"];
+
+export function getDatabaseEnvironmentInfo(rawUrl = process.env.NEXT_PUBLIC_SUPABASE_URL, vercelEnv = process.env.VERCEL_ENV) {
+  let host = "unknown";
+  let projectRef = "local";
+  try {
+    if (rawUrl) {
+      const parsed = new URL(rawUrl);
+      host = parsed.host;
+      if (host.endsWith(".supabase.co")) {
+        projectRef = host.split(".")[0] ?? host;
+      } else if (host.startsWith("127.0.0.1") || host.startsWith("localhost")) {
+        projectRef = "local-sandbox";
+      } else {
+        projectRef = host;
+      }
+    }
+  } catch {
+    host = "invalid-url";
+  }
+
+  const isProtectedClassDb = PROTECTED_CLASS_DB_REFS.includes(projectRef);
+  const isSandboxIsolated = !isProtectedClassDb;
+  const previewWriteBlocked = Boolean(vercelEnv === "preview" && isProtectedClassDb);
+
+  return {
+    host,
+    projectRef,
+    isProtectedClassDb,
+    isSandboxIsolated,
+    previewWriteBlocked,
+  };
+}
+
+export function assertRehearsalWriteAllowed(rawUrl = process.env.NEXT_PUBLIC_SUPABASE_URL, vercelEnv = process.env.VERCEL_ENV) {
+  const info = getDatabaseEnvironmentInfo(rawUrl, vercelEnv);
+  if (info.previewWriteBlocked) {
+    throw new ApiError(
+      403,
+      "preview_shares_class_database",
+      `Môi trường Preview hiện đang trỏ tới database lớp học (${info.projectRef}). Mọi thao tác ghi từ Preview bị khóa cứng (fail-closed) để bảo vệ tuyệt đối cuộc thi 02/11 và 39 tài khoản lớp.`,
+    );
+  }
+}
+
 export async function listRehearsalAccounts(admin: SupabaseClient): Promise<RehearsalAccountItem[]> {
   const { data, error } = await admin
     .from("profiles")
     .select("id, student_id, full_name, display_name, display_name_suffix, status, updated_at, is_rehearsal, class_id")
     .eq("role", "student")
+    .eq("is_rehearsal", true)
     .is("class_id", null)
     .order("student_id", { ascending: true });
 
   if (error) {
-    const fallback = await admin
-      .from("profiles")
-      .select("id, student_id, full_name, display_name, display_name_suffix, status, updated_at, class_id")
-      .eq("role", "student")
-      .is("class_id", null)
-      .order("student_id", { ascending: true });
-    if (fallback.error) throw fallback.error;
-    return (fallback.data ?? [])
-      .filter((r) => /^(THU|DEMO)\d+/i.test(String(r.student_id ?? "")))
-      .map((r) => ({
-        id: String(r.id),
-        studentId: String(r.student_id),
-        fullName: String(r.full_name),
-        displayName: r.display_name_suffix ? `${r.display_name} (${r.display_name_suffix})` : String(r.display_name),
-        status: String(r.status),
-        updatedAt: String(r.updated_at),
-      }));
+    throw new ApiError(
+      503,
+      "rehearsal_isolation_not_ready",
+      "Cơ sở dữ liệu chưa áp dụng migration cách ly phòng thi thử (is_rehearsal). Hệ thống khóa thao tác (fail-closed) để bảo vệ dữ liệu lớp học.",
+    );
   }
 
   return (data ?? [])
-    .filter((r) => Boolean(r.is_rehearsal) || /^(THU|DEMO)\d+/i.test(String(r.student_id ?? "")))
+    .filter((r) => r.is_rehearsal === true && r.class_id === null)
     .map((r) => ({
       id: String(r.id),
       studentId: String(r.student_id),
@@ -205,24 +239,34 @@ export async function provisionRehearsalAccounts(
   deps: { admin: SupabaseClient; env: ServerEnv },
   params: { actorId: string; count: number; requestId?: string },
 ): Promise<{ accounts: RehearsalAccountItem[]; createdCount: number; refreshedCount: number }> {
+  assertRehearsalWriteAllowed(deps.env.NEXT_PUBLIC_SUPABASE_URL);
+
   if (!Number.isInteger(params.count) || params.count < 1 || params.count > 30) {
     throw new ApiError(422, "validation_error", "Số lượng tài khoản thử phải từ 1 đến 30.");
   }
 
   const { data: allProfiles, error: profErr } = await deps.admin
     .from("profiles")
-    .select("id, student_id, class_id")
+    .select("id, student_id, class_id, is_rehearsal")
     .eq("role", "student");
-  if (profErr) throw profErr;
 
-  const realStudentIds = new Set(
+  if (profErr) {
+    throw new ApiError(
+      503,
+      "rehearsal_isolation_not_ready",
+      "Cơ sở dữ liệu chưa có cột cách ly is_rehearsal. Hệ thống từ chối tạo tài khoản thử (fail-closed).",
+    );
+  }
+
+  // Any profile that is not strictly marked is_rehearsal === true and class_id === null is treated as a protected student ID.
+  const protectedStudentIds = new Set(
     (allProfiles ?? [])
-      .filter((p) => p.class_id !== null)
+      .filter((p) => p.is_rehearsal !== true || p.class_id !== null)
       .map((p) => String(p.student_id ?? "").toUpperCase()),
   );
   const existingRehearsalByCode = new Map(
     (allProfiles ?? [])
-      .filter((p) => p.class_id === null && /^(THU|DEMO)\d+/i.test(String(p.student_id ?? "")))
+      .filter((p) => p.is_rehearsal === true && p.class_id === null && /^THU\d+/i.test(String(p.student_id ?? "")))
       .map((p) => [String(p.student_id ?? "").toUpperCase(), String(p.id)]),
   );
 
@@ -233,7 +277,7 @@ export async function provisionRehearsalAccounts(
   while (targetCodes.length < params.count && seq <= 999) {
     const candidate = `THU${String(seq).padStart(3, "0")}`;
     seq += 1;
-    if (realStudentIds.has(candidate)) continue;
+    if (protectedStudentIds.has(candidate)) continue;
     targetCodes.push(candidate);
   }
 
@@ -254,13 +298,17 @@ export async function provisionRehearsalAccounts(
       if (authErr) throw authErr;
       const upd = await deps.admin
         .from("profiles")
-        .update({ status: "active", requires_display_name: false, is_rehearsal: true })
-        .eq("id", existingProfileId);
-      if (upd.error) {
-        await deps.admin
-          .from("profiles")
-          .update({ status: "active", requires_display_name: false })
-          .eq("id", existingProfileId);
+        .update({ status: "active", requires_display_name: false, is_rehearsal: true, class_id: null })
+        .eq("id", existingProfileId)
+        .eq("is_rehearsal", true)
+        .select("id, is_rehearsal, class_id")
+        .single();
+      if (upd.error || upd.data?.is_rehearsal !== true || upd.data?.class_id !== null) {
+        throw new ApiError(
+          503,
+          "rehearsal_isolation_not_ready",
+          "Không thể xác nhận cờ cách ly is_rehearsal=true khi cập nhật tài khoản thử. Đã dừng thao tác (fail-closed).",
+        );
       }
       refreshedCount += 1;
       continue;
@@ -281,20 +329,9 @@ export async function provisionRehearsalAccounts(
     const baseDisplay = REHEARSAL_DISPLAY_NAMES[i % REHEARSAL_DISPLAY_NAMES.length]!;
     const suffix = i >= REHEARSAL_DISPLAY_NAMES.length ? Math.floor(i / REHEARSAL_DISPLAY_NAMES.length) + 1 : null;
 
-    let insertProf = await deps.admin.from("profiles").insert({
-      id: userId,
-      role: "student",
-      student_id: studentId,
-      full_name: `Thí Sinh Thử Nghiệm ${String(i + 1).padStart(2, "0")}`,
-      display_name: baseDisplay,
-      display_name_suffix: suffix,
-      status: "active",
-      class_id: null,
-      requires_display_name: false,
-      is_rehearsal: true,
-    });
-    if (insertProf.error) {
-      insertProf = await deps.admin.from("profiles").insert({
+    const insertProf = await deps.admin
+      .from("profiles")
+      .insert({
         id: userId,
         role: "student",
         student_id: studentId,
@@ -304,11 +341,18 @@ export async function provisionRehearsalAccounts(
         status: "active",
         class_id: null,
         requires_display_name: false,
-      });
-    }
-    if (insertProf.error) {
+        is_rehearsal: true,
+      })
+      .select("id, is_rehearsal, class_id")
+      .single();
+
+    if (insertProf.error || insertProf.data?.is_rehearsal !== true || insertProf.data?.class_id !== null) {
       await deps.admin.auth.admin.deleteUser(userId);
-      throw insertProf.error;
+      throw new ApiError(
+        503,
+        "rehearsal_isolation_not_ready",
+        "Không thể ghi cờ cách ly is_rehearsal=true cho tài khoản thử. Đã thu hồi tài khoản vừa tạo (fail-closed).",
+      );
     }
 
     const { error: identErr } = await deps.admin
@@ -340,7 +384,21 @@ export async function openOrResetRehearsalRound(
   actorId: string,
   options: { name?: string; startWindowMinutes?: number; requestId?: string } = {},
 ) {
+  assertRehearsalWriteAllowed();
   const startWindowMinutes = options.startWindowMinutes ?? 180;
+  if (!Number.isInteger(startWindowMinutes) || startWindowMinutes < 5 || startWindowMinutes > 1440) {
+    throw new ApiError(422, "invalid_start_window", "Thời gian mở nhận lượt thi thử phải từ 5 đến 1440 phút.");
+  }
+
+  // Fail closed if the isolation schema is not installed on the database
+  const { error: isolationSchemaErr } = await admin.from("profiles").select("is_rehearsal").limit(1);
+  if (isolationSchemaErr) {
+    throw new ApiError(
+      503,
+      "rehearsal_isolation_not_ready",
+      "Cơ sở dữ liệu chưa áp dụng migration cách ly phòng thi thử. Hệ thống khóa thao tác (fail-closed).",
+    );
+  }
 
   // Ensure no official competition is currently open
   const { data: openOfficial, error: checkErr } = await admin
@@ -365,85 +423,25 @@ export async function openOrResetRehearsalRound(
     p_start_window_minutes: startWindowMinutes,
   });
 
-  if (!rpcRes.error) {
-    return {
-      ...(rpcRes.data as Record<string, unknown>),
-      fixtures: fixturesInfo,
-    };
-  }
-
-  // If the SQL RPC is not yet installed on a fallback DB, execute the equivalent multi-step flow safely.
-  if (rpcRes.error.code !== "42883" && rpcRes.error.code !== "PGRST202") {
+  if (rpcRes.error) {
+    if (rpcRes.error.code === "42883" || rpcRes.error.code === "PGRST202") {
+      throw new ApiError(
+        503,
+        "rehearsal_isolation_not_ready",
+        "Hàm cách ly reset_rehearsal_competition chưa được cài đặt trên cơ sở dữ liệu (fail-closed).",
+      );
+    }
     throw mapRpcError(rpcRes.error);
   }
 
-  const { data: existingRehearsals, error: listErr } = await admin
-    .from("competitions")
-    .select("id, state")
-    .eq("kind", "rehearsal");
-  if (listErr) throw listErr;
-
-  const closedRehearsalIds: string[] = [];
-  for (const old of existingRehearsals ?? []) {
-    if (old.state === "open") {
-      await rpc(admin, "transition_competition_confirmed", {
-        p_competition_id: old.id,
-        p_actor: actorId,
-        p_target: "start_closed",
-        p_expected_attempts: 60,
-        p_confirmed: false,
-        p_reason: null,
-      });
-      closedRehearsalIds.push(String(old.id));
-    }
-  }
-
-  const roundNum = (existingRehearsals?.length ?? 0) + 1;
-  const title = options.name?.trim() || `Phòng thi thử #${roundNum}`;
-  const nowMs = Date.now();
-  const created = await rpc<{ id: string; publicId: string }>(admin, "create_competition", {
-    p_actor: actorId,
-    p_name: title,
-    p_kind: "rehearsal",
-    p_opens_at: new Date(nowMs - 30_000).toISOString(),
-    p_start_deadline_at: new Date(nowMs + startWindowMinutes * 60_000).toISOString(),
-  });
-
-  await rpc(admin, "transition_competition_confirmed", {
-    p_competition_id: created.id,
-    p_actor: actorId,
-    p_target: "scheduled",
-    p_expected_attempts: 60,
-    p_confirmed: false,
-    p_reason: null,
-  });
-
-  const opened = await rpc<Record<string, unknown>>(admin, "open_competition_now", {
-    p_competition_id: created.id,
-    p_actor: actorId,
-    p_start_window_minutes: startWindowMinutes,
-  });
-
-  await recordAudit(admin, {
-    actorId: actorId,
-    action: "competition.rehearsal_reset",
-    targetType: "competition",
-    targetId: created.id,
-    before: { closedRehearsalIds },
-    after: { newCompetitionId: created.id, name: title, startWindowMinutes },
-    requestId: options.requestId,
-  });
-
   return {
-    ...opened,
-    name: title,
-    kind: "rehearsal",
-    closedRehearsalIds,
+    ...(rpcRes.data as Record<string, unknown>),
     fixtures: fixturesInfo,
   };
 }
 
 export async function closeActiveRehearsalRound(admin: SupabaseClient, actorId: string) {
+  assertRehearsalWriteAllowed();
   const { data: activeRehearsals, error } = await admin
     .from("competitions")
     .select("id, name, state, kind")
@@ -505,8 +503,8 @@ export async function getRehearsalStudioState(admin: SupabaseClient, actorId: st
   if (activeRehearsal && activeRehearsal.state !== "draft" && activeRehearsal.state !== "scheduled") {
     try {
       const [minefield, race] = await Promise.all([
-        rpc(admin, "arena_leaderboard", { p_competition_public_id: activeRehearsal.publicId, p_game: "minefield", p_viewer: actorId }),
-        rpc(admin, "arena_leaderboard", { p_competition_public_id: activeRehearsal.publicId, p_game: "race", p_viewer: actorId }),
+        rpc(admin, "get_leaderboard", { p_competition_public_id: activeRehearsal.publicId, p_game: "minefield", p_limit: 10 }),
+        rpc(admin, "get_leaderboard", { p_competition_public_id: activeRehearsal.publicId, p_game: "race", p_limit: 10 }),
       ]);
       leaderboards = { minefield, race };
     } catch {
@@ -522,5 +520,6 @@ export async function getRehearsalStudioState(admin: SupabaseClient, actorId: st
     rehearsalHistory: rehearsalCompetitions.slice(0, 8),
     accounts,
     leaderboards,
+    environmentInfo: getDatabaseEnvironmentInfo(),
   };
 }

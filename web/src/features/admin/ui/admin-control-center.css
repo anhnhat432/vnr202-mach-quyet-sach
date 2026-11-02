@@ -703,7 +703,77 @@
   gap: 1rem;
 }
 
+/* Responsive Grid Spans & Bulk Action Form Styling */
+.acc-col-span-2 {
+  grid-column: span 2;
+}
+
+.adm__bulk,
+.adm__bulk-form {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.adm__bulk .adm__actions,
+.adm__bulk-form .adm__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.adm__bulk-form {
+  margin-top: 0.75rem;
+  display: grid;
+  gap: 0.65rem;
+}
+
+.adm__bulk-form label {
+  display: grid;
+  gap: 0.35rem;
+  max-width: 100%;
+}
+
+.adm__bulk-form label.adm__check {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.45rem;
+}
+
+.adm__bulk-form textarea {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  min-height: 4.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--acc-radius-sm);
+  border: 1px solid var(--acc-border-strong);
+  background: #0b1218;
+  color: var(--acc-text);
+  font-family: inherit;
+}
+
+.adm__bulk button {
+  max-width: 100%;
+  padding: 0.45rem 0.85rem;
+  border-radius: var(--acc-radius-sm);
+  border: 1px solid var(--acc-border-strong);
+  background: var(--acc-panel);
+  color: var(--acc-text);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.adm__bulk button:disabled {
+  opacity: 0.48;
+  cursor: not-allowed;
+}
+
 @media (max-width: 768px) {
+  .acc-col-span-2 {
+    grid-column: 1 / -1;
+  }
+
   .acc-container {
     width: calc(100% - 1.25rem);
     padding-block: 0.85rem 2.5rem;

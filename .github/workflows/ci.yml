@@ -59,6 +59,8 @@ jobs:
           version: 2.115.0
       - run: supabase start -x studio,imgproxy,storage-api,edge-runtime,logflare,vector,mailpit
         working-directory: .
+      - run: supabase db reset
+        working-directory: .
       - run: supabase test db
         working-directory: .
       - name: Integration tests against the Supabase stack
@@ -142,3 +144,11 @@ jobs:
             web/test-results/**/classroom-*.png
           if-no-files-found: ignore
           retention-days: 3
+      - name: Admin Control Center & Rehearsal Studio live E2E screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rehearsal-studio-e2e-screenshots
+          path: web/test-results/rehearsal-studio-screenshots/*.png
+          if-no-files-found: ignore
+          retention-days: 7

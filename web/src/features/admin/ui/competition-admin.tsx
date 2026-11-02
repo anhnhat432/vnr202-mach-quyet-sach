@@ -696,8 +696,8 @@ export function CompetitionAdmin() {
 
           {/* Right Wide Column: Selected Competition Control Panel & Live Monitor */}
           <section
-            className="acc-panel adm__panel adm__panel--wide"
-            style={{ gridColumn: "span 2", marginBottom: 0 }}
+            className="acc-panel adm__panel adm__panel--wide acc-col-span-2"
+            style={{ marginBottom: 0 }}
           >
             {current ? (
               <>
