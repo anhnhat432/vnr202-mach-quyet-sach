@@ -718,6 +718,23 @@
 }
 
 /* Responsive Grid Spans & Bulk Action Form Styling */
+.acc-ops-grid {
+  display: grid;
+  grid-template-columns: minmax(18rem, 23rem) minmax(0, 1fr);
+  gap: 1rem;
+  align-items: start;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.adm__panel,
+.adm__monitor {
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
 .acc-col-span-2 {
   grid-column: span 2;
 }
@@ -781,6 +798,12 @@
 .adm__bulk button:disabled {
   opacity: 0.48;
   cursor: not-allowed;
+}
+
+@media (max-width: 1024px) {
+  .acc-ops-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 @media (max-width: 768px) {

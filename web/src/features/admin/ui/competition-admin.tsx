@@ -547,17 +547,9 @@ export function CompetitionAdmin() {
 
       {/* TAB 1 & 3: Competition Operations & Incident/Audit Control Room */}
       {activeTab !== "rehearsal" && (
-        <div
-          className="adm"
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(20rem, 1fr))",
-            gap: "1rem",
-            alignItems: "start",
-          }}
-        >
+        <div className="adm acc-ops-grid">
           {/* Left Column: Competition Selector & Create Form */}
-          <section className="acc-panel adm__panel" style={{ marginBottom: 0 }}>
+          <section className="acc-panel adm__panel" style={{ marginBottom: 0, minWidth: 0, maxWidth: "100%" }}>
             <div className="acc-panel-header">
               <h2 className="acc-panel-title">Cuộc thi ({list?.length ?? 0})</h2>
               <button
@@ -706,8 +698,8 @@ export function CompetitionAdmin() {
 
           {/* Right Wide Column: Selected Competition Control Panel & Live Monitor */}
           <section
-            className="acc-panel adm__panel adm__panel--wide acc-col-span-2"
-            style={{ marginBottom: 0 }}
+            className="acc-panel adm__panel adm__panel--wide"
+            style={{ marginBottom: 0, minWidth: 0, maxWidth: "100%" }}
           >
             {current ? (
               <>
@@ -977,7 +969,17 @@ export function CompetitionAdmin() {
                 </div>
 
                 {/* Live Monitor Tables (.adm__monitor) */}
-                <div className="adm__monitor" style={{ display: "grid", gap: "0.95rem", marginBottom: "1rem" }}>
+                <div
+                  className="adm__monitor"
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "minmax(0, 1fr)",
+                    gap: "0.95rem",
+                    marginBottom: "1rem",
+                    minWidth: 0,
+                    maxWidth: "100%",
+                  }}
+                >
                   {(["minefield", "race"] as const)
                     .filter((game) => !monitorGameFilter || monitorGameFilter === game)
                     .map((game) => (
