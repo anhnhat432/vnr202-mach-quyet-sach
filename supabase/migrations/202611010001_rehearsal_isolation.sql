@@ -171,19 +171,20 @@ security definer
 set search_path = ''
 as $$
 declare
+  v_kind public.competition_kind;
   v_count int;
 begin
+  select kind into v_kind from public.competitions where id = p_competition_id;
+
   update public.question_exposures x
   set answer_disclosed_at = public.arena_clock()
-  from public.competitions c,
-       public.question_versions v
-       join public.questions q on q.id = v.question_id
+  from public.question_versions v
+  join public.questions q on q.id = v.question_id
   where x.competition_id = p_competition_id
-    and c.id = x.competition_id
     and x.question_version_id = v.id
     and x.displayed_count > 0
     and x.answer_disclosed_at is null
-    and (c.kind = 'official' or q.origin = 'fixture');
+    and (v_kind is null or v_kind = 'official' or q.origin = 'fixture');
 
   get diagnostics v_count = row_count;
   return v_count;
