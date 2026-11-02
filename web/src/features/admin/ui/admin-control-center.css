@@ -24,9 +24,12 @@
   --acc-radius-sm: 6px;
   --acc-shadow: 0 14px 34px rgba(0, 0, 0, 0.38);
 
+  position: relative;
   min-height: calc(100vh - 3.5rem);
-  max-width: 100%;
-  overflow-x: clip;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  box-sizing: border-box;
   background:
     radial-gradient(circle at 12% 0%, rgba(177, 40, 46, 0.16), transparent 38%),
     radial-gradient(circle at 88% 4%, rgba(240, 170, 60, 0.12), transparent 36%),
@@ -37,18 +40,20 @@
 
 .acc-container {
   width: min(100% - 2rem, 86rem);
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
   margin-inline: auto;
   padding-block: 1.25rem 3.5rem;
 }
 
 /* Top Navigation Bar */
 .acc-topbar {
-  background: rgba(15, 23, 30, 0.92);
+  background: rgba(15, 23, 30, 0.96);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--acc-border);
-  position: sticky;
-  top: 0;
-  z-index: 30;
+  position: relative;
+  z-index: 20;
 }
 
 .acc-topbar-inner {
@@ -615,6 +620,7 @@
 
 /* Tables */
 .acc-table-wrap {
+  position: relative;
   width: 100%;
   min-width: 0;
   max-width: 100%;
@@ -632,6 +638,7 @@
 }
 
 .acc-table th {
+  position: relative;
   text-align: left;
   padding: 0.65rem 0.75rem;
   background: #121c25;
@@ -738,6 +745,80 @@
   min-width: 0;
   max-width: 100%;
   box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.acc-shell .adm__panel {
+  background: var(--acc-panel);
+  border-color: var(--acc-border);
+  color: var(--acc-text);
+}
+
+.acc-shell .adm .adm__list button.acc-comp-card {
+  background: var(--acc-panel-alt);
+  border: 1px solid var(--acc-border);
+  color: var(--acc-text);
+}
+
+.acc-shell .adm .adm__list button.acc-comp-card[data-selected="true"] {
+  border-color: var(--acc-amber);
+  background: linear-gradient(135deg, rgba(240, 170, 60, 0.16), rgba(24, 37, 48, 0.95));
+}
+
+.acc-shell .adm .adm__create input,
+.acc-shell .adm .adm__create select,
+.acc-shell .adm .adm__filters input,
+.acc-shell .adm .adm__filters select,
+.acc-shell .adm input.acc-input,
+.acc-shell .adm select.acc-select,
+.acc-shell .adm textarea.acc-textarea {
+  background: #0b1218;
+  border: 1px solid var(--acc-border-strong);
+  color: var(--acc-text);
+}
+
+.acc-shell .adm button.acc-btn {
+  background: var(--acc-panel-alt);
+  border: 1px solid var(--acc-border-strong);
+  color: var(--acc-text);
+}
+
+.acc-shell .adm button.acc-btn-primary {
+  background: linear-gradient(135deg, #1fb3a6, #148f84);
+  border-color: #2dd4bf;
+  color: #062220;
+}
+
+.acc-shell .adm button.acc-btn-amber {
+  background: linear-gradient(135deg, #f0aa3c, #d48817);
+  border-color: #fbbf24;
+  color: #1c1204;
+}
+
+.acc-shell .adm button.acc-btn-danger {
+  background: rgba(224, 69, 75, 0.16);
+  border-color: rgba(224, 69, 75, 0.65);
+  color: #fca5a5;
+}
+
+.acc-shell .adm button.acc-btn-danger-solid {
+  background: linear-gradient(135deg, #d9383e, #9e2026);
+  border-color: #f87171;
+  color: #fff;
+}
+
+.acc-shell .adm .adm__questions > li,
+.acc-shell .adm .adm__bulk,
+.acc-shell .adm .adm__incident,
+.acc-shell .adm .adm__disclosed {
+  background: var(--acc-panel-alt);
+  border-color: var(--acc-border);
+  color: var(--acc-text);
+}
+
+.acc-shell .adm .adm__questions header,
+.acc-shell .adm .adm__explain {
+  color: var(--acc-text-Soft);
 }
 
 .acc-col-span-2 {

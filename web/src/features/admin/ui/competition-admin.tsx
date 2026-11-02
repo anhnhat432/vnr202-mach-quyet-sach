@@ -1001,9 +1001,7 @@ export function CompetitionAdmin() {
                                 <th>Kết nối</th>
                                 <th>Ghi nhận</th>
                                 <th>Sự cố</th>
-                                <th>
-                                  <span className="sr-only">Thao tác</span>
-                                </th>
+                                <th>Thao tác</th>
                               </tr>
                             </thead>
                             <tbody>

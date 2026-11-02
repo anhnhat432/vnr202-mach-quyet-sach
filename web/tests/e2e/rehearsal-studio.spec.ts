@@ -401,8 +401,16 @@ test("Rehearsal Studio full closed-loop E2E: RBAC, CSRF, network retry, THU acco
 
     // Capture live Rehearsal Studio screenshots (Desktop 1440x960 & Mobile 390x844)
     await page.setViewportSize({ width: 1440, height: 960 });
+    await page.evaluate(() => {
+      if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+      window.scrollTo(0, 0);
+    });
     await page.screenshot({ path: path.join(screenshotDir, "admin-rehearsal-desktop.png"), fullPage: true });
     await page.setViewportSize({ width: 390, height: 844 });
+    await page.evaluate(() => {
+      if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+      window.scrollTo(0, 0);
+    });
     await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
     await page.screenshot({ path: path.join(screenshotDir, "admin-rehearsal-mobile.png"), fullPage: true });
 
@@ -412,8 +420,16 @@ test("Rehearsal Studio full closed-loop E2E: RBAC, CSRF, network retry, THU acco
     await page.getByRole("button", { name: "Làm mới ngay" }).click();
     await page.getByRole("button", { name: new RegExp(round1Name) }).click();
     await expect(page.locator(".adm__monitor tbody tr", { hasText: "THU001" }).first()).toBeVisible({ timeout: 10000 });
+    await page.evaluate(() => {
+      if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+      window.scrollTo(0, 0);
+    });
     await page.screenshot({ path: path.join(screenshotDir, "admin-overview-desktop.png"), fullPage: true });
     await page.setViewportSize({ width: 390, height: 844 });
+    await page.evaluate(() => {
+      if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+      window.scrollTo(0, 0);
+    });
     await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
     await page.screenshot({ path: path.join(screenshotDir, "admin-overview-mobile.png"), fullPage: true });
     await page.setViewportSize({ width: 1440, height: 960 });
