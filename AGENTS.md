@@ -13,6 +13,7 @@ VNR202 - Mạch Quyết Sách is a public educational history experience with 15
 5. `docs/sdd/PLAN.md`
 6. `docs/sdd/TASKS.md`
 7. The detailed plan for the active phase
+8. For Live Arena work: `docs/sdd/specs/live-arena-game-spec.md` and `docs/sdd/architecture/ADR-004-live-arena-game-redesign.md` (they amend the Core spec, see its §16)
 
 ## Immutable boundaries
 
@@ -20,7 +21,10 @@ VNR202 - Mạch Quyết Sách is a public educational history experience with 15
 - Server/database is authoritative for attempts, timers, answers, scores and ranks.
 - Client never writes score, rank, attempt count, remaining time or publication state directly.
 - One attempt per student, game and competition; resume and device transfer reuse the same attempt.
-- Public leaderboard shows full name but never student ID.
+- At most one active attempt per student across both games; the game clock never pauses and question deadlines are absolute.
+- The shared default student password and its derivation pepper live only in server-side environment variables; never hard-code them in code, seeds or fixtures.
+- No correct answer or explanation leaves the server before the competition is Finalized.
+- Public leaderboards and public APIs show only the classroom display name (e.g. "An N.V."), never full name or student ID; anonymous viewers get Top 10 and aggregates only.
 - AI can draft academic content but cannot review or publish it.
 - Never commit secrets, real roster data, temporary passwords or service-role credentials.
 

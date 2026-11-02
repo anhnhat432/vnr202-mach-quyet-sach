@@ -6,6 +6,7 @@ import Link from "next/link";
 import { HeroCrowd, MeterGlyph } from "@/features/brand/artwork";
 import { METERS } from "@/features/crisis/crisis-scenario";
 import { CrisisTeaser } from "@/features/crisis/crisis-teaser";
+import { SHOW_PUBLIC_STUDY_SECTIONS } from "@/lib/config/public-experience";
 
 // Ảnh nền hero — ảnh tư liệu thuộc phạm vi công cộng. Đặt null để quay lại minh hoạ vector.
 const HERO_PHOTO: { src: string; credit: string } | null = {
@@ -33,6 +34,7 @@ const more = [
     title: "15 khoảnh khắc",
     body: "Chạm chọn một quyết định lịch sử, lật bài xem bạn có nghĩ giống lịch sử không.",
   },
+  ...(SHOW_PUBLIC_STUDY_SECTIONS ? [
   {
     href: "/ho-so",
     tag: "Tư liệu",
@@ -45,6 +47,7 @@ const more = [
     title: "Mạch nguyên nhân",
     body: "Quan hệ nhân – quả nối các sự kiện, thay cho một dòng thời gian phẳng.",
   },
+  ] : []),
 ] as const;
 
 const chapters = [
@@ -137,7 +140,7 @@ export default function Home() {
       <CrisisTeaser />
 
       <section className="cold-more" aria-label="Các phân hệ khác">
-        <p className="cold-more__eyebrow">Chơi xong, muốn đi sâu hơn?</p>
+        <p className="cold-more__eyebrow">Khám phá thêm</p>
         <div className="cold-more__grid">
           {more.map((item) => (
             <Link className="cold-card" key={item.href} href={item.href}>
@@ -150,7 +153,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="cold-chapters" aria-label="Ba chương lịch sử">
+      {SHOW_PUBLIC_STUDY_SECTIONS && <section className="cold-chapters" aria-label="Ba chương lịch sử">
         {chapters.map((chapter) => (
           <Link className="cold-chapter" key={chapter.number} href={chapter.href}>
             <span className="cold-chapter__num">CH.{chapter.number}</span>
@@ -158,7 +161,7 @@ export default function Home() {
             <span className="cold-chapter__years">{chapter.years}</span>
           </Link>
         ))}
-      </section>
+      </section>}
     </div>
   );
 }

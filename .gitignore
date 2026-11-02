@@ -18,3 +18,6 @@ tmp/
 *.pyc
 analysis/course_corpus.json
 roster*.csv
+
+# local database harness state and generated secrets
+.local/

@@ -1,0 +1,641 @@
+{
+  "schemaVersion": 1,
+  "game": "race",
+  "questions": [
+    {
+      "key": "ai-race-001",
+      "pool": "race",
+      "chapter": "chapter_1",
+      "topic": "Thành lập Đảng 1930",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "Ai chủ trì hội nghị hợp nhất các tổ chức cộng sản đầu năm 1930?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Nguyễn Ái Quốc"
+        },
+        {
+          "id": "b",
+          "label": "Trần Phú"
+        },
+        {
+          "id": "c",
+          "label": "Lê Hồng Phong"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Hội nghị đầu năm 1930 do Nguyễn Ái Quốc chủ trì đã thống nhất các tổ chức cộng sản và thành lập Đảng Cộng sản Việt Nam.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương I",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'hop-nhat-de-mo-duong' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000004",
+          "locator": "Slides 3-18",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'hop-nhat-de-mo-duong' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "ai-race-002",
+      "pool": "race",
+      "chapter": "chapter_1",
+      "topic": "Trình tự sự kiện",
+      "type": "before_after",
+      "difficulty": "easy",
+      "prompt": "Sự kiện nào xảy ra trước?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Tổng khởi nghĩa (tháng 8/1945)"
+        },
+        {
+          "id": "b",
+          "label": "Thành lập Đảng (đầu năm 1930)"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Đảng Cộng sản Việt Nam được thành lập đầu năm 1930, trước Tổng khởi nghĩa tháng 8/1945.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương I",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'hop-nhat-de-mo-duong' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000004",
+          "locator": "Slides 3-18",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'hop-nhat-de-mo-duong' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "ai-race-003",
+      "pool": "race",
+      "chapter": "chapter_2",
+      "topic": "Kháng chiến toàn quốc",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "Kháng chiến toàn quốc chống Pháp được phát động vào ngày nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "2/9/1945"
+        },
+        {
+          "id": "b",
+          "label": "7/5/1954"
+        },
+        {
+          "id": "c",
+          "label": "19/12/1946"
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "Kháng chiến toàn quốc được phát động ngày 19/12/1946.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương II - Đường lối kháng chiến chống Pháp",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'khi-hoa-hoan-khong-con-du-dia' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000012",
+          "locator": "Slides 3-18",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'khi-hoa-hoan-khong-con-du-dia' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "ai-race-004",
+      "pool": "race",
+      "chapter": "chapter_2",
+      "topic": "Điện Biên Phủ",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "Chiến dịch Điện Biên Phủ kéo dài bao nhiêu ngày đêm?",
+      "options": [
+        {
+          "id": "a",
+          "label": "56 ngày đêm"
+        },
+        {
+          "id": "b",
+          "label": "36 ngày đêm"
+        },
+        {
+          "id": "c",
+          "label": "100 ngày đêm"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Tập đoàn cứ điểm Điện Biên Phủ bị tiêu diệt hoàn toàn sau 56 ngày đêm.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương II - Kháng chiến chống Pháp và Điện Biên Phủ",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000013",
+          "locator": "Slides 3-15",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000014",
+          "locator": "Slides 3-16",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "ai-race-005",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Đổi mới 1986",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "Đại hội nào mở đường cho đổi mới toàn diện?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Đại hội VIII (1996)"
+        },
+        {
+          "id": "b",
+          "label": "Đại hội VI (1986)"
+        },
+        {
+          "id": "c",
+          "label": "Đại hội IV (1976)"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Đại hội VI năm 1986 mở đường cho đổi mới toàn diện.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương III",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'doi-moi-hay-tut-hau' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000022",
+          "locator": "Slides 3-26",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'doi-moi-hay-tut-hau' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "ai-race-006",
+      "pool": "race",
+      "chapter": "chapter_2",
+      "topic": "Trình tự sự kiện",
+      "type": "before_after",
+      "difficulty": "easy",
+      "prompt": "Sự kiện nào xảy ra sau?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Kháng chiến toàn quốc (12/1946)"
+        },
+        {
+          "id": "b",
+          "label": "Hiệp định Geneve (1954)"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Kháng chiến toàn quốc bắt đầu ngày 19/12/1946; Hiệp định Geneve được ký sau chiến thắng Điện Biên Phủ năm 1954.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương II - Kháng chiến chống Pháp và Điện Biên Phủ",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000013",
+          "locator": "Slides 3-15",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000014",
+          "locator": "Slides 3-16",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "ai-race-007",
+      "pool": "race",
+      "chapter": "chapter_1",
+      "topic": "Thống nhất 1929-1930",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Mâu thuẫn chính của giai đoạn 1929–1930 là gì?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Cần thống nhất, nhưng tổ chức chia rẽ"
+        },
+        {
+          "id": "b",
+          "label": "Thiếu vũ khí để khởi nghĩa"
+        },
+        {
+          "id": "c",
+          "label": "Thiếu người biết chữ trong phong trào"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Yêu cầu thống nhất lực lượng cách mạng đối lập với tình trạng chia rẽ tổ chức và thiếu một cương lĩnh chung.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương I",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'hop-nhat-de-mo-duong' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000004",
+          "locator": "Slides 3-18",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'hop-nhat-de-mo-duong' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "ai-race-008",
+      "pool": "race",
+      "chapter": "chapter_1",
+      "topic": "Phong trào 1930-1935",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Sau đàn áp 1930–1931, Đảng thực tế đã làm gì?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Rút khỏi hoạt động trong nước"
+        },
+        {
+          "id": "b",
+          "label": "Bảo toàn, tổng kết, khôi phục tổ chức"
+        },
+        {
+          "id": "c",
+          "label": "Phát động ngay tổng khởi nghĩa"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Đảng và cán bộ còn lại kiên trì khôi phục tổ chức, xây dựng chương trình hành động và tiến tới Đại hội I năm 1935.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương I - Phong trào 1930-1935",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'giu-mach-phong-trao' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000005",
+          "locator": "Slides 3-18",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'giu-mach-phong-trao' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "ai-race-009",
+      "pool": "race",
+      "chapter": "chapter_1",
+      "topic": "Phong trào dân chủ 1936-1939",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Giai đoạn 1936–1939, Đảng kết hợp những hình thức đấu tranh nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Chỉ hoạt động bí mật"
+        },
+        {
+          "id": "b",
+          "label": "Chỉ đấu tranh vũ trang"
+        },
+        {
+          "id": "c",
+          "label": "Cả công khai lẫn nửa hợp pháp"
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "Đảng xây dựng mặt trận rộng rãi và kết hợp các hình thức công khai, nửa công khai, hợp pháp và nửa hợp pháp.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương I - Phong trào dân chủ 1936-1939",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'linh-hoat-trong-cua-so-dan-chu' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000006",
+          "locator": "Slides 3-11",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'linh-hoat-trong-cua-so-dan-chu' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "ai-race-010",
+      "pool": "race",
+      "chapter": "chapter_2",
+      "topic": "Bảo vệ chính quyền 1945-1946",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Đường lối bảo vệ chính quyền 1945–1946 kết hợp điều gì?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Chống đói, dốt; ngoại giao linh hoạt"
+        },
+        {
+          "id": "b",
+          "label": "Chỉ tập trung quân sự"
+        },
+        {
+          "id": "c",
+          "label": "Chỉ nhờ viện trợ bên ngoài"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Đường lối kết hợp chống đói, chống dốt, xây dựng nhà nước mới, trấn áp phản cách mạng và ngoại giao linh hoạt.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương II",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'giu-chinh-quyen-giua-vong-vay' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000011",
+          "locator": "Slides 3-18",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'giu-chinh-quyen-giua-vong-vay' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "ai-race-011",
+      "pool": "race",
+      "chapter": "chapter_2",
+      "topic": "Hai nhiệm vụ chiến lược",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Sau 1954, vai trò của miền Bắc và miền Nam là gì?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Cả hai cùng là hậu phương"
+        },
+        {
+          "id": "b",
+          "label": "Bắc: hậu phương lớn; Nam: tiền tuyến lớn"
+        },
+        {
+          "id": "c",
+          "label": "Nam: hậu phương lớn; Bắc: tiền tuyến lớn"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Miền Bắc là hậu phương lớn, miền Nam là tiền tuyến lớn.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương II - Một Đảng lãnh đạo hai nhiệm vụ chiến lược",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'mot-dat-nuoc-hai-nhiem-vu-chien-luoc' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000015",
+          "locator": "Slides 3-18",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'mot-dat-nuoc-hai-nhiem-vu-chien-luoc' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "ai-race-012",
+      "pool": "race",
+      "chapter": "chapter_2",
+      "topic": "Đường lối kháng chiến",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Đường lối kháng chiến toàn quốc được tóm tắt thế nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Đánh nhanh thắng nhanh nhờ viện trợ"
+        },
+        {
+          "id": "b",
+          "label": "Cố thủ ở các thành thị lớn"
+        },
+        {
+          "id": "c",
+          "label": "Toàn dân, toàn diện, lâu dài, tự lực"
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "Đường lối kháng chiến là toàn dân, toàn diện, lâu dài và dựa vào sức mình là chính.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương II - Đường lối kháng chiến chống Pháp",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'khi-hoa-hoan-khong-con-du-dia' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000012",
+          "locator": "Slides 3-18",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'khi-hoa-hoan-khong-con-du-dia' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "ai-race-013",
+      "pool": "race",
+      "chapter": "chapter_3",
+      "topic": "Đổi mới 1986",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Từ Đại hội VI, lĩnh vực nào là trọng tâm đổi mới ban đầu?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Đổi mới kinh tế"
+        },
+        {
+          "id": "b",
+          "label": "Đổi mới quân sự"
+        },
+        {
+          "id": "c",
+          "label": "Đổi mới nghệ thuật"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Đại hội VI coi đổi mới kinh tế là trọng tâm ban đầu.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương III",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'doi-moi-hay-tut-hau' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000022",
+          "locator": "Slides 3-26",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'doi-moi-hay-tut-hau' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "ai-race-014",
+      "pool": "race",
+      "chapter": "chapter_2",
+      "topic": "Hiệp định Geneve",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "Hiệp định Geneve công nhận điều gì với ba nước Đông Dương?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Chia thành các vùng chiếm đóng"
+        },
+        {
+          "id": "b",
+          "label": "Độc lập, chủ quyền, thống nhất, toàn vẹn"
+        },
+        {
+          "id": "c",
+          "label": "Chỉ độc lập, chưa có chủ quyền"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Hiệp định Geneve buộc Pháp công nhận độc lập, chủ quyền, thống nhất và toàn vẹn lãnh thổ ba nước Đông Dương.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương II - Kháng chiến chống Pháp và Điện Biên Phủ",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000013",
+          "locator": "Slides 3-15",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000014",
+          "locator": "Slides 3-16",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "ai-race-015",
+      "pool": "race",
+      "chapter": "chapter_2",
+      "topic": "Điện Biên Phủ",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "Phương châm tác chiến ở Điện Biên Phủ là gì?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Đánh nhanh, thắng nhanh"
+        },
+        {
+          "id": "b",
+          "label": "Vây lấn, không giao chiến"
+        },
+        {
+          "id": "c",
+          "label": "Đánh chắc, tiến chắc"
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "Bộ Chính trị chọn phương châm 'đánh chắc, tiến chắc' cho chiến dịch Điện Biên Phủ.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương II - Kháng chiến chống Pháp và Điện Biên Phủ",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000013",
+          "locator": "Slides 3-15",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000014",
+          "locator": "Slides 3-16",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "ai-race-016",
+      "pool": "race",
+      "chapter": "chapter_1",
+      "topic": "Tổng khởi nghĩa 8/1945",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "Đảng phát động Tổng khởi nghĩa 8/1945 vào thời điểm nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Nhật đầu hàng, bộ máy địch khủng hoảng"
+        },
+        {
+          "id": "b",
+          "label": "Khi quân Pháp quay lại Đông Dương"
+        },
+        {
+          "id": "c",
+          "label": "Ngay sau Đại hội I năm 1935"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Đảng quyết định phát động Tổng khởi nghĩa khi Nhật đầu hàng và bộ máy cai trị khủng hoảng trong tháng 8/1945.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương I - Giải phóng dân tộc 1939-1945 và Cách mạng Tháng Tám",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'chop-dung-thoi-co' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000007",
+          "locator": "Slides 3-16",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'chop-dung-thoi-co' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000008",
+          "locator": "Slides 3-9",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'chop-dung-thoi-co' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000009",
+          "locator": "Slides 3-12",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'chop-dung-thoi-co' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000010",
+          "locator": "Slides 3-9",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'chop-dung-thoi-co' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        }
+      ],
+      "aiAssisted": true
+    }
+  ]
+}

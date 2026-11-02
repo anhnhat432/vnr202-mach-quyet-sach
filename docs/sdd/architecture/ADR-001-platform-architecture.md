@@ -1,6 +1,6 @@
 # ADR-001: Kiến trúc nền tảng VNR202 - Mạch Quyết Sách
 
-Trạng thái: Accepted  
+Trạng thái: Accepted (một phần được sửa bởi ADR-004 ngày 2026-10-29: game, thời gian và mật khẩu Live Arena V1.0)  
 Ngày: 2026-08-19  
 Phạm vi: Runtime, ranh giới client/server, dữ liệu, realtime và triển khai
 
@@ -13,10 +13,10 @@ Sản phẩm phải phục vụ nội dung công khai, 60 người chơi đồng
 ### Runtime và phiên bản nền
 
 - Node.js `22.14.0` hoặc mới hơn trong nhánh 22 LTS.
-- Next.js `16.3.1`, React `19.2.8`, TypeScript `7.0.2`.
+- Next.js `16.4.3` (nâng từ 16.3.1 do GHSA, xem ADR-005), React `19.2.8`, TypeScript `7.0.2`.
 - Next.js App Router, React Server Components cho dữ liệu đọc ban đầu và Route Handlers cho API `/api/v1`.
 - Supabase JavaScript `2.112.3` và `@supabase/ssr` `0.12.4` cho session cookie phía server.
-- Zod `4.4.3` cho validation ở biên API và validation JSON content.
+- Zod `4.6.7` (nâng từ 4.4.3 do GHSA, xem ADR-005) cho validation ở biên API và validation JSON content.
 - Vitest `4.1.11` cho unit/integration tests; Playwright `1.62.1` cho end-to-end.
 - Vercel chạy ứng dụng Next.js; Supabase cung cấp PostgreSQL, Auth và Realtime.
 
@@ -52,7 +52,7 @@ Các phiên bản trên là snapshot tại thời điểm lập kế hoạch. Lo
 - Giao diện đăng nhập nhận `studentId` và password.
 - Supabase Auth vẫn dùng email/password nội bộ; server ánh xạ student ID sang một synthetic email không hiển thị cho người dùng.
 - Student role và admin role nằm trong `app_metadata`, chỉ service role được sửa.
-- `profiles.must_change_password` là cờ do server quản lý; mọi protected route ngoài đổi mật khẩu và đăng xuất phải chặn tài khoản còn cờ này.
+- `profiles.must_change_password` là cờ do server quản lý; mọi protected route ngoài đổi mật khẩu và đăng xuất phải chặn tài khoản còn cờ này. **[Sửa bởi ADR-004: V1 dùng mật khẩu mặc định chung, không bắt buộc đổi mật khẩu; cờ luôn `false` với sinh viên.]**
 
 ### Realtime
 

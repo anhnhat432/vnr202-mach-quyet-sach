@@ -25,3 +25,130 @@ jobs:
       - run: npm run typecheck
       - run: npm run test
       - run: npm run build
+      - name: Offline dossier reload against production build
+        run: |
+          npx playwright install --with-deps chromium
+          E2E_PRODUCTION=1 npx playwright test tests/e2e/passport-offline.spec.ts --project=desktop-chromium --workers=1
+
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.14.0
+      - run: node scripts/security/scan-secrets.mjs
+
+  # Real Supabase stack (Postgres, Auth, REST). Written for the Supabase CLI path that could not be
+  # exercised in the authoring sandbox (registry limits); first CI run must confirm it.
+  database:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.14.0
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: npm ci --ignore-scripts
+      - uses: supabase/setup-cli@v1
+        with:
+          version: 2.115.0
+      - run: supabase start -x studio,imgproxy,storage-api,edge-runtime,logflare,vector,mailpit
+        working-directory: .
+      - run: supabase db reset
+        working-directory: .
+      - run: supabase test db
+        working-directory: .
+      - name: Integration tests against the Supabase stack
+        working-directory: web
+        run: |
+          eval "$(supabase status -o env --workdir .. | sed 's/^/export /')"
+          export SUPABASE_URL="$API_URL" SUPABASE_ANON_KEY="$ANON_KEY" SUPABASE_SERVICE_ROLE_KEY="$SERVICE_ROLE_KEY" SUPABASE_DB_URL="$DB_URL"
+          npm run test:integration
+      - name: Browser e2e (public pages, auth and roster routes)
+        timeout-minutes: 18
+        working-directory: web
+        run: |
+          eval "$(supabase status -o env --workdir .. | sed 's/^/export /')"
+          export SUPABASE_URL="$API_URL" SUPABASE_ANON_KEY="$ANON_KEY" SUPABASE_SERVICE_ROLE_KEY="$SERVICE_ROLE_KEY" SUPABASE_DB_URL="$DB_URL"
+          export NEXT_PUBLIC_SUPABASE_URL="$API_URL" NEXT_PUBLIC_SUPABASE_ANON_KEY="$ANON_KEY" NEXT_PUBLIC_SITE_URL=http://127.0.0.1:3000
+          # Throwaway values generated for this run only; none is a real secret.
+          export AUTH_PASSWORD_PEPPER="$(openssl rand -hex 32)" CSRF_SIGNING_SECRET="$(openssl rand -hex 32)" INTERNAL_AUTH_EMAIL_DOMAIN=auth.invalid
+          export ROSTER_DEFAULT_PASSWORD="$(openssl rand -hex 1 | cut -c1)" # one random character: the shared password is one character long
+          export E2E_REALTIME=1 # Realtime runs in this stack: the Broadcast-to-browser check is mandatory
+          npx playwright install --with-deps chromium
+          npx playwright test
+      - name: Production-mode synthetic classroom load (independent of browser outcome)
+        if: ${{ !cancelled() && (success() || failure()) }}
+        timeout-minutes: 10
+        working-directory: web
+        run: |
+          eval "$(supabase status -o env --workdir .. | sed 's/^/export /')"
+          export SUPABASE_URL="$API_URL" SUPABASE_ANON_KEY="$ANON_KEY" SUPABASE_SERVICE_ROLE_KEY="$SERVICE_ROLE_KEY" SUPABASE_DB_URL="$DB_URL"
+          export NEXT_PUBLIC_SUPABASE_URL="$API_URL" NEXT_PUBLIC_SUPABASE_ANON_KEY="$ANON_KEY" NEXT_PUBLIC_SITE_URL=http://127.0.0.1:3001
+          # A new local-only world/server: never reuse an E2E session or an orphan dev server.
+          export AUTH_PASSWORD_PEPPER="$(openssl rand -hex 32)" CSRF_SIGNING_SECRET="$(openssl rand -hex 32)" INTERNAL_AUTH_EMAIL_DOMAIN=auth.invalid
+          export ROSTER_DEFAULT_PASSWORD="$(openssl rand -hex 1 | cut -c1)"
+          npm run build
+          npm run start -- --port 3001 > "$RUNNER_TEMP/classroom-load-server.log" 2>&1 &
+          classroom_server_pid=$!
+          trap 'kill "$classroom_server_pid" 2>/dev/null || true' EXIT
+          classroom_ready=0
+          for i in $(seq 1 60); do
+            kill -0 "$classroom_server_pid" 2>/dev/null || { cat "$RUNNER_TEMP/classroom-load-server.log"; exit 1; }
+            if curl --silent --fail http://127.0.0.1:3001/ > /dev/null; then classroom_ready=1; break; fi
+            sleep 1
+          done
+          test "$classroom_ready" = 1
+          node --test ../scripts/load/load-results.test.mjs
+          node ../scripts/load/arena-load.mjs --players 70 --viewers 35 --base http://127.0.0.1:3001 --paced-login --assert --cdn --out "$RUNNER_TEMP/classroom-load-70.json"
+      - name: Browser failure diagnostics (isolated synthetic accounts only)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-failure-diagnostics
+          path: |
+            web/test-results/**/trace.zip
+            web/test-results/**/error-context.md
+          if-no-files-found: ignore
+          retention-days: 3
+      - name: Synthetic classroom load evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: classroom-load-70
+          path: |
+            ${{ runner.temp }}/classroom-load-70.json
+            ${{ runner.temp }}/classroom-load-server.log
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Grouped question review browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: question-bank-bulk-e2e
+          path: web/test-results/**/question-bank-bulk-*.png
+          if-no-files-found: ignore
+          retention-days: 3
+      - name: First-login name browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: student-name-e2e
+          path: |
+            web/test-results/**/student-name-*.png
+            web/test-results/**/classroom-*.png
+          if-no-files-found: ignore
+          retention-days: 3
+      - name: Admin Control Center & Rehearsal Studio live E2E screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rehearsal-studio-e2e-screenshots
+          path: web/test-results/rehearsal-studio-screenshots/*.png
+          if-no-files-found: ignore
+          retention-days: 7

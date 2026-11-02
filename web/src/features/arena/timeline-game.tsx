@@ -1,8 +1,10 @@
 "use client";
 
+import { Volume2, VolumeX } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import { useArenaSound } from "@/features/arena/client/sound";
 import { sampleRound, type TimelineEvent } from "@/features/arena/practice-events";
 
 const ROUND_SIZE = 6;
@@ -38,6 +40,7 @@ function scoreRound(order: TimelineEvent[], elapsed: number): Scored {
 
 export function TimelineGame() {
   const reduceMotion = useReducedMotion();
+  const sound = useArenaSound();
   const [phase, setPhase] = useState<Phase>("idle");
   const [order, setOrder] = useState<TimelineEvent[]>([]);
   const [elapsed, setElapsed] = useState(0);
@@ -45,6 +48,7 @@ export function TimelineGame() {
   const [best, setBest] = useState<number | null>(null);
   const [dragIndex, setDragIndex] = useState<number | null>(null);
   const liveRef = useRef<HTMLParagraphElement | null>(null);
+  const { play } = sound;
 
   useEffect(() => {
     const stored = window.localStorage.getItem(BEST_KEY);
@@ -60,15 +64,17 @@ export function TimelineGame() {
   }, [phase]);
 
   const startRound = useCallback(() => {
+    play("start");
     setOrder(sampleRound(ROUND_SIZE));
     setElapsed(0);
     setResult(null);
     setPhase("playing");
-  }, []);
+  }, [play]);
 
   const move = useCallback(
     (from: number, to: number) => {
       if (to < 0 || to >= order.length || from === to) return;
+      play("tap");
       setOrder((current) => {
         const next = [...current];
         const [item] = next.splice(from, 1);
@@ -79,11 +85,12 @@ export function TimelineGame() {
         return next;
       });
     },
-    [order.length],
+    [order.length, play],
   );
 
   const check = useCallback(() => {
     const scored = scoreRound(order, elapsed);
+    play(scored.perfect ? "finish" : scored.correctPositions >= 4 ? "correct" : "wrong");
     setResult(scored);
     setPhase("result");
     setBest((current) => {
@@ -91,7 +98,7 @@ export function TimelineGame() {
       window.localStorage.setItem(BEST_KEY, String(next));
       return next;
     });
-  }, [order, elapsed]);
+  }, [order, elapsed, play]);
 
   const solution =
     phase === "result" ? [...order].sort((a, b) => a.sortKey - b.sortKey) : [];
@@ -112,6 +119,16 @@ export function TimelineGame() {
           <span>Kỷ lục cục bộ</span>
           <strong>{best === null ? "—" : `${best} điểm`}</strong>
         </div>
+        <button
+          type="button"
+          className="scenario-action"
+          onClick={sound.toggle}
+          aria-pressed={sound.enabled}
+          aria-label={sound.enabled ? "Tắt âm thanh" : "Bật âm thanh"}
+        >
+          {sound.enabled ? <Volume2 aria-hidden size={16} /> : <VolumeX aria-hidden size={16} />}{" "}
+          {sound.enabled ? "Âm thanh: Bật" : "Âm thanh: Tắt"}
+        </button>
       </div>
 
       {phase === "idle" && (

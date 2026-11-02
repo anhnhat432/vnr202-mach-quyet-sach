@@ -1,0 +1,225 @@
+{
+  "schemaVersion": 1,
+  "game": "minefield",
+  "questions": [
+    {
+      "key": "ai-defuse-001",
+      "pool": "minefield_defuse",
+      "chapter": "chapter_1",
+      "topic": "Thành lập Đảng 1930",
+      "type": "defuse_ab",
+      "difficulty": "easy",
+      "prompt": "Ai chủ trì hội nghị hợp nhất đầu năm 1930?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Nguyễn Ái Quốc"
+        },
+        {
+          "id": "b",
+          "label": "Trần Phú"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Hội nghị đầu năm 1930 do Nguyễn Ái Quốc chủ trì.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương I",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'hop-nhat-de-mo-duong' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000004",
+          "locator": "Slides 3-18",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'hop-nhat-de-mo-duong' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "ai-defuse-002",
+      "pool": "minefield_defuse",
+      "chapter": "chapter_2",
+      "topic": "Điện Biên Phủ",
+      "type": "defuse_ab",
+      "difficulty": "easy",
+      "prompt": "Điện Biên Phủ kéo dài bao lâu?",
+      "options": [
+        {
+          "id": "a",
+          "label": "36 ngày đêm"
+        },
+        {
+          "id": "b",
+          "label": "56 ngày đêm"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Chiến dịch Điện Biên Phủ kéo dài 56 ngày đêm.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương II - Kháng chiến chống Pháp và Điện Biên Phủ",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000013",
+          "locator": "Slides 3-15",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000014",
+          "locator": "Slides 3-16",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "ai-defuse-003",
+      "pool": "minefield_defuse",
+      "chapter": "chapter_2",
+      "topic": "Kháng chiến toàn quốc",
+      "type": "defuse_ab",
+      "difficulty": "easy",
+      "prompt": "Kháng chiến toàn quốc được phát động ngày nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "19/12/1946"
+        },
+        {
+          "id": "b",
+          "label": "2/9/1945"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Kháng chiến toàn quốc được phát động ngày 19/12/1946.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương II - Đường lối kháng chiến chống Pháp",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'khi-hoa-hoan-khong-con-du-dia' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000012",
+          "locator": "Slides 3-18",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'khi-hoa-hoan-khong-con-du-dia' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "ai-defuse-004",
+      "pool": "minefield_defuse",
+      "chapter": "chapter_3",
+      "topic": "Đổi mới 1986",
+      "type": "defuse_ab",
+      "difficulty": "easy",
+      "prompt": "Đại hội nào mở đường đổi mới toàn diện?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Đại hội IV (1976)"
+        },
+        {
+          "id": "b",
+          "label": "Đại hội VI (1986)"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Đại hội VI năm 1986 mở đường cho đổi mới toàn diện.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương III",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'doi-moi-hay-tut-hau' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000022",
+          "locator": "Slides 3-26",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'doi-moi-hay-tut-hau' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "ai-defuse-005",
+      "pool": "minefield_defuse",
+      "chapter": "chapter_2",
+      "topic": "Hiệp định Paris",
+      "type": "defuse_ab",
+      "difficulty": "easy",
+      "prompt": "Hiệp định nào buộc Mỹ rút quân?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Hiệp định Paris"
+        },
+        {
+          "id": "b",
+          "label": "Hiệp định Geneve"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Việc ký Hiệp định Paris buộc Mỹ rút quân.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương II - Kháng chiến chống Mỹ và thống nhất đất nước",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'tu-doi-dau-cuc-bo-den-toan-thang' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000016",
+          "locator": "Slides 3-20",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'tu-doi-dau-cuc-bo-den-toan-thang' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000017",
+          "locator": "Slides 3-18",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'tu-doi-dau-cuc-bo-den-toan-thang' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000018",
+          "locator": "Slides 3-12",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'tu-doi-dau-cuc-bo-den-toan-thang' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "ai-defuse-006",
+      "pool": "minefield_defuse",
+      "chapter": "chapter_2",
+      "topic": "Hai nhiệm vụ chiến lược",
+      "type": "defuse_ab",
+      "difficulty": "easy",
+      "prompt": "Sau 1954, miền Bắc là gì của cách mạng cả nước?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Tiền tuyến lớn"
+        },
+        {
+          "id": "b",
+          "label": "Hậu phương lớn"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Miền Bắc là hậu phương lớn, miền Nam là tiền tuyến lớn.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương II - Một Đảng lãnh đạo hai nhiệm vụ chiến lược",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'mot-dat-nuoc-hai-nhiem-vu-chien-luoc' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000015",
+          "locator": "Slides 3-18",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'mot-dat-nuoc-hai-nhiem-vu-chien-luoc' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        }
+      ],
+      "aiAssisted": true
+    }
+  ]
+}
