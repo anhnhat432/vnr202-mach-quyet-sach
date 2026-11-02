@@ -25,6 +25,8 @@
   --acc-shadow: 0 14px 34px rgba(0, 0, 0, 0.38);
 
   min-height: calc(100vh - 3.5rem);
+  max-width: 100%;
+  overflow-x: clip;
   background:
     radial-gradient(circle at 12% 0%, rgba(177, 40, 46, 0.16), transparent 38%),
     radial-gradient(circle at 88% 4%, rgba(240, 170, 60, 0.12), transparent 36%),
@@ -718,7 +720,8 @@
 }
 
 /* Responsive Grid Spans & Bulk Action Form Styling */
-.acc-ops-grid {
+.acc-ops-grid,
+.acc-shell .adm.acc-ops-grid {
   display: grid;
   grid-template-columns: minmax(18rem, 23rem) minmax(0, 1fr);
   gap: 1rem;
@@ -728,7 +731,9 @@
 }
 
 .adm__panel,
-.adm__monitor {
+.adm__monitor,
+.acc-shell .adm__panel,
+.acc-shell .adm__monitor {
   grid-template-columns: minmax(0, 1fr);
   min-width: 0;
   max-width: 100%;
@@ -801,7 +806,8 @@
 }
 
 @media (max-width: 1024px) {
-  .acc-ops-grid {
+  .acc-ops-grid,
+  .acc-shell .adm.acc-ops-grid {
     grid-template-columns: minmax(0, 1fr);
   }
 }
