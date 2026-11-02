@@ -145,15 +145,26 @@ test("leaderboards resync from the API without reload, survive going offline, an
   const board = await viewer.newPage();
   await board.goto("/live-arena/bang-xep-hang");
   const raceBoard = board.locator(".ax-lb--race");
-  await expect(raceBoard.getByText(world.students[0].name)).toBeVisible({ timeout: 10000 });
-  const before = Number((await raceBoard.locator(".ax-lb__row", { hasText: world.students[0].name }).locator(".ax-lb__score").textContent())?.replace(/\./g, ""));
+  await expect(raceBoard).toBeVisible({ timeout: 10000 });
+  // Earlier tests leave student 0's clock running through reconnect/transfer and minefield play.
+  // A resumed question can expire between reading its prompt and clicking the option. Start the
+  // unused student's attempt only after the viewer is ready, so this tests a committed score update.
+  const player = world.students[2];
+  await expect(raceBoard.getByText(player.name)).toHaveCount(0);
 
   // the player answers; the viewer's board follows by itself (Broadcast hint or periodic sync)
-  await signIn(page, world.students[0].studentId);
-  await enter(page, "/live-arena/duong-dua", ".ax-race");
+  await signIn(page, player.studentId);
+  await page.goto("/live-arena/duong-dua");
+  await page.getByRole("button", { name: "Bắt đầu lượt thi" }).click();
   await expect(page.locator(".ax-question:not(.is-expired)")).toBeVisible({ timeout: 10000 });
+  const submitted = page.waitForResponse((response) => response.url().endsWith("/answers") && response.request().method() === "POST");
   await page.locator(".ax-option").nth(await correctIndex(page)).click();
-  await expect.poll(async () => Number((await raceBoard.locator(".ax-lb__row", { hasText: world.students[0].name }).locator(".ax-lb__score").textContent())?.replace(/\./g, "")), { timeout: 12000 }).toBeGreaterThan(before);
+  const answer = await submitted;
+  expect(answer.status()).toBe(200);
+  const result = (await answer.json()).data.result;
+  expect(result.outcome).toBe("correct");
+  expect(result.scoreAfter).toBeGreaterThan(0);
+  await expect.poll(async () => Number((await raceBoard.locator(".ax-lb__row", { hasText: player.name }).locator(".ax-lb__score").textContent())?.replace(/\./g, "")), { timeout: 12000 }).toBe(result.scoreAfter);
 
   // offline then back: the board shows the state and resyncs
   await viewer.setOffline(true);

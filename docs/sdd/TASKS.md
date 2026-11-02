@@ -111,6 +111,8 @@ Re-scope snapshot (2026-10-29, revision 2): stage A approved by the owner subjec
 
 ## Phase 6 - Hardening and public deployment
 
+- [-] `T122` Finish Admin Control Center / Rehearsal Studio acceptance on PR #10. Preserve the handoff and production/class databases; repair the Arena UI test's inherited timed-attempt dependency using a fresh synthetic player and exact committed-score assertions. Plan: `plans/2026-11-02-admin-rehearsal-acceptance.md`; evidence: `evidence/admin-rehearsal-acceptance-2026-11-02.md`. The closed-loop local rehearsal and 175 pgTAP checks pass; latest correction CI is tracked on the PR. Hosted isolated Preview remains blocked: the old deployment is at 9788646 and shares the main Production database, while the account has reached its two-Free-project limit. Do not deploy onto either protected database or close classroom/academic gates from synthetic tests.
+
 - [x] `T121` Temporarily hide public study entry points at owner request: Hồ sơ, Mạch nguyên nhân, Bằng chứng and Phương pháp, including desktop/mobile menu, homepage cards/chapter shortcuts and footer. Shared presentation flag; routes/content/progress remain unchanged. CLASS-017; plan/evidence: `plans/2026-11-01-hide-public-study-navigation.md`. Local 198 units and six production-browser cases pass; no deployment/merge.
 
 - [-] `T120` Investigate the latest 70-player Auth failure from raw artifacts/server logs, reproduce before fixing, distinguish harness versus product failures and verify corrected CI. No retry-only closure, official Open, academic action, Production deploy or merge. Plan: `plans/2026-11-01-classroom-safety-audit.md`; evidence: `evidence/classroom-safety-audit-2026-11-01.md`.

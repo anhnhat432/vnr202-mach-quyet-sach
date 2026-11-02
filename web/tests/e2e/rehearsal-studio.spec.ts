@@ -403,13 +403,13 @@ test("Rehearsal Studio full closed-loop E2E: RBAC, CSRF, network retry, THU acco
     await page.setViewportSize({ width: 1440, height: 960 });
     await page.evaluate(() => {
       if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
-      window.scrollTo(0, 0);
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     });
     await page.screenshot({ path: path.join(screenshotDir, "admin-rehearsal-desktop.png"), fullPage: true });
     await page.setViewportSize({ width: 390, height: 844 });
     await page.evaluate(() => {
       if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
-      window.scrollTo(0, 0);
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     });
     await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
     await page.screenshot({ path: path.join(screenshotDir, "admin-rehearsal-mobile.png"), fullPage: true });
@@ -422,13 +422,13 @@ test("Rehearsal Studio full closed-loop E2E: RBAC, CSRF, network retry, THU acco
     await expect(page.locator(".adm__monitor tbody tr", { hasText: "THU001" }).first()).toBeVisible({ timeout: 10000 });
     await page.evaluate(() => {
       if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
-      window.scrollTo(0, 0);
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     });
     await page.screenshot({ path: path.join(screenshotDir, "admin-overview-desktop.png"), fullPage: true });
     await page.setViewportSize({ width: 390, height: 844 });
     await page.evaluate(() => {
       if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
-      window.scrollTo(0, 0);
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     });
     await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
     await page.screenshot({ path: path.join(screenshotDir, "admin-overview-mobile.png"), fullPage: true });
@@ -490,14 +490,14 @@ test("Rehearsal Studio full closed-loop E2E: RBAC, CSRF, network retry, THU acco
     // Official class student is listed, rehearsal THU001 is excluded from the student directory table
     await expect(page.locator(".acc-table tbody").getByText(classStudentId)).toBeVisible();
     await expect(page.locator(".acc-table tbody").getByText("THU001")).toHaveCount(0);
-    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.evaluate(() => window.scrollTo({ top: 0, left: 0, behavior: "instant" }));
     await page.screenshot({ path: path.join(screenshotDir, "admin-roster-desktop.png"), fullPage: true });
 
     await page.goto("/quan-tri/ngan-hang-cau-hoi");
     await expect(page.getByRole("heading", { name: "Ngân hàng câu hỏi" })).toBeVisible();
     await page.getByLabel("Nguồn").selectOption("fixture");
     await expect(page.locator(".adm__questions > li").first()).toBeVisible();
-    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.evaluate(() => window.scrollTo({ top: 0, left: 0, behavior: "instant" }));
     await page.screenshot({ path: path.join(screenshotDir, "admin-bank-desktop.png"), fullPage: true });
 
     // Create a Scheduled Official Competition in DB to capture the Official Open Confirmation Modal screenshot
@@ -513,7 +513,7 @@ test("Rehearsal Studio full closed-loop E2E: RBAC, CSRF, network retry, THU acco
     await page.getByRole("button", { name: new RegExp(`Cuộc thi chính thức E2E ${run}`) }).click();
     await page.getByRole("button", { name: /Mở cuộc thi/ }).click();
     await expect(page.getByRole("dialog", { name: /Xác nhận mở cuộc thi chính thức/ })).toBeVisible();
-    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.evaluate(() => window.scrollTo({ top: 0, left: 0, behavior: "instant" }));
     await page.screenshot({ path: path.join(screenshotDir, "admin-official-modal-desktop.png"), fullPage: true });
     await page.getByRole("button", { name: "Hủy" }).click();
     // Clean up synthetic official competition as postgres using the Arena thử prefix
