@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import "@/features/admin/ui/admin-control-center.css";
+import { request } from "@/features/arena/client/api";
 import { readCsrfCookie } from "@/lib/security/csrf-client";
 
 type PreviewRow = {
@@ -10,19 +11,35 @@ type PreviewRow = {
   studentId: string;
   fullName: string;
   displayName: string;
+  displayNameSuffix?: number | null;
   status: "valid" | "warning" | "error";
-  code: string | null;
-  message: string | null;
+  issues?: string[];
+  code?: string | null;
+  message?: string | null;
 };
 
 type PreviewData = {
   importId: string;
-  classCode: string;
+  classCode?: string;
   validCount: number;
   warningCount: number;
   errorCount: number;
   rows: PreviewRow[];
   omittedCount?: number;
+};
+
+const ISSUE_LABEL: Record<string, string> = {
+  duplicate_in_file: "MSSV trùng trong tệp",
+  already_exists: "MSSV đã tồn tại",
+  missing_student_id: "Thiếu MSSV",
+  missing_full_name: "Thiếu họ tên",
+  numeric_cell: "Ô MSSV là số — có thể đã mất số 0 đầu",
+  formula_prefix: "MSSV bắt đầu bằng ký tự công thức",
+  invalid_characters: "MSSV có ký tự không hợp lệ",
+  too_long: "MSSV quá dài",
+  pattern_mismatch: "MSSV không khớp mẫu đã cấu hình",
+  full_name_too_long: "Họ tên quá dài",
+  row_limit_exceeded: "Vượt giới hạn số hàng",
 };
 
 type StudentRecord = {
@@ -42,7 +59,6 @@ type ClassInfo = {
 };
 
 export function RosterImport() {
-  const [tab, setTab] = useState<"directory" | "import">("directory");
   const [classInfo, setClassInfo] = useState<ClassInfo | null>(null);
   const [students, setStudents] = useState<StudentRecord[]>([]);
   const [loadingDirectory, setLoadingDirectory] = useState(true);
@@ -61,10 +77,9 @@ export function RosterImport() {
   // Roster import state
   const [classCode, setClassCode] = useState("VNR202");
   const [className, setClassName] = useState("");
-  const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<PreviewData | null>(null);
   const [confirmed, setConfirmed] = useState<Record<number, boolean>>({});
-  const [overrides, setOverrides] = useState<Record<number, string>>({});
+  const [overrides, setOverrides] = useState<Record<string, string>>({});
   const [cleanupConfirmed, setCleanupConfirmed] = useState(false);
   const [cleanupReason, setCleanupReason] = useState("");
   const [message, setMessage] = useState<{ tone: "teal" | "amber" | "red"; text: string } | null>(null);
@@ -157,32 +172,21 @@ export function RosterImport() {
     }
   }
 
-  async function handleUpload(event: React.FormEvent) {
+  async function handleUpload(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!file) return;
     setBusy(true);
     setMessage(null);
-    const form = new FormData();
-    form.set("classCode", classCode);
-    if (className) form.set("className", className);
-    form.set("file", file);
-    const response = await fetch("/api/v1/admin/roster-imports", {
-      method: "POST",
-      headers: { "x-csrf-token": readCsrfCookie() },
-      body: form,
-    });
-    const body = (await response.json().catch(() => null)) as {
-      data?: PreviewData;
-      error?: { message?: string };
-    } | null;
-    setBusy(false);
-    if (!response.ok || !body?.data) {
-      setMessage({ tone: "red", text: body?.error?.message ?? "Không thể kiểm tra tệp danh sách." });
-      return;
+    const body = new FormData(event.currentTarget);
+    try {
+      const data = await request<PreviewData>("POST", "/admin/roster-imports", { body });
+      setPreview(data);
+      setConfirmed({});
+      setOverrides({});
+    } catch (error) {
+      setMessage({ tone: "red", text: error instanceof Error ? error.message : "Không thể kiểm tra tệp danh sách." });
+    } finally {
+      setBusy(false);
     }
-    setPreview(body.data);
-    setConfirmed({});
-    setOverrides({});
   }
 
   async function handleApply() {
@@ -192,63 +196,61 @@ export function RosterImport() {
     const confirmedWarningRows = Object.entries(confirmed)
       .filter(([, v]) => v)
       .map(([k]) => Number(k));
-    const response = await fetch(`/api/v1/admin/roster-imports/${preview.importId}/apply`, {
-      method: "POST",
-      headers: { "content-type": "application/json", "x-csrf-token": readCsrfCookie() },
-      body: JSON.stringify({ confirmedWarningRows, displayNameOverrides: overrides }),
-    });
-    const body = (await response.json().catch(() => null)) as {
-      data?: { created: number; updated: number; omittedCount: number; idempotent?: boolean };
-      error?: { message?: string };
-    } | null;
-    setBusy(false);
-    if (!response.ok || !body?.data) {
-      setMessage({ tone: "red", text: body?.error?.message ?? "Không thể áp dụng danh sách." });
-      return;
+    try {
+      const result = await request<{ created: number; updated?: number; omittedCount?: number; idempotent?: boolean }>(
+        "POST",
+        `/admin/roster-imports/${preview.importId}/apply`,
+        { body: { confirmedWarningRows, displayNameOverrides: overrides } },
+      );
+      setPreview((p) => (p ? { ...p, omittedCount: result.omittedCount ?? 0 } : p));
+      setMessage({
+        tone: "teal",
+        text: `Đã tạo ${result.created} tài khoản${result.updated ? `, cập nhật ${result.updated}` : ""}.`,
+      });
+      await loadDirectory();
+    } catch (error) {
+      setMessage({ tone: "red", text: error instanceof Error ? error.message : "Không thể áp dụng danh sách." });
+    } finally {
+      setBusy(false);
     }
-    setPreview((p) => (p ? { ...p, omittedCount: body.data!.omittedCount } : p));
-    setMessage({
-      tone: "teal",
-      text: `Đã áp dụng: tạo mới ${body.data.created}, cập nhật ${body.data.updated}. Sinh viên vắng trong tệp (giữ nguyên): ${body.data.omittedCount}.`,
-    });
-    await loadDirectory();
   }
 
   async function handleCleanup() {
     if (!preview) return;
     setBusy(true);
-    const response = await fetch(`/api/v1/admin/roster-imports/${preview.importId}/cleanup`, {
-      method: "POST",
-      headers: { "content-type": "application/json", "x-csrf-token": readCsrfCookie() },
-      body: JSON.stringify({ confirmed: cleanupConfirmed, reason: cleanupReason }),
-    });
-    const body = (await response.json().catch(() => null)) as {
-      data?: { removed: number; keptWithHistory: number };
-      error?: { message?: string };
-    } | null;
-    setBusy(false);
-    if (!response.ok || !body?.data) {
-      setMessage({ tone: "red", text: body?.error?.message ?? "Không thể dọn danh sách." });
-      return;
+    try {
+      const result = await request<{ removed: number; keptWithHistory: number }>(
+        "POST",
+        `/admin/roster-imports/${preview.importId}/cleanup`,
+        { body: { confirmed: cleanupConfirmed, reason: cleanupReason } },
+      );
+      setMessage({
+        tone: "amber",
+        text: `Đã xóa ${result.removed} tài khoản chưa có lịch sử; giữ nguyên ${result.keptWithHistory} tài khoản đã từng dự thi.`,
+      });
+      await loadDirectory();
+    } catch (error) {
+      setMessage({ tone: "red", text: error instanceof Error ? error.message : "Không thể dọn danh sách." });
+    } finally {
+      setBusy(false);
     }
-    setMessage({
-      tone: "amber",
-      text: `Đã xóa ${body.data.removed} tài khoản chưa có lịch sử; giữ nguyên ${body.data.keptWithHistory} tài khoản đã từng dự thi.`,
-    });
-    await loadDirectory();
   }
 
+  const confirmedCount = Object.values(confirmed).filter(Boolean).length;
+  const pendingWarnings = preview
+    ? preview.rows.filter((r) => r.status === "warning" && !confirmed[r.rowNumber]).length
+    : 0;
   const activeStudentsCount = students.filter((s) => s.status === "active").length;
   const lockedStudentsCount = students.filter((s) => s.status !== "active").length;
 
   return (
-    <main aria-label="Quản lý danh sách lớp">
+    <main aria-label="Quản lý danh sách lớp" style={{ minWidth: 0, maxWidth: "100%" }}>
       <header className="acc-page-header">
-        <div>
+        <div style={{ minWidth: 0 }}>
           <p className="acc-kicker">Quản lý định danh & Hỗ trợ tại lớp</p>
-          <h1 className="acc-title">Danh sách lớp · {classInfo?.code ?? "VNR202"}</h1>
+          <h1 className="acc-title">Danh sách lớp & Tài khoản · {classInfo?.code ?? "VNR202"}</h1>
           <p className="acc-subtitle">
-            Tra cứu nhanh sinh viên khi đứng lớp, đặt lại mật khẩu mặc định, đổi tên hiển thị hoặc nhập tệp CSV/TSV
+            Tra cứu nhanh sinh viên khi đứng lớp, đặt lại mật khẩu mặc định, đổi tên hiển thị hoặc nhập tệp
             danh sách lớp chính thức. Tài khoản phòng thi thử (<code>THU001...</code>) được cách ly riêng và không tính
             vào sĩ số này.
           </p>
@@ -285,31 +287,8 @@ export function RosterImport() {
         </div>
       </section>
 
-      {/* Mode Switcher */}
-      <div className="acc-tabs" role="tablist">
-        <button
-          type="button"
-          role="tab"
-          aria-selected={tab === "directory"}
-          className="acc-tab"
-          onClick={() => setTab("directory")}
-        >
-          <span>Tra cứu & Hỗ trợ sinh viên</span>
-          <span className="acc-tab-count">{students.length}</span>
-        </button>
-        <button
-          type="button"
-          role="tab"
-          aria-selected={tab === "import"}
-          className="acc-tab"
-          onClick={() => setTab("import")}
-        >
-          <span>Nhập / Cập nhật tệp CSV danh sách lớp</span>
-        </button>
-      </div>
-
       {message && (
-        <div className="acc-banner" data-tone={message.tone} role="status">
+        <div className="acc-banner" data-tone={message.tone} role="status" aria-live="polite">
           <span>{message.text}</span>
           <button type="button" className="acc-btn" onClick={() => setMessage(null)}>
             Đóng
@@ -317,143 +296,150 @@ export function RosterImport() {
         </div>
       )}
 
-      {/* TAB 1: Student Directory & Support */}
-      {tab === "directory" && (
-        <section className="acc-panel" aria-label="Danh bạ sinh viên">
-          <div className="acc-panel-header">
-            <div>
-              <h2 className="acc-panel-title">
-                Danh sách sinh viên chính thức ({filteredStudents.length}/{students.length})
-              </h2>
-              <p style={{ margin: "0.2rem 0 0", fontSize: "0.84rem", color: "var(--acc-muted)" }}>
-                Họ tên và MSSV chỉ hiển thị cho quản trị viên; bảng xếp hạng công khai chỉ hiển thị tên rút gọn (ví dụ:{" "}
-                <em>An N.V.</em>).
-              </p>
-            </div>
+      {/* SECTION 1: CSV / XLSX Roster Import */}
+      <section className="acc-panel" aria-label="Nhập tệp danh sách lớp">
+        <div className="acc-panel-header">
+          <div style={{ minWidth: 0 }}>
+            <h2 className="acc-panel-title">Nhập / Cập nhật tệp danh sách lớp</h2>
+            <p style={{ margin: "0.2rem 0 0", fontSize: "0.84rem", color: "var(--acc-muted)" }}>
+              Tải tệp danh sách lớp (.xlsx hoặc .csv), kiểm tra bản xem trước rồi mới tạo tài khoản. Mật khẩu mặc định
+              lấy từ cấu hình máy chủ, không bao giờ xuất hiện trong tệp hay trên màn hình.
+            </p>
           </div>
+        </div>
 
-          <div
+        <form
+          onSubmit={handleUpload}
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(12rem, 1fr))",
+            gap: "0.75rem",
+            alignItems: "end",
+            minWidth: 0,
+            maxWidth: "100%",
+          }}
+        >
+          <label className="acc-field">
+            <span>Mã lớp</span>
+            <input
+              name="classCode"
+              required
+              maxLength={40}
+              value={classCode}
+              onChange={(e) => setClassCode(e.target.value)}
+              className="acc-input"
+            />
+          </label>
+          <label className="acc-field">
+            <span>Tên lớp</span>
+            <input
+              name="className"
+              maxLength={120}
+              value={className}
+              onChange={(e) => setClassName(e.target.value)}
+              className="acc-input"
+            />
+          </label>
+          <label className="acc-field">
+            <span>Tệp danh sách (.xlsx hoặc .csv)</span>
+            <input
+              name="file"
+              required
+              type="file"
+              accept=".xlsx,.csv,.tsv,.txt"
+              className="acc-input"
+            />
+          </label>
+          <label
+            className="adm__check"
             style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(14rem, 1fr))",
-              gap: "0.75rem",
-              marginBottom: "0.9rem",
+              display: "flex",
+              gap: "0.5rem",
+              alignItems: "flex-start",
+              gridColumn: "1 / -1",
+              fontSize: "0.86rem",
+              color: "var(--acc-text)",
+              minWidth: 0,
             }}
           >
-            <label className="acc-field">
-              <span>Tìm kiếm MSSV hoặc Họ tên</span>
-              <input
-                className="acc-input"
-                placeholder="Nhập MSSV (ví dụ SE18...) hoặc tên..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </label>
-            <label className="acc-field">
-              <span>Trạng thái tài khoản</span>
-              <select
-                className="acc-select"
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value as "" | "active" | "locked")}
-              >
-                <option value="">Tất cả trạng thái</option>
-                <option value="active">Đang hoạt động (active)</option>
-                <option value="locked">Đang bị khóa (locked)</option>
-              </select>
-            </label>
+            <input type="checkbox" name="collectNamesOnSignIn" style={{ marginTop: "0.2rem" }} />
+            <span>Chỉ nhập MSSV; sinh viên tự nhập tên khi đăng nhập lần đầu.</span>
+          </label>
+          <div style={{ gridColumn: "1 / -1" }}>
+            <button disabled={busy} type="submit" className="acc-btn acc-btn-primary">
+              Xem trước
+            </button>
           </div>
+        </form>
 
-          {loadingDirectory ? (
-            <p style={{ color: "var(--acc-muted)" }}>Đang tải danh sách lớp...</p>
-          ) : filteredStudents.length === 0 ? (
-            <div className="acc-panel-alt" style={{ color: "var(--acc-muted)" }}>
-              Không tìm thấy sinh viên phù hợp.
+        {preview && (
+          <div style={{ marginTop: "1.25rem", display: "grid", gap: "0.85rem", minWidth: 0, maxWidth: "100%" }}>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+              <span className="acc-badge" data-tone="teal">
+                Hợp lệ: {preview.validCount}
+              </span>
+              <span className="acc-badge" data-tone="amber">
+                Cảnh báo: {preview.warningCount}
+              </span>
+              <span className="acc-badge" data-tone="red">
+                Lỗi: {preview.errorCount}
+              </span>
             </div>
-          ) : (
-            <div className="acc-table-wrap" style={{ maxHeight: "32rem", overflowY: "auto" }}>
+
+            <div className="acc-table-wrap" role="region" aria-label="Chi tiết danh sách xem trước" tabIndex={0}>
               <table className="acc-table">
                 <thead>
                   <tr>
+                    <th>Hàng</th>
                     <th>MSSV</th>
-                    <th>Họ và tên (Nội bộ)</th>
-                    <th>Tên hiển thị bảng điểm</th>
+                    <th>Họ và tên</th>
+                    <th>Tên hiển thị</th>
                     <th>Trạng thái</th>
-                    <th>Hỗ trợ nhanh tại lớp</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredStudents.map((st) => {
-                    const displayLabel = st.display_name_suffix
-                      ? `${st.display_name} (${st.display_name_suffix})`
-                      : st.display_name;
+                  {preview.rows.map((row) => {
+                    const rowStatusText =
+                      row.status === "valid"
+                        ? "Hợp lệ"
+                        : row.message ??
+                          (row.issues?.map((i) => ISSUE_LABEL[i] ?? i).join("; ") || "Cần kiểm tra");
                     return (
-                      <tr key={st.id}>
+                      <tr key={row.rowNumber} data-status={row.status}>
+                        <td>{row.rowNumber}</td>
                         <td>
-                          <code style={{ fontWeight: 700, color: "var(--acc-amber)" }}>{st.student_id}</code>
+                          <code>{row.studentId}</code>
                         </td>
-                        <td>{st.full_name}</td>
+                        <td>{row.fullName}</td>
                         <td>
-                          <strong>{displayLabel}</strong>
+                          {row.status === "error" ? (
+                            row.displayName
+                          ) : (
+                            <input
+                              aria-label={`Tên hiển thị hàng ${row.rowNumber}`}
+                              maxLength={40}
+                              value={overrides[row.rowNumber] ?? row.displayName}
+                              onChange={(e) => setOverrides({ ...overrides, [row.rowNumber]: e.target.value })}
+                              className="acc-input"
+                              style={{ maxWidth: "11rem" }}
+                            />
+                          )}
+                          {row.displayNameSuffix ? ` (${row.displayNameSuffix})` : ""}
                         </td>
                         <td>
-                          <span className="acc-badge" data-tone={st.status === "active" ? "teal" : "red"}>
-                            {st.status === "active" ? "Hoạt động" : "Đã khóa"}
-                          </span>
-                        </td>
-                        <td>
-                          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem" }}>
-                            <button
-                              type="button"
-                              className="acc-btn"
-                              style={{ minHeight: "1.95rem", padding: "0.2rem 0.6rem", fontSize: "0.78rem" }}
-                              onClick={() => {
-                                setSupportStudent(st);
-                                setSupportAction("reset_password");
-                                setSupportReason("Hỗ trợ đặt lại mật khẩu mặc định tại lớp");
-                              }}
-                            >
-                              Đặt lại MK
-                            </button>
-                            <button
-                              type="button"
-                              className="acc-btn"
-                              style={{ minHeight: "1.95rem", padding: "0.2rem 0.6rem", fontSize: "0.78rem" }}
-                              onClick={() => {
-                                setSupportStudent(st);
-                                setSupportAction("display_name");
-                                setNewDisplayName(st.display_name);
-                                setSupportReason("Cập nhật tên hiển thị theo yêu cầu tại lớp");
-                              }}
-                            >
-                              Đổi tên
-                            </button>
-                            <button
-                              type="button"
-                              className="acc-btn"
-                              style={{ minHeight: "1.95rem", padding: "0.2rem 0.6rem", fontSize: "0.78rem" }}
-                              onClick={() => {
-                                setSupportStudent(st);
-                                setSupportAction("revoke_sessions");
-                                setSupportReason("Thu hồi phiên cũ để đăng nhập thiết bị mới");
-                              }}
-                            >
-                              Thu hồi phiên
-                            </button>
-                            <button
-                              type="button"
-                              className={st.status === "active" ? "acc-btn acc-btn-danger" : "acc-btn acc-btn-primary"}
-                              style={{ minHeight: "1.95rem", padding: "0.2rem 0.6rem", fontSize: "0.78rem" }}
-                              onClick={() => {
-                                setSupportStudent(st);
-                                setSupportAction(st.status === "active" ? "lock_account" : "unlock_account");
-                                setSupportReason(
-                                  st.status === "active" ? "Tạm khóa tài khoản kiểm tra" : "Mở khóa tài khoản tại lớp",
-                                );
-                              }}
-                            >
-                              {st.status === "active" ? "Khóa" : "Mở khóa"}
-                            </button>
-                          </div>
+                          <div>{rowStatusText}</div>
+                          {row.status === "warning" && (
+                            <label style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem", marginTop: "0.25rem" }}>
+                              <input
+                                type="checkbox"
+                                checked={Boolean(confirmed[row.rowNumber])}
+                                onChange={(e) =>
+                                  setConfirmed({ ...confirmed, [row.rowNumber]: e.target.checked })
+                                }
+                              />
+                              <span>Xác nhận</span>
+                            </label>
+                          )}
                         </td>
                       </tr>
                     );
@@ -461,175 +447,207 @@ export function RosterImport() {
                 </tbody>
               </table>
             </div>
-          )}
-        </section>
-      )}
 
-      {/* TAB 2: CSV / TSV Roster Import */}
-      {tab === "import" && (
-        <section className="acc-panel" aria-label="Nhập tệp danh sách lớp">
-          <div className="acc-panel-header">
-            <div>
-              <h2 className="acc-panel-title">Nhập tệp CSV/TSV danh sách lớp</h2>
-              <p style={{ margin: "0.2rem 0 0", fontSize: "0.84rem", color: "var(--acc-muted)" }}>
-                Tệp CSV/TSV có hai cột <code>MSSV</code> và <code>Họ và tên</code>. Mật khẩu mặc định lấy từ cấu hình
-                máy chủ, không bao giờ xuất hiện trong tệp hay trên màn hình.
-              </p>
-            </div>
-          </div>
-
-          <form
-            onSubmit={handleUpload}
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(13rem, 1fr))",
-              gap: "0.75rem",
-              alignItems: "end",
-            }}
-          >
-            <label className="acc-field">
-              <span>Mã lớp</span>
-              <input
-                required
-                value={classCode}
-                onChange={(e) => setClassCode(e.target.value)}
-                className="acc-input"
-              />
-            </label>
-            <label className="acc-field">
-              <span>Tên lớp (tùy chọn)</span>
-              <input
-                value={className}
-                onChange={(e) => setClassName(e.target.value)}
-                className="acc-input"
-              />
-            </label>
-            <label className="acc-field">
-              <span>Tệp danh sách (.csv, .tsv, .txt)</span>
-              <input
-                required
-                type="file"
-                accept=".csv,.tsv,.txt"
-                onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-                className="acc-input"
-              />
-            </label>
-            <button disabled={busy || !file} type="submit" className="acc-btn acc-btn-primary">
-              Kiểm tra danh sách
-            </button>
-          </form>
-
-          {preview && (
-            <div style={{ marginTop: "1.25rem", display: "grid", gap: "0.85rem" }}>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
-                <span className="acc-badge" data-tone="teal">
-                  Hợp lệ: {preview.validCount}
+            <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "0.75rem" }}>
+              <button
+                disabled={busy || pendingWarnings > 0 || preview.validCount + confirmedCount === 0}
+                type="button"
+                onClick={handleApply}
+                className="acc-btn acc-btn-primary"
+              >
+                Tạo {preview.validCount + confirmedCount} tài khoản
+              </button>
+              {pendingWarnings > 0 && (
+                <span style={{ fontSize: "0.84rem", color: "var(--acc-amber)" }}>
+                  Còn {pendingWarnings} hàng cảnh báo chưa xác nhận.
                 </span>
-                <span className="acc-badge" data-tone="amber">
-                  Cảnh báo: {preview.warningCount}
-                </span>
-                <span className="acc-badge" data-tone="red">
-                  Lỗi: {preview.errorCount}
-                </span>
-              </div>
-
-              <div className="acc-table-wrap">
-                <table className="acc-table">
-                  <thead>
-                    <tr>
-                      <th>Dòng</th>
-                      <th>MSSV</th>
-                      <th>Họ và tên</th>
-                      <th>Tên hiển thị</th>
-                      <th>Trạng thái</th>
-                      <th>Xác nhận / Chỉnh tên</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {preview.rows.map((row) => (
-                      <tr key={row.rowNumber}>
-                        <td>{row.rowNumber}</td>
-                        <td>
-                          <code>{row.studentId}</code>
-                        </td>
-                        <td>{row.fullName}</td>
-                        <td>{overrides[row.rowNumber] ?? row.displayName}</td>
-                        <td>{row.message ?? "Hợp lệ"}</td>
-                        <td>
-                          {row.status === "warning" && (
-                            <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
-                              <label style={{ display: "inline-flex", alignItems: "center", gap: "0.3rem" }}>
-                                <input
-                                  type="checkbox"
-                                  checked={Boolean(confirmed[row.rowNumber])}
-                                  onChange={(e) =>
-                                    setConfirmed({ ...confirmed, [row.rowNumber]: e.target.checked })
-                                  }
-                                />
-                                <span>Duyệt</span>
-                              </label>
-                              <input
-                                placeholder="Tên hiển thị thay thế"
-                                value={overrides[row.rowNumber] ?? ""}
-                                onChange={(e) =>
-                                  setOverrides({ ...overrides, [row.rowNumber]: e.target.value })
-                                }
-                                className="acc-input"
-                                style={{ maxWidth: "11rem" }}
-                              />
-                            </div>
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-
-              <div>
-                <button disabled={busy} type="button" onClick={handleApply} className="acc-btn acc-btn-primary">
-                  Áp dụng danh sách
-                </button>
-              </div>
-
-              {(preview.omittedCount ?? 0) > 0 && (
-                <div className="acc-panel-alt" style={{ display: "grid", gap: "0.6rem" }}>
-                  <p style={{ margin: 0 }}>
-                    Có <strong>{preview.omittedCount}</strong> sinh viên đang có trong lớp nhưng không nằm trong tệp
-                    vừa nhập. Mặc định các tài khoản này được giữ nguyên.
-                  </p>
-                  <label style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
-                    <input
-                      type="checkbox"
-                      checked={cleanupConfirmed}
-                      onChange={(e) => setCleanupConfirmed(e.target.checked)}
-                    />
-                    <span>Tôi xác nhận xóa các tài khoản vắng mặt chưa có lịch sử dự thi</span>
-                  </label>
-                  <label className="acc-field">
-                    <span>Lý do kiểm toán</span>
-                    <input
-                      value={cleanupReason}
-                      onChange={(e) => setCleanupReason(e.target.value)}
-                      className="acc-input"
-                    />
-                  </label>
-                  <div>
-                    <button
-                      disabled={busy || !cleanupConfirmed || cleanupReason.trim().length < 3}
-                      type="button"
-                      onClick={handleCleanup}
-                      className="acc-btn acc-btn-danger-solid"
-                    >
-                      Xóa sinh viên không còn trong danh sách
-                    </button>
-                  </div>
-                </div>
               )}
             </div>
-          )}
-        </section>
-      )}
+
+            {(preview.omittedCount ?? 0) > 0 && (
+              <div className="acc-panel-alt" style={{ display: "grid", gap: "0.6rem" }}>
+                <p style={{ margin: 0 }}>
+                  Có <strong>{preview.omittedCount}</strong> sinh viên đang có trong lớp nhưng không nằm trong tệp
+                  vừa nhập. Mặc định các tài khoản này được giữ nguyên.
+                </p>
+                <label style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+                  <input
+                    type="checkbox"
+                    checked={cleanupConfirmed}
+                    onChange={(e) => setCleanupConfirmed(e.target.checked)}
+                  />
+                  <span>Tôi xác nhận xóa các tài khoản vắng mặt chưa có lịch sử dự thi</span>
+                </label>
+                <label className="acc-field">
+                  <span>Lý do kiểm toán</span>
+                  <input
+                    value={cleanupReason}
+                    onChange={(e) => setCleanupReason(e.target.value)}
+                    className="acc-input"
+                  />
+                </label>
+                <div>
+                  <button
+                    disabled={busy || !cleanupConfirmed || cleanupReason.trim().length < 3}
+                    type="button"
+                    onClick={handleCleanup}
+                    className="acc-btn acc-btn-danger-solid"
+                  >
+                    Xóa sinh viên không còn trong danh sách
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </section>
+
+      {/* SECTION 2: Student Directory & Support */}
+      <section className="acc-panel" aria-label="Danh bạ sinh viên">
+        <div className="acc-panel-header">
+          <div style={{ minWidth: 0 }}>
+            <h2 className="acc-panel-title">
+              Danh sách sinh viên chính thức ({filteredStudents.length}/{students.length})
+            </h2>
+            <p style={{ margin: "0.2rem 0 0", fontSize: "0.84rem", color: "var(--acc-muted)" }}>
+              Họ tên và MSSV chỉ hiển thị cho quản trị viên; bảng xếp hạng công khai chỉ hiển thị tên rút gọn (ví dụ:{" "}
+              <em>An N.V.</em>).
+            </p>
+          </div>
+        </div>
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(12rem, 1fr))",
+            gap: "0.75rem",
+            marginBottom: "0.9rem",
+            minWidth: 0,
+          }}
+        >
+          <label className="acc-field">
+            <span>Tìm kiếm MSSV hoặc Họ tên</span>
+            <input
+              className="acc-input"
+              placeholder="Nhập MSSV (ví dụ SE18...) hoặc tên..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </label>
+          <label className="acc-field">
+            <span>Trạng thái tài khoản</span>
+            <select
+              className="acc-select"
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value as "" | "active" | "locked")}
+            >
+              <option value="">Tất cả trạng thái</option>
+              <option value="active">Đang hoạt động (active)</option>
+              <option value="locked">Đang bị khóa (locked)</option>
+            </select>
+          </label>
+        </div>
+
+        {loadingDirectory ? (
+          <p style={{ color: "var(--acc-muted)" }}>Đang tải danh sách lớp...</p>
+        ) : filteredStudents.length === 0 ? (
+          <div className="acc-panel-alt" style={{ color: "var(--acc-muted)" }}>
+            Không tìm thấy sinh viên phù hợp.
+          </div>
+        ) : (
+          <div className="acc-table-wrap" style={{ maxHeight: "32rem", overflowY: "auto" }}>
+            <table className="acc-table">
+              <thead>
+                <tr>
+                  <th>MSSV</th>
+                  <th>Họ và tên (Nội bộ)</th>
+                  <th>Tên hiển thị bảng điểm</th>
+                  <th>Trạng thái</th>
+                  <th>Hỗ trợ nhanh tại lớp</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredStudents.map((st) => {
+                  const displayLabel = st.display_name_suffix
+                    ? `${st.display_name} (${st.display_name_suffix})`
+                    : st.display_name;
+                  return (
+                    <tr key={st.id}>
+                      <td>
+                        <code style={{ fontWeight: 700, color: "var(--acc-amber)" }}>{st.student_id}</code>
+                      </td>
+                      <td>{st.full_name}</td>
+                      <td>
+                        <strong>{displayLabel}</strong>
+                      </td>
+                      <td>
+                        <span className="acc-badge" data-tone={st.status === "active" ? "teal" : "red"}>
+                          {st.status === "active" ? "Hoạt động" : "Đã khóa"}
+                        </span>
+                      </td>
+                      <td>
+                        <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem" }}>
+                          <button
+                            type="button"
+                            className="acc-btn"
+                            style={{ minHeight: "1.95rem", padding: "0.2rem 0.6rem", fontSize: "0.78rem" }}
+                            onClick={() => {
+                              setSupportStudent(st);
+                              setSupportAction("reset_password");
+                              setSupportReason("Hỗ trợ đặt lại mật khẩu mặc định tại lớp");
+                            }}
+                          >
+                            Đặt lại MK
+                          </button>
+                          <button
+                            type="button"
+                            className="acc-btn"
+                            style={{ minHeight: "1.95rem", padding: "0.2rem 0.6rem", fontSize: "0.78rem" }}
+                            onClick={() => {
+                              setSupportStudent(st);
+                              setSupportAction("display_name");
+                              setNewDisplayName(st.display_name);
+                              setSupportReason("Cập nhật tên hiển thị theo yêu cầu tại lớp");
+                            }}
+                          >
+                            Đổi tên
+                          </button>
+                          <button
+                            type="button"
+                            className="acc-btn"
+                            style={{ minHeight: "1.95rem", padding: "0.2rem 0.6rem", fontSize: "0.78rem" }}
+                            onClick={() => {
+                              setSupportStudent(st);
+                              setSupportAction("revoke_sessions");
+                              setSupportReason("Thu hồi phiên cũ để đăng nhập thiết bị mới");
+                            }}
+                          >
+                            Thu hồi phiên
+                          </button>
+                          <button
+                            type="button"
+                            className={st.status === "active" ? "acc-btn acc-btn-danger" : "acc-btn acc-btn-primary"}
+                            style={{ minHeight: "1.95rem", padding: "0.2rem 0.6rem", fontSize: "0.78rem" }}
+                            onClick={() => {
+                              setSupportStudent(st);
+                              setSupportAction(st.status === "active" ? "lock_account" : "unlock_account");
+                              setSupportReason(
+                                st.status === "active" ? "Tạm khóa tài khoản kiểm tra" : "Mở khóa tài khoản tại lớp",
+                              );
+                            }}
+                          >
+                            {st.status === "active" ? "Khóa" : "Mở khóa"}
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </section>
 
       {/* Student Support Confirmation Modal */}
       {supportStudent && (

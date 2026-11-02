@@ -329,6 +329,9 @@
   border: 1px solid var(--acc-border);
   box-shadow: var(--acc-shadow);
   margin-bottom: 1.1rem;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .acc-panel-alt {
@@ -336,6 +339,9 @@
   border-radius: var(--acc-radius-sm);
   background: var(--acc-panel-alt);
   border: 1px solid var(--acc-border);
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .acc-panel-header {
@@ -512,12 +518,17 @@
   font-size: 0.85rem;
   font-weight: 600;
   color: var(--acc-text-Soft);
+  min-width: 0;
+  max-width: 100%;
 }
 
 .acc-input,
 .acc-select,
 .acc-textarea {
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
   min-height: 2.5rem;
   padding: 0.5rem 0.75rem;
   border-radius: var(--acc-radius-sm);
@@ -603,6 +614,9 @@
 /* Tables */
 .acc-table-wrap {
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
   overflow-x: auto;
   border-radius: var(--acc-radius-sm);
   border: 1px solid var(--acc-border);

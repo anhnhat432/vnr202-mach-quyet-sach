@@ -30,194 +30,6 @@ const rehearsalPrefix = `THU`;
 const syntheticBankKey = `reh-e2e-bank-${run.toLowerCase()}`;
 const SEEDED_VERIFIED_SOURCE = "10000000-0000-0000-0000-000000000001";
 
-let adminId = "";
-let classStudentUserId = "";
-let classId = "";
-const createdCompetitionIds: string[] = [];
-
-test.beforeAll(async () => {
-  const svc = createClient(env.url!, env.serviceKey!, { auth: { persistSession: false } });
-  const pool = new Pool({ connectionString: env.dbUrl!, max: 2 });
-
-  // Close any open competition before starting the serial rehearsal flow
-  await pool.query("update public.competitions set state = 'start_closed' where state = 'open'");
-
-  // Ensure fixture questions exist for rehearsal snapshots
-  const { rows } = await pool.query("select count(*)::int as n from public.questions where origin = 'fixture'");
-  if (!rows[0].n) {
-    const fixtures = generateFixtures("dev87", { keyPrefix: `reh${run.toLowerCase()}` });
-    const { data: qs } = await svc
-      .from("questions")
-      .insert(
-        fixtures.map((q) => ({
-          external_key: q.key,
-          game_type: q.game,
-          pool: q.pool,
-          chapter: q.chapter,
-          topic: q.topic,
-          question_type: q.type,
-          option_count: q.options.length,
-          difficulty: q.difficulty,
-          origin: "fixture",
-        })),
-      )
-      .select("id, external_key");
-    const ids = new Map(qs!.map((r) => [r.external_key, r.id]));
-    await svc.from("question_versions").insert(
-      fixtures.map((q) => ({
-        question_id: ids.get(q.key),
-        version: 1,
-        status: "published",
-        content_public: { prompt: q.prompt, options: q.options },
-        content_private: { correctOptionId: q.correctOptionId, explanation: q.explanation },
-      })),
-    );
-  }
-
-  // Create admin account
-  const a = await svc.auth.admin.createUser({
-    email: adminEmail,
-    password: adminPassword,
-    email_confirm: true,
-    app_metadata: { role: "admin" },
-  });
-  adminId = a.data.user!.id;
-  await svc.from("profiles").insert({
-    id: adminId,
-    role: "admin",
-    full_name: "Admin Rehearsal E2E",
-    display_name: "Admin E2E",
-  });
-
-  // Create a published 'bank' question to verify it never enters rehearsal snapshots
-  const { data: bq } = await svc
-    .from("questions")
-    .insert({
-      external_key: syntheticBankKey,
-      game_type: "race",
-      pool: "race",
-      chapter: "chapter_3",
-      topic: "Cách ly ngân hàng chính thức",
-      question_type: "single_choice",
-      option_count: 3,
-      difficulty: "easy",
-      origin: "bank",
-      created_by: adminId,
-    })
-    .select("id")
-    .single();
-  if (bq?.id) {
-    const { data: bv } = await svc
-      .from("question_versions")
-      .insert({
-        question_id: bq.id,
-        version: 1,
-        status: "draft",
-        content_public: {
-          prompt: "Câu hỏi chính thức kiểm tra cách ly phòng thi thử?",
-          options: [
-            { id: "a", label: "Đáp án A" },
-            { id: "b", label: "Đáp án B" },
-            { id: "c", label: "Đáp án C" },
-          ],
-        },
-        content_private: {
-          correctOptionId: "a",
-          explanation: "Giải thích kiểm thử.",
-        },
-        created_by: adminId,
-      })
-      .select("id")
-      .single();
-    if (bv?.id) {
-      await svc.from("question_source_links").insert({
-        question_version_id: bv.id,
-        source_id: SEEDED_VERIFIED_SOURCE,
-        locator: "tr. 12",
-      });
-      await pool.query(
-        "update public.question_versions set status = 'reviewed', reviewed_by = $1, reviewed_at = now(), review_note = 'Duyệt e2e' where id = $2",
-        [adminId, bv.id],
-      );
-      await pool.query(
-        "update public.question_versions set status = 'published', published_by = $1, published_at = now() where id = $2",
-        [adminId, bv.id],
-      );
-      await pool.query("update public.questions set current_version_id = $1 where id = $2", [bv.id, bq.id]);
-    }
-  }
-
-  // Create an official class student to verify RBAC & official roster isolation
-  const { data: cls } = await svc
-    .from("classes")
-    .insert({ code: `CLS-${run}`, name: `Lớp chính thức ${run}`, created_by: adminId })
-    .select("id")
-    .single();
-  classId = cls!.id;
-  const sEmail = `${crypto.randomUUID()}@auth.invalid`;
-  const sUser = await svc.auth.admin.createUser({
-    email: sEmail,
-    password: deriveProviderPassword(env.pepper!, classStudentId, env.defaultPassword!),
-    email_confirm: true,
-    app_metadata: { role: "student" },
-  });
-  classStudentUserId = sUser.data.user!.id;
-  await svc.from("profiles").insert({
-    id: classStudentUserId,
-    role: "student",
-    student_id: classStudentId,
-    full_name: "Nguyễn Văn Chính Thức",
-    display_name: "Thức N.V.",
-    class_id: classId,
-    is_rehearsal: false,
-  });
-  await svc.from("student_auth_identities").insert({ profile_id: classStudentUserId, internal_email: sEmail });
-
-  await pool.end();
-});
-
-test.afterAll(async () => {
-  const svc = createClient(env.url!, env.serviceKey!, { auth: { persistSession: false } });
-  const pool = new Pool({ connectionString: env.dbUrl!, max: 2 });
-
-  // Clean up rehearsal competitions created during this test
-  const { rows: comps } = await pool.query(
-    "select id from public.competitions where id = any($1::uuid[]) or name like 'Phòng thi thử #%' or name like 'Cuộc thi chính thức E2E%'",
-    [createdCompetitionIds],
-  );
-  for (const r of comps) {
-    await pool.query(
-      "delete from public.audit_logs where target_type = 'attempt' and target_id in (select id::text from public.attempts where competition_id = $1)",
-      [r.id],
-    );
-    await pool.query("delete from public.question_exposures where competition_id = $1", [r.id]);
-    await pool.query("delete from public.audit_logs where target_id = $1", [r.id]);
-    await pool.query("delete from public.competitions where id = $1 and kind = 'rehearsal'", [r.id]);
-  }
-
-  // Clean up rehearsal accounts THU001, THU002
-  const { rows: rehProfiles } = await pool.query(
-    "select id from public.profiles where is_rehearsal = true and student_id in ('THU001', 'THU002')",
-  );
-  for (const p of rehProfiles) {
-    await pool.query("delete from public.auth_events where profile_id = $1", [p.id]);
-    await svc.auth.admin.deleteUser(p.id);
-  }
-
-  await pool.query("delete from public.questions where external_key = $1", [syntheticBankKey]);
-  await pool.query("delete from public.auth_events where profile_id = any($1::uuid[])", [
-    [adminId, classStudentUserId].filter(Boolean),
-  ]);
-  if (classStudentUserId) await svc.auth.admin.deleteUser(classStudentUserId);
-  if (classId) await pool.query("delete from public.classes where id = $1", [classId]);
-  if (adminId) await svc.auth.admin.deleteUser(adminId);
-  await pool.end();
-});
-
-test.beforeEach(({}, info) => {
-  test.skip(info.project.name !== "desktop-chromium", "one competition can be open at a time");
-});
-
 async function correctIndex(page: Page) {
   const prompt = (await page.textContent(".ax-question__prompt")) ?? "";
   const letter = prompt.match(/đáp án ([A-C])/)?.[1];
@@ -229,13 +41,167 @@ test("Rehearsal Studio full closed-loop E2E: RBAC, CSRF, network retry, THU acco
   page,
   browser,
   request,
-}) => {
+}, info) => {
+  test.skip(info.project.name !== "desktop-chromium", "one competition can be open at a time");
   test.setTimeout(360_000);
+
+  const svc = createClient(env.url!, env.serviceKey!, { auth: { persistSession: false } });
   const pool = new Pool({ connectionString: env.dbUrl!, max: 2 });
   const screenshotDir = path.resolve(process.cwd(), "test-results", "rehearsal-studio-screenshots");
   await fs.mkdir(screenshotDir, { recursive: true });
 
+  let adminId = "";
+  let classStudentUserId = "";
+  let classId = "";
+  let createdOwnClass = false;
+  const createdCompetitionIds: string[] = [];
+
   try {
+    // =========================================================================
+    // 0. Setup Isolated Test World
+    // =========================================================================
+    await pool.query("update public.competitions set state = 'start_closed' where state = 'open'");
+
+    const { rows } = await pool.query("select count(*)::int as n from public.questions where origin = 'fixture'");
+    if (!rows[0].n) {
+      const fixtures = generateFixtures("dev87", { keyPrefix: `reh${run.toLowerCase()}` });
+      const { data: qs } = await svc
+        .from("questions")
+        .insert(
+          fixtures.map((q) => ({
+            external_key: q.key,
+            game_type: q.game,
+            pool: q.pool,
+            chapter: q.chapter,
+            topic: q.topic,
+            question_type: q.type,
+            option_count: q.options.length,
+            difficulty: q.difficulty,
+            origin: "fixture",
+          })),
+        )
+        .select("id, external_key");
+      const ids = new Map(qs!.map((r) => [r.external_key, r.id]));
+      await svc.from("question_versions").insert(
+        fixtures.map((q) => ({
+          question_id: ids.get(q.key),
+          version: 1,
+          status: "published",
+          content_public: { prompt: q.prompt, options: q.options },
+          content_private: { correctOptionId: q.correctOptionId, explanation: q.explanation },
+        })),
+      );
+    }
+
+    const a = await svc.auth.admin.createUser({
+      email: adminEmail,
+      password: adminPassword,
+      email_confirm: true,
+      app_metadata: { role: "admin" },
+    });
+    if (a.error || !a.data.user) throw a.error ?? new Error("Failed to create admin user");
+    adminId = a.data.user.id;
+    await svc.from("profiles").insert({
+      id: adminId,
+      role: "admin",
+      full_name: "Admin Rehearsal E2E",
+      display_name: "Admin E2E",
+    });
+
+    // Create a published 'bank' question to verify it never enters rehearsal snapshots
+    const { data: bq } = await svc
+      .from("questions")
+      .insert({
+        external_key: syntheticBankKey,
+        game_type: "race",
+        pool: "race",
+        chapter: "chapter_3",
+        topic: "Cách ly ngân hàng chính thức",
+        question_type: "single_choice",
+        option_count: 3,
+        difficulty: "easy",
+        origin: "bank",
+        created_by: adminId,
+      })
+      .select("id")
+      .single();
+    if (bq?.id) {
+      const { data: bv } = await svc
+        .from("question_versions")
+        .insert({
+          question_id: bq.id,
+          version: 1,
+          status: "draft",
+          content_public: {
+            prompt: "Câu hỏi chính thức kiểm tra cách ly phòng thi thử?",
+            options: [
+              { id: "a", label: "Đáp án A" },
+              { id: "b", label: "Đáp án B" },
+              { id: "c", label: "Đáp án C" },
+            ],
+          },
+          content_private: {
+            correctOptionId: "a",
+            explanation: "Giải thích kiểm thử.",
+          },
+          created_by: adminId,
+        })
+        .select("id")
+        .single();
+      if (bv?.id) {
+        await svc.from("question_source_links").insert({
+          question_version_id: bv.id,
+          source_id: SEEDED_VERIFIED_SOURCE,
+          locator: "tr. 12",
+        });
+        await pool.query(
+          "update public.question_versions set status = 'reviewed', reviewed_by = $1, reviewed_at = now(), review_note = 'Duyệt e2e' where id = $2",
+          [adminId, bv.id],
+        );
+        await pool.query(
+          "update public.question_versions set status = 'published', published_by = $1, published_at = now() where id = $2",
+          [adminId, bv.id],
+        );
+        await pool.query("update public.questions set current_version_id = $1 where id = $2", [bv.id, bq.id]);
+      }
+    }
+
+    // Reuse existing active class or create one (public.classes has classes_single_active_idx and no created_by column)
+    const existingClass = await svc.from("classes").select("id").eq("is_active", true).maybeSingle();
+    if (existingClass.data?.id) {
+      classId = existingClass.data.id;
+      createdOwnClass = false;
+    } else {
+      const { data: cls, error: clsError } = await svc
+        .from("classes")
+        .insert({ code: `CLS-${run}`, name: `Lớp chính thức ${run}`, is_active: true })
+        .select("id")
+        .single();
+      if (clsError || !cls) throw clsError ?? new Error("Failed to create active class");
+      classId = cls.id;
+      createdOwnClass = true;
+    }
+
+    const sEmail = `${crypto.randomUUID()}@auth.invalid`;
+    const sUser = await svc.auth.admin.createUser({
+      email: sEmail,
+      password: deriveProviderPassword(env.pepper!, classStudentId, env.defaultPassword!),
+      email_confirm: true,
+      app_metadata: { role: "student" },
+    });
+    if (sUser.error || !sUser.data.user) throw sUser.error ?? new Error("Failed to create class student");
+    classStudentUserId = sUser.data.user.id;
+    await svc.from("profiles").insert({
+      id: classStudentUserId,
+      role: "student",
+      student_id: classStudentId,
+      full_name: "Nguyễn Văn Chính Thức",
+      display_name: "Thức N.V.",
+      class_id: classId,
+      is_rehearsal: false,
+    });
+    await svc.from("student_auth_identities").insert({ profile_id: classStudentUserId, internal_email: sEmail });
+
     // =========================================================================
     // 1. RBAC, CSRF & Invalid-State API Verification
     // =========================================================================
@@ -526,7 +492,7 @@ test("Rehearsal Studio full closed-loop E2E: RBAC, CSRF, network retry, THU acco
     // 8. Capture Official Confirmation Modal, Roster (no THU accounts), & Question Bank Screenshots
     // =========================================================================
     await page.goto("/quan-tri/lop");
-    await expect(page.getByRole("heading", { name: "Danh sách lớp & Tài khoản" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /Danh sách lớp & Tài khoản/ })).toBeVisible();
     // Official class student is listed, rehearsal THU001 is excluded
     await expect(page.getByText(classStudentId)).toBeVisible();
     await expect(page.getByText("THU001")).toHaveCount(0);
@@ -557,6 +523,38 @@ test("Rehearsal Studio full closed-loop E2E: RBAC, CSRF, network retry, THU acco
     await pool.query("update public.competitions set name = $1 where id = $2", [`Arena thử ${run}`, offCompId]);
     await pool.query("delete from public.competitions where id = $1", [offCompId]);
   } finally {
-    await pool.end();
+    try {
+      const { rows: comps } = await pool.query(
+        "select id from public.competitions where id = any($1::uuid[]) or name like 'Phòng thi thử #%' or name like 'Cuộc thi chính thức E2E%'",
+        [createdCompetitionIds],
+      );
+      for (const r of comps) {
+        await pool.query(
+          "delete from public.audit_logs where target_type = 'attempt' and target_id in (select id::text from public.attempts where competition_id = $1)",
+          [r.id],
+        );
+        await pool.query("delete from public.question_exposures where competition_id = $1", [r.id]);
+        await pool.query("delete from public.audit_logs where target_id = $1", [r.id]);
+        await pool.query("delete from public.competitions where id = $1 and kind = 'rehearsal'", [r.id]);
+      }
+
+      const { rows: rehProfiles } = await pool.query(
+        "select id from public.profiles where is_rehearsal = true and student_id in ('THU001', 'THU002')",
+      );
+      for (const p of rehProfiles) {
+        await pool.query("delete from public.auth_events where profile_id = $1", [p.id]);
+        await svc.auth.admin.deleteUser(p.id);
+      }
+
+      await pool.query("delete from public.questions where external_key = $1", [syntheticBankKey]);
+      await pool.query("delete from public.auth_events where profile_id = any($1::uuid[])", [
+        [adminId, classStudentUserId].filter(Boolean),
+      ]);
+      if (classStudentUserId) await svc.auth.admin.deleteUser(classStudentUserId);
+      if (createdOwnClass && classId) await pool.query("delete from public.classes where id = $1", [classId]);
+      if (adminId) await svc.auth.admin.deleteUser(adminId);
+    } finally {
+      await pool.end();
+    }
   }
 });

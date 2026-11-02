@@ -24,7 +24,7 @@ export function AdminNavigation() {
           <span className="acc-brand-title">Mạch Quyết Sách · VNR202</span>
         </div>
 
-        <nav aria-label="Điều hướng quản trị" className="acc-nav-links">
+        <nav aria-label="Quản trị" className="acc-nav-links">
           {ITEMS.map((item) => {
             const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
             return (
