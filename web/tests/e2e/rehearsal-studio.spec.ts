@@ -487,21 +487,23 @@ test("Rehearsal Studio full closed-loop E2E: RBAC, CSRF, network retry, THU acco
     // =========================================================================
     await page.goto("/quan-tri/lop");
     await expect(page.getByRole("heading", { name: /Danh sách lớp & Tài khoản/ })).toBeVisible();
-    // Official class student is listed, rehearsal THU001 is excluded
-    await expect(page.getByText(classStudentId)).toBeVisible();
-    await expect(page.getByText("THU001")).toHaveCount(0);
+    // Official class student is listed, rehearsal THU001 is excluded from the student directory table
+    await expect(page.locator(".acc-table tbody").getByText(classStudentId)).toBeVisible();
+    await expect(page.locator(".acc-table tbody").getByText("THU001")).toHaveCount(0);
+    await page.evaluate(() => window.scrollTo(0, 0));
     await page.screenshot({ path: path.join(screenshotDir, "admin-roster-desktop.png"), fullPage: true });
 
     await page.goto("/quan-tri/ngan-hang-cau-hoi");
     await expect(page.getByRole("heading", { name: "Ngân hàng câu hỏi" })).toBeVisible();
     await page.getByLabel("Nguồn").selectOption("fixture");
     await expect(page.locator(".adm__questions > li").first()).toBeVisible();
+    await page.evaluate(() => window.scrollTo(0, 0));
     await page.screenshot({ path: path.join(screenshotDir, "admin-bank-desktop.png"), fullPage: true });
 
     // Create a Scheduled Official Competition in DB to capture the Official Open Confirmation Modal screenshot
     const { rows: offComp } = await pool.query<{ id: string }>(
-      `insert into public.competitions (name, kind, state, opens_at, start_deadline_at, minefield_duration_ms, race_duration_ms, created_by)
-       values ($1, 'official', 'scheduled', now() - interval '1 minute', now() + interval '60 minutes', 180000, 150000, $2)
+      `insert into public.competitions (name, kind, state, opens_at, start_deadline_at, created_by)
+       values ($1, 'official', 'scheduled', now() - interval '1 minute', now() + interval '60 minutes', $2)
        returning id`,
       [`Cuộc thi chính thức E2E ${run}`, adminId],
     );
@@ -511,6 +513,7 @@ test("Rehearsal Studio full closed-loop E2E: RBAC, CSRF, network retry, THU acco
     await page.getByRole("button", { name: new RegExp(`Cuộc thi chính thức E2E ${run}`) }).click();
     await page.getByRole("button", { name: /Mở cuộc thi/ }).click();
     await expect(page.getByRole("dialog", { name: /Xác nhận mở cuộc thi chính thức/ })).toBeVisible();
+    await page.evaluate(() => window.scrollTo(0, 0));
     await page.screenshot({ path: path.join(screenshotDir, "admin-official-modal-desktop.png"), fullPage: true });
     await page.getByRole("button", { name: "Hủy" }).click();
     // Clean up synthetic official competition as postgres using the Arena thử prefix

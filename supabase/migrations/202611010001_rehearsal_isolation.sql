@@ -220,7 +220,8 @@ create trigger attempts_rehearsal_isolation
 create or replace function public.competitions_official_delete_guard()
 returns trigger
 language plpgsql
-security definer
+-- security invoker on purpose: current_user must be the real caller, not the function owner.
+security invoker
 set search_path = ''
 as $$
 begin
@@ -407,3 +408,17 @@ grant execute on function
   public.reset_rehearsal_competition(uuid, text, integer),
   public.arena_admin_competitions(uuid)
 to service_role;
+
+-- Enforce read-only direct table access for service_role across Postgres/Supabase CLI versions
+revoke insert, update, delete, truncate on
+  public.competitions,
+  public.competition_games,
+  public.competition_question_snapshots,
+  public.attempts,
+  public.attempt_allocations,
+  public.minefield_cells,
+  public.answer_submissions,
+  public.attempt_events,
+  public.leaderboard_entries,
+  public.leaderboard_versions
+from service_role;
