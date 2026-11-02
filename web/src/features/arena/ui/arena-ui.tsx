@@ -222,7 +222,8 @@ export function FeedbackFlash({ feedback, game, placement = "center" }: { feedba
     if (c.kind === "chest") content = { tone: "chest", title: "Rương +40" };
     if (c.kind === "shield") content = { tone: "shield", title: "Nhận khiên" };
     if (c.kind === "double") content = { tone: "double", title: "x2 cho câu tiếp theo" };
-    if (c.kind === "bomb") content = { tone: "bad", title: "Bom! Gỡ ngay" };
+    // Question and bomb cells have no flash: the reveal tile and the question itself announce them,
+    // and a flash here would sit on top of the 5 s defuse question (LA-FB-002).
   }
   const key = feedback ? `${feedback.kind}-${feedback.at}` : "none";
   return (
