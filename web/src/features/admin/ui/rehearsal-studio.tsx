@@ -93,14 +93,24 @@ export function RehearsalStudio({
   const [copiedToken, setCopiedToken] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<{ tone: "teal" | "amber" | "red"; text: string } | null>(null);
   const [lastUpdated, setLastUpdated] = useState<string | null>(null);
+  const mountedRef = useRef(true);
+
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
 
   const loadStudio = useCallback(async () => {
     try {
       const response = await fetch("/api/v1/admin/rehearsal", { cache: "no-store" });
+      if (!mountedRef.current) return;
       const body = (await response.json().catch(() => null)) as {
         data?: RehearsalStudioState;
         error?: { message?: string };
       } | null;
+      if (!mountedRef.current) return;
       if (!response.ok || !body?.data) {
         setFeedback({ tone: "red", text: body?.error?.message ?? "Không tải được trạng thái phòng thi thử." });
         return;
@@ -108,9 +118,10 @@ export function RehearsalStudio({
       setData(body.data);
       setLastUpdated(new Date().toLocaleTimeString("vi-VN"));
     } catch {
+      if (!mountedRef.current) return;
       setFeedback({ tone: "red", text: "Mất kết nối tới máy chủ khi tải phòng thi thử." });
     } finally {
-      setLoading(false);
+      if (mountedRef.current) setLoading(false);
     }
   }, []);
 

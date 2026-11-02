@@ -2,7 +2,7 @@
 
 import { Activity, ExternalLink, FileClock, Play, RefreshCw, ShieldAlert, Square, Trophy } from "lucide-react";
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import "@/features/admin/ui/admin-control-center.css";
 import { RehearsalStudio } from "@/features/admin/ui/rehearsal-studio";
@@ -176,10 +176,19 @@ export function CompetitionAdmin() {
   const [monitorGameFilter, setMonitorGameFilter] = useState<"" | "minefield" | "race">("");
   const [monitorStateFilter, setMonitorStateFilter] = useState<string>("");
   const [monitorHealthFilter, setMonitorHealthFilter] = useState<"" | "disconnected" | "timeout" | "incident">("");
+  const mountedRef = useRef(true);
+
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
 
   const load = useCallback(async () => {
     try {
       const l = await request<Competition[]>("GET", "/admin/competitions");
+      if (!mountedRef.current) return;
       setList(l);
       setSyncError(null);
       setLastUpdatedText(new Date().toLocaleTimeString("vi-VN"));
@@ -194,6 +203,7 @@ export function CompetitionAdmin() {
         return null;
       });
     } catch (e) {
+      if (!mountedRef.current) return;
       const errText = errorText(e);
       setMessage(errText);
       setSyncError(errText);

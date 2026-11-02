@@ -28,7 +28,7 @@ $$;
 
 drop trigger if exists profiles_rehearsal_immutable on public.profiles;
 create trigger profiles_rehearsal_immutable
-  before update on public.profiles
+  before update of is_rehearsal on public.profiles
   for each row execute function public.profiles_rehearsal_immutable_guard();
 
 -- Strictly isolate question pools by competition kind (replacing exact signature and return table):
@@ -162,8 +162,8 @@ create trigger competition_snapshots_origin_check
   before insert on public.competition_question_snapshots
   for each row execute function public.competition_snapshots_origin_guard();
 
--- Finalization marks only bank questions somebody actually saw (displayed_count > 0, not previously marked)
--- in an official competition as disclosed (LA-CONTENT-009, LA-AC-037). Rehearsal competitions never mark disclosure.
+-- Finalization marks only questions somebody actually saw (displayed_count > 0, not previously marked)
+-- as disclosed (LA-CONTENT-009, LA-AC-037), and never marks official bank questions from a rehearsal competition.
 create or replace function public.mark_competition_answers_disclosed(p_competition_id uuid)
 returns int
 language plpgsql
@@ -171,23 +171,19 @@ security definer
 set search_path = ''
 as $$
 declare
-  v_kind public.competition_kind;
   v_count int;
 begin
-  select kind into v_kind from public.competitions where id = p_competition_id;
-  if found and v_kind <> 'official' then
-    return 0;
-  end if;
-
   update public.question_exposures x
   set answer_disclosed_at = public.arena_clock()
-  from public.question_versions v
-  join public.questions q on q.id = v.question_id
+  from public.competitions c,
+       public.question_versions v
+       join public.questions q on q.id = v.question_id
   where x.competition_id = p_competition_id
+    and c.id = x.competition_id
     and x.question_version_id = v.id
-    and q.origin = 'bank'
     and x.displayed_count > 0
-    and x.answer_disclosed_at is null;
+    and x.answer_disclosed_at is null
+    and (c.kind = 'official' or q.origin = 'fixture');
 
   get diagnostics v_count = row_count;
   return v_count;
@@ -216,7 +212,7 @@ $$;
 
 drop trigger if exists attempts_rehearsal_isolation on public.attempts;
 create trigger attempts_rehearsal_isolation
-  before insert or update on public.attempts
+  before insert or update of profile_id, competition_id on public.attempts
   for each row execute function public.attempts_rehearsal_isolation_guard();
 
 -- Prevent deletion of official competitions (except synthetic test-harness cleanup worlds named 'Arena thử %' by owner).
