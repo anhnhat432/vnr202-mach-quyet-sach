@@ -229,7 +229,8 @@ export function MinefieldGame() {
               )}
             </div>
           ) : null}
-          <FeedbackFlash feedback={flash} game="minefield" />
+          {/* Never over a question or its reveal tile (LA-FB-002): a flash that is still fading is dropped. */}
+          <FeedbackFlash feedback={pending ? null : flash} game="minefield" />
         </div>
       </div>
     </ArenaFrame>
