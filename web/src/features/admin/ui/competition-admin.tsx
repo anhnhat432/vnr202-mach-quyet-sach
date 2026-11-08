@@ -1,6 +1,6 @@
 "use client";
 
-import { Activity, ExternalLink, FileClock, Play, RefreshCw, ShieldAlert, Square, Trophy } from "lucide-react";
+import { Activity, Download, ExternalLink, FileClock, Layers, Play, RefreshCw, ShieldAlert, Square, Trophy, Users } from "lucide-react";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
@@ -48,6 +48,23 @@ type MonitorRow = {
   deviceTransfers: number;
   timeouts: number;
   pendingQuestion: boolean;
+};
+
+type StudentSummary = {
+  profileId: string;
+  studentId: string;
+  displayName: string;
+  accountStatus: string;
+  minefield: MonitorRow | null;
+  race: MonitorRow | null;
+  totalScore: number;
+  isOnline: boolean;
+  isDisconnected: boolean;
+  heartbeatAgoMs: number | null;
+  timeouts: number;
+  deviceTransfers: number;
+  incidents: Incident[];
+  latestAttemptId: string;
 };
 
 type AuditRow = {
@@ -137,6 +154,72 @@ const INCIDENT_WARNING: Partial<Record<IncidentAction, string>> = {
     "Sinh viên bị đăng xuất khỏi mọi thiết bị. Đồng hồ lượt đang chơi vẫn chạy.",
 };
 
+function exportLeaderboardCsv(compName: string, students: StudentSummary[]) {
+  const headers = [
+    "STT",
+    "MSSV",
+    "Tên hiển thị",
+    "Trạng thái",
+    "Bãi Mìn (Số câu)",
+    "Bãi Mìn (Điểm)",
+    "Đường Đua (Số câu)",
+    "Đường Đua (Điểm)",
+    "Tổng điểm",
+    "Đổi thiết bị",
+    "Câu hết giờ",
+    "Sự cố / Ghi chú",
+  ];
+
+  const rows = students.map((s, idx) => {
+    const mineProgress = s.minefield
+      ? `${s.minefield.mainAnswered}/${s.minefield.mainTotal} (${s.minefield.mainCorrect} đúng)`
+      : "Chưa thi";
+    const raceProgress = s.race
+      ? `${s.race.mainAnswered}/${s.race.mainTotal} (${s.race.mainCorrect} đúng)`
+      : "Chưa thi";
+    const statusText =
+      s.accountStatus === "locked"
+        ? "Tài khoản bị khóa"
+        : s.isDisconnected
+          ? "Mất kết nối"
+          : s.isOnline
+            ? "Đang chơi"
+            : "Hoàn thành";
+    const incidentNotes = s.incidents
+      .map((i) => `${INCIDENT_LABEL[i.action] || i.action}: ${i.reason}`)
+      .join("; ");
+
+    return [
+      idx + 1,
+      `"${s.studentId}"`,
+      `"${s.displayName.replace(/"/g, '""')}"`,
+      `"${statusText}"`,
+      `"${mineProgress}"`,
+      s.minefield?.score ?? 0,
+      `"${raceProgress}"`,
+      s.race?.score ?? 0,
+      s.totalScore,
+      s.deviceTransfers,
+      s.timeouts,
+      `"${incidentNotes.replace(/"/g, '""')}"`,
+    ].join(",");
+  });
+
+  const bom = "\uFEFF";
+  const csvContent = bom + [headers.join(","), ...rows].join("\r\n");
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  const safeName = (compName || "Cuoc_thi").replace(/[^a-zA-Z0-9_\u00C0-\u024F\u1EA0-\u1EF9]/g, "_");
+  const dateStr = new Date().toISOString().slice(0, 10);
+  a.href = url;
+  a.download = `Bang_Diem_${safeName}_${dateStr}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
 type WorkspaceTab = "operations" | "rehearsal" | "incidents";
 
 function errorText(error: unknown) {
@@ -171,7 +254,8 @@ export function CompetitionAdmin() {
   const [syncError, setSyncError] = useState<string | null>(null);
   const [nowTick, setNowTick] = useState<number>(() => Date.now());
 
-  // Monitor filters
+  // Monitor filters & view mode
+  const [monitorViewMode, setMonitorViewMode] = useState<"unified" | "split">("unified");
   const [monitorSearch, setMonitorSearch] = useState("");
   const [monitorGameFilter, setMonitorGameFilter] = useState<"" | "minefield" | "race">("");
   const [monitorStateFilter, setMonitorStateFilter] = useState<string>("");
@@ -406,6 +490,90 @@ export function CompetitionAdmin() {
   }, [monitor, monitorSearch, monitorGameFilter, monitorStateFilter, monitorHealthFilter]);
 
   const byGame = (game: "minefield" | "race") => filteredMonitor.filter((m) => m.game === game);
+
+  const unifiedStudents = useMemo(() => {
+    const map = new Map<string, StudentSummary>();
+
+    for (const m of monitor) {
+      const key = m.profileId || m.studentId;
+      let s = map.get(key);
+      if (!s) {
+        s = {
+          profileId: m.profileId,
+          studentId: m.studentId,
+          displayName: m.displayName,
+          accountStatus: m.accountStatus,
+          minefield: null,
+          race: null,
+          totalScore: 0,
+          isOnline: false,
+          isDisconnected: false,
+          heartbeatAgoMs: null,
+          timeouts: 0,
+          deviceTransfers: 0,
+          incidents: [],
+          latestAttemptId: m.attemptId,
+        };
+        map.set(key, s);
+      }
+
+      if (m.game === "minefield") {
+        s.minefield = m;
+      } else if (m.game === "race") {
+        s.race = m;
+      }
+
+      s.totalScore += m.score;
+      s.timeouts += m.timeouts;
+      s.deviceTransfers += m.deviceTransfers;
+      if (m.incidents?.length) {
+        s.incidents.push(...m.incidents);
+      }
+      if (m.accountStatus === "locked") {
+        s.accountStatus = "locked";
+      }
+
+      // Latest attempt selection: prefer active attempt
+      if (m.state === "active") {
+        s.latestAttemptId = m.attemptId;
+        if (m.heartbeatAgoMs !== null && m.heartbeatAgoMs < 12_000) {
+          s.isOnline = true;
+        } else {
+          s.isDisconnected = true;
+        }
+        s.heartbeatAgoMs = m.heartbeatAgoMs;
+      }
+    }
+
+    const q = monitorSearch.trim().toLowerCase();
+    return Array.from(map.values())
+      .filter((s) => {
+        if (monitorHealthFilter === "disconnected" && !s.isDisconnected) return false;
+        if (monitorHealthFilter === "timeout" && s.timeouts === 0) return false;
+        if (monitorHealthFilter === "incident" && s.incidents.length === 0 && s.accountStatus !== "locked")
+          return false;
+        if (monitorStateFilter === "active") {
+          const hasActive = s.minefield?.state === "active" || s.race?.state === "active";
+          if (!hasActive) return false;
+        } else if (monitorStateFilter === "completed") {
+          const allDone =
+            (s.minefield?.state === "completed" || s.minefield?.state === "timed_out") &&
+            (s.race?.state === "completed" || s.race?.state === "timed_out");
+          if (!allDone) return false;
+        }
+        if (q) {
+          const hay = `${s.studentId ?? ""} ${s.displayName} ${s.accountStatus}`.toLowerCase();
+          if (!hay.includes(q)) return false;
+        }
+        return true;
+      })
+      .sort((a, b) => {
+        if (a.isDisconnected !== b.isDisconnected) return a.isDisconnected ? -1 : 1;
+        if ((a.accountStatus === "locked") !== (b.accountStatus === "locked"))
+          return a.accountStatus === "locked" ? -1 : 1;
+        return b.totalScore - a.totalScore;
+      });
+  }, [monitor, monitorSearch, monitorHealthFilter, monitorStateFilter]);
   const activeStepIndex = current ? LIFECYCLE_STEPS.findIndex((s) => s.key === current.state) : -1;
 
   return (
@@ -721,13 +889,21 @@ export function CompetitionAdmin() {
                         : ` · nhận lượt tới ${new Date(current.startDeadlineAt).toLocaleString("vi-VN")}`}
                     </p>
                   </div>
-                  <div className="adm__links" style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
-                    <Link href="/trinh-chieu" target="_blank" className="acc-btn">
-                      <Trophy aria-hidden size={16} /> Trình chiếu <ExternalLink aria-hidden size={12} />
-                    </Link>
-                    <Link href="/live-arena/bang-xep-hang" target="_blank" className="acc-btn">
-                      Bảng xếp hạng <ExternalLink aria-hidden size={12} />
-                    </Link>
+                  <div className="adm__links" style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", alignItems: "center" }}>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem" }}>
+                      <Link href="/trinh-chieu" target="_blank" className="acc-btn acc-btn-amber" title="Mở màn hình chiếu Full HD 1920x1080">
+                        <Trophy aria-hidden size={15} /> Màn chiếu cả 2 bảng <ExternalLink aria-hidden size={12} />
+                      </Link>
+                      <Link href="/trinh-chieu?game=minefield" target="_blank" className="acc-btn" title="Chiếu phóng to Bãi Mìn">
+                        Chiếu Bãi Mìn ↗
+                      </Link>
+                      <Link href="/trinh-chieu?game=race" target="_blank" className="acc-btn" title="Chiếu phóng to Đường Đua">
+                        Chiếu Đường Đua ↗
+                      </Link>
+                      <Link href="/live-arena/bang-xep-hang" target="_blank" className="acc-btn">
+                        Bảng xếp hạng <ExternalLink aria-hidden size={12} />
+                      </Link>
+                    </div>
                   </div>
                 </header>
 
@@ -743,6 +919,9 @@ export function CompetitionAdmin() {
                       <span>{step.label}</span>
                     </div>
                   ))}
+                </div>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", margin: "-0.45rem 0 0.75rem", fontSize: "0.78rem", color: "var(--acc-muted)" }}>
+                  <span>💡 Điều khiển màn chiếu máy tính phụ: Bấm phím <b>1</b> (Bãi Mìn), <b>2</b> (Đường Đua), <b>0</b> (Chiếu song song)</span>
                 </div>
 
                 {/* Readiness & Window Controls */}
@@ -907,6 +1086,107 @@ export function CompetitionAdmin() {
                   </div>
                 ) : null}
 
+                {/* Class Pulse Bar */}
+                <div className="acc-pulse-bar" role="region" aria-label="Nhịp độ lớp học">
+                  <button
+                    type="button"
+                    className="acc-pulse-card"
+                    data-active={!monitorHealthFilter && !monitorStateFilter}
+                    onClick={() => {
+                      setMonitorHealthFilter("");
+                      setMonitorStateFilter("");
+                    }}
+                  >
+                    <span className="acc-pulse-label">Sĩ số lớp</span>
+                    <span className="acc-pulse-val">{readiness?.classSize ?? participantCount}</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    className="acc-pulse-card"
+                    data-active={monitorStateFilter === "active"}
+                    onClick={() => setMonitorStateFilter(monitorStateFilter === "active" ? "" : "active")}
+                  >
+                    <span className="acc-pulse-label">Đang thi</span>
+                    <span className="acc-pulse-val" style={{ color: "var(--acc-amber)" }}>
+                      {monitor.filter((m) => m.state === "active").length}
+                    </span>
+                  </button>
+
+                  <button
+                    type="button"
+                    className="acc-pulse-card"
+                    data-active={monitorStateFilter === "completed"}
+                    onClick={() => setMonitorStateFilter(monitorStateFilter === "completed" ? "" : "completed")}
+                  >
+                    <span className="acc-pulse-label">Đã nộp bài</span>
+                    <span className="acc-pulse-val" style={{ color: "#10b981" }}>{completedCount}</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    className="acc-pulse-card"
+                    data-tone={disconnectedCount > 0 ? "red" : undefined}
+                    data-active={monitorHealthFilter === "disconnected"}
+                    onClick={() => setMonitorHealthFilter(monitorHealthFilter === "disconnected" ? "" : "disconnected")}
+                  >
+                    <span className="acc-pulse-label">Mất kết nối</span>
+                    <span className="acc-pulse-val" style={{ color: disconnectedCount > 0 ? "var(--acc-red)" : "inherit" }}>
+                      {disconnectedCount}
+                    </span>
+                  </button>
+
+                  <button
+                    type="button"
+                    className="acc-pulse-card"
+                    data-active={monitorHealthFilter === "incident"}
+                    onClick={() => setMonitorHealthFilter(monitorHealthFilter === "incident" ? "" : "incident")}
+                  >
+                    <span className="acc-pulse-label">Sự cố / Khóa</span>
+                    <span className="acc-pulse-val">
+                      {monitor.filter((m) => m.incidents.length > 0 || m.accountStatus === "locked").length}
+                    </span>
+                  </button>
+                </div>
+
+                {/* Monitor Controls & Toolbar */}
+                <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", gap: "0.6rem", marginBottom: "0.85rem" }}>
+                  <div className="acc-view-switcher" role="tablist" aria-label="Chế độ hiển thị bảng">
+                    <button
+                      type="button"
+                      role="tab"
+                      aria-selected={monitorViewMode === "unified"}
+                      data-active={monitorViewMode === "unified"}
+                      className="acc-view-btn"
+                      onClick={() => setMonitorViewMode("unified")}
+                    >
+                      <Users aria-hidden size={14} style={{ verticalAlign: "middle", marginRight: "0.3rem" }} />
+                      Bảng hợp nhất cả lớp ({unifiedStudents.length})
+                    </button>
+                    <button
+                      type="button"
+                      role="tab"
+                      aria-selected={monitorViewMode === "split"}
+                      data-active={monitorViewMode === "split"}
+                      className="acc-view-btn"
+                      onClick={() => setMonitorViewMode("split")}
+                    >
+                      <Layers aria-hidden size={14} style={{ verticalAlign: "middle", marginRight: "0.3rem" }} />
+                      Tách chi tiết 2 Game
+                    </button>
+                  </div>
+
+                  <button
+                    type="button"
+                    className="acc-btn acc-btn-primary"
+                    style={{ minHeight: "2rem", padding: "0.3rem 0.8rem", fontSize: "0.82rem" }}
+                    onClick={() => exportLeaderboardCsv(current?.name ?? "Live_Arena", unifiedStudents)}
+                    disabled={unifiedStudents.length === 0}
+                  >
+                    <Download aria-hidden size={15} /> Xuất bảng điểm Excel / CSV
+                  </button>
+                </div>
+
                 {/* Monitor Filter Bar */}
                 <div
                   style={{
@@ -925,18 +1205,20 @@ export function CompetitionAdmin() {
                       onChange={(e) => setMonitorSearch(e.target.value)}
                     />
                   </label>
-                  <label className="acc-field">
-                    <span>Lọc theo Game</span>
-                    <select
-                      className="acc-select"
-                      value={monitorGameFilter}
-                      onChange={(e) => setMonitorGameFilter(e.target.value as "" | "minefield" | "race")}
-                    >
-                      <option value="">Tất cả 2 game</option>
-                      <option value="minefield">Bãi Mìn Tri Thức</option>
-                      <option value="race">Đường Đua Lịch Sử</option>
-                    </select>
-                  </label>
+                  {monitorViewMode === "split" && (
+                    <label className="acc-field">
+                      <span>Lọc theo Game</span>
+                      <select
+                        className="acc-select"
+                        value={monitorGameFilter}
+                        onChange={(e) => setMonitorGameFilter(e.target.value as "" | "minefield" | "race")}
+                      >
+                        <option value="">Tất cả 2 game</option>
+                        <option value="minefield">Bãi Mìn Tri Thức</option>
+                        <option value="race">Đường Đua Lịch Sử</option>
+                      </select>
+                    </label>
+                  )}
                   <label className="acc-field">
                     <span>Lọc trạng thái</span>
                     <select
@@ -980,151 +1262,321 @@ export function CompetitionAdmin() {
                     maxWidth: "100%",
                   }}
                 >
-                  {(["minefield", "race"] as const)
-                    .filter((game) => !monitorGameFilter || monitorGameFilter === game)
-                    .map((game) => (
-                      <div key={game} className="acc-panel-alt">
-                        <h3 style={{ margin: "0 0 0.6rem", fontSize: "0.98rem", display: "flex", alignItems: "center", gap: "0.45rem" }}>
-                          <Activity aria-hidden size={16} />{" "}
-                          {game === "minefield" ? "Bãi Mìn Tri Thức" : "Đường Đua Lịch Sử"} · {byGame(game).length} lượt
+                  {monitorViewMode === "unified" ? (
+                    <div className="acc-panel-alt">
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          marginBottom: "0.65rem",
+                          flexWrap: "wrap",
+                          gap: "0.5rem",
+                        }}
+                      >
+                        <h3 style={{ margin: 0, fontSize: "0.98rem", display: "flex", alignItems: "center", gap: "0.45rem" }}>
+                          <Users aria-hidden size={16} /> Bảng điều hành cả lớp · {unifiedStudents.length} sinh viên
                         </h3>
-                        <div className="acc-table-wrap">
-                          <table className="acc-table">
-                            <thead>
+                        <span style={{ fontSize: "0.8rem", color: "var(--acc-muted)" }}>
+                          Tự động đồng bộ mỗi 4 giây · Click nút Xử lý khi có sự cố
+                        </span>
+                      </div>
+                      <div className="acc-table-wrap">
+                        <table className="acc-table">
+                          <thead>
+                            <tr>
+                              <th>MSSV & Họ tên</th>
+                              <th>Kết nối</th>
+                              <th>Bãi Mìn Tri Thức</th>
+                              <th>Đường Đua Lịch Sử</th>
+                              <th>Tổng điểm</th>
+                              <th>Ghi nhận</th>
+                              <th>Sự cố</th>
+                              <th>Thao tác</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {unifiedStudents.length === 0 ? (
                               <tr>
-                                <th>MSSV</th>
-                                <th>Tên hiển thị</th>
-                                <th>Trạng thái</th>
-                                <th>Tiến độ</th>
-                                <th>Điểm</th>
-                                <th>Thời gian</th>
-                                <th>Kết nối</th>
-                                <th>Ghi nhận</th>
-                                <th>Sự cố</th>
-                                <th>Thao tác</th>
+                                <td colSpan={8} style={{ textAlign: "center", color: "var(--acc-muted)", padding: "1.5rem" }}>
+                                  Chưa có lượt thi nào hoặc không tìm thấy sinh viên phù hợp bộ lọc.
+                                </td>
                               </tr>
-                            </thead>
-                            <tbody>
-                              {byGame(game).map((m) => {
-                                const isDisconnected =
-                                  m.state === "active" && (m.heartbeatAgoMs === null || m.heartbeatAgoMs >= 12_000);
-                                return (
-                                  <tr key={m.attemptId}>
-                                    <td>
-                                      <code>{m.studentId}</code>
-                                    </td>
-                                    <td>
-                                      <strong>{m.displayName}</strong>
-                                    </td>
-                                    <td>
+                            ) : (
+                              unifiedStudents.map((s) => (
+                                <tr key={s.profileId || s.studentId}>
+                                  <td>
+                                    <div style={{ display: "flex", flexDirection: "column", gap: "0.15rem" }}>
+                                      <code>{s.studentId}</code>
+                                      <strong style={{ fontSize: "0.95rem" }}>{s.displayName}</strong>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    {s.isOnline ? (
+                                      <span className="acc-badge" data-tone="teal">
+                                        <span className="acc-status-dot" data-status="online" /> Online
+                                      </span>
+                                    ) : s.isDisconnected ? (
                                       <span
                                         className="acc-badge"
-                                        data-tone={
-                                          m.state === "active"
-                                            ? "amber"
-                                            : m.state === "completed"
-                                              ? "teal"
-                                              : m.state === "voided"
-                                                ? "red"
-                                                : undefined
-                                        }
+                                        data-tone="red"
+                                        title={`Mất nhịp tim ${Math.round((s.heartbeatAgoMs ?? 0) / 1000)} s`}
                                       >
-                                        {m.state === "active"
-                                          ? "Đang chơi"
-                                          : m.state === "completed"
-                                            ? "Hoàn thành"
-                                            : m.state === "timed_out"
-                                              ? "Hết giờ"
-                                              : "Vô hiệu"}
+                                        <span className="acc-status-dot" data-status="disconnected" /> mất{" "}
+                                        {Math.round((s.heartbeatAgoMs ?? 0) / 1000)} s
                                       </span>
-                                    </td>
-                                    <td>
-                                      {m.mainAnswered}/{m.mainTotal} ({m.mainCorrect} đúng)
-                                    </td>
-                                    <td>
-                                      <b style={{ color: "var(--acc-amber)" }}>{m.score}</b>
-                                    </td>
-                                    <td>
-                                      {m.state === "active"
-                                        ? `còn ${formatClock(m.remainingMs)}`
-                                        : m.completionDurationMs !== null
-                                          ? formatClock(m.completionDurationMs)
-                                          : "—"}
-                                    </td>
-                                    <td>
-                                      {m.state !== "active" ? (
-                                        "—"
-                                      ) : m.heartbeatAgoMs === null ? (
-                                        <span className="acc-badge" data-tone="red">
-                                          chưa có
+                                    ) : (
+                                      <span className="acc-badge" style={{ color: "var(--acc-muted)" }}>
+                                        <span className="acc-status-dot" data-status="idle" /> Hoàn thành
+                                      </span>
+                                    )}
+                                  </td>
+                                  <td>
+                                    {s.minefield ? (
+                                      <div>
+                                        <span style={{ fontWeight: 600 }}>
+                                          {s.minefield.mainAnswered}/{s.minefield.mainTotal} câu
                                         </span>
-                                      ) : !isDisconnected ? (
-                                        <span className="acc-badge" data-tone="teal">
-                                          tốt
+                                        <div style={{ fontSize: "0.82rem", color: "var(--acc-amber)" }}>
+                                          +{s.minefield.score} điểm
+                                        </div>
+                                      </div>
+                                    ) : (
+                                      <span style={{ color: "var(--acc-muted)", fontSize: "0.82rem" }}>Chưa chơi</span>
+                                    )}
+                                  </td>
+                                  <td>
+                                    {s.race ? (
+                                      <div>
+                                        <span style={{ fontWeight: 600 }}>
+                                          {s.race.mainAnswered}/{s.race.mainTotal} câu
                                         </span>
-                                      ) : (
-                                        <span className="acc-badge" data-tone="red">
-                                          mất {Math.round(m.heartbeatAgoMs / 1000)} s
-                                        </span>
-                                      )}
-                                    </td>
-                                    <td>
-                                      {[
-                                        m.deviceTransfers ? `${m.deviceTransfers} lần đổi thiết bị` : null,
-                                        m.timeouts ? `${m.timeouts} câu hết giờ` : null,
-                                      ]
-                                        .filter(Boolean)
-                                        .join(" · ") || "—"}
-                                    </td>
-                                    <td>
-                                      {m.accountStatus === "locked" ? (
-                                        <span className="adm__tag is-bad acc-badge" data-tone="red">
-                                          TK bị khóa
-                                        </span>
-                                      ) : null}
-                                      {m.incidents.length ? (
-                                        <span
-                                          title={m.incidents
-                                            .map((i) => `${INCIDENT_LABEL[i.action]}: ${i.reason}`)
-                                            .join("\n")}
-                                        >
-                                          {m.incidents.length} ghi nhận ·{" "}
-                                          {INCIDENT_LABEL[m.incidents.at(-1)!.action]}
-                                        </span>
-                                      ) : m.accountStatus === "locked" ? null : (
-                                        "—"
-                                      )}
-                                    </td>
-                                    <td>
-                                      <button
-                                        type="button"
-                                        className="adm__small acc-btn"
-                                        style={{ minHeight: "1.95rem", padding: "0.2rem 0.6rem", fontSize: "0.78rem" }}
-                                        aria-expanded={incidentFor === m.attemptId}
-                                        onClick={() =>
-                                          setIncidentFor(incidentFor === m.attemptId ? null : m.attemptId)
-                                        }
+                                        <div style={{ fontSize: "0.82rem", color: "var(--acc-amber)" }}>
+                                          +{s.race.score} điểm
+                                        </div>
+                                      </div>
+                                    ) : (
+                                      <span style={{ color: "var(--acc-muted)", fontSize: "0.82rem" }}>Chưa chơi</span>
+                                    )}
+                                  </td>
+                                  <td>
+                                    <b style={{ fontSize: "1.15rem", color: "var(--acc-amber)" }}>{s.totalScore}</b>
+                                  </td>
+                                  <td>
+                                    {[
+                                      s.deviceTransfers ? `${s.deviceTransfers} lần đổi thiết bị` : null,
+                                      s.timeouts ? `${s.timeouts} câu hết giờ` : null,
+                                    ]
+                                      .filter(Boolean)
+                                      .join(" · ") || "—"}
+                                  </td>
+                                  <td>
+                                    {s.accountStatus === "locked" ? (
+                                      <span className="adm__tag is-bad acc-badge" data-tone="red" style={{ marginRight: "0.3rem" }}>
+                                        TK bị khóa
+                                      </span>
+                                    ) : null}
+                                    {s.incidents.length ? (
+                                      <span
+                                        title={s.incidents
+                                          .map((i) => `${INCIDENT_LABEL[i.action]}: ${i.reason}`)
+                                          .join("\n")}
                                       >
-                                        Xử lý
-                                      </button>
-                                    </td>
-                                  </tr>
-                                );
-                              })}
-                            </tbody>
-                          </table>
-                        </div>
+                                        {s.incidents.length} ghi nhận · {INCIDENT_LABEL[s.incidents.at(-1)!.action]}
+                                      </span>
+                                    ) : s.accountStatus === "locked" ? null : (
+                                      "—"
+                                    )}
+                                  </td>
+                                  <td>
+                                    <button
+                                      type="button"
+                                      className="adm__small acc-btn"
+                                      style={{ minHeight: "1.95rem", padding: "0.2rem 0.6rem", fontSize: "0.78rem" }}
+                                      aria-expanded={incidentFor === s.latestAttemptId}
+                                      onClick={() =>
+                                        setIncidentFor(incidentFor === s.latestAttemptId ? null : s.latestAttemptId)
+                                      }
+                                    >
+                                      Xử lý
+                                    </button>
+                                  </td>
+                                </tr>
+                              ))
+                            )}
+                          </tbody>
+                        </table>
                       </div>
-                    ))}
+                    </div>
+                  ) : (
+                    (["minefield", "race"] as const)
+                      .filter((game) => !monitorGameFilter || monitorGameFilter === game)
+                      .map((game) => (
+                        <div key={game} className="acc-panel-alt">
+                          <h3
+                            style={{
+                              margin: "0 0 0.6rem",
+                              fontSize: "0.98rem",
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "0.45rem",
+                            }}
+                          >
+                            <Activity aria-hidden size={16} />{" "}
+                            {game === "minefield" ? "Bãi Mìn Tri Thức" : "Đường Đua Lịch Sử"} · {byGame(game).length}{" "}
+                            lượt
+                          </h3>
+                          <div className="acc-table-wrap">
+                            <table className="acc-table">
+                              <thead>
+                                <tr>
+                                  <th>MSSV</th>
+                                  <th>Tên hiển thị</th>
+                                  <th>Trạng thái</th>
+                                  <th>Tiến độ</th>
+                                  <th>Điểm</th>
+                                  <th>Thời gian</th>
+                                  <th>Kết nối</th>
+                                  <th>Ghi nhận</th>
+                                  <th>Sự cố</th>
+                                  <th>Thao tác</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {byGame(game).map((m) => {
+                                  const isDisconnected =
+                                    m.state === "active" && (m.heartbeatAgoMs === null || m.heartbeatAgoMs >= 12_000);
+                                  return (
+                                    <tr key={m.attemptId}>
+                                      <td>
+                                        <code>{m.studentId}</code>
+                                      </td>
+                                      <td>
+                                        <strong>{m.displayName}</strong>
+                                      </td>
+                                      <td>
+                                        <span
+                                          className="acc-badge"
+                                          data-tone={
+                                            m.state === "active"
+                                              ? "amber"
+                                              : m.state === "completed"
+                                                ? "teal"
+                                                : m.state === "voided"
+                                                  ? "red"
+                                                  : undefined
+                                          }
+                                        >
+                                          {m.state === "active"
+                                            ? "Đang chơi"
+                                            : m.state === "completed"
+                                              ? "Hoàn thành"
+                                              : m.state === "timed_out"
+                                                ? "Hết giờ"
+                                                : "Vô hiệu"}
+                                        </span>
+                                      </td>
+                                      <td>
+                                        {m.mainAnswered}/{m.mainTotal} ({m.mainCorrect} đúng)
+                                      </td>
+                                      <td>
+                                        <b style={{ color: "var(--acc-amber)" }}>{m.score}</b>
+                                      </td>
+                                      <td>
+                                        {m.state === "active"
+                                          ? `còn ${formatClock(m.remainingMs)}`
+                                          : m.completionDurationMs !== null
+                                            ? formatClock(m.completionDurationMs)
+                                            : "—"}
+                                      </td>
+                                      <td>
+                                        {m.state !== "active" ? (
+                                          "—"
+                                        ) : m.heartbeatAgoMs === null ? (
+                                          <span className="acc-badge" data-tone="red">
+                                            chưa có
+                                          </span>
+                                        ) : !isDisconnected ? (
+                                          <span className="acc-badge" data-tone="teal">
+                                            tốt
+                                          </span>
+                                        ) : (
+                                          <span className="acc-badge" data-tone="red">
+                                            mất {Math.round(m.heartbeatAgoMs / 1000)} s
+                                          </span>
+                                        )}
+                                      </td>
+                                      <td>
+                                        {[
+                                          m.deviceTransfers ? `${m.deviceTransfers} lần đổi thiết bị` : null,
+                                          m.timeouts ? `${m.timeouts} câu hết giờ` : null,
+                                        ]
+                                          .filter(Boolean)
+                                          .join(" · ") || "—"}
+                                      </td>
+                                      <td>
+                                        {m.accountStatus === "locked" ? (
+                                          <span className="adm__tag is-bad acc-badge" data-tone="red">
+                                            TK bị khóa
+                                          </span>
+                                        ) : null}
+                                        {m.incidents.length ? (
+                                          <span
+                                            title={m.incidents
+                                              .map((i) => `${INCIDENT_LABEL[i.action]}: ${i.reason}`)
+                                              .join("\n")}
+                                          >
+                                            {m.incidents.length} ghi nhận ·{" "}
+                                            {INCIDENT_LABEL[m.incidents.at(-1)!.action]}
+                                          </span>
+                                        ) : m.accountStatus === "locked" ? null : (
+                                          "—"
+                                        )}
+                                      </td>
+                                      <td>
+                                        <button
+                                          type="button"
+                                          className="adm__small acc-btn"
+                                          style={{ minHeight: "1.95rem", padding: "0.2rem 0.6rem", fontSize: "0.78rem" }}
+                                          aria-expanded={incidentFor === m.attemptId}
+                                          onClick={() =>
+                                            setIncidentFor(incidentFor === m.attemptId ? null : m.attemptId)
+                                          }
+                                        >
+                                          Xử lý
+                                        </button>
+                                      </td>
+                                    </tr>
+                                  );
+                                })}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      ))
+                  )}
                 </div>
 
                 {incidentFor && monitor.find((m) => m.attemptId === incidentFor) ? (
-                  <IncidentPanel
-                    key={incidentFor}
-                    row={monitor.find((m) => m.attemptId === incidentFor)!}
-                    onDone={incidentDone}
-                    onClose={() => setIncidentFor(null)}
-                  />
+                  <div
+                    className="acc-modal-backdrop"
+                    role="dialog"
+                    aria-modal="true"
+                    onClick={() => setIncidentFor(null)}
+                  >
+                    <div
+                      className="acc-modal"
+                      style={{ width: "min(100%, 36rem)", maxHeight: "90vh", overflowY: "auto" }}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <IncidentPanel
+                        key={incidentFor}
+                        row={monitor.find((m) => m.attemptId === incidentFor)!}
+                        onDone={incidentDone}
+                        onClose={() => setIncidentFor(null)}
+                      />
+                    </div>
+                  </div>
                 ) : null}
 
                 {current.kind === "official" ? (
@@ -1291,6 +1743,23 @@ function IncidentPanel({
       </fieldset>
       <label className="acc-field">
         <span>Lý do (bắt buộc)</span>
+        <div className="acc-quick-preset-grid">
+          {[
+            "Mất kết nối mạng tại lớp",
+            "Đổi sang thiết bị khác (hết pin/sập nguồn)",
+            "Sinh viên yêu cầu cấp lại mật khẩu",
+            "Nghi vấn vi phạm quy chế",
+          ].map((preset) => (
+            <button
+              key={preset}
+              type="button"
+              className="acc-preset-chip"
+              onClick={() => setReason(preset)}
+            >
+              + {preset}
+            </button>
+          ))}
+        </div>
         <textarea
           className="acc-textarea"
           value={reason}

@@ -85,6 +85,10 @@ export function RosterImport() {
   const [message, setMessage] = useState<{ tone: "teal" | "amber" | "red"; text: string } | null>(null);
   const [busy, setBusy] = useState(false);
 
+  // Quick add student & export state
+  const [showQuickAddModal, setShowQuickAddModal] = useState(false);
+  const [quickStudentText, setQuickStudentText] = useState("");
+
   const loadDirectory = useCallback(async () => {
     try {
       const response = await fetch("/api/v1/admin/students", { cache: "no-store" });
@@ -187,6 +191,66 @@ export function RosterImport() {
     } finally {
       setBusy(false);
     }
+  }
+
+  async function handleQuickAdd(text: string) {
+    const rawIds = text
+      .split(/[\n,;]+/)
+      .map((s) => s.trim().toUpperCase())
+      .filter(Boolean);
+    if (rawIds.length === 0) return;
+    const csvContent = ["student_id", ...rawIds].join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8" });
+    const file = new File([blob], "quick_add.csv", { type: "text/csv" });
+
+    const formData = new FormData();
+    formData.append("classCode", classCode);
+    formData.append("className", className || classCode);
+    formData.append("file", file);
+    formData.append("collectNamesOnSignIn", "on");
+
+    setBusy(true);
+    setMessage(null);
+    try {
+      const data = await request<PreviewData>("POST", "/admin/roster-imports", { body: formData });
+      setPreview(data);
+      setConfirmed({});
+      setOverrides({});
+      setMessage({
+        tone: "teal",
+        text: `Đã tạo bản xem trước cho ${rawIds.length} sinh viên. Bấm "Tạo tài khoản" ở khung bên trên để hoàn tất.`,
+      });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch (error) {
+      setMessage({ tone: "red", text: error instanceof Error ? error.message : "Không thể thêm nhanh sinh viên." });
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  function handleExportCsv() {
+    const headers = ["STT", "MSSV", "Họ và tên", "Tên hiển thị", "Trạng thái", "Ngày cập nhật"];
+    const rows = filteredStudents.map((s, idx) =>
+      [
+        idx + 1,
+        `"${s.student_id}"`,
+        `"${(s.full_name || "").replace(/"/g, '""')}"`,
+        `"${(s.display_name || "").replace(/"/g, '""')}"`,
+        `"${s.status === "active" ? "Hoạt động" : "Bị khóa"}"`,
+        `"${new Date(s.updated_at).toLocaleDateString("vi-VN")}"`,
+      ].join(","),
+    );
+    const bom = "\uFEFF";
+    const csv = bom + [headers.join(","), ...rows].join("\r\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `Danh_Sach_Lop_${classCode || "VNR202"}_${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   }
 
   async function handleApply() {
@@ -504,7 +568,16 @@ export function RosterImport() {
 
       {/* SECTION 2: Student Directory & Support */}
       <section className="acc-panel" aria-label="Danh bạ sinh viên">
-        <div className="acc-panel-header">
+        <div
+          className="acc-panel-header"
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: "0.6rem",
+          }}
+        >
           <div style={{ minWidth: 0 }}>
             <h2 className="acc-panel-title">
               Danh sách sinh viên chính thức ({filteredStudents.length}/{students.length})
@@ -513,6 +586,28 @@ export function RosterImport() {
               Họ tên và MSSV chỉ hiển thị cho quản trị viên; bảng xếp hạng công khai chỉ hiển thị tên rút gọn (ví dụ:{" "}
               <em>An N.V.</em>).
             </p>
+          </div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.45rem" }}>
+            <button
+              type="button"
+              className="acc-btn acc-btn-primary"
+              style={{ minHeight: "2rem", padding: "0.3rem 0.75rem", fontSize: "0.82rem" }}
+              onClick={() => {
+                setQuickStudentText("");
+                setShowQuickAddModal(true);
+              }}
+            >
+              + Thêm nhanh sinh viên
+            </button>
+            <button
+              type="button"
+              className="acc-btn"
+              style={{ minHeight: "2rem", padding: "0.3rem 0.75rem", fontSize: "0.82rem" }}
+              onClick={handleExportCsv}
+              disabled={students.length === 0}
+            >
+              Xuất danh sách CSV
+            </button>
           </div>
         </div>
 
@@ -717,6 +812,57 @@ export function RosterImport() {
               </button>
             </div>
           </form>
+        </div>
+      )}
+
+      {/* Quick Add Student Modal */}
+      {showQuickAddModal && (
+        <div
+          className="acc-modal-backdrop"
+          role="dialog"
+          aria-modal="true"
+          onClick={() => setShowQuickAddModal(false)}
+        >
+          <div
+            className="acc-modal"
+            style={{ width: "min(100%, 32rem)" }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 style={{ margin: "0 0 0.4rem", fontSize: "1.2rem" }}>Thêm nhanh sinh viên vào lớp</h3>
+            <p style={{ margin: "0 0 0.85rem", fontSize: "0.84rem", color: "var(--acc-text-Soft)" }}>
+              Nhập một hoặc nhiều MSSV (mỗi MSSV một dòng, hoặc cách nhau bởi dấu phẩy). Hệ thống sẽ tạo tài khoản và sinh viên sẽ tự nhập họ tên hiển thị khi đăng nhập lần đầu.
+            </p>
+            <label className="acc-field" style={{ marginBottom: "0.95rem" }}>
+              <span>Danh sách MSSV</span>
+              <textarea
+                className="acc-textarea"
+                rows={4}
+                placeholder="Ví dụ:&#10;SE180001&#10;SE180002"
+                value={quickStudentText}
+                onChange={(e) => setQuickStudentText(e.target.value)}
+              />
+            </label>
+            <div style={{ display: "flex", justifyContent: "flex-end", gap: "0.55rem" }}>
+              <button
+                type="button"
+                className="acc-btn"
+                onClick={() => setShowQuickAddModal(false)}
+              >
+                Hủy
+              </button>
+              <button
+                type="button"
+                className="acc-btn acc-btn-primary"
+                disabled={busy || !quickStudentText.trim()}
+                onClick={() => {
+                  setShowQuickAddModal(false);
+                  void handleQuickAdd(quickStudentText);
+                }}
+              >
+                {busy ? "Đang xử lý..." : "Tạo bản xem trước"}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </main>
