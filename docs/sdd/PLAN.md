@@ -2,6 +2,8 @@
 
 Goal: Deliver a polished public VNR202 website with 15 interactive decision dossiers, two secure one-attempt games, two realtime leaderboards, administration and public deployment.
 
+> **Re-scope 2026-10-29 — Live Arena V1.0.** The two competition games are now Bãi Mìn Tri Thức (`minefield`) and Đường Đua Lịch Sử (`race`) per `docs/sdd/specs/live-arena-game-spec.md`, Core Spec Amendment v1.1 (§16) and ADR-004. Dòng Chảy Lịch Sử becomes a free practice mode; Phòng Quyết Sách stays inside the public dossiers. Implementation follows stages A–G below; stage A (documentation) must be approved before any Core code, migration or gameplay is written.
+
 Approach: Execute as a sequence of independently demonstrable vertical slices. Figma locks the design language and responsive behavior first. Code then establishes the platform, public experience, identity, competition engine, realtime UI, administration and production hardening. Core logic is test-first and database-authoritative; Shell work follows the approved Figma brief.
 
 ## Global constraints
@@ -9,10 +11,12 @@ Approach: Execute as a sequence of independently demonstrable vertical slices. F
 - One developer; prefer reusable engines and shared content schemas.
 - 15 dossiers: exactly five per main course chapter.
 - One active competition accepting starts; historical competitions retained.
-- Two games, two attempts per competition total, two independent leaderboards.
+- Two games (Bãi Mìn Tri Thức, Đường Đua Lịch Sử), one attempt per game per competition, at most one active attempt per student at a time, two independent leaderboards and no combined leaderboard.
+- Trial durations 3:00 and 2:30; per-question limits 6/8/10 s (+5 s defuse) and 5/7/9 s; no clock pause on disconnect.
+- Shared default student password with a documented, accepted identity risk (classroom use only).
 - 60 concurrent players and 200 concurrent viewers; committed rank visible within one second under target load.
 - Public content needs no login; Live Arena/Passport require student login; admin is separate.
-- Node 22.14+, Next 16.3.1, React 19.2.8, TypeScript 7.0.2, Supabase JS 2.112.3.
+- Node 22.14+, Next 16.3.1, React 19.2.8, TypeScript 6.0.3 (ADR-002; 7.0.2 when the lint toolchain allows), Supabase JS 2.112.3.
 - No code implementation may redefine Core rules in the approved specs.
 
 ## Phase 0 - Figma source of truth
@@ -56,34 +60,39 @@ Exit gate: exactly 15 Published dossiers, five/chapter, content audit complete a
 
 Deliverables:
 
-- Student ID login over Supabase Auth synthetic email.
-- First-login password change, admin password reset and session protection.
-- CSV preview/apply with validation, compensation and audit.
+- Unblock local Supabase (`supabase start`, `supabase db reset`, `supabase test db`) so RLS and RPC tests run on a real Postgres; plain PostgreSQL 16 + pgTAP is only a fallback for RPC logic and never replaces Supabase Auth/RLS/Realtime verification.
+- Student ID login over Supabase Auth synthetic email with the shared default password and server-side password derivation (`LA-ACC-003..007`); no forced first-login change in V1.
+- Admin reset-to-default, session revocation, sign-in/transfer log (proposed) and session protection.
+- `.xlsx` and `.csv` roster preview/apply with duplicate/missing-data validation, compensation and audit.
 - Student Passport with dossier progress and competition result cards.
 
-Exit gate: RLS actor matrix passes; malformed roster is atomic; no public/private response leaks student ID.
+Exit gate: RLS actor matrix passes on Supabase; malformed roster is atomic; no public/private response leaks student ID; pepper/default password absent from bundle, logs and repository.
 
 ## Phase 4 - Competition and game Core
 
 Deliverables:
 
-- Competition lifecycle, readiness, snapshots and schedule transitions.
-- Balanced allocation, one-attempt constraint and immutable attempt content.
-- Heartbeat, disconnect grace, resume, device transfer and authoritative timer.
-- Transactional scoring for both games and tie-breakers.
+- Question bank pipeline (authoring JSON, validation, human review pack, seed) with fixtures isolated from the real bank; no question marked Published without a human academic reviewer.
+- Competition lifecycle, readiness (blueprint coverage, no fixtures in official competitions), snapshots and schedule transitions.
+- Per-attempt allocation by difficulty blueprint, option shuffling, Game 1 board generation, one-attempt and one-active-attempt constraints.
+- Absolute question deadlines, latency allowance, resume and device transfer with no clock pause.
+- Transactional event ledger and scoring for Bãi Mìn (board, bombs, shields, x2, chests) and Đường Đua (combo, sprint), per-game tie-breakers with shared ranks, provisional/official standing.
+- Versioned API routes and OpenAPI for the new gameplay endpoints; TypeScript reference model used only for simulation and SQL parity tests.
 
-Exit gate: concurrency tests prove one attempt and one score per interaction; timing/state-machine tests cover boundaries.
+Exit gate: concurrency tests prove one attempt, one active attempt and one score per interaction; deadline/state-machine tests cover boundaries; no correct answer leaves the server before finalization; pgTAP and Supabase integration runs both pass.
 
 ## Phase 5 - Live Arena and administration
 
 Deliverables:
 
-- Dòng Chảy Lịch Sử and Phòng Quyết Sách responsive gameplay UIs.
-- Two live leaderboard projections, Broadcast events, resync and projector mode.
-- Admin question workflow, competition controls, monitor and audit viewer.
+- Bãi Mìn Tri Thức and Đường Đua Lịch Sử responsive gameplay UIs (keyboard, sound toggle, reduced motion, ~10-second rules intro).
+- Arena lobby, personal rank and score gap, post-finalization answer review.
+- Two live leaderboard projections, Broadcast events, resync and a 1920x1080 projector mode with both Top 10 boards side by side plus single-game zoom.
+- Dòng Chảy Lịch Sử relabelled as free practice outside the competition.
+- Admin question workflow, competition controls, monitor, audited incident actions and audit viewer.
 - All failure/reconnect/resume/transfer UI states from Figma.
 
-Exit gate: 60-player/200-viewer rehearsal, rank update under one second target, realtime outage converges by REST resync.
+Exit gate: 60-player/200-viewer rehearsal, rank update under one second target, realtime outage converges by REST resync; classroom rehearsal measures latency allowance, durations, feedback timing, AI-lookup effectiveness and Game 1 luck (spec §11, P1–P8).
 
 ## Phase 6 - Production hardening and launch
 
@@ -95,6 +104,20 @@ Deliverables:
 - Public deployment, smoke tests, demo script and evidence pack.
 
 Exit gate: four-layer Hybrid validation passes in production and no required acceptance criterion remains Pending.
+
+## Live Arena V1.0 stages (2026-10-29)
+
+| Stage | Scope | Phase / tasks | Gate |
+| --- | --- | --- | --- |
+| A | Spec, ADR, contracts, plan, tasks and traceability updates; balance and time-budget analyses; consistency check | T090–T099 | Approved 2026-10-29 subject to revision 2, which is applied |
+| B | Local Supabase unblock; identity, default password, roster `.xlsx`/`.csv` | T014, T019, T030–T035 | Phase 3 exit gate |
+| C | Question bank pipeline and isolated fixtures | T048 | Validation + review pack; no Published without reviewer |
+| D | Competition and game Core in PostgreSQL (TDD) | T040–T046, T049 | pgTAP + Supabase integration |
+| E | Versioned API and OpenAPI for gameplay | T047 | Contract + integration tests |
+| F | Player, projector, review and admin UI | T050–T058 | Live Arena E2E |
+| G | Load, latency, rehearsal, hardening | T060–T067 | Phase 6 exit gate |
+
+Stage B is authorized after revision 2. Stage B covers only the database test harness, MSSV sign-in and roster import; gameplay, the official question bank and realtime leaderboards stay in later stages. Remaining open items are listed in `live-arena-game-spec.md` §12.2.1. An acceptance report is required at the end of each stage before the next one starts.
 
 ## Dependencies and critical path
 
@@ -108,6 +131,12 @@ Phase 2 content production can run after the Scenario Engine contract in Phase 1
 - Timer/disconnect concurrency: implement in PostgreSQL functions with deterministic tests before UI.
 - Auth roster partial failure: stage, validate, audit and compensate Auth users.
 - Public Broadcast spoofing: event contains no authority; validate version, debounce and refetch.
+- Question bank volume and no appointed academic reviewer yet: build with fixtures, block official competitions until the bank is Published. 87 questions is a development target only; each question would be seen by about 20 of 60 players per competition, so it does not prevent answer sharing (spec §5.13.1).
+- Correct/incorrect feedback reveals two-option answers: mitigated by allocation, option shuffling, exposure limits and explicit confirmation before reusing disclosed questions; never claimed as absolute protection.
+- Leaderboard privacy: public boards use classroom display names only and anonymous viewers see Top 10 (`LA-PRV-003/004`); CONSTITUTION, Core `PRV-001` and `AGENTS.md` amended.
+- Database clock: decisions use `clock_timestamp()` with bounded lock waits; verified with concurrent-connection tests in stage D (`LA-AC-033..035`).
+- Shared default password allows impersonation: accepted for classroom use, mitigated only by audit and admin incident actions.
+- Game 1 luck and time pressure: the balance baseline ignores the 3-minute limit; the time budget shows slow cell selection can hit 3:00. Both are re-measured with a time model and real players (T067); balancing changes require owner approval.
 - One-person schedule: keep each phase demoable and do not add VR, chatbot, social or multi-class scope.
 
 ## Validation commands by phase

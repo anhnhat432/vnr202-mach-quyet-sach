@@ -1,0 +1,393 @@
+{
+  "schemaVersion": 1,
+  "game": "minefield",
+  "questions": [
+    {
+      "key": "ai-mine-001",
+      "pool": "minefield_main",
+      "chapter": "chapter_1",
+      "topic": "Thành lập Đảng 1930",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "Hội nghị hợp nhất đầu năm 1930 đã thành lập tổ chức nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Đảng Cộng sản Việt Nam"
+        },
+        {
+          "id": "b",
+          "label": "Hội Việt Nam Cách mạng Thanh niên"
+        },
+        {
+          "id": "c",
+          "label": "Mặt trận Việt Minh"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Hội nghị đầu năm 1930 thống nhất các tổ chức cộng sản và thành lập Đảng Cộng sản Việt Nam.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương I",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'hop-nhat-de-mo-duong' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000004",
+          "locator": "Slides 3-18",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'hop-nhat-de-mo-duong' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "ai-mine-002",
+      "pool": "minefield_main",
+      "chapter": "chapter_2",
+      "topic": "Hiệp định Geneve",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "Hiệp định nào chấm dứt chiến tranh của Pháp ở Đông Dương?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Hiệp định Sơ bộ"
+        },
+        {
+          "id": "b",
+          "label": "Hiệp định Geneve"
+        },
+        {
+          "id": "c",
+          "label": "Hiệp định Paris"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Chiến thắng Điện Biên Phủ buộc Pháp ký Hiệp định Geneve, chấm dứt chiến tranh.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương II - Kháng chiến chống Pháp và Điện Biên Phủ",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000013",
+          "locator": "Slides 3-15",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000014",
+          "locator": "Slides 3-16",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "ai-mine-003",
+      "pool": "minefield_main",
+      "chapter": "chapter_1",
+      "topic": "Cách mạng Tháng Tám",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "Nhà nước nào ra đời sau Tổng khởi nghĩa tháng 8/1945?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Việt Nam Cộng hòa"
+        },
+        {
+          "id": "b",
+          "label": "Liên bang Đông Dương"
+        },
+        {
+          "id": "c",
+          "label": "Việt Nam Dân chủ Cộng hòa"
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "Sau Tổng khởi nghĩa, nước Việt Nam Dân chủ Cộng hòa ra đời, mở ra kỷ nguyên độc lập dân tộc.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương I - Giải phóng dân tộc 1939-1945 và Cách mạng Tháng Tám",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'chop-dung-thoi-co' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000007",
+          "locator": "Slides 3-16",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'chop-dung-thoi-co' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000008",
+          "locator": "Slides 3-9",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'chop-dung-thoi-co' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000009",
+          "locator": "Slides 3-12",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'chop-dung-thoi-co' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000010",
+          "locator": "Slides 3-9",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'chop-dung-thoi-co' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "ai-mine-004",
+      "pool": "minefield_main",
+      "chapter": "chapter_2",
+      "topic": "Đường lối kháng chiến",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Kháng chiến toàn quốc dựa vào điều gì là chính?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Sức mình"
+        },
+        {
+          "id": "b",
+          "label": "Viện trợ nước ngoài"
+        },
+        {
+          "id": "c",
+          "label": "Lực lượng đồng minh"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Đường lối kháng chiến toàn dân, toàn diện, lâu dài, dựa vào sức mình là chính.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương II - Đường lối kháng chiến chống Pháp",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'khi-hoa-hoan-khong-con-du-dia' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000012",
+          "locator": "Slides 3-18",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'khi-hoa-hoan-khong-con-du-dia' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "ai-mine-005",
+      "pool": "minefield_main",
+      "chapter": "chapter_2",
+      "topic": "Kháng chiến toàn quốc",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Cơ quan đầu não kháng chiến chuyển lên đâu năm 1946?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Tây Nguyên"
+        },
+        {
+          "id": "b",
+          "label": "Việt Bắc"
+        },
+        {
+          "id": "c",
+          "label": "Nam Bộ"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Vừa chiến đấu giam chân địch, vừa chuyển cơ quan đầu não lên Việt Bắc.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương II - Đường lối kháng chiến chống Pháp",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'khi-hoa-hoan-khong-con-du-dia' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000012",
+          "locator": "Slides 3-18",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'khi-hoa-hoan-khong-con-du-dia' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "ai-mine-006",
+      "pool": "minefield_main",
+      "chapter": "chapter_2",
+      "topic": "Điện Biên Phủ",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Bộ Chính trị chọn điểm quyết chiến chiến lược nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Hà Nội"
+        },
+        {
+          "id": "b",
+          "label": "Huế"
+        },
+        {
+          "id": "c",
+          "label": "Điện Biên Phủ"
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "Bộ Chính trị quyết định chọn Điện Biên Phủ làm điểm quyết chiến chiến lược.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương II - Kháng chiến chống Pháp và Điện Biên Phủ",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000013",
+          "locator": "Slides 3-15",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000014",
+          "locator": "Slides 3-16",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'tao-the-cho-quyet-chien' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "ai-mine-007",
+      "pool": "minefield_main",
+      "chapter": "chapter_2",
+      "topic": "Hai nhiệm vụ chiến lược",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Chiến lược nào của Mỹ bị thất bại giai đoạn 1954–1965?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Chiến tranh đặc biệt"
+        },
+        {
+          "id": "b",
+          "label": "Việt Nam hóa chiến tranh"
+        },
+        {
+          "id": "c",
+          "label": "Chiến tranh cục bộ"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Cách mạng miền Nam chuyển sang thế tiến công, làm thất bại chiến lược 'Chiến tranh đặc biệt' của Mỹ.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương II - Một Đảng lãnh đạo hai nhiệm vụ chiến lược",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'mot-dat-nuoc-hai-nhiem-vu-chien-luoc' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000015",
+          "locator": "Slides 3-18",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'mot-dat-nuoc-hai-nhiem-vu-chien-luoc' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "ai-mine-008",
+      "pool": "minefield_main",
+      "chapter": "chapter_2",
+      "topic": "Giải phóng miền Nam",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "Cuộc tiến công nào giải phóng hoàn toàn miền Nam?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Chiến dịch Biên giới 1950"
+        },
+        {
+          "id": "b",
+          "label": "Tổng tiến công mùa Xuân 1975"
+        },
+        {
+          "id": "c",
+          "label": "Tổng tiến công Tết Mậu Thân 1968"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Đảng tổ chức Tổng tiến công mùa Xuân 1975, giải phóng hoàn toàn miền Nam.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương II - Kháng chiến chống Mỹ và thống nhất đất nước",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'tu-doi-dau-cuc-bo-den-toan-thang' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000016",
+          "locator": "Slides 3-20",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'tu-doi-dau-cuc-bo-den-toan-thang' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000017",
+          "locator": "Slides 3-18",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'tu-doi-dau-cuc-bo-den-toan-thang' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000018",
+          "locator": "Slides 3-12",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'tu-doi-dau-cuc-bo-den-toan-thang' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "ai-mine-009",
+      "pool": "minefield_main",
+      "chapter": "chapter_2",
+      "topic": "Kinh nghiệm lãnh đạo",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "Đánh bại các chiến lược của Mỹ cần kết hợp mặt trận nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Quân sự, kinh tế, văn hóa"
+        },
+        {
+          "id": "b",
+          "label": "Chính trị, kinh tế, tôn giáo"
+        },
+        {
+          "id": "c",
+          "label": "Quân sự, chính trị, ngoại giao"
+        }
+      ],
+      "correctOptionId": "c",
+      "explanation": "Đảng kiên trì kết hợp đấu tranh quân sự, chính trị và ngoại giao.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương II - Kháng chiến chống Mỹ và thống nhất đất nước",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'tu-doi-dau-cuc-bo-den-toan-thang' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000016",
+          "locator": "Slides 3-20",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'tu-doi-dau-cuc-bo-den-toan-thang' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000017",
+          "locator": "Slides 3-18",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'tu-doi-dau-cuc-bo-den-toan-thang' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000018",
+          "locator": "Slides 3-12",
+          "usageNote": "Dữ kiện lấy từ hồ sơ 'tu-doi-dau-cuc-bo-den-toan-thang' (hồ sơ cũng chưa được duyệt học thuật). Vị trí là phạm vi tài liệu hồ sơ đã khai; người duyệt cần đối chiếu và ghi trang/slide cụ thể."
+        }
+      ],
+      "aiAssisted": true
+    }
+  ]
+}

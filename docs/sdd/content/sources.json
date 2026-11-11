@@ -198,6 +198,39 @@
       "sourceType": "course_slide",
       "rightsNote": "Học liệu nội bộ dùng cho sản phẩm môn học",
       "verificationStatus": "verified"
+    },
+    {
+      "id": "10000000-0000-0000-0000-000000000023",
+      "title": "Đại hội IX của Đảng: Mở đường tiến vào thế kỷ mới, thiên niên kỷ mới",
+      "authorOrIssuer": "TTXVN/Vietnam+, đăng lại trên Cổng thông tin điện tử Bộ Công Thương",
+      "publicationYear": 2026,
+      "locator": "Bài viết, đoạn về chủ đề Báo cáo chính trị và tinh thần Đại hội",
+      "url": "https://moit.gov.vn/tin-tuc/dai-hoi-ix-cua-dang-mo-duong-tien-vao-the-ky-moi-thien-nien-ky-moi.html",
+      "sourceType": "official_news",
+      "rightsNote": "Chỉ trích dẫn dữ kiện và ghi nguồn; không sao chép bài viết",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "10000000-0000-0000-0000-000000000024",
+      "title": "Sáng nay khai mạc Đại hội Đảng XI",
+      "authorOrIssuer": "VnEconomy",
+      "publicationYear": 2011,
+      "locator": "Bài ngày 12/01/2011, đoạn nêu chủ đề Đại hội",
+      "url": "https://vneconomy.vn/sang-nay-khai-mac-dai-hoi-dang-xi.htm",
+      "sourceType": "official_news",
+      "rightsNote": "Chỉ trích dẫn dữ kiện và ghi nguồn; không sao chép bài viết",
+      "verificationStatus": "verified"
+    },
+    {
+      "id": "10000000-0000-0000-0000-000000000025",
+      "title": "Đại hội đại biểu toàn quốc lần thứ XIII của Đảng - Đại hội \"Đoàn kết - Dân chủ - Kỷ cương - Sáng tạo - Phát triển\"",
+      "authorOrIssuer": "Báo Pháp luật Việt Nam (Bộ Tư pháp), Huy Anh",
+      "publicationYear": 2021,
+      "locator": "Bài ngày 25/01/2021, đoạn nêu phương châm Đại hội",
+      "url": "https://baophapluat.vn/dai-hoi-dai-bieu-toan-quoc-lan-thu-xiii-cua-dang-dai-hoi-doan-ket-dan-chu-ky-cuong-sang-tao-phat-trien-post379393.html",
+      "sourceType": "official_news",
+      "rightsNote": "Chỉ trích dẫn dữ kiện và ghi nguồn; không sao chép bài viết",
+      "verificationStatus": "verified"
     }
   ]
 }

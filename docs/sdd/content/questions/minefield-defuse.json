@@ -1,0 +1,388 @@
+{
+  "schemaVersion": 1,
+  "game": "minefield",
+  "questions": [
+    {
+      "key": "t6-defuse-001",
+      "pool": "minefield_defuse",
+      "chapter": "chapter_3",
+      "topic": "Đối ngoại sau Đại hội VII",
+      "type": "defuse_ab",
+      "difficulty": "easy",
+      "prompt": "Việt Nam và Hoa Kỳ thiết lập quan hệ ngoại giao năm nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "1991"
+        },
+        {
+          "id": "b",
+          "label": "1995"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Ngày 11/7/1995, Việt Nam và Hoa Kỳ thiết lập quan hệ ngoại giao.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 281",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-defuse-002",
+      "pool": "minefield_defuse",
+      "chapter": "chapter_3",
+      "topic": "Cương lĩnh 2011",
+      "type": "defuse_ab",
+      "difficulty": "easy",
+      "prompt": "Cương lĩnh 2011 bổ sung, phát triển Cương lĩnh năm nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "1991"
+        },
+        {
+          "id": "b",
+          "label": "1930"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Cương lĩnh 2011 là bản bổ sung, phát triển Cương lĩnh xây dựng đất nước trong thời kỳ quá độ lên CNXH năm 1991.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 335, 336",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-defuse-003",
+      "pool": "minefield_defuse",
+      "chapter": "chapter_3",
+      "topic": "Đại hội XIII (2021)",
+      "type": "defuse_ab",
+      "difficulty": "easy",
+      "prompt": "Giữa thế kỷ XXI, Đại hội XIII hướng tới nước ta trở thành nước nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Nước đang phát triển thu nhập thấp"
+        },
+        {
+          "id": "b",
+          "label": "Nước phát triển, định hướng XHCN"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Mục tiêu đến giữa thế kỷ XXI: nước ta trở thành nước phát triển, theo định hướng xã hội chủ nghĩa.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 389",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-defuse-004",
+      "pool": "minefield_defuse",
+      "chapter": "chapter_3",
+      "topic": "Gia nhập WTO (2006)",
+      "type": "defuse_ab",
+      "difficulty": "easy",
+      "prompt": "WTO chấp thuận việc Việt Nam gia nhập vào năm nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "2006"
+        },
+        {
+          "id": "b",
+          "label": "2001"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Tháng 11/2006, WTO chấp thuận việc Việt Nam gia nhập; Việt Nam là thành viên thứ 150 và tư cách thành viên có hiệu lực từ 11/1/2007.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 332",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc. Lưu ý mốc WTO: theo wto.org (Accessions: Viet Nam), Đại hội đồng WTO chấp thuận ngày 7/11/2006, tư cách thành viên có hiệu lực từ 11/1/2007; giáo trình ghi gộp là 11/2006."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-defuse-005",
+      "pool": "minefield_defuse",
+      "chapter": "chapter_3",
+      "topic": "Đại hội XIII (2021)",
+      "type": "defuse_ab",
+      "difficulty": "easy",
+      "prompt": "Đại hội XIII đánh giá bao nhiêu năm thực hiện Cương lĩnh năm 1991?",
+      "options": [
+        {
+          "id": "a",
+          "label": "20 năm"
+        },
+        {
+          "id": "b",
+          "label": "30 năm"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Đại hội XIII đánh giá 35 năm đổi mới, 30 năm thực hiện Cương lĩnh năm 1991 và 10 năm thực hiện Cương lĩnh (bổ sung, phát triển năm 2011).",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 387",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-defuse-006",
+      "pool": "minefield_defuse",
+      "chapter": "chapter_3",
+      "topic": "Đại hội XII (2016)",
+      "type": "defuse_ab",
+      "difficulty": "easy",
+      "prompt": "Đại hội XII tổng kết bao nhiêu năm đổi mới?",
+      "options": [
+        {
+          "id": "a",
+          "label": "30 năm"
+        },
+        {
+          "id": "b",
+          "label": "20 năm"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Đại hội XII (1/2016) tổng kết 30 năm đổi mới (1986–2016).",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 367, 368",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-defuse-007",
+      "pool": "minefield_defuse",
+      "chapter": "chapter_3",
+      "topic": "Đại hội XII (2016)",
+      "type": "defuse_ab",
+      "difficulty": "easy",
+      "prompt": "Đại hội XII của Đảng họp vào tháng nào năm 2016?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Tháng 1"
+        },
+        {
+          "id": "b",
+          "label": "Tháng 6"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Đại hội XII họp từ ngày 20 đến ngày 28/1/2016.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 367",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-defuse-008",
+      "pool": "minefield_defuse",
+      "chapter": "chapter_3",
+      "topic": "Đại hội IX (2001)",
+      "type": "defuse_ab",
+      "difficulty": "easy",
+      "prompt": "Đại hội nào là Đại hội mở đầu thế kỷ XXI?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Đại hội X"
+        },
+        {
+          "id": "b",
+          "label": "Đại hội IX"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Đại hội IX (19–22/4/2001) là Đại hội mở đầu thế kỷ XXI.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 296",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-defuse-009",
+      "pool": "minefield_defuse",
+      "chapter": "chapter_3",
+      "topic": "So sánh các kỳ Đại hội",
+      "type": "defuse_ab",
+      "difficulty": "easy",
+      "prompt": "Đại hội nào có số đại biểu đông nhất trong các kỳ VII–XIII?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Đại hội XIII"
+        },
+        {
+          "id": "b",
+          "label": "Đại hội XI"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Đại hội XIII có 1.587 đại biểu, đông nhất trong các kỳ VII–XIII (Đại hội XI có 1.377, Đại hội XII hơn 1.510).",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 335, 367, 386",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-defuse-010",
+      "pool": "minefield_defuse",
+      "chapter": "chapter_3",
+      "topic": "Đại hội VII (1991)",
+      "type": "defuse_ab",
+      "difficulty": "easy",
+      "prompt": "Đại hội VII thông qua Chiến lược ổn định và phát triển KT-XH đến năm nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "2010"
+        },
+        {
+          "id": "b",
+          "label": "2000"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Đại hội VII thông qua Chiến lược ổn định và phát triển kinh tế - xã hội đến năm 2000.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 272",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-defuse-011",
+      "pool": "minefield_defuse",
+      "chapter": "chapter_3",
+      "topic": "Sau Đại hội VII",
+      "type": "defuse_ab",
+      "difficulty": "easy",
+      "prompt": "Hiến pháp năm 1992 được Quốc hội thông qua sau Đại hội nào?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Đại hội VII"
+        },
+        {
+          "id": "b",
+          "label": "Đại hội X"
+        }
+      ],
+      "correctOptionId": "a",
+      "explanation": "Sau Đại hội VII, tại kỳ họp thứ 11 (4/1992), Quốc hội thông qua Hiến pháp năm 1992.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 277",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-defuse-012",
+      "pool": "minefield_defuse",
+      "chapter": "chapter_3",
+      "topic": "Quan điểm Đại hội XIII",
+      "type": "defuse_ab",
+      "difficulty": "easy",
+      "prompt": "Theo Đại hội XIII, phát triển KT-XH là trung tâm, còn xây dựng Đảng là gì?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Trọng yếu"
+        },
+        {
+          "id": "b",
+          "label": "Then chốt"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Đại hội XIII: phát triển kinh tế - xã hội là trung tâm; xây dựng Đảng là then chốt; phát triển văn hóa là nền tảng tinh thần; bảo đảm quốc phòng, an ninh là trọng yếu.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 388",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). AI soạn nháp từ bản scan giáo trình, người duyệt cần đối chiếu số trang và số liệu với sách gốc."
+        }
+      ],
+      "aiAssisted": true
+    },
+    {
+      "key": "t6-defuse-013",
+      "pool": "minefield_defuse",
+      "chapter": "chapter_3",
+      "topic": "Phương châm Đại hội XIII",
+      "type": "defuse_ab",
+      "difficulty": "easy",
+      "prompt": "Phương châm Đại hội XIII thêm cụm nào so với tinh thần Đại hội XII?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Trí tuệ - Đổi mới"
+        },
+        {
+          "id": "b",
+          "label": "Sáng tạo - Phát triển"
+        }
+      ],
+      "correctOptionId": "b",
+      "explanation": "Đại hội XII: 'Đoàn kết - Dân chủ - Kỷ cương - Đổi mới'. Đại hội XIII: 'Đoàn kết - Dân chủ - Kỷ cương - Sáng tạo - Phát triển'.",
+      "sources": [
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000025",
+          "locator": "Bài ngày 25/01/2021, đoạn nêu phương châm Đại hội",
+          "usageNote": "Chủ đề 6 (Đại hội VII–XIII). Nguồn báo chí/cổng thông tin đang chờ người duyệt xác minh (sources-pending.json)."
+        },
+        {
+          "sourceId": "10000000-0000-0000-0000-000000000001",
+          "locator": "Chương 3, mục II, tr. 367",
+          "usageNote": "Đối chiếu với giáo trình để phân biệt các kỳ Đại hội."
+        }
+      ],
+      "aiAssisted": true
+    }
+  ]
+}
