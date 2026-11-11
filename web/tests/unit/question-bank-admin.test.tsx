@@ -188,10 +188,13 @@ it("hides stale actionable rows if the authoritative reload fails", async () => 
   expect(screen.getByRole("button", { name: "Tải lại ngân hàng" })).toBeEnabled();
 });
 
-it("cancels an individual note prompt without sending a transition", async () => {
+it("cancels an individual note dialog without sending a transition and requires a note for AI-assisted review", async () => {
   const { posts } = bank([question("q-a")]);
-  vi.spyOn(window, "prompt").mockReturnValue(null);
   render(<QuestionBankAdmin />);
   fireEvent.click(await screen.findByRole("button", { name: "Duyệt học thuật" }));
+  const dialog = screen.getByRole("dialog", { name: /Duyệt học thuật/ });
+  expect(dialog).toBeVisible();
+  expect(screen.getByRole("button", { name: "Xác nhận" })).toBeDisabled();
+  fireEvent.click(screen.getByRole("button", { name: "Hủy" }));
   expect(posts()).toHaveLength(0);
 });

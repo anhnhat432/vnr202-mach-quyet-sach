@@ -94,6 +94,7 @@ export function RehearsalStudio({
   const [feedback, setFeedback] = useState<{ tone: "teal" | "amber" | "red"; text: string } | null>(null);
   const [lastUpdated, setLastUpdated] = useState<string | null>(null);
   const mountedRef = useRef(true);
+  const confirmResetBtnRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     mountedRef.current = true;
@@ -101,6 +102,27 @@ export function RehearsalStudio({
       mountedRef.current = false;
     };
   }, []);
+
+  useEffect(() => {
+    if (!feedback || feedback.tone !== "teal") return;
+    const t = window.setTimeout(() => setFeedback(null), 5000);
+    return () => window.clearTimeout(t);
+  }, [feedback]);
+
+  useEffect(() => {
+    if (!confirmResetOpen) return;
+    const focusTimer = window.setTimeout(() => confirmResetBtnRef.current?.focus(), 0);
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && !busyAction) {
+        setConfirmResetOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.clearTimeout(focusTimer);
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [confirmResetOpen, busyAction]);
 
   const loadStudio = useCallback(async () => {
     try {
@@ -127,7 +149,10 @@ export function RehearsalStudio({
 
   useEffect(() => {
     const initial = setTimeout(() => void loadStudio(), 0);
-    const timer = setInterval(() => void loadStudio(), 6000);
+    const timer = setInterval(() => {
+      if (typeof document !== "undefined" && document.visibilityState === "hidden") return;
+      void loadStudio();
+    }, 6000);
     return () => {
       clearTimeout(initial);
       clearInterval(timer);
@@ -191,8 +216,8 @@ export function RehearsalStudio({
         tone: "teal",
         text:
           closedCount > 0
-            ? `Đã đóng vòng thử cũ (bảo toàn lịch sử điểm & audit) và mở vòng mới "${body.data.name}" với bảng xếp hạng trống!`
-            : `Đã mở buổi thi thử "${body.data.name}"! Sẵn sàng đăng nhập và chơi thử cả 2 game.`,
+            ? `Đã đóng vòng thử cũ (bảo toàn lịch sử điểm & nhật ký) và mở vòng mới "${body.data.name}" với bảng xếp hạng trống!`
+            : `Đã mở buổi thi thử "${body.data.name}"! Sẵn sàng đăng nhập và chơi thử cả 2 trò.`,
       });
       await loadStudio();
       onCompetitionChanged?.();
@@ -217,7 +242,7 @@ export function RehearsalStudio({
         setFeedback({ tone: "red", text: body?.error?.message ?? "Không đóng được phòng thi thử." });
         return;
       }
-      setFeedback({ tone: "amber", text: "Đã đóng nhận lượt cho buổi thi thử hiện tại." });
+      setFeedback({ tone: "teal", text: "Đã đóng nhận lượt cho buổi thi thử hiện tại." });
       await loadStudio();
       onCompetitionChanged?.();
     } catch {
@@ -246,7 +271,7 @@ export function RehearsalStudio({
     ? [
         `=== THÔNG TIN ĐĂNG NHẬP PHÒNG THI THỬ VNR202 ===`,
         `Trang đăng nhập: ${typeof window !== "undefined" ? window.location.origin : ""}/dang-nhap`,
-        `Mật khẩu chung: Dùng mật khẩu mặc định của lớp (ROSTER_DEFAULT_PASSWORD trên server)`,
+        `Mật khẩu chung: Dùng mật khẩu mặc định của lớp`,
         `Danh sách MSSV thử nghiệm (${accounts.length} tài khoản):`,
         ...accounts.map((a) => `- ${a.studentId} (${a.displayName})`),
       ].join("\n")
@@ -254,11 +279,31 @@ export function RehearsalStudio({
 
   return (
     <section aria-label="Phòng thi thử khép kín">
+      {feedback && (
+        <div
+          className="acc-banner"
+          data-tone={feedback.tone}
+          role={feedback.tone === "red" ? "alert" : "status"}
+        >
+          <span>{feedback.text}</span>
+          <div style={{ display: "flex", gap: "0.45rem" }}>
+            {feedback.tone === "red" && (
+              <button type="button" className="acc-btn acc-btn-amber" onClick={() => void loadStudio()}>
+                Thử lại
+              </button>
+            )}
+            <button type="button" className="acc-btn" onClick={() => setFeedback(null)}>
+              Đóng
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Safety Isolation Banner */}
       <div className="acc-banner" data-tone="teal">
         <div>
-          <strong>Chế độ Cách ly An toàn (Sandbox Isolation):</strong> Phòng thi thử chỉ lấy bộ 87 câu{" "}
-          <code>[GIẢ LẬP]</code>, tách biệt hoàn toàn với câu hỏi <code>Published</code> chính thức. Tài khoản thử (
+          <strong>Chế độ thi thử an toàn:</strong> Phòng thi thử chỉ lấy bộ 87 câu{" "}
+          <code>[GIẢ LẬP]</code>, tách biệt hoàn toàn với câu hỏi chính thức đã xuất bản. Tài khoản thử (
           <code>THU001...</code>) bị chặn khỏi cuộc thi chính thức và không làm tăng sĩ số lớp.
         </div>
         <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "0.5rem" }}>
@@ -283,22 +328,6 @@ export function RehearsalStudio({
         <div className="acc-banner" data-tone="red" role="alert">
           <strong>Đang có cuộc thi chính thức mở!</strong> Hệ thống tạm khóa thao tác mở/đặt lại phòng thi thử để bảo vệ
           tuyệt đối buổi thi thật của lớp.
-        </div>
-      )}
-
-      {feedback && (
-        <div className="acc-banner" data-tone={feedback.tone} role="status">
-          <span>{feedback.text}</span>
-          <div style={{ display: "flex", gap: "0.45rem" }}>
-            {feedback.tone === "red" && (
-              <button type="button" className="acc-btn acc-btn-amber" onClick={() => void loadStudio()}>
-                Thử lại
-              </button>
-            )}
-            <button type="button" className="acc-btn" onClick={() => setFeedback(null)}>
-              Đóng
-            </button>
-          </div>
         </div>
       )}
 
@@ -419,8 +448,7 @@ export function RehearsalStudio({
 
           <p style={{ color: "var(--acc-muted)", fontSize: "0.86rem", marginTop: 0 }}>
             Tạo sẵn các tài khoản thử không trùng MSSV thật. Tất cả đăng nhập bằng{" "}
-            <strong>mật khẩu mặc định của lớp</strong> (biến môi trường <code>ROSTER_DEFAULT_PASSWORD</code>, không lưu
-            log).
+            <strong>mật khẩu mặc định của lớp</strong> (được cấu hình sẵn trên hệ thống).
           </p>
 
           <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", gap: "0.6rem", marginBottom: "0.85rem" }}>
@@ -504,10 +532,10 @@ export function RehearsalStudio({
           <div className="acc-panel-header">
             <h3 className="acc-panel-title">
               <span className="acc-step-number">3</span>
-              Đăng nhập & Chơi thử 2 Game
+              Đăng nhập & Chơi thử 2 Trò
             </h3>
             <span className="acc-badge" data-tone="teal">
-              API Thật 100%
+              Giống thi thật
             </span>
           </div>
 
@@ -526,7 +554,7 @@ export function RehearsalStudio({
               Nhập mã <code>{accounts[0]?.studentId ?? "THU001"}</code> và mật khẩu mặc định của lớp.
             </li>
             <li>
-              Chơi <strong>Bãi Mìn Quyết Sách</strong> và <strong>Đường Đua Mốc Quá Độ</strong>.
+              Chơi <strong>Bãi Mìn Tri Thức</strong> và <strong>Đường Đua Lịch Sử</strong>.
             </li>
             <li>
               Đối chiếu kết quả trên 2 bảng xếp hạng bên dưới, hoặc bấm <strong>Chơi thử lại</strong> để mở vòng mới!
@@ -578,8 +606,8 @@ export function RehearsalStudio({
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(22rem, 1fr))", gap: "1rem" }}>
           {(
             [
-              { key: "minefield", title: "Game 1 · Bãi Mìn Quyết Sách", maxProgress: 10 },
-              { key: "race", title: "Game 2 · Đường Đua Mốc Quá Độ", maxProgress: 15 },
+              { key: "minefield", title: "Trò 1 · Bãi Mìn Tri Thức", maxProgress: 10 },
+              { key: "race", title: "Trò 2 · Đường Đua Lịch Sử", maxProgress: 15 },
             ] as const
           ).map((g) => {
             const board = data?.leaderboards?.[g.key];
@@ -657,8 +685,16 @@ export function RehearsalStudio({
 
       {/* Confirmation Modal for "Chơi thử lại" (New Rehearsal Round) */}
       {confirmResetOpen && (
-        <div className="acc-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="rehearsal-reset-title">
-          <div className="acc-modal">
+        <div
+          className="acc-modal-backdrop"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="rehearsal-reset-title"
+          onClick={() => {
+            if (!busyAction) setConfirmResetOpen(false);
+          }}
+        >
+          <div className="acc-modal" onClick={(e) => e.stopPropagation()}>
             <p className="acc-kicker">Xác nhận vòng diễn tập mới</p>
             <h3 id="rehearsal-reset-title" style={{ margin: "0 0 0.5rem", fontSize: "1.25rem" }}>
               Bắt đầu vòng &ldquo;Chơi thử lại&rdquo; mới?
@@ -682,14 +718,20 @@ export function RehearsalStudio({
               </div>
               <div className="acc-modal-row">
                 <span>Tác động tới cuộc thi chính thức:</span>
-                <strong style={{ color: "#5eead4" }}>Không tác động (Cách ly 100%)</strong>
+                <strong style={{ color: "#5eead4" }}>Không tác động (Tách biệt 100%)</strong>
               </div>
             </div>
             <div style={{ display: "flex", justifyContent: "flex-end", gap: "0.6rem" }}>
-              <button type="button" className="acc-btn" onClick={() => setConfirmResetOpen(false)}>
+              <button
+                type="button"
+                className="acc-btn"
+                disabled={busyAction !== null}
+                onClick={() => setConfirmResetOpen(false)}
+              >
                 Hủy
               </button>
               <button
+                ref={confirmResetBtnRef}
                 type="button"
                 className="acc-btn acc-btn-amber"
                 disabled={busyAction !== null}

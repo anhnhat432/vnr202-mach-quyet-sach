@@ -393,10 +393,10 @@ test("Rehearsal Studio full closed-loop E2E: RBAC, CSRF, network retry, THU acco
     // Refresh leaderboards in Admin Rehearsal Studio & verify An N.V. appears in both Top 10 panels
     await page.getByRole("button", { name: "Làm mới bảng điểm" }).click();
     await expect(
-      page.locator(".acc-panel-alt", { hasText: "Game 1 · Bãi Mìn Quyết Sách" }).getByText("An N.V."),
+      page.locator(".acc-panel-alt", { hasText: "Trò 1 · Bãi Mìn Tri Thức" }).getByText("An N.V."),
     ).toBeVisible({ timeout: 10000 });
     await expect(
-      page.locator(".acc-panel-alt", { hasText: "Game 2 · Đường Đua Mốc Quá Độ" }).getByText("An N.V."),
+      page.locator(".acc-panel-alt", { hasText: "Trò 2 · Đường Đua Lịch Sử" }).getByText("An N.V."),
     ).toBeVisible({ timeout: 10000 });
 
     // Capture live Rehearsal Studio screenshots (Desktop 1440x960 & Mobile 390x844)
@@ -484,21 +484,34 @@ test("Rehearsal Studio full closed-loop E2E: RBAC, CSRF, network retry, THU acco
 
     // =========================================================================
     // 8. Capture Official Confirmation Modal, Roster (no THU accounts), & Question Bank Screenshots
+    //    at 1366x768 (Desktop) and 390x844 (Mobile) + Verify Primary Action Above the Fold at 1366x768
     // =========================================================================
+    await page.setViewportSize({ width: 1366, height: 768 });
     await page.goto("/quan-tri/lop");
     await expect(page.getByRole("heading", { name: /Danh sách lớp & Tài khoản/ })).toBeVisible();
     // Official class student is listed, rehearsal THU001 is excluded from the student directory table
     await expect(page.locator(".acc-table tbody").getByText(classStudentId)).toBeVisible();
     await expect(page.locator(".acc-table tbody").getByText("THU001")).toHaveCount(0);
     await page.evaluate(() => window.scrollTo({ top: 0, left: 0, behavior: "instant" }));
+    await page.screenshot({ path: path.join(screenshotDir, "admin-roster-1366x768.png") });
     await page.screenshot({ path: path.join(screenshotDir, "admin-roster-desktop.png"), fullPage: true });
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.evaluate(() => window.scrollTo({ top: 0, left: 0, behavior: "instant" }));
+    await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
+    await page.screenshot({ path: path.join(screenshotDir, "admin-roster-390px.png"), fullPage: true });
 
+    await page.setViewportSize({ width: 1366, height: 768 });
     await page.goto("/quan-tri/ngan-hang-cau-hoi");
     await expect(page.getByRole("heading", { name: "Ngân hàng câu hỏi" })).toBeVisible();
     await page.getByLabel("Nguồn").selectOption("fixture");
     await expect(page.locator(".adm__questions > li").first()).toBeVisible();
     await page.evaluate(() => window.scrollTo({ top: 0, left: 0, behavior: "instant" }));
+    await page.screenshot({ path: path.join(screenshotDir, "admin-bank-1366x768.png") });
     await page.screenshot({ path: path.join(screenshotDir, "admin-bank-desktop.png"), fullPage: true });
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.evaluate(() => window.scrollTo({ top: 0, left: 0, behavior: "instant" }));
+    await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
+    await page.screenshot({ path: path.join(screenshotDir, "admin-bank-390px.png"), fullPage: true });
 
     // Create a Scheduled Official Competition in DB to capture the Official Open Confirmation Modal screenshot
     const { rows: offComp } = await pool.query<{ id: string }>(
@@ -509,9 +522,22 @@ test("Rehearsal Studio full closed-loop E2E: RBAC, CSRF, network retry, THU acco
     );
     const offCompId = offComp[0]!.id;
     createdCompetitionIds.push(offCompId);
+    await page.setViewportSize({ width: 1366, height: 768 });
     await page.goto("/quan-tri/cuoc-thi");
     await page.getByRole("button", { name: new RegExp(`Cuộc thi chính thức E2E ${run}`) }).click();
-    await page.getByRole("button", { name: /Mở cuộc thi/ }).click();
+    await page.evaluate(() => window.scrollTo({ top: 0, left: 0, behavior: "instant" }));
+    const openBtn = page.getByRole("button", { name: /Mở cuộc thi/ });
+    await expect(openBtn).toBeVisible();
+    const openBtnBox = await openBtn.boundingBox();
+    expect(openBtnBox).not.toBeNull();
+    expect(openBtnBox!.y + openBtnBox!.height).toBeLessThanOrEqual(768);
+    await page.screenshot({ path: path.join(screenshotDir, "admin-ops-1366x768.png") });
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.evaluate(() => window.scrollTo({ top: 0, left: 0, behavior: "instant" }));
+    await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
+    await page.screenshot({ path: path.join(screenshotDir, "admin-ops-390px.png"), fullPage: true });
+    await page.setViewportSize({ width: 1366, height: 768 });
+    await openBtn.click();
     await expect(page.getByRole("dialog", { name: /Xác nhận mở cuộc thi chính thức/ })).toBeVisible();
     await page.evaluate(() => window.scrollTo({ top: 0, left: 0, behavior: "instant" }));
     await page.screenshot({ path: path.join(screenshotDir, "admin-official-modal-desktop.png"), fullPage: true });
