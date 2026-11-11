@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import "@/features/admin/ui/admin-control-center.css";
+import { translateReadinessBlocker } from "@/features/admin/ui/question-bank-admin";
 import { RehearsalStudio } from "@/features/admin/ui/rehearsal-studio";
 import { ArenaApiError, newKey, request } from "@/features/arena/client/api";
 import type { Standing } from "@/features/arena/client/types";
@@ -50,6 +51,18 @@ type MonitorRow = {
   pendingQuestion: boolean;
 };
 
+type RosterStudent = {
+  id: string;
+  student_id: string;
+  full_name: string;
+  display_name: string;
+  display_name_suffix: number | null;
+  status: string;
+  updated_at: string;
+};
+
+type StudentPlayStatus = "not_entered" | "active" | "half_done" | "both_done" | "disconnected";
+
 type StudentSummary = {
   profileId: string;
   studentId: string;
@@ -58,13 +71,13 @@ type StudentSummary = {
   minefield: MonitorRow | null;
   race: MonitorRow | null;
   totalScore: number;
+  playStatus: StudentPlayStatus;
   isOnline: boolean;
   isDisconnected: boolean;
   heartbeatAgoMs: number | null;
   timeouts: number;
   deviceTransfers: number;
   incidents: Incident[];
-  latestAttemptId: string;
 };
 
 type AuditRow = {
@@ -119,6 +132,21 @@ const STATE_LABEL: Record<string, string> = {
   archived: "Lưu trữ",
 };
 
+const ATTEMPT_STATE_LABEL: Record<string, string> = {
+  active: "Đang chơi",
+  completed: "Hoàn thành",
+  timed_out: "Hết giờ",
+  voided: "Vô hiệu",
+};
+
+const PLAY_STATUS_LABEL: Record<StudentPlayStatus, string> = {
+  not_entered: "Chưa vào",
+  active: "Đang chơi",
+  half_done: "Xong 1/2 trò",
+  both_done: "Xong cả hai",
+  disconnected: "Mất kết nối",
+};
+
 const LIFECYCLE_STEPS = [
   { key: "draft", label: "1. Nháp" },
   { key: "scheduled", label: "2. Đã chuẩn bị" },
@@ -133,7 +161,7 @@ const NEXT_ACTIONS: Record<string, Array<{ target: string; label: string; tone?:
   scheduled: [{ target: "open", label: "Mở cuộc thi", tone: "amber" }],
   open: [{ target: "start_closed", label: "Đóng nhận lượt mới", tone: "danger" }],
   start_closed: [{ target: "settling", label: "Chuyển sang chốt kết quả", tone: "amber" }],
-  settling: [{ target: "finalize", label: "Kết thúc & công bố (Finalized)", tone: "danger" }],
+  settling: [{ target: "finalize", label: "Kết thúc & công bố", tone: "danger" }],
   finalized: [{ target: "archived", label: "Lưu trữ" }],
 };
 
@@ -154,23 +182,60 @@ const INCIDENT_WARNING: Partial<Record<IncidentAction, string>> = {
     "Sinh viên bị đăng xuất khỏi mọi thiết bị. Đồng hồ lượt đang chơi vẫn chạy.",
 };
 
+function isAttemptDone(row: MonitorRow | null): boolean {
+  if (!row) return false;
+  return row.state === "completed" || row.state === "timed_out";
+}
+
+function computeStudentPlayStatus(minefield: MonitorRow | null, race: MonitorRow | null): {
+  playStatus: StudentPlayStatus;
+  isOnline: boolean;
+  isDisconnected: boolean;
+  heartbeatAgoMs: number | null;
+} {
+  const activeAttempt = minefield?.state === "active" ? minefield : race?.state === "active" ? race : null;
+  if (activeAttempt) {
+    const lost = activeAttempt.heartbeatAgoMs === null || activeAttempt.heartbeatAgoMs >= 12_000;
+    return {
+      playStatus: lost ? "disconnected" : "active",
+      isOnline: !lost,
+      isDisconnected: lost,
+      heartbeatAgoMs: activeAttempt.heartbeatAgoMs,
+    };
+  }
+  const mDone = isAttemptDone(minefield);
+  const rDone = isAttemptDone(race);
+  if (mDone && rDone) {
+    return { playStatus: "both_done", isOnline: false, isDisconnected: false, heartbeatAgoMs: null };
+  }
+  if (mDone || rDone || minefield?.state === "voided" || race?.state === "voided") {
+    return { playStatus: "half_done", isOnline: false, isDisconnected: false, heartbeatAgoMs: null };
+  }
+  return { playStatus: "not_entered", isOnline: false, isDisconnected: false, heartbeatAgoMs: null };
+}
+
 function exportLeaderboardCsv(compName: string, students: StudentSummary[]) {
+  const sorted = [...students].sort((a, b) => {
+    if (b.totalScore !== a.totalScore) return b.totalScore - a.totalScore;
+    return a.studentId.localeCompare(b.studentId, "vi");
+  });
+
   const headers = [
     "STT",
     "MSSV",
     "Tên hiển thị",
     "Trạng thái",
-    "Bãi Mìn (Số câu)",
-    "Bãi Mìn (Điểm)",
-    "Đường Đua (Số câu)",
-    "Đường Đua (Điểm)",
+    "Bãi Mìn Tri Thức (Số câu)",
+    "Bãi Mìn Tri Thức (Điểm)",
+    "Đường Đua Lịch Sử (Số câu)",
+    "Đường Đua Lịch Sử (Điểm)",
     "Tổng điểm",
     "Đổi thiết bị",
     "Câu hết giờ",
     "Sự cố / Ghi chú",
   ];
 
-  const rows = students.map((s, idx) => {
+  const rows = sorted.map((s, idx) => {
     const mineProgress = s.minefield
       ? `${s.minefield.mainAnswered}/${s.minefield.mainTotal} (${s.minefield.mainCorrect} đúng)`
       : "Chưa thi";
@@ -178,13 +243,7 @@ function exportLeaderboardCsv(compName: string, students: StudentSummary[]) {
       ? `${s.race.mainAnswered}/${s.race.mainTotal} (${s.race.mainCorrect} đúng)`
       : "Chưa thi";
     const statusText =
-      s.accountStatus === "locked"
-        ? "Tài khoản bị khóa"
-        : s.isDisconnected
-          ? "Mất kết nối"
-          : s.isOnline
-            ? "Đang chơi"
-            : "Hoàn thành";
+      s.accountStatus === "locked" ? "Tài khoản bị khóa" : PLAY_STATUS_LABEL[s.playStatus];
     const incidentNotes = s.incidents
       .map((i) => `${INCIDENT_LABEL[i.action] || i.action}: ${i.reason}`)
       .join("; ");
@@ -220,11 +279,26 @@ function exportLeaderboardCsv(compName: string, students: StudentSummary[]) {
   URL.revokeObjectURL(url);
 }
 
-type WorkspaceTab = "operations" | "rehearsal" | "incidents";
+type WorkspaceTab = "operations" | "rehearsal";
 
-function errorText(error: unknown) {
-  if (error instanceof ArenaApiError) return `${error.message} (${error.code})`;
-  return "Đã xảy ra lỗi.";
+const READABLE_ERROR_MAP: Record<string, string> = {
+  attempts_still_active: "Vẫn còn sinh viên đang làm bài nên chưa thể kết thúc cuộc thi. Hãy chờ hoặc chốt các lượt đã hết giờ.",
+  readiness_blocked: "Ngân hàng câu hỏi chưa đủ điều kiện bắt buộc để mở cuộc thi.",
+  bank_acknowledgement_required: "Ngân hàng chưa đạt mục tiêu phân bổ; cần tích xác nhận rủi ro và nhập lý do.",
+  bank_assessment_required: "Cuộc thi cần được kiểm tra & chuẩn bị ngân hàng câu hỏi trước khi mở.",
+  official_competition_currently_open: "Đang có cuộc thi chính thức mở. Không thể mở thêm cuộc thi khác lúc này.",
+  official_competition_protected: "Cuộc thi chính thức được bảo vệ, không cho phép xóa hoặc đặt lại.",
+  already_voided: "Lượt thi này đã bị vô hiệu trước đó.",
+  competition_finalized: "Cuộc thi đã công bố kết quả; chỉ có thể thêm ghi chú sự cố.",
+  reason_required: "Vui lòng nhập lý do (ít nhất 3 ký tự).",
+  confirmation_closed: "Chỉ xác nhận được khi cuộc thi còn ở trạng thái Nháp.",
+};
+
+function friendlyErrorText(error: unknown) {
+  if (error instanceof ArenaApiError) {
+    return READABLE_ERROR_MAP[error.code] ?? error.message ?? "Đã xảy ra lỗi khi xử lý yêu cầu.";
+  }
+  return "Đã xảy ra lỗi khi xử lý yêu cầu.";
 }
 
 export function CompetitionAdmin() {
@@ -232,27 +306,28 @@ export function CompetitionAdmin() {
   const [list, setList] = useState<Competition[] | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
   const [monitor, setMonitor] = useState<MonitorRow[]>([]);
+  const [rosterStudents, setRosterStudents] = useState<RosterStudent[]>([]);
   const [readiness, setReadiness] = useState<Readiness | null>(null);
-  const [message, setMessage] = useState<string | null>(null);
+  const [notice, setNotice] = useState<{ tone: "teal" | "amber" | "red"; text: string } | null>(null);
   const [busy, setBusy] = useState(false);
-  const [form, setForm] = useState<{ name: string; minutes: number; kind: "rehearsal" | "official" }>({
+  const [form, setForm] = useState<{ name: string; kind: "rehearsal" | "official" }>({
     name: "Diễn tập Live Arena",
-    minutes: 60,
     kind: "rehearsal",
   });
   const [incidentFor, setIncidentFor] = useState<string | null>(null);
   const [auditTick, setAuditTick] = useState(0);
-  const [expectedAttempts, setExpectedAttempts] = useState(60);
+  const [expectedAttempts, setExpectedAttempts] = useState<number | null>(null);
+  const [expectedAttemptsEdited, setExpectedAttemptsEdited] = useState(false);
   const [openMinutes, setOpenMinutes] = useState(60);
   const [acknowledgeRisk, setAcknowledgeRisk] = useState(false);
   const [bankReason, setBankReason] = useState("");
   const [confirmOfficialOpenModal, setConfirmOfficialOpenModal] = useState(false);
+  const [confirmFinalizeModal, setConfirmFinalizeModal] = useState(false);
 
   // Sync & staleness tracking
   const [lastUpdatedText, setLastUpdatedText] = useState<string | null>(null);
-  const [lastSyncMs, setLastSyncMs] = useState<number | null>(null);
   const [syncError, setSyncError] = useState<string | null>(null);
-  const [nowTick, setNowTick] = useState<number>(() => Date.now());
+  const [syncDelayed, setSyncDelayed] = useState(false);
 
   // Monitor filters & view mode
   const [monitorViewMode, setMonitorViewMode] = useState<"unified" | "split">("unified");
@@ -261,6 +336,8 @@ export function CompetitionAdmin() {
   const [monitorStateFilter, setMonitorStateFilter] = useState<string>("");
   const [monitorHealthFilter, setMonitorHealthFilter] = useState<"" | "disconnected" | "timeout" | "incident">("");
   const mountedRef = useRef(true);
+  const confirmOpenBtnRef = useRef<HTMLButtonElement>(null);
+  const confirmFinalizeBtnRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     mountedRef.current = true;
@@ -269,101 +346,188 @@ export function CompetitionAdmin() {
     };
   }, []);
 
+  // Auto-hide success notices after a few seconds
+  useEffect(() => {
+    if (!notice || notice.tone !== "teal") return;
+    const t = window.setTimeout(() => setNotice(null), 5000);
+    return () => window.clearTimeout(t);
+  }, [notice]);
+
+  // Modal focus & Escape key handling for official open & finalize modals
+  useEffect(() => {
+    if (!confirmOfficialOpenModal && !confirmFinalizeModal) return;
+    const focusTimer = window.setTimeout(() => {
+      if (confirmOfficialOpenModal) confirmOpenBtnRef.current?.focus();
+      else if (confirmFinalizeModal) confirmFinalizeBtnRef.current?.focus();
+    }, 0);
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && !busy) {
+        setConfirmOfficialOpenModal(false);
+        setConfirmFinalizeModal(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.clearTimeout(focusTimer);
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [confirmOfficialOpenModal, confirmFinalizeModal, busy]);
+
+  // Load class roster so official competitions show all students (including "Chưa vào")
+  const loadRoster = useCallback(async () => {
+    try {
+      const response = await fetch("/api/v1/admin/students", { cache: "no-store" });
+      if (!mountedRef.current || !response.ok) return;
+      const body = (await response.json().catch(() => null)) as {
+        data?: RosterStudent[] | { students?: RosterStudent[] };
+      } | null;
+      if (!mountedRef.current || !body?.data) return;
+      const listData = Array.isArray(body.data) ? body.data : (body.data.students ?? []);
+      setRosterStudents(listData);
+    } catch {
+      /* ignore background roster fetch failure here */
+    }
+  }, []);
+
+  useEffect(() => {
+    const t = window.setTimeout(() => void loadRoster(), 0);
+    return () => window.clearTimeout(t);
+  }, [loadRoster]);
+
   const load = useCallback(async () => {
+    const startedAt = Date.now();
     try {
       const l = await request<Competition[]>("GET", "/admin/competitions");
       if (!mountedRef.current) return;
+      const durationMs = Date.now() - startedAt;
       setList(l);
       setSyncError(null);
+      setSyncDelayed(durationMs > 8000);
       setLastUpdatedText(new Date().toLocaleTimeString("vi-VN"));
-      setLastSyncMs(Date.now());
-      // Prevent accidental selection of an unopened official competition when multiple competitions exist:
-      // Auto-select if a competition is currently 'open', or if there is only 1 competition in the list.
       setSelected((s) => {
         if (s && l.some((c) => c.id === s)) return s;
         const openComp = l.find((c) => c.state === "open");
         if (openComp) return openComp.id;
+        const scheduledOfficial = l.find((c) => c.kind === "official" && c.state === "scheduled");
+        if (scheduledOfficial) return scheduledOfficial.id;
         if (l.length === 1) return l[0]!.id;
         return null;
       });
     } catch (e) {
       if (!mountedRef.current) return;
-      const errText = errorText(e);
-      setMessage(errText);
+      const errText = friendlyErrorText(e);
       setSyncError(errText);
     }
   }, []);
 
+  // Periodic competition list refresh (~5s, paused when document is hidden)
   useEffect(() => {
-    const t = window.setTimeout(() => void load(), 0);
-    return () => window.clearTimeout(t);
+    const first = window.setTimeout(() => void load(), 0);
+    const timer = window.setInterval(() => {
+      if (typeof document !== "undefined" && document.visibilityState === "hidden") return;
+      void load();
+    }, 5000);
+    const onVisibility = () => {
+      if (typeof document !== "undefined" && document.visibilityState === "visible") {
+        void load();
+      }
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => {
+      window.clearTimeout(first);
+      window.clearInterval(timer);
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
   }, [load]);
 
-  useEffect(() => {
-    const t = window.setInterval(() => setNowTick(Date.now()), 5000);
-    return () => window.clearInterval(t);
-  }, []);
-
   const current = list?.find((c) => c.id === selected) ?? null;
+  const openCompetition = useMemo(() => list?.find((c) => c.state === "open") ?? null, [list]);
+
+  // Effective expectedAttempts defaults to readiness.classSize (or roster length) when not manually edited
+  const effectiveExpectedAttempts =
+    expectedAttempts ?? readiness?.classSize ?? (rosterStudents.length > 0 ? rosterStudents.length : 60);
 
   useEffect(() => {
     if (!selected) return;
     let alive = true;
     const pull = async () => {
+      if (typeof document !== "undefined" && document.visibilityState === "hidden") return;
+      const startedAt = Date.now();
       try {
         const m = await request<{ attempts: MonitorRow[] }>("GET", `/admin/competitions/${selected}/monitor`);
         if (alive) {
+          const durationMs = Date.now() - startedAt;
           setMonitor(m.attempts ?? []);
           setSyncError(null);
+          setSyncDelayed(durationMs > 8000);
           setLastUpdatedText(new Date().toLocaleTimeString("vi-VN"));
-          setLastSyncMs(Date.now());
         }
       } catch (e) {
-        if (alive) setSyncError(errorText(e));
+        if (alive) setSyncError(friendlyErrorText(e));
       }
     };
     const first = window.setTimeout(() => void pull(), 0);
     const timer = window.setInterval(() => void pull(), 4000);
-    request<Readiness>("GET", `/admin/competitions/${selected}/readiness?expectedAttempts=${expectedAttempts}`)
-      .then((r) => alive && setReadiness(r))
+
+    const queryAttempts = expectedAttemptsEdited && expectedAttempts !== null
+      ? expectedAttempts
+      : readiness?.classSize ?? (rosterStudents.length > 0 ? rosterStudents.length : 60);
+
+    request<Readiness>("GET", `/admin/competitions/${selected}/readiness?expectedAttempts=${queryAttempts}`)
+      .then((r) => {
+        if (!alive) return;
+        setReadiness(r);
+        if (!expectedAttemptsEdited && typeof r.classSize === "number" && r.classSize > 0) {
+          setExpectedAttempts(r.classSize);
+          if (r.target.expectedAttempts !== r.classSize) {
+            request<Readiness>("GET", `/admin/competitions/${selected}/readiness?expectedAttempts=${r.classSize}`)
+              .then((r2) => alive && setReadiness(r2))
+              .catch(() => undefined);
+          }
+        }
+      })
       .catch(() => undefined);
+
     return () => {
       alive = false;
       window.clearTimeout(first);
       window.clearInterval(timer);
     };
-  }, [selected, auditTick, expectedAttempts]);
+  }, [selected, auditTick, expectedAttempts, expectedAttemptsEdited, readiness?.classSize, rosterStudents.length]);
 
   function incidentDone(text: string) {
     setIncidentFor(null);
-    setMessage(text);
+    setNotice({ tone: "teal", text });
     setAuditTick((t) => t + 1);
     void load();
   }
 
   async function create() {
     setBusy(true);
-    setMessage(null);
+    setNotice(null);
     try {
       const c = await request<{ id: string }>("POST", "/admin/competitions", {
         body: {
           name: form.name,
           kind: form.kind,
           opensAt: new Date(Date.now() - 60_000).toISOString(),
-          startDeadlineAt: new Date(Date.now() + form.minutes * 60_000).toISOString(),
+          startDeadlineAt: new Date(Date.now() + openMinutes * 60_000).toISOString(),
         },
         key: newKey("create"),
       });
       setSelected(c.id);
-      setOpenMinutes(form.minutes);
+      setExpectedAttempts(null);
+      setExpectedAttemptsEdited(false);
       await load();
-      setMessage(
-        form.kind === "official"
-          ? "Đã tạo cuộc thi chính thức (Nháp)."
-          : "Đã tạo cuộc thi diễn tập (Nháp).",
-      );
+      setNotice({
+        tone: "teal",
+        text:
+          form.kind === "official"
+            ? "Đã tạo cuộc thi chính thức (Nháp)."
+            : "Đã tạo cuộc thi diễn tập (Nháp).",
+      });
     } catch (e) {
-      setMessage(errorText(e));
+      setNotice({ tone: "red", text: friendlyErrorText(e) });
     } finally {
       setBusy(false);
     }
@@ -371,16 +535,8 @@ export function CompetitionAdmin() {
 
   async function executeTransition(target: string) {
     if (!current) return;
-    if (
-      target === "finalize" &&
-      !window.confirm(
-        "Kết thúc cuộc thi? Đáp án sẽ mở cho người đã chơi và bảng được gắn nhãn chính thức (với cuộc thi chính thức).",
-      )
-    ) {
-      return;
-    }
     setBusy(true);
-    setMessage(null);
+    setNotice(null);
     try {
       if (target === "finalize") {
         await request("POST", `/admin/competitions/${current.id}/finalize`);
@@ -394,11 +550,11 @@ export function CompetitionAdmin() {
           body: {
             target,
             ...(target === "open" ? { startWindowMinutes: openMinutes } : {}),
-            ...(target === "scheduled" ? { expectedAttempts } : {}),
+            ...(target === "scheduled" ? { expectedAttempts: effectiveExpectedAttempts } : {}),
             ...(belowTarget
               ? {
                   bankAcknowledgement: {
-                    expectedAttempts,
+                    expectedAttempts: effectiveExpectedAttempts,
                     confirmed: acknowledgeRisk,
                     reason: bankReason,
                   },
@@ -409,9 +565,12 @@ export function CompetitionAdmin() {
       }
       await load();
       setAuditTick((t) => t + 1);
-      setMessage(`Đã chuyển: ${STATE_LABEL[target === "finalize" ? "finalized" : target]}.`);
+      setNotice({
+        tone: "teal",
+        text: `Đã chuyển trạng thái: ${STATE_LABEL[target === "finalize" ? "finalized" : target]}.`,
+      });
     } catch (e) {
-      setMessage(errorText(e));
+      setNotice({ tone: "red", text: friendlyErrorText(e) });
     } finally {
       setBusy(false);
     }
@@ -419,9 +578,12 @@ export function CompetitionAdmin() {
 
   function handleActionClick(target: string) {
     if (!current) return;
-    // Opening an official competition requires an explicit confirmation modal showing Name, Kind, Class Size, and Window
     if (target === "open" && current.kind === "official") {
       setConfirmOfficialOpenModal(true);
+      return;
+    }
+    if (target === "finalize") {
+      setConfirmFinalizeModal(true);
       return;
     }
     void executeTransition(target);
@@ -435,44 +597,132 @@ export function CompetitionAdmin() {
         "POST",
         `/admin/competitions/${current.id}/reconcile`,
       );
-      setMessage(
-        `Đã đối soát ${r.reconciled} lượt; còn ${r.activeAttempts} lượt đang chơi${
+      setNotice({
+        tone: "teal",
+        text: `Đã chốt ${r.reconciled} lượt hết giờ; còn ${r.activeAttempts} lượt đang chơi${
           r.startClosed ? "; đã tự đóng nhận lượt mới" : ""
         }.`,
-      );
+      });
       await load();
     } catch (e) {
-      setMessage(errorText(e));
+      setNotice({ tone: "red", text: friendlyErrorText(e) });
     } finally {
       setBusy(false);
     }
   }
 
-  const isDataStale = lastSyncMs !== null && nowTick - lastSyncMs > 15_000;
+  // Build unified class student rows (merging roster with monitor for official competitions)
+  const allUnifiedStudents = useMemo(() => {
+    const map = new Map<string, StudentSummary>();
 
-  const disconnectedCount = useMemo(
-    () =>
-      monitor.filter(
-        (m) => m.state === "active" && (m.heartbeatAgoMs === null || m.heartbeatAgoMs >= 12_000),
-      ).length,
-    [monitor],
-  );
-  const completedCount = useMemo(
-    () =>
-      current?.completed ??
-      monitor.filter((m) => m.state === "completed" || m.state === "timed_out").length,
-    [current, monitor],
-  );
-  const participantCount = useMemo(
-    () => current?.participants ?? new Set(monitor.map((m) => m.profileId)).size,
-    [current, monitor],
-  );
+    if (current?.kind === "official" && rosterStudents.length > 0) {
+      for (const st of rosterStudents) {
+        const displayName = st.display_name_suffix
+          ? `${st.display_name} (${st.display_name_suffix})`
+          : st.display_name;
+        map.set(st.id, {
+          profileId: st.id,
+          studentId: st.student_id,
+          displayName,
+          accountStatus: st.status,
+          minefield: null,
+          race: null,
+          totalScore: 0,
+          playStatus: "not_entered",
+          isOnline: false,
+          isDisconnected: false,
+          heartbeatAgoMs: null,
+          timeouts: 0,
+          deviceTransfers: 0,
+          incidents: [],
+        });
+      }
+    }
+
+    for (const m of monitor) {
+      const key = m.profileId || m.studentId;
+      let s = map.get(key);
+      if (!s && m.studentId) {
+        // Fallback match by studentId if profileId key differed
+        for (const existing of map.values()) {
+          if (existing.studentId === m.studentId) {
+            s = existing;
+            break;
+          }
+        }
+      }
+      if (!s) {
+        s = {
+          profileId: m.profileId,
+          studentId: m.studentId,
+          displayName: m.displayName,
+          accountStatus: m.accountStatus,
+          minefield: null,
+          race: null,
+          totalScore: 0,
+          playStatus: "not_entered",
+          isOnline: false,
+          isDisconnected: false,
+          heartbeatAgoMs: null,
+          timeouts: 0,
+          deviceTransfers: 0,
+          incidents: [],
+        };
+        map.set(key, s);
+      }
+
+      if (m.game === "minefield") {
+        s.minefield = m;
+      } else if (m.game === "race") {
+        s.race = m;
+      }
+
+      s.totalScore = (s.minefield?.score ?? 0) + (s.race?.score ?? 0);
+      s.timeouts = (s.minefield?.timeouts ?? 0) + (s.race?.timeouts ?? 0);
+      s.deviceTransfers = (s.minefield?.deviceTransfers ?? 0) + (s.race?.deviceTransfers ?? 0);
+      if (m.incidents?.length) {
+        s.incidents.push(...m.incidents);
+      }
+      if (m.accountStatus === "locked") {
+        s.accountStatus = "locked";
+      }
+    }
+
+    for (const s of map.values()) {
+      const computed = computeStudentPlayStatus(s.minefield, s.race);
+      s.playStatus = computed.playStatus;
+      s.isOnline = computed.isOnline;
+      s.isDisconnected = computed.isDisconnected;
+      s.heartbeatAgoMs = computed.heartbeatAgoMs;
+    }
+
+    return Array.from(map.values());
+  }, [current?.kind, rosterStudents, monitor]);
+
+  // All pulse bar counts come from a single source: allUnifiedStudents (derived from monitor + roster)
+  const pulseCounts = useMemo(() => {
+    const total = allUnifiedStudents.length;
+    const notEntered = allUnifiedStudents.filter((s) => s.playStatus === "not_entered").length;
+    const active = allUnifiedStudents.filter((s) => s.playStatus === "active").length;
+    const halfDone = allUnifiedStudents.filter((s) => s.playStatus === "half_done").length;
+    const bothDone = allUnifiedStudents.filter((s) => s.playStatus === "both_done").length;
+    const disconnected = allUnifiedStudents.filter((s) => s.playStatus === "disconnected").length;
+    const incident = allUnifiedStudents.filter((s) => s.incidents.length > 0 || s.accountStatus === "locked").length;
+    return { total, notEntered, active, halfDone, bothDone, disconnected, incident };
+  }, [allUnifiedStudents]);
 
   const filteredMonitor = useMemo(() => {
     const q = monitorSearch.trim().toLowerCase();
     return monitor.filter((m) => {
       if (monitorGameFilter && m.game !== monitorGameFilter) return false;
-      if (monitorStateFilter && m.state !== monitorStateFilter) return false;
+      if (monitorStateFilter) {
+        if (monitorStateFilter === "disconnected") {
+          const lost = m.state === "active" && (m.heartbeatAgoMs === null || m.heartbeatAgoMs >= 12_000);
+          if (!lost) return false;
+        } else if (m.state !== monitorStateFilter) {
+          return false;
+        }
+      }
       if (monitorHealthFilter === "disconnected") {
         const lost = m.state === "active" && (m.heartbeatAgoMs === null || m.heartbeatAgoMs >= 12_000);
         if (!lost) return false;
@@ -492,74 +742,19 @@ export function CompetitionAdmin() {
   const byGame = (game: "minefield" | "race") => filteredMonitor.filter((m) => m.game === game);
 
   const unifiedStudents = useMemo(() => {
-    const map = new Map<string, StudentSummary>();
-
-    for (const m of monitor) {
-      const key = m.profileId || m.studentId;
-      let s = map.get(key);
-      if (!s) {
-        s = {
-          profileId: m.profileId,
-          studentId: m.studentId,
-          displayName: m.displayName,
-          accountStatus: m.accountStatus,
-          minefield: null,
-          race: null,
-          totalScore: 0,
-          isOnline: false,
-          isDisconnected: false,
-          heartbeatAgoMs: null,
-          timeouts: 0,
-          deviceTransfers: 0,
-          incidents: [],
-          latestAttemptId: m.attemptId,
-        };
-        map.set(key, s);
-      }
-
-      if (m.game === "minefield") {
-        s.minefield = m;
-      } else if (m.game === "race") {
-        s.race = m;
-      }
-
-      s.totalScore += m.score;
-      s.timeouts += m.timeouts;
-      s.deviceTransfers += m.deviceTransfers;
-      if (m.incidents?.length) {
-        s.incidents.push(...m.incidents);
-      }
-      if (m.accountStatus === "locked") {
-        s.accountStatus = "locked";
-      }
-
-      // Latest attempt selection: prefer active attempt
-      if (m.state === "active") {
-        s.latestAttemptId = m.attemptId;
-        if (m.heartbeatAgoMs !== null && m.heartbeatAgoMs < 12_000) {
-          s.isOnline = true;
-        } else {
-          s.isDisconnected = true;
-        }
-        s.heartbeatAgoMs = m.heartbeatAgoMs;
-      }
-    }
-
     const q = monitorSearch.trim().toLowerCase();
-    return Array.from(map.values())
+    return allUnifiedStudents
       .filter((s) => {
         if (monitorHealthFilter === "disconnected" && !s.isDisconnected) return false;
         if (monitorHealthFilter === "timeout" && s.timeouts === 0) return false;
         if (monitorHealthFilter === "incident" && s.incidents.length === 0 && s.accountStatus !== "locked")
           return false;
-        if (monitorStateFilter === "active") {
-          const hasActive = s.minefield?.state === "active" || s.race?.state === "active";
-          if (!hasActive) return false;
-        } else if (monitorStateFilter === "completed") {
-          const allDone =
-            (s.minefield?.state === "completed" || s.minefield?.state === "timed_out") &&
-            (s.race?.state === "completed" || s.race?.state === "timed_out");
-          if (!allDone) return false;
+        if (monitorStateFilter) {
+          if (monitorStateFilter === "not_entered" && s.playStatus !== "not_entered") return false;
+          if (monitorStateFilter === "active" && s.playStatus !== "active") return false;
+          if (monitorStateFilter === "half_done" && s.playStatus !== "half_done") return false;
+          if (monitorStateFilter === "both_done" && s.playStatus !== "both_done") return false;
+          if (monitorStateFilter === "disconnected" && s.playStatus !== "disconnected") return false;
         }
         if (q) {
           const hay = `${s.studentId ?? ""} ${s.displayName} ${s.accountStatus}`.toLowerCase();
@@ -571,33 +766,140 @@ export function CompetitionAdmin() {
         if (a.isDisconnected !== b.isDisconnected) return a.isDisconnected ? -1 : 1;
         if ((a.accountStatus === "locked") !== (b.accountStatus === "locked"))
           return a.accountStatus === "locked" ? -1 : 1;
-        return b.totalScore - a.totalScore;
+        if (b.totalScore !== a.totalScore) return b.totalScore - a.totalScore;
+        return a.studentId.localeCompare(b.studentId, "vi");
       });
-  }, [monitor, monitorSearch, monitorHealthFilter, monitorStateFilter]);
+  }, [allUnifiedStudents, monitorSearch, monitorHealthFilter, monitorStateFilter]);
+
+  const groupedCompetitions = useMemo(() => {
+    if (!list) return null;
+    return {
+      open: list.filter((c) => c.state === "open"),
+      upcoming: list.filter((c) => c.state === "draft" || c.state === "scheduled"),
+      finished: list.filter((c) => c.state === "start_closed" || c.state === "settling" || c.state === "finalized"),
+      archived: list.filter((c) => c.state === "archived"),
+    };
+  }, [list]);
+
   const activeStepIndex = current ? LIFECYCLE_STEPS.findIndex((s) => s.key === current.state) : -1;
+
+  function renderCompCard(c: Competition) {
+    const isSelected = c.id === selected;
+    const isOfficial = c.kind === "official";
+    return (
+      <li key={c.id}>
+        <button
+          type="button"
+          aria-pressed={isSelected}
+          data-selected={isSelected}
+          onClick={() => {
+            setSelected(c.id);
+            setAcknowledgeRisk(false);
+            setBankReason("");
+            setReadiness(null);
+            setExpectedAttempts(null);
+            setExpectedAttemptsEdited(false);
+          }}
+          className="acc-comp-card"
+          style={{ width: "100%" }}
+        >
+          <div style={{ display: "flex", justifyContent: "space-between", width: "100%", gap: "0.4rem" }}>
+            <span className="acc-badge" data-tone={isOfficial ? "red" : "teal"}>
+              {isOfficial ? "Chính thức" : "Diễn tập"}
+            </span>
+            <span
+              className="acc-badge"
+              data-tone={c.state === "open" ? "amber" : c.state === "finalized" ? "teal" : undefined}
+            >
+              {STATE_LABEL[c.state] ?? c.state}
+            </span>
+          </div>
+          <strong style={{ fontSize: "0.95rem" }}>{c.name}</strong>
+          <span style={{ fontSize: "0.78rem", color: "var(--acc-muted)" }}>
+            {c.kind === "rehearsal" ? "Diễn tập" : "Chính thức"} · {STATE_LABEL[c.state] ?? c.state} · {c.attempts} lượt
+            ({c.active} đang chơi)
+          </span>
+        </button>
+      </li>
+    );
+  }
 
   return (
     <main aria-label="Admin Control Center">
-      {/* Command Header */}
-      <header className="acc-page-header">
-        <div>
-          <p className="acc-kicker">Trung tâm chỉ huy trực tiếp · Live Arena</p>
-          <h1 className="acc-title">Điều hành cuộc thi</h1>
-          <p className="acc-subtitle">
-            Giám sát thời gian thực, điều phối cuộc thi chính thức và vận hành Phòng thi thử khép kín. Quản trị viên
-            không sửa điểm, thời gian hay lượt thi; không tạo lượt thay thế.
-          </p>
+      {/* Top Notification Banner (item 14) */}
+      {notice ? (
+        <div
+          className="acc-banner adm__message"
+          data-tone={notice.tone}
+          role={notice.tone === "red" ? "alert" : "status"}
+          aria-live="polite"
+        >
+          <span>{notice.text}</span>
+          <button type="button" className="acc-btn" onClick={() => setNotice(null)}>
+            Đóng
+          </button>
+        </div>
+      ) : null}
+
+      {/* Sync / Failure Banner (item 1) — only when a real fetch failed or was delayed */}
+      {(syncError || syncDelayed) && (
+        <div className="acc-banner" data-tone={syncError ? "red" : "amber"} role="alert">
+          <div>
+            <strong>{syncError ? "Không tải được dữ liệu mới:" : "Phản hồi từ máy chủ bị trễ:"}</strong>{" "}
+            {syncError ?? "Lần tải gần nhất mất nhiều thời gian hơn bình thường. Hãy kiểm tra kết nối mạng."}
+          </div>
+          <button
+            type="button"
+            className="acc-btn"
+            onClick={() => {
+              void load();
+              setAuditTick((t) => t + 1);
+            }}
+          >
+            Thử lại
+          </button>
+        </div>
+      )}
+
+      {/* Sticky Student Visibility Bar (item 7) */}
+      <div
+        className="acc-student-live-strip"
+        data-tone={
+          openCompetition
+            ? openCompetition.kind === "rehearsal"
+              ? "rehearsal-open"
+              : "official-open"
+            : "waiting"
+        }
+        role="region"
+        aria-label="Trạng thái hiển thị phía sinh viên"
+      >
+        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "0.5rem" }}>
+          <span
+            className="acc-status-dot"
+            data-status={openCompetition ? (openCompetition.kind === "rehearsal" ? "disconnected" : "online") : "idle"}
+          />
+          {openCompetition ? (
+            <span>
+              Sinh viên đang thấy: <strong>{openCompetition.name}</strong> ·{" "}
+              <strong>{openCompetition.kind === "official" ? "Chính thức" : "Diễn tập"}</strong> ·{" "}
+              <strong>{STATE_LABEL[openCompetition.state] ?? openCompetition.state}</strong>
+            </span>
+          ) : (
+            <span>Chưa có cuộc thi nào mở; sinh viên đang ở màn hình chờ</span>
+          )}
         </div>
 
-        <div className="acc-sync-bar">
+        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "0.55rem" }}>
           {lastUpdatedText && (
-            <span className="acc-badge" data-tone={isDataStale || syncError ? "amber" : "teal"}>
-              Cập nhật lần cuối: {lastUpdatedText}
+            <span className="acc-badge" data-tone={syncError || syncDelayed ? "amber" : "teal"}>
+              Cập nhật: {lastUpdatedText}
             </span>
           )}
           <button
             type="button"
             className="acc-btn"
+            style={{ minHeight: "1.95rem", padding: "0.2rem 0.65rem", fontSize: "0.78rem" }}
             disabled={busy}
             onClick={() => {
               void load();
@@ -607,68 +909,190 @@ export function CompetitionAdmin() {
             Làm mới ngay
           </button>
         </div>
-      </header>
+      </div>
 
-      {/* Stale data or API error warning banner */}
-      {(syncError || isDataStale) && (
-        <div className="acc-banner" data-tone={syncError ? "red" : "amber"} role="alert">
-          <div>
-            <strong>{syncError ? "Cảnh báo lỗi kết nối API:" : "Cảnh báo dữ liệu giám sát đã cũ:"}</strong>{" "}
-            {syncError ?? "Dữ liệu chưa được cập nhật trong hơn 15 giây qua. Hãy kiểm tra đường truyền mạng."}
+      {/* Primary Action & Status Bar right under Sticky Strip (item 8) — fits above the fold on 1366x768 */}
+      {activeTab === "operations" && current ? (
+        <section
+          className="acc-panel adm__head"
+          aria-label="Điều khiển nhanh cuộc thi đang chọn"
+          style={{ padding: "0.85rem 1.1rem", marginBottom: "0.85rem" }}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              justifyContent: "space-between",
+              alignItems: "center",
+              gap: "0.75rem",
+            }}
+          >
+            <div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.45rem", alignItems: "center" }}>
+                <span className="acc-badge" data-tone={current.kind === "official" ? "red" : "teal"}>
+                  {current.kind === "official" ? "Chính thức" : "Diễn tập"}
+                </span>
+                <span className="acc-badge" data-tone={current.state === "open" ? "amber" : "teal"}>
+                  {STATE_LABEL[current.state] ?? current.state}
+                </span>
+                <h1 style={{ margin: 0, fontSize: "1.25rem", fontWeight: 800 }}>{current.name}</h1>
+              </div>
+              <p style={{ margin: "0.25rem 0 0", fontSize: "0.84rem", color: "var(--acc-text-Soft)" }}>
+                {STATE_LABEL[current.state]} · nhãn bảng: <b>{STANDING_LABEL[current.standing]}</b>
+                {current.state === "draft" || current.state === "scheduled"
+                  ? " · chờ bạn bấm Mở cuộc thi"
+                  : ` · nhận lượt tới ${new Date(current.startDeadlineAt).toLocaleString("vi-VN")}`}
+              </p>
+            </div>
+
+            <div className="adm__actions" style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "0.55rem" }}>
+              {current.state === "draft" && current.kind === "official" ? (
+                <label className="acc-field" style={{ flexDirection: "row", alignItems: "center", gap: "0.4rem" }}>
+                  <span>Sĩ số dự kiến</span>
+                  <input
+                    className="acc-input"
+                    style={{ width: "5.2rem", minHeight: "2.2rem", padding: "0.3rem 0.5rem" }}
+                    type="number"
+                    min={1}
+                    max={500}
+                    value={effectiveExpectedAttempts}
+                    onChange={(e) => {
+                      setExpectedAttempts(Number(e.target.value));
+                      setExpectedAttemptsEdited(true);
+                      setAcknowledgeRisk(false);
+                      setReadiness(null);
+                    }}
+                  />
+                </label>
+              ) : null}
+
+              {current.state === "scheduled" ? (
+                <label className="acc-field" style={{ flexDirection: "row", alignItems: "center", gap: "0.4rem" }}>
+                  <span>Nhận lượt mới sau khi mở (phút)</span>
+                  <input
+                    className="acc-input"
+                    style={{ width: "5.2rem", minHeight: "2.2rem", padding: "0.3rem 0.5rem" }}
+                    type="number"
+                    min={1}
+                    max={1440}
+                    value={openMinutes}
+                    onChange={(e) => setOpenMinutes(Number(e.target.value))}
+                  />
+                </label>
+              ) : null}
+
+              {(NEXT_ACTIONS[current.state] ?? []).map((a) => {
+                const isBlockedSchedule =
+                  a.target === "scheduled" &&
+                  current.kind === "official" &&
+                  (!readiness ||
+                    !readiness.ready ||
+                    (!readiness.target.meetsTarget && (!acknowledgeRisk || bankReason.trim().length < 3)));
+                const btnClass =
+                  a.tone === "danger"
+                    ? "acc-btn acc-btn-danger-solid"
+                    : a.tone === "amber"
+                      ? "acc-btn acc-btn-amber"
+                      : "acc-btn acc-btn-primary";
+                return (
+                  <button
+                    key={a.target}
+                    type="button"
+                    className={btnClass}
+                    disabled={busy || isBlockedSchedule}
+                    onClick={() => handleActionClick(a.target)}
+                  >
+                    {a.target === "open" ? (
+                      <Play aria-hidden size={16} />
+                    ) : a.target === "start_closed" ? (
+                      <Square aria-hidden size={16} />
+                    ) : null}{" "}
+                    {a.label}
+                  </button>
+                );
+              })}
+
+              <button
+                type="button"
+                className="acc-btn is-ghost"
+                disabled={busy}
+                onClick={() => void reconcile()}
+              >
+                <RefreshCw aria-hidden size={15} /> Chốt các lượt đã hết giờ
+              </button>
+            </div>
           </div>
-          <button type="button" className="acc-btn" onClick={() => void load()}>
-            Đồng bộ lại
-          </button>
-        </div>
-      )}
 
-      {/* Overview KPI Dashboard Cards */}
-      <section aria-label="Chỉ số tổng quan" className="acc-kpi-grid">
-        <div className="acc-kpi-card" data-tone={current?.state === "open" ? "teal" : "amber"}>
-          <span className="acc-kpi-label">Trạng thái cuộc thi</span>
-          <span className="acc-kpi-value" style={{ fontSize: "1.2rem" }}>
-            {current ? (STATE_LABEL[current.state] ?? current.state) : "Chưa chọn"}
-          </span>
-          <span className="acc-kpi-meta">
-            {current
-              ? `${current.kind === "official" ? "Chính thức" : "Diễn tập"} · ${current.name}`
-              : `${list?.length ?? 0} cuộc thi trên hệ thống`}
-          </span>
-        </div>
+          {readiness && current.state === "draft" ? (
+            <div
+              className={`adm__ready ${readiness.ready ? "is-ok" : "is-bad"}`}
+              style={{ marginTop: "0.65rem", display: "grid", gap: "0.4rem", fontSize: "0.86rem" }}
+            >
+              <p style={{ margin: 0 }}>
+                {readiness.ready
+                  ? "Ngân hàng câu đủ điều kiện bắt buộc."
+                  : `Chưa đủ điều kiện: ${readiness.blockers.map(translateReadinessBlocker).join("; ")}`}
+              </p>
+              {current.kind === "official" && readiness.classSize != null ? (
+                <p
+                  role={readiness.classSize !== effectiveExpectedAttempts ? "alert" : undefined}
+                  style={{
+                    margin: 0,
+                    padding:
+                      readiness.classSize !== effectiveExpectedAttempts ? "0.45rem 0.7rem" : undefined,
+                    borderRadius: "6px",
+                    background:
+                      readiness.classSize !== effectiveExpectedAttempts
+                        ? "rgba(240, 170, 60, 0.15)"
+                        : undefined,
+                    color:
+                      readiness.classSize !== effectiveExpectedAttempts ? "#fde68a" : undefined,
+                  }}
+                >
+                  Danh sách lớp hiện có {readiness.classSize} sinh viên
+                  {readiness.classSize !== effectiveExpectedAttempts
+                    ? `, khác sĩ số dự kiến ${effectiveExpectedAttempts}. Hãy kiểm tra trước khi xác nhận.`
+                    : "."}
+                </p>
+              ) : null}
+              {current.kind === "official" && !readiness.target.meetsTarget ? (
+                <>
+                  <p style={{ margin: 0, color: "var(--acc-text-Soft)" }}>
+                    Sĩ số dự kiến {effectiveExpectedAttempts}: chưa đạt mục tiêu tối đa{" "}
+                    {readiness.target.maxPerQuestion} lượt phân bổ mỗi câu. Một câu có thể được nhiều sinh viên nhận,
+                    tăng rủi ro chia sẻ đáp án.
+                  </p>
+                  {readiness.ready ? (
+                    <div style={{ display: "grid", gap: "0.45rem" }}>
+                      <label style={{ display: "flex", gap: "0.45rem", alignItems: "center" }}>
+                        <input
+                          type="checkbox"
+                          checked={acknowledgeRisk}
+                          onChange={(e) => setAcknowledgeRisk(e.target.checked)}
+                        />
+                        <span>Tôi đã xem và chấp nhận rủi ro phân bổ lặp.</span>
+                      </label>
+                      <label className="acc-field">
+                        <span>Lý do xác nhận</span>
+                        <textarea
+                          className="acc-textarea"
+                          rows={2}
+                          value={bankReason}
+                          minLength={3}
+                          maxLength={300}
+                          onChange={(e) => setBankReason(e.target.value)}
+                        />
+                      </label>
+                    </div>
+                  ) : null}
+                </>
+              ) : null}
+            </div>
+          ) : null}
+        </section>
+      ) : null}
 
-        <div className="acc-kpi-card" data-tone="teal">
-          <span className="acc-kpi-label">Người tham gia / Sĩ số</span>
-          <span className="acc-kpi-value">
-            {participantCount}
-            {readiness?.classSize ? ` / ${readiness.classSize}` : ""}
-          </span>
-          <span className="acc-kpi-meta">Tổng lượt đã tạo: {current?.attempts ?? monitor.length} lượt</span>
-        </div>
-
-        <div className="acc-kpi-card" data-tone={(current?.active ?? 0) > 0 ? "amber" : undefined}>
-          <span className="acc-kpi-label">Đang chơi trực tiếp</span>
-          <span className="acc-kpi-value">{current?.active ?? monitor.filter((m) => m.state === "active").length}</span>
-          <span className="acc-kpi-meta">Bãi Mìn & Đường Đua thời gian thực</span>
-        </div>
-
-        <div className="acc-kpi-card" data-tone="teal">
-          <span className="acc-kpi-label">Đã hoàn thành</span>
-          <span className="acc-kpi-value">{completedCount}</span>
-          <span className="acc-kpi-meta">Đã nộp hết câu hoặc hết giờ</span>
-        </div>
-
-        <div className="acc-kpi-card" data-tone={disconnectedCount > 0 ? "red" : "teal"}>
-          <span className="acc-kpi-label">Cảnh báo kết nối & sự cố</span>
-          <span className="acc-kpi-value">{disconnectedCount}</span>
-          <span className="acc-kpi-meta">
-            {disconnectedCount > 0
-              ? `${disconnectedCount} phiên mất nhịp tim >=12s`
-              : "Tín hiệu kết nối ổn định"}
-          </span>
-        </div>
-      </section>
-
-      {/* Primary Mode Switcher Tabs */}
+      {/* Primary Mode Switcher Tabs (item 9: removed duplicate Incidents/Audit tab) */}
       <div className="acc-tabs" role="tablist" aria-label="Chế độ điều hành">
         <button
           type="button"
@@ -687,19 +1111,10 @@ export function CompetitionAdmin() {
           className="acc-tab"
           onClick={() => setActiveTab("rehearsal")}
         >
-          <span>Phòng thi thử khép kín (Rehearsal Studio)</span>
+          <span>Phòng thi thử khép kín</span>
           <span className="acc-badge" data-tone="teal" style={{ padding: "0.1rem 0.45rem", fontSize: "0.68rem" }}>
-            SANDBOX
+            THI THỬ
           </span>
-        </button>
-        <button
-          type="button"
-          role="tab"
-          aria-selected={activeTab === "incidents"}
-          className="acc-tab"
-          onClick={() => setActiveTab("incidents")}
-        >
-          <span>Sự cố & Nhật ký Audit</span>
         </button>
       </div>
 
@@ -713,11 +1128,11 @@ export function CompetitionAdmin() {
         />
       )}
 
-      {/* TAB 1 & 3: Competition Operations & Incident/Audit Control Room */}
-      {activeTab !== "rehearsal" && (
+      {/* TAB 1: Competition Operations Control Room */}
+      {activeTab === "operations" && (
         <div className="adm acc-ops-grid">
-          {/* Left Column: Competition Selector & Create Form */}
-          <section className="acc-panel adm__panel" style={{ marginBottom: 0, minWidth: 0, maxWidth: "100%" }}>
+          {/* Left Column: Competition Selector (grouped) & Collapsed Create Form */}
+          <section className="acc-panel adm__panel acc-ops-sidebar" style={{ marginBottom: 0, minWidth: 0, maxWidth: "100%" }}>
             <div className="acc-panel-header">
               <h2 className="acc-panel-title">Cuộc thi ({list?.length ?? 0})</h2>
               <button
@@ -735,177 +1150,159 @@ export function CompetitionAdmin() {
             ) : list.length === 0 ? (
               <p style={{ color: "var(--acc-muted)" }}>Chưa có cuộc thi nào.</p>
             ) : (
-              <ul
-                className="adm__list"
-                style={{ listStyle: "none", padding: 0, margin: "0 0 1.1rem", display: "grid", gap: "0.55rem" }}
-              >
-                {list.map((c) => {
-                  const isSelected = c.id === selected;
-                  const isOfficial = c.kind === "official";
-                  return (
-                    <li key={c.id}>
-                      <button
-                        type="button"
-                        aria-pressed={isSelected}
-                        data-selected={isSelected}
-                        onClick={() => {
-                          setSelected(c.id);
-                          setAcknowledgeRisk(false);
-                          setBankReason("");
-                          setReadiness(null);
-                        }}
-                        className="acc-comp-card"
-                        style={{ width: "100%" }}
-                      >
-                        <div style={{ display: "flex", justifyContent: "space-between", width: "100%", gap: "0.4rem" }}>
-                          <span className="acc-badge" data-tone={isOfficial ? "red" : "teal"}>
-                            {isOfficial ? "Chính thức" : "Diễn tập"}
-                          </span>
-                          <span
-                            className="acc-badge"
-                            data-tone={c.state === "open" ? "amber" : c.state === "finalized" ? "teal" : undefined}
-                          >
-                            {STATE_LABEL[c.state] ?? c.state}
-                          </span>
-                        </div>
-                        <strong style={{ fontSize: "0.98rem" }}>{c.name}</strong>
-                        <span style={{ fontSize: "0.8rem", color: "var(--acc-muted)" }}>
-                          {c.kind === "rehearsal" ? "Diễn tập" : "Chính thức"} · {STATE_LABEL[c.state] ?? c.state} ·{" "}
-                          {c.attempts} lượt ({c.active} đang chơi)
-                        </span>
-                      </button>
-                    </li>
-                  );
-                })}
-              </ul>
+              <div className="adm__list" style={{ display: "grid", gap: "0.75rem", marginBottom: "1rem" }}>
+                {groupedCompetitions && groupedCompetitions.open.length > 0 && (
+                  <div>
+                    <div className="acc-group-label">Đang mở ({groupedCompetitions.open.length})</div>
+                    <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "grid", gap: "0.45rem" }}>
+                      {groupedCompetitions.open.map(renderCompCard)}
+                    </ul>
+                  </div>
+                )}
+
+                {groupedCompetitions && groupedCompetitions.upcoming.length > 0 && (
+                  <div>
+                    <div className="acc-group-label">Sắp mở ({groupedCompetitions.upcoming.length})</div>
+                    <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "grid", gap: "0.45rem" }}>
+                      {groupedCompetitions.upcoming.map(renderCompCard)}
+                    </ul>
+                  </div>
+                )}
+
+                {groupedCompetitions && groupedCompetitions.finished.length > 0 && (
+                  <div>
+                    <div className="acc-group-label">Đã xong ({groupedCompetitions.finished.length})</div>
+                    <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "grid", gap: "0.45rem" }}>
+                      {groupedCompetitions.finished.map(renderCompCard)}
+                    </ul>
+                  </div>
+                )}
+
+                {groupedCompetitions && groupedCompetitions.archived.length > 0 && (
+                  <details className="acc-panel-alt" style={{ padding: "0.55rem 0.75rem" }}>
+                    <summary style={{ cursor: "pointer", fontSize: "0.82rem", fontWeight: 700, color: "var(--acc-muted)" }}>
+                      Lưu trữ ({groupedCompetitions.archived.length})
+                    </summary>
+                    <ul style={{ listStyle: "none", padding: 0, margin: "0.5rem 0 0", display: "grid", gap: "0.45rem" }}>
+                      {groupedCompetitions.archived.map(renderCompCard)}
+                    </ul>
+                  </details>
+                )}
+              </div>
             )}
 
-            <form
-              className="adm__create acc-panel-alt"
-              onSubmit={(e) => {
-                e.preventDefault();
-                void create();
-              }}
-              style={{ display: "grid", gap: "0.65rem" }}
-            >
-              <h3 style={{ margin: 0, fontSize: "1rem" }}>Tạo cuộc thi</h3>
-              <label className="acc-field">
-                <span>Loại cuộc thi</span>
-                <select
-                  className="acc-select"
-                  value={form.kind}
-                  onChange={(e) => {
-                    const kind = e.target.value as "rehearsal" | "official";
-                    setForm({
-                      ...form,
-                      kind,
-                      name:
-                        form.name === "Diễn tập Live Arena" || form.name === "Cuộc thi Live Arena"
-                          ? kind === "official"
-                            ? "Cuộc thi Live Arena"
-                            : "Diễn tập Live Arena"
-                          : form.name,
-                    });
+            {/* Create Competition Form — Collapsed by default unless list is empty (item 8 & 11) */}
+            <details className="acc-panel-alt" open={list !== null && list.length === 0}>
+              <summary style={{ cursor: "pointer", fontWeight: 700, fontSize: "0.95rem" }}>
+                + Tạo cuộc thi mới
+              </summary>
+              <form
+                className="adm__create"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  void create();
+                }}
+                style={{ display: "grid", gap: "0.65rem", marginTop: "0.75rem" }}
+              >
+                <label className="acc-field">
+                  <span>Loại cuộc thi</span>
+                  <select
+                    className="acc-select"
+                    value={form.kind}
+                    onChange={(e) => {
+                      const kind = e.target.value as "rehearsal" | "official";
+                      setForm({
+                        ...form,
+                        kind,
+                        name:
+                          form.name === "Diễn tập Live Arena" || form.name === "Cuộc thi Live Arena"
+                            ? kind === "official"
+                              ? "Cuộc thi Live Arena"
+                              : "Diễn tập Live Arena"
+                            : form.name,
+                      });
+                    }}
+                  >
+                    <option value="rehearsal">Diễn tập</option>
+                    <option value="official">Chính thức</option>
+                  </select>
+                </label>
+
+                <label className="acc-field">
+                  <span>Tên</span>
+                  <input
+                    className="acc-input"
+                    value={form.name}
+                    onChange={(e) => setForm({ ...form, name: e.target.value })}
+                    minLength={3}
+                    maxLength={120}
+                    required
+                  />
+                </label>
+
+                <p style={{ margin: 0, fontSize: "0.78rem", color: "var(--acc-muted)" }}>
+                  Diễn tập chỉ lấy bộ câu giả lập <code>[GIẢ LẬP]</code>; cuộc thi chính thức chỉ dùng câu hỏi chính thức
+                  đã duyệt học thuật và không cho phép xóa hoặc đặt lại. Số phút mở nhận lượt sẽ được hỏi khi bấm Mở.
+                </p>
+
+                <p
+                  role="note"
+                  style={{
+                    margin: 0,
+                    padding: "0.5rem 0.65rem",
+                    borderRadius: "6px",
+                    background: "rgba(240, 170, 60, 0.12)",
+                    border: "1px solid rgba(240, 170, 60, 0.35)",
+                    fontSize: "0.78rem",
+                    color: "#fde68a",
                   }}
                 >
-                  <option value="rehearsal">Diễn tập</option>
-                  <option value="official">Chính thức</option>
-                </select>
-              </label>
+                  <ShieldAlert aria-hidden size={14} style={{ verticalAlign: "middle", marginRight: "0.25rem" }} />
+                  Mật khẩu mặc định chung <b>không bảo đảm danh tính cá nhân</b>: chỉ dùng cho hoạt động thi đua trên lớp.
+                </p>
 
-              <label className="acc-field">
-                <span>Tên</span>
-                <input
-                  className="acc-input"
-                  value={form.name}
-                  onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  minLength={3}
-                  maxLength={120}
-                  required
-                />
-              </label>
-
-              <label className="acc-field">
-                <span>Nhận lượt mới trong (phút)</span>
-                <input
-                  className="acc-input"
-                  type="number"
-                  min={5}
-                  max={720}
-                  value={form.minutes}
-                  onChange={(e) => setForm({ ...form, minutes: Number(e.target.value) })}
-                />
-              </label>
-
-              <p style={{ margin: 0, fontSize: "0.78rem", color: "var(--acc-muted)" }}>
-                Diễn tập chỉ lấy bộ câu giả lập <code>[GIẢ LẬP]</code>; cuộc thi chính thức chỉ dùng câu{" "}
-                <code>Published</code> đã duyệt học thuật và không cho phép xóa/reset.
-              </p>
-
-              <p
-                role="note"
-                style={{
-                  margin: 0,
-                  padding: "0.5rem 0.65rem",
-                  borderRadius: "6px",
-                  background: "rgba(240, 170, 60, 0.12)",
-                  border: "1px solid rgba(240, 170, 60, 0.35)",
-                  fontSize: "0.78rem",
-                  color: "#fde68a",
-                }}
-              >
-                <ShieldAlert aria-hidden size={14} style={{ verticalAlign: "middle", marginRight: "0.25rem" }} />
-                Mật khẩu mặc định chung <b>không bảo đảm danh tính</b>: chỉ dùng cho thi đua lớp học (LA-ACC-006).
-              </p>
-
-              <button type="submit" disabled={busy} className="acc-btn acc-btn-primary">
-                Tạo (Nháp)
-              </button>
-            </form>
+                <button type="submit" disabled={busy} className="acc-btn acc-btn-primary">
+                  Tạo (Nháp)
+                </button>
+              </form>
+            </details>
           </section>
 
-          {/* Right Wide Column: Selected Competition Control Panel & Live Monitor */}
+          {/* Right Wide Column: Live Monitor & Audit */}
           <section
-            className="acc-panel adm__panel adm__panel--wide"
+            className="acc-panel adm__panel adm__panel--wide acc-ops-main"
             style={{ marginBottom: 0, minWidth: 0, maxWidth: "100%" }}
           >
             {current ? (
               <>
-                <header className="acc-panel-header adm__head">
-                  <div>
-                    <div style={{ display: "flex", flexWrap: "wrap", gap: "0.45rem", marginBottom: "0.3rem" }}>
-                      <span className="acc-badge" data-tone={current.kind === "official" ? "red" : "teal"}>
-                        {current.kind === "official" ? "Chính thức" : "Diễn tập"}
-                      </span>
-                      <span className="acc-badge" data-tone={current.state === "open" ? "amber" : "teal"}>
-                        {STATE_LABEL[current.state]}
-                      </span>
-                    </div>
-                    <h2 style={{ margin: 0, fontSize: "1.35rem" }}>{current.name}</h2>
-                    <p style={{ margin: "0.25rem 0 0", fontSize: "0.86rem", color: "var(--acc-text-Soft)" }}>
-                      {STATE_LABEL[current.state]} · nhãn bảng: <b>{STANDING_LABEL[current.standing]}</b>
-                      {current.state === "draft" || current.state === "scheduled"
-                        ? " · chờ bạn bấm Mở cuộc thi"
-                        : ` · nhận lượt tới ${new Date(current.startDeadlineAt).toLocaleString("vi-VN")}`}
-                    </p>
+                <div
+                  style={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                    marginBottom: "0.55rem",
+                  }}
+                >
+                  <span style={{ fontSize: "0.8rem", color: "var(--acc-muted)" }}>
+                    💡 Phím tắt màn chiếu: <b>1</b> (Bãi Mìn Tri Thức), <b>2</b> (Đường Đua Lịch Sử), <b>0</b> (Cả 2 bảng)
+                  </span>
+                  <div className="adm__links" style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem" }}>
+                    <Link href="/trinh-chieu" target="_blank" className="acc-btn acc-btn-amber" style={{ minHeight: "2rem", padding: "0.25rem 0.65rem", fontSize: "0.78rem" }}>
+                      <Trophy aria-hidden size={14} /> Màn chiếu cả 2 bảng <ExternalLink aria-hidden size={11} />
+                    </Link>
+                    <Link href="/trinh-chieu?game=minefield" target="_blank" className="acc-btn" style={{ minHeight: "2rem", padding: "0.25rem 0.65rem", fontSize: "0.78rem" }}>
+                      Chiếu Bãi Mìn ↗
+                    </Link>
+                    <Link href="/trinh-chieu?game=race" target="_blank" className="acc-btn" style={{ minHeight: "2rem", padding: "0.25rem 0.65rem", fontSize: "0.78rem" }}>
+                      Chiếu Đường Đua ↗
+                    </Link>
+                    <Link href="/live-arena/bang-xep-hang" target="_blank" className="acc-btn" style={{ minHeight: "2rem", padding: "0.25rem 0.65rem", fontSize: "0.78rem" }}>
+                      Bảng xếp hạng <ExternalLink aria-hidden size={11} />
+                    </Link>
                   </div>
-                  <div className="adm__links" style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", alignItems: "center" }}>
-                    <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem" }}>
-                      <Link href="/trinh-chieu" target="_blank" className="acc-btn acc-btn-amber" title="Mở màn hình chiếu Full HD 1920x1080">
-                        <Trophy aria-hidden size={15} /> Màn chiếu cả 2 bảng <ExternalLink aria-hidden size={12} />
-                      </Link>
-                      <Link href="/trinh-chieu?game=minefield" target="_blank" className="acc-btn" title="Chiếu phóng to Bãi Mìn">
-                        Chiếu Bãi Mìn ↗
-                      </Link>
-                      <Link href="/trinh-chieu?game=race" target="_blank" className="acc-btn" title="Chiếu phóng to Đường Đua">
-                        Chiếu Đường Đua ↗
-                      </Link>
-                      <Link href="/live-arena/bang-xep-hang" target="_blank" className="acc-btn">
-                        Bảng xếp hạng <ExternalLink aria-hidden size={12} />
-                      </Link>
-                    </div>
-                  </div>
-                </header>
+                </div>
 
                 {/* Lifecycle Stepper */}
                 <div className="acc-stepper" aria-label="Tiến trình trạng thái cuộc thi">
@@ -920,173 +1317,8 @@ export function CompetitionAdmin() {
                     </div>
                   ))}
                 </div>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", margin: "-0.45rem 0 0.75rem", fontSize: "0.78rem", color: "var(--acc-muted)" }}>
-                  <span>💡 Điều khiển màn chiếu máy tính phụ: Bấm phím <b>1</b> (Bãi Mìn), <b>2</b> (Đường Đua), <b>0</b> (Chiếu song song)</span>
-                </div>
 
-                {/* Readiness & Window Controls */}
-                <div className="acc-panel-alt" style={{ marginBottom: "0.9rem", display: "grid", gap: "0.65rem" }}>
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: "0.8rem", alignItems: "center" }}>
-                    {current.state === "draft" && current.kind === "official" ? (
-                      <label className="acc-field" style={{ flexDirection: "row", alignItems: "center", gap: "0.45rem" }}>
-                        <span>Sĩ số dự kiến</span>
-                        <input
-                          className="acc-input"
-                          style={{ width: "6rem" }}
-                          type="number"
-                          min={1}
-                          max={500}
-                          value={expectedAttempts}
-                          onChange={(e) => {
-                            setExpectedAttempts(Number(e.target.value));
-                            setAcknowledgeRisk(false);
-                            setReadiness(null);
-                          }}
-                        />
-                      </label>
-                    ) : null}
-
-                    {current.state === "scheduled" ? (
-                      <label className="acc-field" style={{ flexDirection: "row", alignItems: "center", gap: "0.45rem" }}>
-                        <span>Nhận lượt mới sau khi mở (phút)</span>
-                        <input
-                          className="acc-input"
-                          style={{ width: "6rem" }}
-                          type="number"
-                          min={1}
-                          max={1440}
-                          value={openMinutes}
-                          onChange={(e) => setOpenMinutes(Number(e.target.value))}
-                        />
-                      </label>
-                    ) : null}
-                  </div>
-
-                  {readiness && current.state === "draft" ? (
-                    <div className={`adm__ready ${readiness.ready ? "is-ok" : "is-bad"}`} style={{ display: "grid", gap: "0.45rem" }}>
-                      <p style={{ margin: 0 }}>
-                        {readiness.ready
-                          ? "Ngân hàng câu đủ điều kiện bắt buộc."
-                          : `Chưa đủ điều kiện: ${readiness.blockers.join(", ")}`}
-                      </p>
-                      {current.kind === "official" && readiness.classSize != null ? (
-                        <p
-                          role={readiness.classSize !== readiness.target.expectedAttempts ? "alert" : undefined}
-                          style={{
-                            margin: 0,
-                            padding:
-                              readiness.classSize !== readiness.target.expectedAttempts ? "0.5rem 0.75rem" : undefined,
-                            borderRadius: "6px",
-                            background:
-                              readiness.classSize !== readiness.target.expectedAttempts
-                                ? "rgba(240, 170, 60, 0.15)"
-                                : undefined,
-                            color:
-                              readiness.classSize !== readiness.target.expectedAttempts ? "#fde68a" : undefined,
-                          }}
-                        >
-                          Danh sách lớp hiện có {readiness.classSize} sinh viên
-                          {readiness.classSize !== readiness.target.expectedAttempts
-                            ? `, khác sĩ số dự kiến ${readiness.target.expectedAttempts}. Hãy kiểm tra trước khi xác nhận.`
-                            : "."}
-                        </p>
-                      ) : null}
-                      {current.kind === "official" && !readiness.target.meetsTarget ? (
-                        <>
-                          <p style={{ margin: 0, fontSize: "0.86rem", color: "var(--acc-text-Soft)" }}>
-                            Sĩ số dự kiến {readiness.target.expectedAttempts}: chưa đạt mục tiêu tối đa{" "}
-                            {readiness.target.maxPerQuestion} lượt phân bổ mỗi câu. Một câu có thể được nhiều sinh viên
-                            nhận, tăng rủi ro chia sẻ đáp án.
-                          </p>
-                          {readiness.ready ? (
-                            <div style={{ display: "grid", gap: "0.5rem" }}>
-                              <label style={{ display: "flex", gap: "0.45rem", alignItems: "center" }}>
-                                <input
-                                  type="checkbox"
-                                  checked={acknowledgeRisk}
-                                  onChange={(e) => setAcknowledgeRisk(e.target.checked)}
-                                />
-                                <span>Tôi đã xem và chấp nhận rủi ro phân bổ lặp.</span>
-                              </label>
-                              <label className="acc-field">
-                                <span>Lý do xác nhận</span>
-                                <textarea
-                                  className="acc-textarea"
-                                  value={bankReason}
-                                  minLength={3}
-                                  maxLength={300}
-                                  onChange={(e) => setBankReason(e.target.value)}
-                                />
-                              </label>
-                            </div>
-                          ) : null}
-                        </>
-                      ) : null}
-                    </div>
-                  ) : null}
-
-                  {/* Action Buttons — Separated Normal vs Danger */}
-                  <div
-                    className="adm__actions"
-                    style={{
-                      display: "flex",
-                      flexWrap: "wrap",
-                      justifyContent: "space-between",
-                      gap: "0.65rem",
-                      paddingTop: "0.35rem",
-                    }}
-                  >
-                    <div style={{ display: "flex", flexWrap: "wrap", gap: "0.55rem" }}>
-                      {(NEXT_ACTIONS[current.state] ?? []).map((a) => {
-                        const isBlockedSchedule =
-                          a.target === "scheduled" &&
-                          current.kind === "official" &&
-                          (!readiness ||
-                            !readiness.ready ||
-                            (!readiness.target.meetsTarget && (!acknowledgeRisk || bankReason.trim().length < 3)));
-                        const btnClass =
-                          a.tone === "danger"
-                            ? "acc-btn acc-btn-danger-solid"
-                            : a.tone === "amber"
-                              ? "acc-btn acc-btn-amber"
-                              : "acc-btn acc-btn-primary";
-                        return (
-                          <button
-                            key={a.target}
-                            type="button"
-                            className={btnClass}
-                            disabled={busy || isBlockedSchedule}
-                            onClick={() => handleActionClick(a.target)}
-                          >
-                            {a.target === "open" ? (
-                              <Play aria-hidden size={16} />
-                            ) : a.target === "start_closed" ? (
-                              <Square aria-hidden size={16} />
-                            ) : null}{" "}
-                            {a.label}
-                          </button>
-                        );
-                      })}
-                    </div>
-
-                    <button
-                      type="button"
-                      className="acc-btn is-ghost"
-                      disabled={busy}
-                      onClick={() => void reconcile()}
-                    >
-                      <RefreshCw aria-hidden size={16} /> Đối soát các lượt
-                    </button>
-                  </div>
-                </div>
-
-                {message ? (
-                  <div className="acc-banner adm__message" data-tone="amber" role="status">
-                    <span>{message}</span>
-                  </div>
-                ) : null}
-
-                {/* Class Pulse Bar */}
+                {/* Class Pulse Bar — Single Click-to-Filter KPI Row (item 2 & 5) */}
                 <div className="acc-pulse-bar" role="region" aria-label="Nhịp độ lớp học">
                   <button
                     type="button"
@@ -1097,8 +1329,18 @@ export function CompetitionAdmin() {
                       setMonitorStateFilter("");
                     }}
                   >
-                    <span className="acc-pulse-label">Sĩ số lớp</span>
-                    <span className="acc-pulse-val">{readiness?.classSize ?? participantCount}</span>
+                    <span className="acc-pulse-label">Tổng danh sách</span>
+                    <span className="acc-pulse-val">{pulseCounts.total}</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    className="acc-pulse-card"
+                    data-active={monitorStateFilter === "not_entered"}
+                    onClick={() => setMonitorStateFilter(monitorStateFilter === "not_entered" ? "" : "not_entered")}
+                  >
+                    <span className="acc-pulse-label">Chưa vào</span>
+                    <span className="acc-pulse-val">{pulseCounts.notEntered}</span>
                   </button>
 
                   <button
@@ -1107,32 +1349,45 @@ export function CompetitionAdmin() {
                     data-active={monitorStateFilter === "active"}
                     onClick={() => setMonitorStateFilter(monitorStateFilter === "active" ? "" : "active")}
                   >
-                    <span className="acc-pulse-label">Đang thi</span>
+                    <span className="acc-pulse-label">Đang chơi</span>
                     <span className="acc-pulse-val" style={{ color: "var(--acc-amber)" }}>
-                      {monitor.filter((m) => m.state === "active").length}
+                      {pulseCounts.active}
                     </span>
                   </button>
 
                   <button
                     type="button"
                     className="acc-pulse-card"
-                    data-active={monitorStateFilter === "completed"}
-                    onClick={() => setMonitorStateFilter(monitorStateFilter === "completed" ? "" : "completed")}
+                    data-active={monitorStateFilter === "half_done"}
+                    onClick={() => setMonitorStateFilter(monitorStateFilter === "half_done" ? "" : "half_done")}
                   >
-                    <span className="acc-pulse-label">Đã nộp bài</span>
-                    <span className="acc-pulse-val" style={{ color: "#10b981" }}>{completedCount}</span>
+                    <span className="acc-pulse-label">Xong 1/2 trò</span>
+                    <span className="acc-pulse-val" style={{ color: "#60a5fa" }}>{pulseCounts.halfDone}</span>
                   </button>
 
                   <button
                     type="button"
                     className="acc-pulse-card"
-                    data-tone={disconnectedCount > 0 ? "red" : undefined}
-                    data-active={monitorHealthFilter === "disconnected"}
-                    onClick={() => setMonitorHealthFilter(monitorHealthFilter === "disconnected" ? "" : "disconnected")}
+                    data-active={monitorStateFilter === "both_done"}
+                    onClick={() => setMonitorStateFilter(monitorStateFilter === "both_done" ? "" : "both_done")}
+                  >
+                    <span className="acc-pulse-label">Xong cả hai</span>
+                    <span className="acc-pulse-val" style={{ color: "#10b981" }}>{pulseCounts.bothDone}</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    className="acc-pulse-card"
+                    data-tone={pulseCounts.disconnected > 0 ? "red" : undefined}
+                    data-active={monitorStateFilter === "disconnected" || monitorHealthFilter === "disconnected"}
+                    onClick={() => {
+                      setMonitorHealthFilter("");
+                      setMonitorStateFilter(monitorStateFilter === "disconnected" ? "" : "disconnected");
+                    }}
                   >
                     <span className="acc-pulse-label">Mất kết nối</span>
-                    <span className="acc-pulse-val" style={{ color: disconnectedCount > 0 ? "var(--acc-red)" : "inherit" }}>
-                      {disconnectedCount}
+                    <span className="acc-pulse-val" style={{ color: pulseCounts.disconnected > 0 ? "var(--acc-red)" : "inherit" }}>
+                      {pulseCounts.disconnected}
                     </span>
                   </button>
 
@@ -1143,9 +1398,7 @@ export function CompetitionAdmin() {
                     onClick={() => setMonitorHealthFilter(monitorHealthFilter === "incident" ? "" : "incident")}
                   >
                     <span className="acc-pulse-label">Sự cố / Khóa</span>
-                    <span className="acc-pulse-val">
-                      {monitor.filter((m) => m.incidents.length > 0 || m.accountStatus === "locked").length}
-                    </span>
+                    <span className="acc-pulse-val">{pulseCounts.incident}</span>
                   </button>
                 </div>
 
@@ -1158,7 +1411,10 @@ export function CompetitionAdmin() {
                       aria-selected={monitorViewMode === "unified"}
                       data-active={monitorViewMode === "unified"}
                       className="acc-view-btn"
-                      onClick={() => setMonitorViewMode("unified")}
+                      onClick={() => {
+                        setMonitorViewMode("unified");
+                        setMonitorStateFilter("");
+                      }}
                     >
                       <Users aria-hidden size={14} style={{ verticalAlign: "middle", marginRight: "0.3rem" }} />
                       Bảng hợp nhất cả lớp ({unifiedStudents.length})
@@ -1169,10 +1425,13 @@ export function CompetitionAdmin() {
                       aria-selected={monitorViewMode === "split"}
                       data-active={monitorViewMode === "split"}
                       className="acc-view-btn"
-                      onClick={() => setMonitorViewMode("split")}
+                      onClick={() => {
+                        setMonitorViewMode("split");
+                        setMonitorStateFilter("");
+                      }}
                     >
                       <Layers aria-hidden size={14} style={{ verticalAlign: "middle", marginRight: "0.3rem" }} />
-                      Tách chi tiết 2 Game
+                      Tách chi tiết 2 trò
                     </button>
                   </div>
 
@@ -1180,14 +1439,14 @@ export function CompetitionAdmin() {
                     type="button"
                     className="acc-btn acc-btn-primary"
                     style={{ minHeight: "2rem", padding: "0.3rem 0.8rem", fontSize: "0.82rem" }}
-                    onClick={() => exportLeaderboardCsv(current?.name ?? "Live_Arena", unifiedStudents)}
-                    disabled={unifiedStudents.length === 0}
+                    onClick={() => exportLeaderboardCsv(current?.name ?? "Live_Arena", allUnifiedStudents)}
+                    disabled={allUnifiedStudents.length === 0}
                   >
-                    <Download aria-hidden size={15} /> Xuất bảng điểm Excel / CSV
+                    <Download aria-hidden size={15} /> Xuất bảng điểm (CSV)
                   </button>
                 </div>
 
-                {/* Monitor Filter Bar */}
+                {/* Monitor Filter Bar (item 5 & 12: every state filter option works in its view mode) */}
                 <div
                   style={{
                     display: "grid",
@@ -1207,13 +1466,13 @@ export function CompetitionAdmin() {
                   </label>
                   {monitorViewMode === "split" && (
                     <label className="acc-field">
-                      <span>Lọc theo Game</span>
+                      <span>Lọc theo trò</span>
                       <select
                         className="acc-select"
                         value={monitorGameFilter}
                         onChange={(e) => setMonitorGameFilter(e.target.value as "" | "minefield" | "race")}
                       >
-                        <option value="">Tất cả 2 game</option>
+                        <option value="">Cả 2 trò</option>
                         <option value="minefield">Bãi Mìn Tri Thức</option>
                         <option value="race">Đường Đua Lịch Sử</option>
                       </select>
@@ -1221,17 +1480,32 @@ export function CompetitionAdmin() {
                   )}
                   <label className="acc-field">
                     <span>Lọc trạng thái</span>
-                    <select
-                      className="acc-select"
-                      value={monitorStateFilter}
-                      onChange={(e) => setMonitorStateFilter(e.target.value)}
-                    >
-                      <option value="">Tất cả trạng thái</option>
-                      <option value="active">Đang chơi</option>
-                      <option value="completed">Hoàn thành</option>
-                      <option value="timed_out">Hết giờ</option>
-                      <option value="voided">Vô hiệu</option>
-                    </select>
+                    {monitorViewMode === "unified" ? (
+                      <select
+                        className="acc-select"
+                        value={monitorStateFilter}
+                        onChange={(e) => setMonitorStateFilter(e.target.value)}
+                      >
+                        <option value="">Tất cả trạng thái</option>
+                        <option value="not_entered">Chưa vào</option>
+                        <option value="active">Đang chơi</option>
+                        <option value="half_done">Xong 1/2 trò</option>
+                        <option value="both_done">Xong cả hai</option>
+                        <option value="disconnected">Mất kết nối</option>
+                      </select>
+                    ) : (
+                      <select
+                        className="acc-select"
+                        value={monitorStateFilter}
+                        onChange={(e) => setMonitorStateFilter(e.target.value)}
+                      >
+                        <option value="">Tất cả trạng thái lượt</option>
+                        <option value="active">Đang chơi</option>
+                        <option value="completed">Hoàn thành</option>
+                        <option value="timed_out">Hết giờ</option>
+                        <option value="voided">Vô hiệu</option>
+                      </select>
+                    )}
                   </label>
                   <label className="acc-field">
                     <span>Lọc cảnh báo</span>
@@ -1278,7 +1552,7 @@ export function CompetitionAdmin() {
                           <Users aria-hidden size={16} /> Bảng điều hành cả lớp · {unifiedStudents.length} sinh viên
                         </h3>
                         <span style={{ fontSize: "0.8rem", color: "var(--acc-muted)" }}>
-                          Tự động đồng bộ mỗi 4 giây · Click nút Xử lý khi có sự cố
+                          Tự động đồng bộ mỗi 4 giây · Chọn đúng lượt trò chơi để xử lý sự cố
                         </span>
                       </div>
                       <div className="acc-table-wrap">
@@ -1286,13 +1560,13 @@ export function CompetitionAdmin() {
                           <thead>
                             <tr>
                               <th>MSSV & Họ tên</th>
-                              <th>Kết nối</th>
+                              <th>Trạng thái</th>
                               <th>Bãi Mìn Tri Thức</th>
                               <th>Đường Đua Lịch Sử</th>
                               <th>Tổng điểm</th>
                               <th>Ghi nhận</th>
                               <th>Sự cố</th>
-                              <th>Thao tác</th>
+                              <th>Thao tác theo lượt</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -1312,22 +1586,30 @@ export function CompetitionAdmin() {
                                     </div>
                                   </td>
                                   <td>
-                                    {s.isOnline ? (
-                                      <span className="acc-badge" data-tone="teal">
-                                        <span className="acc-status-dot" data-status="online" /> Online
-                                      </span>
-                                    ) : s.isDisconnected ? (
+                                    {s.playStatus === "disconnected" ? (
                                       <span
                                         className="acc-badge"
                                         data-tone="red"
-                                        title={`Mất nhịp tim ${Math.round((s.heartbeatAgoMs ?? 0) / 1000)} s`}
+                                        title={`Mất tín hiệu kết nối ${Math.round((s.heartbeatAgoMs ?? 0) / 1000)} s`}
                                       >
-                                        <span className="acc-status-dot" data-status="disconnected" /> mất{" "}
+                                        <span className="acc-status-dot" data-status="disconnected" /> Mất kết nối · mất{" "}
                                         {Math.round((s.heartbeatAgoMs ?? 0) / 1000)} s
+                                      </span>
+                                    ) : s.playStatus === "active" ? (
+                                      <span className="acc-badge" data-tone="amber">
+                                        <span className="acc-status-dot" data-status="online" /> Đang chơi
+                                      </span>
+                                    ) : s.playStatus === "both_done" ? (
+                                      <span className="acc-badge" data-tone="teal">
+                                        <span className="acc-status-dot" data-status="online" /> Xong cả hai
+                                      </span>
+                                    ) : s.playStatus === "half_done" ? (
+                                      <span className="acc-badge" data-tone="blue">
+                                        <span className="acc-status-dot" data-status="idle" /> Xong 1/2 trò
                                       </span>
                                     ) : (
                                       <span className="acc-badge" style={{ color: "var(--acc-muted)" }}>
-                                        <span className="acc-status-dot" data-status="idle" /> Hoàn thành
+                                        <span className="acc-status-dot" data-status="idle" /> Chưa vào
                                       </span>
                                     )}
                                   </td>
@@ -1336,7 +1618,10 @@ export function CompetitionAdmin() {
                                       <div>
                                         <span style={{ fontWeight: 600 }}>
                                           {s.minefield.mainAnswered}/{s.minefield.mainTotal} câu
-                                        </span>
+                                        </span>{" "}
+                                        <small style={{ color: "var(--acc-muted)" }}>
+                                          ({ATTEMPT_STATE_LABEL[s.minefield.state] ?? s.minefield.state})
+                                        </small>
                                         <div style={{ fontSize: "0.82rem", color: "var(--acc-amber)" }}>
                                           +{s.minefield.score} điểm
                                         </div>
@@ -1350,7 +1635,10 @@ export function CompetitionAdmin() {
                                       <div>
                                         <span style={{ fontWeight: 600 }}>
                                           {s.race.mainAnswered}/{s.race.mainTotal} câu
-                                        </span>
+                                        </span>{" "}
+                                        <small style={{ color: "var(--acc-muted)" }}>
+                                          ({ATTEMPT_STATE_LABEL[s.race.state] ?? s.race.state})
+                                        </small>
                                         <div style={{ fontSize: "0.82rem", color: "var(--acc-amber)" }}>
                                           +{s.race.score} điểm
                                         </div>
@@ -1389,17 +1677,40 @@ export function CompetitionAdmin() {
                                     )}
                                   </td>
                                   <td>
-                                    <button
-                                      type="button"
-                                      className="adm__small acc-btn"
-                                      style={{ minHeight: "1.95rem", padding: "0.2rem 0.6rem", fontSize: "0.78rem" }}
-                                      aria-expanded={incidentFor === s.latestAttemptId}
-                                      onClick={() =>
-                                        setIncidentFor(incidentFor === s.latestAttemptId ? null : s.latestAttemptId)
-                                      }
-                                    >
-                                      Xử lý
-                                    </button>
+                                    {/* Per-attempt incident buttons (item 3): Bãi Mìn / Đường Đua */}
+                                    <div style={{ display: "flex", flexWrap: "wrap", gap: "0.35rem" }}>
+                                      {s.minefield && (
+                                        <button
+                                          type="button"
+                                          className="adm__small acc-btn"
+                                          style={{ minHeight: "1.9rem", padding: "0.2rem 0.55rem", fontSize: "0.76rem" }}
+                                          aria-expanded={incidentFor === s.minefield.attemptId}
+                                          onClick={() =>
+                                            setIncidentFor(
+                                              incidentFor === s.minefield!.attemptId ? null : s.minefield!.attemptId,
+                                            )
+                                          }
+                                        >
+                                          Xử lý Bãi Mìn
+                                        </button>
+                                      )}
+                                      {s.race && (
+                                        <button
+                                          type="button"
+                                          className="adm__small acc-btn"
+                                          style={{ minHeight: "1.9rem", padding: "0.2rem 0.55rem", fontSize: "0.76rem" }}
+                                          aria-expanded={incidentFor === s.race.attemptId}
+                                          onClick={() =>
+                                            setIncidentFor(incidentFor === s.race!.attemptId ? null : s.race!.attemptId)
+                                          }
+                                        >
+                                          Xử lý Đường Đua
+                                        </button>
+                                      )}
+                                      {!s.minefield && !s.race && (
+                                        <span style={{ fontSize: "0.78rem", color: "var(--acc-muted)" }}>Chưa có lượt</span>
+                                      )}
+                                    </div>
                                   </td>
                                 </tr>
                               ))
@@ -1467,13 +1778,7 @@ export function CompetitionAdmin() {
                                                   : undefined
                                           }
                                         >
-                                          {m.state === "active"
-                                            ? "Đang chơi"
-                                            : m.state === "completed"
-                                              ? "Hoàn thành"
-                                              : m.state === "timed_out"
-                                                ? "Hết giờ"
-                                                : "Vô hiệu"}
+                                          {ATTEMPT_STATE_LABEL[m.state] ?? m.state}
                                         </span>
                                       </td>
                                       <td>
@@ -1543,7 +1848,7 @@ export function CompetitionAdmin() {
                                             setIncidentFor(incidentFor === m.attemptId ? null : m.attemptId)
                                           }
                                         >
-                                          Xử lý
+                                          {m.game === "minefield" ? "Xử lý Bãi Mìn" : "Xử lý Đường Đua"}
                                         </button>
                                       </td>
                                     </tr>
@@ -1558,56 +1863,42 @@ export function CompetitionAdmin() {
                 </div>
 
                 {incidentFor && monitor.find((m) => m.attemptId === incidentFor) ? (
-                  <div
-                    className="acc-modal-backdrop"
-                    role="dialog"
-                    aria-modal="true"
-                    onClick={() => setIncidentFor(null)}
-                  >
-                    <div
-                      className="acc-modal"
-                      style={{ width: "min(100%, 36rem)", maxHeight: "90vh", overflowY: "auto" }}
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <IncidentPanel
-                        key={incidentFor}
-                        row={monitor.find((m) => m.attemptId === incidentFor)!}
-                        onDone={incidentDone}
-                        onClose={() => setIncidentFor(null)}
-                      />
-                    </div>
-                  </div>
+                  <IncidentModal
+                    key={incidentFor}
+                    row={monitor.find((m) => m.attemptId === incidentFor)!}
+                    onDone={incidentDone}
+                    onClose={() => setIncidentFor(null)}
+                  />
                 ) : null}
 
                 {current.kind === "official" ? (
                   <DisclosedQuestions key={current.id} competitionId={current.id} onDone={incidentDone} />
                 ) : null}
 
-                <AuditLog
-                  competitionId={current.id}
-                  refresh={auditTick}
-                  defaultOpen={activeTab === "incidents"}
-                />
+                <AuditLog competitionId={current.id} refresh={auditTick} />
               </>
             ) : (
               <div className="acc-panel-alt" role="status">
                 <strong>Chưa chọn cuộc thi điều hành:</strong> Chọn hoặc tạo một cuộc thi ở cột bên trái để bắt đầu
-                điều hành (hệ thống không tự chọn cuộc thi chính thức chưa mở để tránh thao tác nhầm).
+                điều hành.
               </div>
             )}
           </section>
         </div>
       )}
 
-      {/* Confirmation Modal for Opening an Official Competition */}
+      {/* Confirmation Modal for Opening an Official Competition (item 4 & 13) */}
       {confirmOfficialOpenModal && current && (
         <div
           className="acc-modal-backdrop"
           role="dialog"
           aria-modal="true"
           aria-labelledby="confirm-official-open-title"
+          onClick={() => {
+            if (!busy) setConfirmOfficialOpenModal(false);
+          }}
         >
-          <div className="acc-modal">
+          <div className="acc-modal" onClick={(e) => e.stopPropagation()}>
             <p className="acc-kicker" style={{ color: "#fca5a5" }}>
               Xác nhận vận hành chính thức
             </p>
@@ -1625,16 +1916,14 @@ export function CompetitionAdmin() {
               </div>
               <div className="acc-modal-row">
                 <span>Loại cuộc thi:</span>
-                <strong style={{ color: "#fca5a5" }}>Chính thức (Official)</strong>
+                <strong style={{ color: "#fca5a5" }}>Chính thức</strong>
               </div>
-              <div className="acc-modal-row">
-                <span>Sĩ số lớp / Dự kiến:</span>
-                <strong>
-                  {typeof readiness?.classSize === "number"
-                    ? `${readiness.classSize} sinh viên (dự kiến ${expectedAttempts})`
-                    : `${expectedAttempts} sinh viên`}
-                </strong>
-              </div>
+              {typeof readiness?.classSize === "number" ? (
+                <div className="acc-modal-row">
+                  <span>Sĩ số lớp:</span>
+                  <strong>{readiness.classSize} sinh viên</strong>
+                </div>
+              ) : null}
               <div className="acc-modal-row">
                 <span>Thời gian nhận lượt:</span>
                 <strong style={{ color: "var(--acc-amber)" }}>{openMinutes} phút</strong>
@@ -1644,11 +1933,13 @@ export function CompetitionAdmin() {
               <button
                 type="button"
                 className="acc-btn"
+                disabled={busy}
                 onClick={() => setConfirmOfficialOpenModal(false)}
               >
                 Hủy
               </button>
               <button
+                ref={confirmOpenBtnRef}
                 type="button"
                 className="acc-btn acc-btn-amber"
                 disabled={busy}
@@ -1663,11 +1954,59 @@ export function CompetitionAdmin() {
           </div>
         </div>
       )}
+
+      {/* Confirmation Modal for Finalizing a Competition (replaces window.confirm, item 13) */}
+      {confirmFinalizeModal && current && (
+        <div
+          className="acc-modal-backdrop"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="confirm-finalize-title"
+          onClick={() => {
+            if (!busy) setConfirmFinalizeModal(false);
+          }}
+        >
+          <div className="acc-modal" onClick={(e) => e.stopPropagation()}>
+            <p className="acc-kicker" style={{ color: "#fca5a5" }}>
+              Xác nhận kết thúc & công bố
+            </p>
+            <h3 id="confirm-finalize-title" style={{ margin: "0 0 0.5rem", fontSize: "1.25rem" }}>
+              Kết thúc & công bố kết quả cuộc thi?
+            </h3>
+            <p style={{ margin: "0 0 1rem", fontSize: "0.9rem", color: "var(--acc-text-Soft)" }}>
+              Khi kết thúc cuộc thi <strong>{current.name}</strong>, đáp án và giải thích sẽ mở cho sinh viên đã tham
+              gia và bảng xếp hạng được chốt kết quả.
+            </p>
+            <div style={{ display: "flex", justifyContent: "flex-end", gap: "0.6rem" }}>
+              <button
+                type="button"
+                className="acc-btn"
+                disabled={busy}
+                onClick={() => setConfirmFinalizeModal(false)}
+              >
+                Hủy
+              </button>
+              <button
+                ref={confirmFinalizeBtnRef}
+                type="button"
+                className="acc-btn acc-btn-danger-solid"
+                disabled={busy}
+                onClick={() => {
+                  setConfirmFinalizeModal(false);
+                  void executeTransition("finalize");
+                }}
+              >
+                Xác nhận kết thúc & công bố
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
 
-function IncidentPanel({
+function IncidentModal({
   row,
   onDone,
   onClose,
@@ -1681,6 +2020,8 @@ function IncidentPanel({
   const [ack, setAck] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
   const warning = INCIDENT_WARNING[action];
   const actions = (Object.keys(INCIDENT_LABEL) as IncidentAction[]).filter((a) =>
     a === "lock_account"
@@ -1692,112 +2033,154 @@ function IncidentPanel({
           : true,
   );
 
+  const gameName = row.game === "minefield" ? "Bãi Mìn Tri Thức" : "Đường Đua Lịch Sử";
+  const attemptStateText = ATTEMPT_STATE_LABEL[row.state] ?? row.state;
+
+  useEffect(() => {
+    const focusTimer = window.setTimeout(() => textareaRef.current?.focus(), 0);
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && !busy) {
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.clearTimeout(focusTimer);
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [busy, onClose]);
+
   async function submit() {
     setBusy(true);
     setError(null);
     try {
       await request("POST", `/admin/attempts/${row.attemptId}/incidents`, { body: { action, reason } });
-      onDone(`${INCIDENT_LABEL[action]}: ${row.displayName}.`);
+      onDone(`${INCIDENT_LABEL[action]} (${gameName}): ${row.displayName}.`);
     } catch (e) {
-      setError(errorText(e));
+      setError(friendlyErrorText(e));
     } finally {
       setBusy(false);
     }
   }
 
   return (
-    <form
-      className="adm__incident acc-panel-alt"
-      aria-label={`Xử lý sự cố: ${row.displayName}`}
-      onSubmit={(e) => {
-        e.preventDefault();
-        void submit();
+    <div
+      className="acc-modal-backdrop"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="incident-modal-title"
+      onClick={() => {
+        if (!reason.trim() && !busy) {
+          onClose();
+        }
       }}
-      style={{ marginBottom: "1rem", display: "grid", gap: "0.65rem" }}
     >
-      <h3 style={{ margin: 0, fontSize: "1rem", display: "flex", alignItems: "center", gap: "0.45rem" }}>
-        <ShieldAlert aria-hidden size={16} /> Xử lý sự cố · {row.studentId} · {row.displayName}
-      </h3>
-      <p style={{ margin: 0, fontSize: "0.82rem", color: "var(--acc-muted)" }}>
-        Không thể sửa điểm, sửa đồng hồ, tạo lượt thay thế hay xóa lịch sử. Mọi thao tác được ghi nhật ký kèm lý do.
-      </p>
-      <fieldset style={{ border: "1px solid var(--acc-border)", borderRadius: "6px", padding: "0.6rem 0.75rem" }}>
-        <legend style={{ fontSize: "0.8rem", color: "var(--acc-muted)" }}>Thao tác</legend>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem" }}>
-          {actions.map((a) => (
-            <label key={a} className="adm__radio" style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem" }}>
-              <input
-                type="radio"
-                name="incident-action"
-                value={a}
-                checked={action === a}
-                onChange={() => {
-                  setAction(a);
-                  setAck(false);
-                }}
-              />{" "}
-              {INCIDENT_LABEL[a]}
-            </label>
-          ))}
-        </div>
-      </fieldset>
-      <label className="acc-field">
-        <span>Lý do (bắt buộc)</span>
-        <div className="acc-quick-preset-grid">
-          {[
-            "Mất kết nối mạng tại lớp",
-            "Đổi sang thiết bị khác (hết pin/sập nguồn)",
-            "Sinh viên yêu cầu cấp lại mật khẩu",
-            "Nghi vấn vi phạm quy chế",
-          ].map((preset) => (
-            <button
-              key={preset}
-              type="button"
-              className="acc-preset-chip"
-              onClick={() => setReason(preset)}
-            >
-              + {preset}
-            </button>
-          ))}
-        </div>
-        <textarea
-          className="acc-textarea"
-          value={reason}
-          onChange={(e) => setReason(e.target.value)}
-          minLength={3}
-          maxLength={300}
-          required
-          rows={2}
-        />
-      </label>
-      {warning ? (
-        <label className="adm__confirm" style={{ display: "flex", gap: "0.45rem", alignItems: "flex-start", fontSize: "0.85rem", color: "#fca5a5" }}>
-          <input type="checkbox" checked={ack} onChange={(e) => setAck(e.target.checked)} />
-          <span>{warning}</span>
-        </label>
-      ) : null}
-      {error ? (
-        <p className="adm__message is-bad" role="alert">
-          {error}
-        </p>
-      ) : null}
-      <div className="adm__actions" style={{ display: "flex", gap: "0.55rem" }}>
-        <button
-          type="submit"
-          disabled={busy || reason.trim().length < 3 || (Boolean(warning) && !ack)}
-          className={
-            action === "void_attempt" || action === "lock_account"
-              ? "acc-btn acc-btn-danger-solid"
-              : "acc-btn acc-btn-primary"
-          }
+      <div
+        className="acc-modal"
+        style={{ width: "min(100%, 36rem)", maxHeight: "90vh", overflowY: "auto" }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <form
+          className="adm__incident acc-panel-alt"
+          aria-label={`Xử lý sự cố: ${row.displayName} (${gameName} · ${attemptStateText})`}
+          onSubmit={(e) => {
+            e.preventDefault();
+            void submit();
+          }}
+          style={{ display: "grid", gap: "0.65rem" }}
         >
-          {INCIDENT_LABEL[action]}
-        </button>
-        <button type="button" className="acc-btn is-ghost" onClick={onClose}>
-          Đóng
-        </button>
+          <h3
+            id="incident-modal-title"
+            style={{ margin: 0, fontSize: "1.02rem", display: "flex", alignItems: "center", gap: "0.45rem", flexWrap: "wrap" }}
+          >
+            <ShieldAlert aria-hidden size={16} /> Xử lý sự cố · {row.studentId} · {row.displayName} ·{" "}
+            <span className="acc-badge" data-tone="amber">
+              {gameName} ({attemptStateText})
+            </span>
+          </h3>
+          <p style={{ margin: 0, fontSize: "0.82rem", color: "var(--acc-muted)" }}>
+            Không thể sửa điểm, sửa đồng hồ, tạo lượt thay thế hay xóa lịch sử. Mọi thao tác được ghi nhật ký kèm lý do.
+          </p>
+          <fieldset style={{ border: "1px solid var(--acc-border)", borderRadius: "6px", padding: "0.6rem 0.75rem" }}>
+            <legend style={{ fontSize: "0.8rem", color: "var(--acc-muted)" }}>Thao tác</legend>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem" }}>
+              {actions.map((a) => (
+                <label key={a} className="adm__radio" style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem" }}>
+                  <input
+                    type="radio"
+                    name="incident-action"
+                    value={a}
+                    checked={action === a}
+                    onChange={() => {
+                      setAction(a);
+                      setAck(false);
+                    }}
+                  />{" "}
+                  {INCIDENT_LABEL[a]}
+                </label>
+              ))}
+            </div>
+          </fieldset>
+          <label className="acc-field">
+            <span>Lý do (bắt buộc)</span>
+            <div className="acc-quick-preset-grid">
+              {[
+                "Mất kết nối mạng tại lớp",
+                "Đổi sang thiết bị khác (hết pin/sập nguồn)",
+                "Sinh viên yêu cầu cấp lại mật khẩu",
+                "Nghi vấn vi phạm quy chế",
+              ].map((preset) => (
+                <button
+                  key={preset}
+                  type="button"
+                  className="acc-preset-chip"
+                  onClick={() => setReason(preset)}
+                >
+                  + {preset}
+                </button>
+              ))}
+            </div>
+            <textarea
+              ref={textareaRef}
+              className="acc-textarea"
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+              minLength={3}
+              maxLength={300}
+              required
+              rows={2}
+            />
+          </label>
+          {warning ? (
+            <label className="adm__confirm" style={{ display: "flex", gap: "0.45rem", alignItems: "flex-start", fontSize: "0.85rem", color: "#fca5a5" }}>
+              <input type="checkbox" checked={ack} onChange={(e) => setAck(e.target.checked)} />
+              <span>{warning}</span>
+            </label>
+          ) : null}
+          {error ? (
+            <p className="adm__message is-bad" role="alert">
+              {error}
+            </p>
+          ) : null}
+          <div className="adm__actions" style={{ display: "flex", gap: "0.55rem" }}>
+            <button
+              type="submit"
+              disabled={busy || reason.trim().length < 3 || (Boolean(warning) && !ack)}
+              className={
+                action === "void_attempt" || action === "lock_account"
+                  ? "acc-btn acc-btn-danger-solid"
+                  : "acc-btn acc-btn-primary"
+              }
+            >
+              {INCIDENT_LABEL[action]}
+            </button>
+            <button type="button" className="acc-btn is-ghost" disabled={busy} onClick={onClose}>
+              Đóng
+            </button>
+          </div>
+        </form>
       </div>
-    </form>
+    </div>
   );
 }
 
@@ -1849,25 +2232,39 @@ function DisclosedQuestions({ competitionId, onDone }: { competitionId: string; 
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [version, setVersion] = useState(0);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const confirmBtnRef = useRef<HTMLButtonElement>(null);
+
   useEffect(() => {
     let alive = true;
     request<Disclosed>("GET", `/admin/competitions/${competitionId}/disclosed-questions`)
       .then((d) => alive && setData(d))
-      .catch((e) => alive && setError(errorText(e)));
+      .catch((e) => alive && setError(friendlyErrorText(e)));
     return () => {
       alive = false;
     };
   }, [competitionId, version]);
+
+  useEffect(() => {
+    if (!confirmOpen) return;
+    const focusTimer = window.setTimeout(() => confirmBtnRef.current?.focus(), 0);
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && !busy) {
+        setConfirmOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.clearTimeout(focusTimer);
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [confirmOpen, busy]);
+
   if (!data) return error ? <p className="adm__message is-bad">{error}</p> : null;
   const editable = data.competitionState === "draft";
-  async function confirm() {
-    if (
-      !window.confirm(
-        `Cho phép dùng lại ${picked.length} câu đã công bố đáp án trong cuộc thi chính thức này? Thao tác được ghi nhật ký.`,
-      )
-    ) {
-      return;
-    }
+
+  async function executeConfirm() {
+    setConfirmOpen(false);
     setBusy(true);
     setError(null);
     try {
@@ -1881,11 +2278,12 @@ function DisclosedQuestions({ competitionId, onDone }: { competitionId: string; 
       setVersion((v) => v + 1);
       onDone(`Đã xác nhận dùng lại ${r.confirmed} câu đã công bố.`);
     } catch (e) {
-      setError(errorText(e));
+      setError(friendlyErrorText(e));
     } finally {
       setBusy(false);
     }
   }
+
   return (
     <section className="adm__disclosed acc-panel-alt" aria-labelledby="disclosed-title" style={{ marginTop: "0.85rem" }}>
       <h3 id="disclosed-title" style={{ margin: "0 0 0.35rem", fontSize: "0.96rem" }}>
@@ -1914,7 +2312,7 @@ function DisclosedQuestions({ competitionId, onDone }: { competitionId: string; 
                 />
                 <span>
                   <b>
-                    {q.game === "race" ? "Đường Đua" : "Bãi Mìn"} · {q.pool} · {q.difficulty} · {q.chapter}
+                    {q.game === "race" ? "Đường Đua Lịch Sử" : "Bãi Mìn Tri Thức"} · {q.pool} · {q.difficulty} · {q.chapter}
                   </b>
                   {q.confirmed ? " · đã xác nhận" : ""}
                   <br />
@@ -1936,7 +2334,7 @@ function DisclosedQuestions({ competitionId, onDone }: { competitionId: string; 
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            void confirm();
+            setConfirmOpen(true);
           }}
           style={{ display: "grid", gap: "0.55rem" }}
         >
@@ -1968,6 +2366,42 @@ function DisclosedQuestions({ competitionId, onDone }: { competitionId: string; 
           </div>
         </form>
       ) : null}
+
+      {confirmOpen && (
+        <div
+          className="acc-modal-backdrop"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="disclosed-confirm-title"
+          onClick={() => {
+            if (!busy) setConfirmOpen(false);
+          }}
+        >
+          <div className="acc-modal" onClick={(e) => e.stopPropagation()}>
+            <h3 id="disclosed-confirm-title" style={{ margin: "0 0 0.5rem", fontSize: "1.15rem" }}>
+              Xác nhận dùng lại {picked.length} câu đã công bố đáp án?
+            </h3>
+            <p style={{ margin: "0 0 1rem", fontSize: "0.88rem", color: "var(--acc-text-Soft)" }}>
+              Cho phép dùng lại {picked.length} câu đã công bố đáp án trong cuộc thi chính thức này? Thao tác sẽ được ghi
+              vào nhật ký kèm lý do của bạn.
+            </p>
+            <div style={{ display: "flex", justifyContent: "flex-end", gap: "0.55rem" }}>
+              <button type="button" className="acc-btn" disabled={busy} onClick={() => setConfirmOpen(false)}>
+                Hủy
+              </button>
+              <button
+                ref={confirmBtnRef}
+                type="button"
+                className="acc-btn acc-btn-amber"
+                disabled={busy}
+                onClick={() => void executeConfirm()}
+              >
+                Đồng ý dùng lại
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

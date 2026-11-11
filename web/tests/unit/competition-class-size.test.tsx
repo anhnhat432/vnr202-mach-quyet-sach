@@ -5,7 +5,7 @@ import { QuestionBankAdmin } from "@/features/admin/ui/question-bank-admin";
 
 afterEach(() => { cleanup(); vi.unstubAllGlobals(); });
 
-it("warns an administrator when expected attendance differs from the active roster", async () => {
+it("defaults expected attendance to readiness.classSize and warns when edited to differ from the active roster", async () => {
   vi.stubGlobal("fetch", vi.fn(async (url: string) => {
     const data = url.endsWith("/admin/competitions")
       ? [{ id: "a", name: "Thi thử", kind: "official", state: "draft", standing: "provisional", attempts: 0, active: 0, startDeadlineAt: "2030-01-01T00:00:00Z" }]
@@ -14,6 +14,10 @@ it("warns an administrator when expected attendance differs from the active rost
     return { ok: true, json: async () => ({ data }) };
   }));
   render(<CompetitionAdmin />);
+  const input = await screen.findByLabelText("Sĩ số dự kiến") as HTMLInputElement;
+  await act(async () => { await new Promise((r) => setTimeout(r, 10)); });
+  expect(input.value).toBe("42");
+  fireEvent.change(input, { target: { value: "60" } });
   expect(await screen.findByText(/Danh sách lớp hiện có 42 sinh viên, khác sĩ số dự kiến 60/)).toHaveAttribute("role", "alert");
 });
 

@@ -2,7 +2,7 @@ import { cleanup, fireEvent, render, screen, waitFor, within } from "@testing-li
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { CompetitionAdmin } from "@/features/admin/ui/competition-admin";
-import { QuestionBankAdmin } from "@/features/admin/ui/question-bank-admin";
+import { QuestionBankAdmin, translateReadinessBlocker } from "@/features/admin/ui/question-bank-admin";
 import { RehearsalStudio } from "@/features/admin/ui/rehearsal-studio";
 import { mapRpcError } from "@/features/arena/server/arena-service";
 import {
@@ -344,7 +344,7 @@ describe("RehearsalStudio closed-loop workflow", () => {
 });
 
 describe("CompetitionAdmin operational UX & safety", () => {
-  it("does not auto-select an unopened official competition when multiple competitions exist, and requires a confirmation modal to open an official competition", async () => {
+  it("auto-selects the nearest scheduled official competition when none is open, merges roster for 'Chưa vào' / 'Xong 1/2 trò', and requires confirmation modal to open", async () => {
     document.cookie = "vnr_csrf=admin-csrf; path=/";
     const postCalls: Array<{ url: string; body: unknown }> = [];
 
@@ -388,6 +388,21 @@ describe("CompetitionAdmin operational UX & safety", () => {
                   active: 0,
                 },
               ],
+            }),
+          };
+        }
+        if (url.endsWith("/admin/students")) {
+          return {
+            ok: true,
+            json: async () => ({
+              data: {
+                classInfo: { id: "c1", code: "VNR202", name: "Lớp Lịch sử Đảng" },
+                students: [
+                  { id: "p-1", student_id: "SE18001", full_name: "Nguyễn Văn An", display_name: "An N.V.", display_name_suffix: null, status: "active", updated_at: "2026-11-01T10:00:00Z" },
+                  { id: "p-2", student_id: "SE18002", full_name: "Trần Thị Bình", display_name: "Bình T.T.", display_name_suffix: null, status: "active", updated_at: "2026-11-01T10:00:00Z" },
+                  { id: "p-3", student_id: "SE18003", full_name: "Lê Văn Cường", display_name: "Cường L.V.", display_name_suffix: null, status: "active", updated_at: "2026-11-01T10:00:00Z" },
+                ],
+              },
             }),
           };
         }
@@ -459,21 +474,20 @@ describe("CompetitionAdmin operational UX & safety", () => {
 
     render(<CompetitionAdmin />);
 
-    // Wait for list to load; verify it did NOT auto-select the unopened official competition
-    expect(await screen.findByRole("button", { name: /VNR202 · Buổi chơi 02\/11\/2026/ })).toBeVisible();
-    expect(screen.getByText(/Chưa chọn cuộc thi điều hành/)).toBeVisible();
+    // Sticky bar shows waiting message when no competition is open
+    expect(await screen.findByText(/Chưa có cuộc thi nào mở; sinh viên đang ở màn hình chờ/)).toBeVisible();
 
-    // Explicitly select the official competition
-    fireEvent.click(screen.getByRole("button", { name: /VNR202 · Buổi chơi 02\/11\/2026/ }));
+    // Auto-selects the nearest scheduled official competition
+    const openBtn = await screen.findByRole("button", { name: /Mở cuộc thi/ });
+    expect(openBtn).toBeVisible();
 
     // Clicking "Mở cuộc thi" on an official competition opens the confirmation modal first without firing POST
-    const openBtn = await screen.findByRole("button", { name: /Mở cuộc thi/ });
     fireEvent.click(openBtn);
     expect(postCalls).toHaveLength(0);
 
     const dialog = screen.getByRole("dialog", { name: "Xác nhận mở cuộc thi chính thức?" });
     expect(within(dialog).getByText("VNR202 · Buổi chơi 02/11/2026")).toBeVisible();
-    expect(within(dialog).getByText("Chính thức (Official)")).toBeVisible();
+    expect(within(dialog).getByText("Chính thức")).toBeVisible();
     expect(within(dialog).getByText(/39 sinh viên/)).toBeVisible();
     expect(within(dialog).getByText("60 phút")).toBeVisible();
 
@@ -484,6 +498,17 @@ describe("CompetitionAdmin operational UX & safety", () => {
       url: "/api/v1/admin/competitions/off-1/transitions",
       body: { target: "open", startWindowMinutes: 60 },
     });
+
+    // Verify roster merge statuses: SE18003 is "Chưa vào", SE18002 is "Xong 1/2 trò"
+    expect(await screen.findByText("Cường L.V.")).toBeVisible();
+    expect(screen.getAllByText("Chưa vào").length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText("Xong 1/2 trò").length).toBeGreaterThanOrEqual(1);
+
+    // Per-game incident button opens modal with game name & state in title
+    fireEvent.click(screen.getByRole("button", { name: "Xử lý Bãi Mìn" }));
+    const incidentDialog = screen.getByRole("dialog", { name: /Xử lý sự cố · SE18001 · An N\.V\. · Bãi Mìn Tri Thức \(Đang chơi\)/ });
+    expect(incidentDialog).toBeVisible();
+    fireEvent.click(within(incidentDialog).getByRole("button", { name: "Đóng" }));
 
     // Verify monitor search & connection warning filter
     expect(screen.getByText(/mất 32 s/)).toBeVisible();
@@ -621,5 +646,51 @@ describe("QuestionBankAdmin & RosterImport enhancements", () => {
       url: "/api/v1/admin/profiles/00000000-0000-4000-8000-000000000001/password-resets",
       body: { reason: "Hỗ trợ đặt lại mật khẩu mặc định tại lớp" },
     });
+  });
+
+  it("shows a red error banner with Thử lại when roster loading fails instead of 'Không tìm thấy sinh viên phù hợp'", async () => {
+    let calls = 0;
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => {
+        calls += 1;
+        if (calls === 1) {
+          return { ok: false, status: 500, json: async () => ({ error: { message: "Lỗi máy chủ khi tải danh sách lớp." } }) };
+        }
+        return {
+          ok: true,
+          json: async () => ({
+            data: {
+              classInfo: { id: "c1", code: "VNR202", name: "Lớp Lịch sử Đảng" },
+              students: [
+                {
+                  id: "00000000-0000-4000-8000-000000000001",
+                  student_id: "SE180101",
+                  full_name: "Nguyễn Văn An",
+                  display_name: "An N.V.",
+                  display_name_suffix: null,
+                  status: "active",
+                  updated_at: "2026-11-01T10:00:00Z",
+                },
+              ],
+            },
+          }),
+        };
+      }),
+    );
+
+    render(<RosterImport />);
+    expect(await screen.findByText(/Lỗi máy chủ khi tải danh sách lớp/)).toBeVisible();
+    expect(screen.queryByText(/Không tìm thấy sinh viên phù hợp/)).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Thử lại" }));
+    expect(await screen.findByText("SE180101")).toBeVisible();
+  });
+
+  it("translates readiness.blockers into Vietnamese and formats unknown codes cleanly", () => {
+    expect(translateReadinessBlocker("insufficient_pool:minefield/minefield_main/easy")).toContain("Thiếu câu hỏi Bãi Mìn Tri Thức (Câu chính Bãi Mìn, mức Dễ)");
+    expect(translateReadinessBlocker("two_option_cap_unsatisfiable:race")).toContain("quá nhiều câu 2 lựa chọn");
+    expect(translateReadinessBlocker("over_length:minefield:3")).toContain("3 câu");
+    expect(translateReadinessBlocker("mystery_code_xyz")).toBe("Lý do khác (mã: mystery_code_xyz)");
   });
 });

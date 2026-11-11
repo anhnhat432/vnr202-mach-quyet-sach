@@ -810,14 +810,20 @@
 .acc-shell .adm .adm__questions > li,
 .acc-shell .adm .adm__bulk,
 .acc-shell .adm .adm__incident,
-.acc-shell .adm .adm__disclosed {
+.acc-shell .adm .adm__disclosed,
+.acc-shell .adm__questions > li,
+.acc-shell .adm__bulk,
+.acc-shell .adm__incident,
+.acc-shell .adm__disclosed {
   background: var(--acc-panel-alt);
   border-color: var(--acc-border);
   color: var(--acc-text);
 }
 
 .acc-shell .adm .adm__questions header,
-.acc-shell .adm .adm__explain {
+.acc-shell .adm .adm__explain,
+.acc-shell .adm__questions header,
+.acc-shell .adm__explain {
   color: var(--acc-text-Soft);
 }
 
@@ -891,6 +897,65 @@
   .acc-shell .adm.acc-ops-grid {
     grid-template-columns: minmax(0, 1fr);
   }
+
+  .acc-ops-main {
+    order: -1;
+  }
+
+  .acc-ops-sidebar {
+    order: 1;
+  }
+}
+
+/* Sticky Student Live Strip (Item 7) */
+.acc-student-live-strip {
+  position: sticky;
+  top: 0;
+  z-index: 35;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.65rem 1rem;
+  margin-bottom: 0.75rem;
+  border-radius: var(--acc-radius-sm);
+  border: 1px solid var(--acc-border-strong);
+  background: rgba(15, 23, 30, 0.96);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.42);
+  font-size: 0.9rem;
+  color: var(--acc-text);
+}
+
+.acc-student-live-strip[data-tone="rehearsal-open"] {
+  background: linear-gradient(135deg, rgba(185, 28, 28, 0.92), rgba(127, 29, 29, 0.94));
+  border-color: #f87171;
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(224, 69, 75, 0.35);
+}
+
+.acc-student-live-strip[data-tone="official-open"] {
+  background: linear-gradient(135deg, rgba(15, 118, 110, 0.32), rgba(19, 29, 38, 0.96));
+  border-color: rgba(45, 212, 191, 0.65);
+  color: #ccfbf1;
+}
+
+.acc-student-live-strip[data-tone="waiting"] {
+  background: rgba(19, 29, 38, 0.95);
+  border-color: var(--acc-border-strong);
+  color: var(--acc-text-Soft);
+}
+
+.acc-group-label {
+  font-family: var(--font-mono);
+  font-size: 0.73rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--acc-amber);
+  margin-bottom: 0.35rem;
+  padding-inline: 0.15rem;
 }
 
 @media (max-width: 768px) {

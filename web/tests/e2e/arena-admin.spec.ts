@@ -80,6 +80,9 @@ test("admin runs a rehearsal end to end; the student reviews answers only after 
   await page.fill("input[name=password]", adminPassword);
   await page.click("button[type=submit]");
   await page.waitForURL("**/quan-tri/cuoc-thi");
+  if (!(await page.getByLabel("Tên").isVisible())) {
+    await page.getByText("+ Tạo cuộc thi mới").click();
+  }
   await page.getByLabel("Tên").fill(name);
   await page.getByRole("button", { name: "Tạo (Nháp)" }).click();
   await expect(page.getByRole("heading", { name })).toBeVisible();
@@ -102,9 +105,9 @@ test("admin runs a rehearsal end to end; the student reviews answers only after 
   await expect(row).toBeVisible({ timeout: 10000 });
   await page.getByRole("button", { name: "Đóng nhận lượt mới" }).click();
   await page.getByRole("button", { name: "Chuyển sang chốt kết quả" }).click();
-  page.once("dialog", (d) => void d.accept());
   await page.getByRole("button", { name: /Kết thúc & công bố/ }).click();
-  await expect(page.getByText(/attempts_still_active/)).toBeVisible();
+  await page.getByRole("button", { name: "Xác nhận kết thúc & công bố" }).click();
+  await expect(page.getByText(/Vẫn còn lượt thi đang diễn ra/)).toBeVisible();
 
   // The race clock runs while the admin acts above (a slow first compile can expire a 5 s question):
   // answer every question still open and let the server time out the others.
@@ -125,7 +128,7 @@ test("admin runs a rehearsal end to end; the student reviews answers only after 
 
   // incident handling (LA-ADMIN-003), after the run so the race clock is not held up: a reason is required,
   // voiding needs an explicit confirmation, everything lands in the audit log; no score or clock editing
-  await row.getByRole("button", { name: "Xử lý" }).click();
+  await row.getByRole("button", { name: /Xử lý/ }).click();
   const panel = page.getByRole("form", { name: /Xử lý sự cố/ });
   await panel.getByLabel("Vô hiệu lượt thi").check();
   await panel.getByLabel("Lý do (bắt buộc)").fill("Thử xác nhận");
@@ -138,7 +141,7 @@ test("admin runs a rehearsal end to end; the student reviews answers only after 
   await page.getByText(/Nhật ký thao tác/).click();
   await expect(page.locator(".adm__audit li", { hasText: "attempt.note" })).toContainText("Máy 12 mất mạng 30 giây");
   // lock then unlock reuse the stage B account actions (sessions are revoked on lock)
-  await row.getByRole("button", { name: "Xử lý" }).click();
+  await row.getByRole("button", { name: /Xử lý/ }).click();
   await panel.getByLabel("Khóa tài khoản").check();
   await panel.getByLabel("Lý do (bắt buộc)").fill("Nghi lộ mật khẩu");
   await panel.getByRole("checkbox").check();
@@ -146,7 +149,7 @@ test("admin runs a rehearsal end to end; the student reviews answers only after 
   await expect(row.getByText("TK bị khóa")).toBeVisible({ timeout: 10000 });
   await student.reload();
   await expect(student.getByText("để xem lượt thi của bạn")).toBeVisible({ timeout: 10000 }); // signed out everywhere
-  await row.getByRole("button", { name: "Xử lý" }).click();
+  await row.getByRole("button", { name: /Xử lý/ }).click();
   await panel.getByLabel("Mở khóa tài khoản").check();
   await panel.getByLabel("Lý do (bắt buộc)").fill("Đã đổi mật khẩu");
   await panel.getByRole("button", { name: "Mở khóa tài khoản" }).click();
@@ -155,8 +158,8 @@ test("admin runs a rehearsal end to end; the student reviews answers only after 
   await expect(page.locator(".adm__audit li", { hasText: "account.set_status" }).first()).toBeVisible();
 
   // --- finalize, then the review opens -------------------------------------------------------------
-  page.once("dialog", (d) => void d.accept());
   await page.getByRole("button", { name: /Kết thúc & công bố/ }).click();
+  await page.getByRole("button", { name: "Xác nhận kết thúc & công bố" }).click();
   await expect(page.getByText(/Đã kết thúc · nhãn bảng: Diễn tập/)).toBeVisible({ timeout: 10000 });
   await student.goto("/dang-nhap");
   await student.fill("input[name=studentId]", studentId);
