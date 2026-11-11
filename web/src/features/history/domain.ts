@@ -1,4 +1,6 @@
 import { z } from "zod";
+import { LOCATIONS, TOPICS } from "./museum-data";
+import type { MuseumFilters } from "./museum-domain";
 
 export const HISTORY_PERIODS = [
   { id: "before-1930", years: "Trước 1930", title: "Tìm đường & chuẩn bị", note: "Bối cảnh và quá trình chuẩn bị thành lập Đảng" },
@@ -10,7 +12,7 @@ export const HISTORY_PERIODS = [
 ] as const;
 
 export type HistoryPeriod = typeof HISTORY_PERIODS[number]["id"];
-export type HistoryState = { period: HistoryPeriod | "all"; query: string; eventId: string | null };
+export type HistoryState = { period: HistoryPeriod | "all"; query: string; eventId: string | null } & MuseumFilters;
 
 const historyStateSchema = z.object({
   period: z.enum(["all", ...HISTORY_PERIODS.map(period => period.id)]).catch("all"),
@@ -34,7 +36,15 @@ export function filterHistory<T extends SearchableEvent>(events: readonly T[], p
 }
 
 export function readHistoryState(params: URLSearchParams): HistoryState {
-  return historyStateSchema.parse({ period: params.get("period"), query: params.get("q") ?? "", eventId: params.get("event") });
+  const state: HistoryState = historyStateSchema.parse({ period: params.get("period"), query: params.get("q") ?? "", eventId: params.get("event") });
+  for (const key of ["from", "to"] as const) {
+    const raw = params.get(key);
+    if (raw && /^\d{4}$/.test(raw) && Number(raw) >= 1800 && Number(raw) <= 2100) state[key] = Number(raw);
+  }
+  if (state.from && state.to && state.from > state.to) [state.from, state.to] = [state.to, state.from];
+  if (LOCATIONS.some(l => l.id === params.get("place"))) state.locationId = params.get("place")!;
+  if (TOPICS.some(t => t.id === params.get("topic"))) state.topic = params.get("topic")!;
+  return state;
 }
 
 export function historyUrl(state: HistoryState): string {
@@ -42,5 +52,9 @@ export function historyUrl(state: HistoryState): string {
   if (state.period !== "all") params.set("period", state.period);
   if (state.query) params.set("q", state.query);
   if (state.eventId) params.set("event", state.eventId);
+  if (state.from !== undefined) params.set("from", String(state.from));
+  if (state.to !== undefined) params.set("to", String(state.to));
+  if (state.locationId) params.set("place", state.locationId);
+  if (state.topic) params.set("topic", state.topic);
   return `/kien-thuc${params.size ? `?${params}` : ""}`;
 }

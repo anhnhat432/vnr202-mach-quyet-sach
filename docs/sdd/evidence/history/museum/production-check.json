@@ -1,0 +1,42 @@
+{
+  "mode": "local production, unthrottled single samples; not field Core Web Vitals",
+  "threeChunks": [
+    {
+      "file": "b536a0f1.a5118e04d8aaa1b9.js",
+      "bytes": 356783,
+      "gzipBytes": 84439
+    }
+  ],
+  "viewports": [
+    {
+      "name": "desktop",
+      "width": 1440,
+      "height": 1000,
+      "status": 200,
+      "overflow": false,
+      "gameLoadedThree": false,
+      "museumLoadedThree": true,
+      "metrics": {
+        "lcp": 280,
+        "cls": 0.003284876837082851,
+        "maxEventDuration": 104
+      },
+      "errors": []
+    },
+    {
+      "name": "mobile",
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "overflow": false,
+      "gameLoadedThree": false,
+      "museumLoadedThree": true,
+      "metrics": {
+        "lcp": 172,
+        "cls": 0.008686069495294354,
+        "maxEventDuration": 48
+      },
+      "errors": []
+    }
+  ]
+}

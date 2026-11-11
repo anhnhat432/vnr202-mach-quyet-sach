@@ -1,5 +1,7 @@
 # Dấu Ấn Sử Việt — implementation and QA
 
+The later interactive-museum extension (3D globe, campaign map, theater, comparison and challenge) has its current file list, provenance, screenshots, measurements and QA results in [museum/README.md](museum/README.md). The report below records the original timeline delivery.
+
 Date: 2026-11-11 (Asia/Saigon). Scope: user-requested local implementation; no commit, push, merge or deployment.
 
 ## A. Delivered experience
