@@ -1,9 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import "@/features/admin/ui/admin-control-center.css";
-import { request } from "@/features/arena/client/api";
+import { ArenaApiError, request } from "@/features/arena/client/api";
 import { readCsrfCookie } from "@/lib/security/csrf-client";
 
 type PreviewRow = {
@@ -58,10 +58,17 @@ type ClassInfo = {
   name: string;
 };
 
+function cleanRosterError(error: unknown, fallback: string) {
+  if (error instanceof ArenaApiError) return error.message || fallback;
+  if (error instanceof Error) return error.message || fallback;
+  return fallback;
+}
+
 export function RosterImport() {
   const [classInfo, setClassInfo] = useState<ClassInfo | null>(null);
   const [students, setStudents] = useState<StudentRecord[]>([]);
   const [loadingDirectory, setLoadingDirectory] = useState(true);
+  const [directoryError, setDirectoryError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<"" | "active" | "locked">("");
 
@@ -72,6 +79,7 @@ export function RosterImport() {
   >("reset_password");
   const [newDisplayName, setNewDisplayName] = useState("");
   const [supportReason, setSupportReason] = useState("");
+  const [supportDirty, setSupportDirty] = useState(false);
   const [supportBusy, setSupportBusy] = useState(false);
 
   // Roster import state
@@ -88,12 +96,22 @@ export function RosterImport() {
   // Quick add student & export state
   const [showQuickAddModal, setShowQuickAddModal] = useState(false);
   const [quickStudentText, setQuickStudentText] = useState("");
+  const [quickPreview, setQuickPreview] = useState<PreviewData | null>(null);
+  const [quickConfirmed, setQuickConfirmed] = useState<Record<number, boolean>>({});
+  const [quickOverrides, setQuickOverrides] = useState<Record<string, string>>({});
+
+  const supportReasonInputRef = useRef<HTMLInputElement>(null);
+  const supportNameInputRef = useRef<HTMLInputElement>(null);
+  const quickAddTextareaRef = useRef<HTMLTextAreaElement>(null);
 
   const loadDirectory = useCallback(async () => {
+    setLoadingDirectory(true);
+    setDirectoryError(null);
     try {
       const response = await fetch("/api/v1/admin/students", { cache: "no-store" });
       const body = (await response.json().catch(() => null)) as {
         data?: StudentRecord[] | { classInfo: ClassInfo | null; students: StudentRecord[] };
+        error?: { message?: string };
       } | null;
       if (response.ok && body?.data) {
         if (Array.isArray(body.data)) {
@@ -105,7 +123,11 @@ export function RosterImport() {
             setClassCode(body.data.classInfo.code);
           }
         }
+      } else {
+        setDirectoryError(body?.error?.message ?? "Không tải được danh sách lớp.");
       }
+    } catch {
+      setDirectoryError("Mất kết nối tới máy chủ khi tải danh sách lớp.");
     } finally {
       setLoadingDirectory(false);
     }
@@ -115,6 +137,46 @@ export function RosterImport() {
     const initial = setTimeout(() => void loadDirectory(), 0);
     return () => clearTimeout(initial);
   }, [loadDirectory]);
+
+  // Auto-hide success notifications after a few seconds
+  useEffect(() => {
+    if (!message || message.tone !== "teal") return;
+    const timer = window.setTimeout(() => setMessage(null), 5000);
+    return () => window.clearTimeout(timer);
+  }, [message]);
+
+  // Modal focus & Escape key handling
+  useEffect(() => {
+    if (!supportStudent && !showQuickAddModal) return;
+    const focusTimer = window.setTimeout(() => {
+      if (supportStudent) {
+        if (supportAction === "display_name") {
+          supportNameInputRef.current?.focus();
+        } else {
+          supportReasonInputRef.current?.focus();
+        }
+      } else if (showQuickAddModal) {
+        quickAddTextareaRef.current?.focus();
+      }
+    }, 0);
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        if (supportStudent && !supportBusy) {
+          setSupportStudent(null);
+          setSupportDirty(false);
+        } else if (showQuickAddModal && !busy) {
+          setShowQuickAddModal(false);
+          setQuickPreview(null);
+        }
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.clearTimeout(focusTimer);
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [supportStudent, supportAction, supportBusy, showQuickAddModal, busy]);
 
   const filteredStudents = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
@@ -167,6 +229,7 @@ export function RosterImport() {
         });
         setSupportStudent(null);
         setSupportReason("");
+        setSupportDirty(false);
         await loadDirectory();
       }
     } catch {
@@ -187,13 +250,13 @@ export function RosterImport() {
       setConfirmed({});
       setOverrides({});
     } catch (error) {
-      setMessage({ tone: "red", text: error instanceof Error ? error.message : "Không thể kiểm tra tệp danh sách." });
+      setMessage({ tone: "red", text: cleanRosterError(error, "Không thể kiểm tra tệp danh sách.") });
     } finally {
       setBusy(false);
     }
   }
 
-  async function handleQuickAdd(text: string) {
+  async function handleQuickAddPreview(text: string) {
     const rawIds = text
       .split(/[\n,;]+/)
       .map((s) => s.trim().toUpperCase())
@@ -213,16 +276,39 @@ export function RosterImport() {
     setMessage(null);
     try {
       const data = await request<PreviewData>("POST", "/admin/roster-imports", { body: formData });
-      setPreview(data);
-      setConfirmed({});
-      setOverrides({});
+      setQuickPreview(data);
+      setQuickConfirmed({});
+      setQuickOverrides({});
+    } catch (error) {
+      setMessage({ tone: "red", text: cleanRosterError(error, "Không thể thêm nhanh sinh viên.") });
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function handleQuickAddApply() {
+    if (!quickPreview) return;
+    setBusy(true);
+    setMessage(null);
+    const confirmedWarningRows = Object.entries(quickConfirmed)
+      .filter(([, v]) => v)
+      .map(([k]) => Number(k));
+    try {
+      const result = await request<{ created: number; updated?: number; omittedCount?: number }>(
+        "POST",
+        `/admin/roster-imports/${quickPreview.importId}/apply`,
+        { body: { confirmedWarningRows, displayNameOverrides: quickOverrides } },
+      );
       setMessage({
         tone: "teal",
-        text: `Đã tạo bản xem trước cho ${rawIds.length} sinh viên. Bấm "Tạo tài khoản" ở khung bên trên để hoàn tất.`,
+        text: `Đã tạo ${result.created} tài khoản${result.updated ? `, cập nhật ${result.updated}` : ""}.`,
       });
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      setShowQuickAddModal(false);
+      setQuickPreview(null);
+      setQuickStudentText("");
+      await loadDirectory();
     } catch (error) {
-      setMessage({ tone: "red", text: error instanceof Error ? error.message : "Không thể thêm nhanh sinh viên." });
+      setMessage({ tone: "red", text: cleanRosterError(error, "Không thể tạo tài khoản sinh viên.") });
     } finally {
       setBusy(false);
     }
@@ -273,7 +359,7 @@ export function RosterImport() {
       });
       await loadDirectory();
     } catch (error) {
-      setMessage({ tone: "red", text: error instanceof Error ? error.message : "Không thể áp dụng danh sách." });
+      setMessage({ tone: "red", text: cleanRosterError(error, "Không thể áp dụng danh sách.") });
     } finally {
       setBusy(false);
     }
@@ -289,12 +375,12 @@ export function RosterImport() {
         { body: { confirmed: cleanupConfirmed, reason: cleanupReason } },
       );
       setMessage({
-        tone: "amber",
+        tone: "teal",
         text: `Đã xóa ${result.removed} tài khoản chưa có lịch sử; giữ nguyên ${result.keptWithHistory} tài khoản đã từng dự thi.`,
       });
       await loadDirectory();
     } catch (error) {
-      setMessage({ tone: "red", text: error instanceof Error ? error.message : "Không thể dọn danh sách." });
+      setMessage({ tone: "red", text: cleanRosterError(error, "Không thể dọn danh sách.") });
     } finally {
       setBusy(false);
     }
@@ -304,18 +390,36 @@ export function RosterImport() {
   const pendingWarnings = preview
     ? preview.rows.filter((r) => r.status === "warning" && !confirmed[r.rowNumber]).length
     : 0;
+  const quickConfirmedCount = Object.values(quickConfirmed).filter(Boolean).length;
+  const quickPendingWarnings = quickPreview
+    ? quickPreview.rows.filter((r) => r.status === "warning" && !quickConfirmed[r.rowNumber]).length
+    : 0;
   const activeStudentsCount = students.filter((s) => s.status === "active").length;
   const lockedStudentsCount = students.filter((s) => s.status !== "active").length;
 
   return (
     <main aria-label="Quản lý danh sách lớp" style={{ minWidth: 0, maxWidth: "100%" }}>
+      {message && (
+        <div
+          className="acc-banner"
+          data-tone={message.tone}
+          role={message.tone === "red" ? "alert" : "status"}
+          aria-live="polite"
+        >
+          <span>{message.text}</span>
+          <button type="button" className="acc-btn" onClick={() => setMessage(null)}>
+            Đóng
+          </button>
+        </div>
+      )}
+
       <header className="acc-page-header">
         <div style={{ minWidth: 0 }}>
           <p className="acc-kicker">Quản lý định danh & Hỗ trợ tại lớp</p>
           <h1 className="acc-title">Danh sách lớp & Tài khoản · {classInfo?.code ?? "VNR202"}</h1>
           <p className="acc-subtitle">
             Tra cứu nhanh sinh viên khi đứng lớp, đặt lại mật khẩu mặc định, đổi tên hiển thị hoặc nhập tệp
-            danh sách lớp chính thức. Tài khoản phòng thi thử (<code>THU001...</code>) được cách ly riêng và không tính
+            danh sách lớp chính thức. Tài khoản phòng thi thử (<code>THU001...</code>) được tách riêng và không tính
             vào sĩ số này.
           </p>
         </div>
@@ -351,222 +455,7 @@ export function RosterImport() {
         </div>
       </section>
 
-      {message && (
-        <div className="acc-banner" data-tone={message.tone} role="status" aria-live="polite">
-          <span>{message.text}</span>
-          <button type="button" className="acc-btn" onClick={() => setMessage(null)}>
-            Đóng
-          </button>
-        </div>
-      )}
-
-      {/* SECTION 1: CSV / XLSX Roster Import */}
-      <section className="acc-panel" aria-label="Nhập tệp danh sách lớp">
-        <div className="acc-panel-header">
-          <div style={{ minWidth: 0 }}>
-            <h2 className="acc-panel-title">Nhập / Cập nhật tệp danh sách lớp</h2>
-            <p style={{ margin: "0.2rem 0 0", fontSize: "0.84rem", color: "var(--acc-muted)" }}>
-              Tải tệp danh sách lớp (.xlsx hoặc .csv), kiểm tra bản xem trước rồi mới tạo tài khoản. Mật khẩu mặc định
-              lấy từ cấu hình máy chủ, không bao giờ xuất hiện trong tệp hay trên màn hình.
-            </p>
-          </div>
-        </div>
-
-        <form
-          onSubmit={handleUpload}
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(12rem, 1fr))",
-            gap: "0.75rem",
-            alignItems: "end",
-            minWidth: 0,
-            maxWidth: "100%",
-          }}
-        >
-          <label className="acc-field">
-            <span>Mã lớp</span>
-            <input
-              name="classCode"
-              required
-              maxLength={40}
-              value={classCode}
-              onChange={(e) => setClassCode(e.target.value)}
-              className="acc-input"
-            />
-          </label>
-          <label className="acc-field">
-            <span>Tên lớp</span>
-            <input
-              name="className"
-              maxLength={120}
-              value={className}
-              onChange={(e) => setClassName(e.target.value)}
-              className="acc-input"
-            />
-          </label>
-          <label className="acc-field">
-            <span>Tệp danh sách (.xlsx hoặc .csv)</span>
-            <input
-              name="file"
-              required
-              type="file"
-              accept=".xlsx,.csv,.tsv,.txt"
-              className="acc-input"
-            />
-          </label>
-          <label
-            className="adm__check"
-            style={{
-              display: "flex",
-              gap: "0.5rem",
-              alignItems: "flex-start",
-              gridColumn: "1 / -1",
-              fontSize: "0.86rem",
-              color: "var(--acc-text)",
-              minWidth: 0,
-            }}
-          >
-            <input type="checkbox" name="collectNamesOnSignIn" style={{ marginTop: "0.2rem" }} />
-            <span>Chỉ nhập MSSV; sinh viên tự nhập tên khi đăng nhập lần đầu.</span>
-          </label>
-          <div style={{ gridColumn: "1 / -1" }}>
-            <button disabled={busy} type="submit" className="acc-btn acc-btn-primary">
-              Xem trước
-            </button>
-          </div>
-        </form>
-
-        {preview && (
-          <div style={{ marginTop: "1.25rem", display: "grid", gap: "0.85rem", minWidth: 0, maxWidth: "100%" }}>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
-              <span className="acc-badge" data-tone="teal">
-                Hợp lệ: {preview.validCount}
-              </span>
-              <span className="acc-badge" data-tone="amber">
-                Cảnh báo: {preview.warningCount}
-              </span>
-              <span className="acc-badge" data-tone="red">
-                Lỗi: {preview.errorCount}
-              </span>
-            </div>
-
-            <div className="acc-table-wrap" role="region" aria-label="Chi tiết danh sách xem trước" tabIndex={0}>
-              <table className="acc-table">
-                <thead>
-                  <tr>
-                    <th>Hàng</th>
-                    <th>MSSV</th>
-                    <th>Họ và tên</th>
-                    <th>Tên hiển thị</th>
-                    <th>Trạng thái</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {preview.rows.map((row) => {
-                    const rowStatusText =
-                      row.status === "valid"
-                        ? "Hợp lệ"
-                        : row.message ??
-                          (row.issues?.map((i) => ISSUE_LABEL[i] ?? i).join("; ") || "Cần kiểm tra");
-                    return (
-                      <tr key={row.rowNumber} data-status={row.status}>
-                        <td>{row.rowNumber}</td>
-                        <td>
-                          <code>{row.studentId}</code>
-                        </td>
-                        <td>{row.fullName}</td>
-                        <td>
-                          {row.status === "error" ? (
-                            row.displayName
-                          ) : (
-                            <input
-                              aria-label={`Tên hiển thị hàng ${row.rowNumber}`}
-                              maxLength={40}
-                              value={overrides[row.rowNumber] ?? row.displayName}
-                              onChange={(e) => setOverrides({ ...overrides, [row.rowNumber]: e.target.value })}
-                              className="acc-input"
-                              style={{ maxWidth: "11rem" }}
-                            />
-                          )}
-                          {row.displayNameSuffix ? ` (${row.displayNameSuffix})` : ""}
-                        </td>
-                        <td>
-                          <div>{rowStatusText}</div>
-                          {row.status === "warning" && (
-                            <label style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem", marginTop: "0.25rem" }}>
-                              <input
-                                type="checkbox"
-                                checked={Boolean(confirmed[row.rowNumber])}
-                                onChange={(e) =>
-                                  setConfirmed({ ...confirmed, [row.rowNumber]: e.target.checked })
-                                }
-                              />
-                              <span>Xác nhận</span>
-                            </label>
-                          )}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-
-            <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "0.75rem" }}>
-              <button
-                disabled={busy || pendingWarnings > 0 || preview.validCount + confirmedCount === 0}
-                type="button"
-                onClick={handleApply}
-                className="acc-btn acc-btn-primary"
-              >
-                Tạo {preview.validCount + confirmedCount} tài khoản
-              </button>
-              {pendingWarnings > 0 && (
-                <span style={{ fontSize: "0.84rem", color: "var(--acc-amber)" }}>
-                  Còn {pendingWarnings} hàng cảnh báo chưa xác nhận.
-                </span>
-              )}
-            </div>
-
-            {(preview.omittedCount ?? 0) > 0 && (
-              <div className="acc-panel-alt" style={{ display: "grid", gap: "0.6rem" }}>
-                <p style={{ margin: 0 }}>
-                  Có <strong>{preview.omittedCount}</strong> sinh viên đang có trong lớp nhưng không nằm trong tệp
-                  vừa nhập. Mặc định các tài khoản này được giữ nguyên.
-                </p>
-                <label style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
-                  <input
-                    type="checkbox"
-                    checked={cleanupConfirmed}
-                    onChange={(e) => setCleanupConfirmed(e.target.checked)}
-                  />
-                  <span>Tôi xác nhận xóa các tài khoản vắng mặt chưa có lịch sử dự thi</span>
-                </label>
-                <label className="acc-field">
-                  <span>Lý do kiểm toán</span>
-                  <input
-                    value={cleanupReason}
-                    onChange={(e) => setCleanupReason(e.target.value)}
-                    className="acc-input"
-                  />
-                </label>
-                <div>
-                  <button
-                    disabled={busy || !cleanupConfirmed || cleanupReason.trim().length < 3}
-                    type="button"
-                    onClick={handleCleanup}
-                    className="acc-btn acc-btn-danger-solid"
-                  >
-                    Xóa sinh viên không còn trong danh sách
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-        )}
-      </section>
-
-      {/* SECTION 2: Student Directory & Support */}
+      {/* SECTION 1 (Moved to top): Student Directory & Support */}
       <section className="acc-panel" aria-label="Danh bạ sinh viên">
         <div
           className="acc-panel-header"
@@ -594,6 +483,7 @@ export function RosterImport() {
               style={{ minHeight: "2rem", padding: "0.3rem 0.75rem", fontSize: "0.82rem" }}
               onClick={() => {
                 setQuickStudentText("");
+                setQuickPreview(null);
                 setShowQuickAddModal(true);
               }}
             >
@@ -637,14 +527,21 @@ export function RosterImport() {
               onChange={(e) => setStatusFilter(e.target.value as "" | "active" | "locked")}
             >
               <option value="">Tất cả trạng thái</option>
-              <option value="active">Đang hoạt động (active)</option>
-              <option value="locked">Đang bị khóa (locked)</option>
+              <option value="active">Đang hoạt động</option>
+              <option value="locked">Đang bị khóa</option>
             </select>
           </label>
         </div>
 
         {loadingDirectory ? (
           <p style={{ color: "var(--acc-muted)" }}>Đang tải danh sách lớp...</p>
+        ) : directoryError ? (
+          <div className="acc-banner" data-tone="red" role="alert">
+            <span>{directoryError}</span>
+            <button type="button" className="acc-btn acc-btn-amber" onClick={() => void loadDirectory()}>
+              Thử lại
+            </button>
+          </div>
         ) : filteredStudents.length === 0 ? (
           <div className="acc-panel-alt" style={{ color: "var(--acc-muted)" }}>
             Không tìm thấy sinh viên phù hợp.
@@ -690,6 +587,7 @@ export function RosterImport() {
                               setSupportStudent(st);
                               setSupportAction("reset_password");
                               setSupportReason("Hỗ trợ đặt lại mật khẩu mặc định tại lớp");
+                              setSupportDirty(false);
                             }}
                           >
                             Đặt lại MK
@@ -703,6 +601,7 @@ export function RosterImport() {
                               setSupportAction("display_name");
                               setNewDisplayName(st.display_name);
                               setSupportReason("Cập nhật tên hiển thị theo yêu cầu tại lớp");
+                              setSupportDirty(false);
                             }}
                           >
                             Đổi tên
@@ -715,6 +614,7 @@ export function RosterImport() {
                               setSupportStudent(st);
                               setSupportAction("revoke_sessions");
                               setSupportReason("Thu hồi phiên cũ để đăng nhập thiết bị mới");
+                              setSupportDirty(false);
                             }}
                           >
                             Thu hồi phiên
@@ -729,6 +629,7 @@ export function RosterImport() {
                               setSupportReason(
                                 st.status === "active" ? "Tạm khóa tài khoản kiểm tra" : "Mở khóa tài khoản tại lớp",
                               );
+                              setSupportDirty(false);
                             }}
                           >
                             {st.status === "active" ? "Khóa" : "Mở khóa"}
@@ -744,10 +645,243 @@ export function RosterImport() {
         )}
       </section>
 
+      {/* SECTION 2 (Moved below and collapsed by default): CSV / XLSX Roster Import */}
+      <details className="acc-panel" aria-label="Nhập tệp danh sách lớp" open={Boolean(preview)}>
+        <summary
+          style={{
+            cursor: "pointer",
+            fontWeight: 700,
+            fontSize: "1.05rem",
+            color: "var(--acc-text)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: "0.75rem",
+          }}
+        >
+          <span>Nhập / Cập nhật tệp danh sách lớp (.xlsx hoặc .csv)</span>
+          <span className="acc-badge">Nhấn để mở / đóng</span>
+        </summary>
+
+        <div style={{ marginTop: "0.9rem" }}>
+          <p style={{ margin: "0 0 0.85rem", fontSize: "0.84rem", color: "var(--acc-muted)" }}>
+            Tải tệp danh sách lớp (.xlsx hoặc .csv), kiểm tra bản xem trước rồi mới tạo tài khoản. Mật khẩu mặc định
+            lấy từ cấu hình máy chủ, không bao giờ xuất hiện trong tệp hay trên màn hình.
+          </p>
+
+          <form
+            onSubmit={handleUpload}
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(12rem, 1fr))",
+              gap: "0.75rem",
+              alignItems: "end",
+              minWidth: 0,
+              maxWidth: "100%",
+            }}
+          >
+            <label className="acc-field">
+              <span>Mã lớp</span>
+              <input
+                name="classCode"
+                required
+                maxLength={40}
+                value={classCode}
+                onChange={(e) => setClassCode(e.target.value)}
+                className="acc-input"
+              />
+            </label>
+            <label className="acc-field">
+              <span>Tên lớp</span>
+              <input
+                name="className"
+                maxLength={120}
+                value={className}
+                onChange={(e) => setClassName(e.target.value)}
+                className="acc-input"
+              />
+            </label>
+            <label className="acc-field">
+              <span>Tệp danh sách (.xlsx hoặc .csv)</span>
+              <input
+                name="file"
+                required
+                type="file"
+                accept=".xlsx,.csv,.tsv,.txt"
+                className="acc-input"
+              />
+            </label>
+            <label
+              className="adm__check"
+              style={{
+                display: "flex",
+                gap: "0.5rem",
+                alignItems: "flex-start",
+                gridColumn: "1 / -1",
+                fontSize: "0.86rem",
+                color: "var(--acc-text)",
+                minWidth: 0,
+              }}
+            >
+              <input type="checkbox" name="collectNamesOnSignIn" style={{ marginTop: "0.2rem" }} />
+              <span>Chỉ nhập MSSV; sinh viên tự nhập tên khi đăng nhập lần đầu.</span>
+            </label>
+            <div style={{ gridColumn: "1 / -1" }}>
+              <button disabled={busy} type="submit" className="acc-btn acc-btn-primary">
+                Xem trước
+              </button>
+            </div>
+          </form>
+
+          {preview && (
+            <div style={{ marginTop: "1.25rem", display: "grid", gap: "0.85rem", minWidth: 0, maxWidth: "100%" }}>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+                <span className="acc-badge" data-tone="teal">
+                  Hợp lệ: {preview.validCount}
+                </span>
+                <span className="acc-badge" data-tone="amber">
+                  Cảnh báo: {preview.warningCount}
+                </span>
+                <span className="acc-badge" data-tone="red">
+                  Lỗi: {preview.errorCount}
+                </span>
+              </div>
+
+              <div className="acc-table-wrap" role="region" aria-label="Chi tiết danh sách xem trước" tabIndex={0}>
+                <table className="acc-table">
+                  <thead>
+                    <tr>
+                      <th>Hàng</th>
+                      <th>MSSV</th>
+                      <th>Họ và tên</th>
+                      <th>Tên hiển thị</th>
+                      <th>Trạng thái</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {preview.rows.map((row) => {
+                      const rowStatusText =
+                        row.status === "valid"
+                          ? "Hợp lệ"
+                          : row.message ??
+                            (row.issues?.map((i) => ISSUE_LABEL[i] ?? i).join("; ") || "Cần kiểm tra");
+                      return (
+                        <tr key={row.rowNumber} data-status={row.status}>
+                          <td>{row.rowNumber}</td>
+                          <td>
+                            <code>{row.studentId}</code>
+                          </td>
+                          <td>{row.fullName}</td>
+                          <td>
+                            {row.status === "error" ? (
+                              row.displayName
+                            ) : (
+                              <input
+                                aria-label={`Tên hiển thị hàng ${row.rowNumber}`}
+                                maxLength={40}
+                                value={overrides[row.rowNumber] ?? row.displayName}
+                                onChange={(e) => setOverrides({ ...overrides, [row.rowNumber]: e.target.value })}
+                                className="acc-input"
+                                style={{ maxWidth: "11rem" }}
+                              />
+                            )}
+                            {row.displayNameSuffix ? ` (${row.displayNameSuffix})` : ""}
+                          </td>
+                          <td>
+                            <div>{rowStatusText}</div>
+                            {row.status === "warning" && (
+                              <label style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem", marginTop: "0.25rem" }}>
+                                <input
+                                  type="checkbox"
+                                  checked={Boolean(confirmed[row.rowNumber])}
+                                  onChange={(e) =>
+                                    setConfirmed({ ...confirmed, [row.rowNumber]: e.target.checked })
+                                  }
+                                />
+                                <span>Xác nhận</span>
+                              </label>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+
+              <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "0.75rem" }}>
+                <button
+                  disabled={busy || pendingWarnings > 0 || preview.validCount + confirmedCount === 0}
+                  type="button"
+                  onClick={handleApply}
+                  className="acc-btn acc-btn-primary"
+                >
+                  Tạo {preview.validCount + confirmedCount} tài khoản
+                </button>
+                {pendingWarnings > 0 && (
+                  <span style={{ fontSize: "0.84rem", color: "var(--acc-amber)" }}>
+                    Còn {pendingWarnings} hàng cảnh báo chưa xác nhận.
+                  </span>
+                )}
+              </div>
+
+              {(preview.omittedCount ?? 0) > 0 && (
+                <div className="acc-panel-alt" style={{ display: "grid", gap: "0.6rem" }}>
+                  <p style={{ margin: 0 }}>
+                    Có <strong>{preview.omittedCount}</strong> sinh viên đang có trong lớp nhưng không nằm trong tệp
+                    vừa nhập. Mặc định các tài khoản này được giữ nguyên.
+                  </p>
+                  <label style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+                    <input
+                      type="checkbox"
+                      checked={cleanupConfirmed}
+                      onChange={(e) => setCleanupConfirmed(e.target.checked)}
+                    />
+                    <span>Tôi xác nhận xóa các tài khoản vắng mặt chưa có lịch sử dự thi</span>
+                  </label>
+                  <label className="acc-field">
+                    <span>Lý do kiểm toán</span>
+                    <input
+                      value={cleanupReason}
+                      onChange={(e) => setCleanupReason(e.target.value)}
+                      className="acc-input"
+                    />
+                  </label>
+                  <div>
+                    <button
+                      disabled={busy || !cleanupConfirmed || cleanupReason.trim().length < 3}
+                      type="button"
+                      onClick={handleCleanup}
+                      className="acc-btn acc-btn-danger-solid"
+                    >
+                      Xóa sinh viên không còn trong danh sách
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </details>
+
       {/* Student Support Confirmation Modal */}
       {supportStudent && (
-        <div className="acc-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="support-modal-title">
-          <form className="acc-modal" onSubmit={handleSupportSubmit}>
+        <div
+          className="acc-modal-backdrop"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="support-modal-title"
+          onClick={() => {
+            if (!supportDirty && !supportBusy) {
+              setSupportStudent(null);
+            }
+          }}
+        >
+          <form
+            className="acc-modal"
+            onSubmit={handleSupportSubmit}
+            onClick={(e) => e.stopPropagation()}
+          >
             <p className="acc-kicker">Hỗ trợ sinh viên tại lớp</p>
             <h3 id="support-modal-title" style={{ margin: "0 0 0.5rem", fontSize: "1.2rem" }}>
               {supportAction === "reset_password" && "Đặt lại mật khẩu mặc định"}
@@ -776,11 +910,15 @@ export function RosterImport() {
               <label className="acc-field" style={{ marginBottom: "0.75rem" }}>
                 <span>Tên hiển thị mới (không chứa MSSV)</span>
                 <input
+                  ref={supportNameInputRef}
                   required
                   maxLength={100}
                   className="acc-input"
                   value={newDisplayName}
-                  onChange={(e) => setNewDisplayName(e.target.value)}
+                  onChange={(e) => {
+                    setNewDisplayName(e.target.value);
+                    setSupportDirty(true);
+                  }}
                 />
               </label>
             )}
@@ -788,17 +926,29 @@ export function RosterImport() {
             <label className="acc-field" style={{ marginBottom: "1rem" }}>
               <span>Lý do kiểm toán (bắt buộc, tối thiểu 3 ký tự)</span>
               <input
+                ref={supportReasonInputRef}
                 required
                 minLength={3}
                 maxLength={300}
                 className="acc-input"
                 value={supportReason}
-                onChange={(e) => setSupportReason(e.target.value)}
+                onChange={(e) => {
+                  setSupportReason(e.target.value);
+                  setSupportDirty(true);
+                }}
               />
             </label>
 
             <div style={{ display: "flex", justifyContent: "flex-end", gap: "0.6rem" }}>
-              <button type="button" className="acc-btn" onClick={() => setSupportStudent(null)}>
+              <button
+                type="button"
+                className="acc-btn"
+                disabled={supportBusy}
+                onClick={() => {
+                  setSupportStudent(null);
+                  setSupportDirty(false);
+                }}
+              >
                 Hủy
               </button>
               <button
@@ -821,46 +971,159 @@ export function RosterImport() {
           className="acc-modal-backdrop"
           role="dialog"
           aria-modal="true"
-          onClick={() => setShowQuickAddModal(false)}
+          aria-labelledby="quick-add-modal-title"
+          onClick={() => {
+            if (!quickStudentText.trim() && !quickPreview && !busy) {
+              setShowQuickAddModal(false);
+            }
+          }}
         >
           <div
             className="acc-modal"
-            style={{ width: "min(100%, 32rem)" }}
+            style={{ width: "min(100%, 40rem)", maxHeight: "90vh", overflowY: "auto" }}
             onClick={(e) => e.stopPropagation()}
           >
-            <h3 style={{ margin: "0 0 0.4rem", fontSize: "1.2rem" }}>Thêm nhanh sinh viên vào lớp</h3>
+            <h3 id="quick-add-modal-title" style={{ margin: "0 0 0.4rem", fontSize: "1.2rem" }}>
+              Thêm nhanh sinh viên vào lớp
+            </h3>
             <p style={{ margin: "0 0 0.85rem", fontSize: "0.84rem", color: "var(--acc-text-Soft)" }}>
-              Nhập một hoặc nhiều MSSV (mỗi MSSV một dòng, hoặc cách nhau bởi dấu phẩy). Hệ thống sẽ tạo tài khoản và sinh viên sẽ tự nhập họ tên hiển thị khi đăng nhập lần đầu.
+              Nhập một hoặc nhiều MSSV (mỗi MSSV một dòng, hoặc cách nhau bởi dấu phẩy). Sinh viên sẽ tự nhập họ tên
+              hiển thị khi đăng nhập lần đầu.
             </p>
             <label className="acc-field" style={{ marginBottom: "0.95rem" }}>
               <span>Danh sách MSSV</span>
               <textarea
+                ref={quickAddTextareaRef}
                 className="acc-textarea"
                 rows={4}
                 placeholder="Ví dụ:&#10;SE180001&#10;SE180002"
                 value={quickStudentText}
-                onChange={(e) => setQuickStudentText(e.target.value)}
+                onChange={(e) => {
+                  setQuickStudentText(e.target.value);
+                  setQuickPreview(null);
+                }}
               />
             </label>
-            <div style={{ display: "flex", justifyContent: "flex-end", gap: "0.55rem" }}>
+
+            {quickPreview && (
+              <div
+                className="acc-panel-alt"
+                style={{ marginBottom: "0.95rem", display: "grid", gap: "0.65rem" }}
+              >
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "0.45rem" }}>
+                  <span className="acc-badge" data-tone="teal">
+                    Hợp lệ: {quickPreview.validCount}
+                  </span>
+                  <span className="acc-badge" data-tone="amber">
+                    Cảnh báo: {quickPreview.warningCount}
+                  </span>
+                  <span className="acc-badge" data-tone="red">
+                    Lỗi: {quickPreview.errorCount}
+                  </span>
+                </div>
+
+                <div className="acc-table-wrap" style={{ maxHeight: "14rem", overflowY: "auto" }}>
+                  <table className="acc-table">
+                    <thead>
+                      <tr>
+                        <th>Hàng</th>
+                        <th>MSSV</th>
+                        <th>Tên hiển thị</th>
+                        <th>Trạng thái</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {quickPreview.rows.map((row) => {
+                        const rowStatusText =
+                          row.status === "valid"
+                            ? "Hợp lệ"
+                            : row.message ??
+                              (row.issues?.map((i) => ISSUE_LABEL[i] ?? i).join("; ") || "Cần kiểm tra");
+                        return (
+                          <tr key={row.rowNumber} data-status={row.status}>
+                            <td>{row.rowNumber}</td>
+                            <td>
+                              <code>{row.studentId}</code>
+                            </td>
+                            <td>
+                              {row.status === "error" ? (
+                                row.displayName
+                              ) : (
+                                <input
+                                  aria-label={`Tên hiển thị xem trước hàng ${row.rowNumber}`}
+                                  maxLength={40}
+                                  value={quickOverrides[row.rowNumber] ?? row.displayName}
+                                  onChange={(e) =>
+                                    setQuickOverrides({ ...quickOverrides, [row.rowNumber]: e.target.value })
+                                  }
+                                  className="acc-input"
+                                  style={{ maxWidth: "10rem" }}
+                                />
+                              )}
+                            </td>
+                            <td>
+                              <div>{rowStatusText}</div>
+                              {row.status === "warning" && (
+                                <label
+                                  style={{
+                                    display: "inline-flex",
+                                    alignItems: "center",
+                                    gap: "0.35rem",
+                                    marginTop: "0.25rem",
+                                  }}
+                                >
+                                  <input
+                                    type="checkbox"
+                                    checked={Boolean(quickConfirmed[row.rowNumber])}
+                                    onChange={(e) =>
+                                      setQuickConfirmed({ ...quickConfirmed, [row.rowNumber]: e.target.checked })
+                                    }
+                                  />
+                                  <span>Xác nhận</span>
+                                </label>
+                              )}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            <div style={{ display: "flex", justifyContent: "flex-end", gap: "0.55rem", flexWrap: "wrap" }}>
               <button
                 type="button"
                 className="acc-btn"
-                onClick={() => setShowQuickAddModal(false)}
+                disabled={busy}
+                onClick={() => {
+                  setShowQuickAddModal(false);
+                  setQuickPreview(null);
+                }}
               >
                 Hủy
               </button>
               <button
                 type="button"
-                className="acc-btn acc-btn-primary"
+                className="acc-btn"
                 disabled={busy || !quickStudentText.trim()}
-                onClick={() => {
-                  setShowQuickAddModal(false);
-                  void handleQuickAdd(quickStudentText);
-                }}
+                onClick={() => void handleQuickAddPreview(quickStudentText)}
               >
-                {busy ? "Đang xử lý..." : "Tạo bản xem trước"}
+                {busy && !quickPreview ? "Đang kiểm tra..." : "Xem trước"}
               </button>
+              {quickPreview && (
+                <button
+                  type="button"
+                  className="acc-btn acc-btn-primary"
+                  disabled={busy || quickPendingWarnings > 0 || quickPreview.validCount + quickConfirmedCount === 0}
+                  onClick={() => void handleQuickAddApply()}
+                >
+                  {busy
+                    ? "Đang tạo..."
+                    : `Tạo ${quickPreview.validCount + quickConfirmedCount} tài khoản tại chỗ`}
+                </button>
+              )}
             </div>
           </div>
         </div>

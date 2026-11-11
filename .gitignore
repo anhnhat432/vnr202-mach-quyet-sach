@@ -18,6 +18,10 @@ tmp/
 *.pyc
 analysis/course_corpus.json
 roster*.csv
+danh_sach_mssv.csv
+danh_sach_mssv.xlsx
 
 # local database harness state and generated secrets
 .local/
+.vercel
+.env*
