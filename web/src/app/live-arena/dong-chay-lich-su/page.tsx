@@ -23,6 +23,7 @@ export default function TimelineGamePage() {
         </Link>
       </header>
       <TimelineGame />
+      <Link className="text-link" href="/kien-thuc">Ôn tập các dấu mốc trước khi chơi →</Link>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 import { DecisionMomentPlayer } from "@/features/moments/decision-moment";
 
@@ -19,6 +20,7 @@ export default function KhoanhKhacPage() {
         </p>
       </header>
       <DecisionMomentPlayer />
+      <Link className="text-link" href="/kien-thuc">Khám phá kiến thức theo dòng lịch sử →</Link>
     </div>
   );
 }

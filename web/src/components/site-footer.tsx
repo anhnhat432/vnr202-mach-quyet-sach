@@ -9,6 +9,7 @@ export function SiteFooter() {
           <span>FPT University</span>
         </p>
         <nav aria-label="Thông tin học thuật">
+          <Link href="/kien-thuc">Dấu Ấn Sử Việt</Link>
           <Link href="/phong-phuong-phap">Phòng Phương Pháp</Link>
           <Link href="/nguon-va-ai">Nguồn &amp; AI</Link>
         </nav>

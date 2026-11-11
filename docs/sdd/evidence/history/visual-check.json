@@ -1,0 +1,26 @@
+[
+  {
+    "viewport": "desktop",
+    "width": 1440,
+    "height": 1000,
+    "status": 200,
+    "overflow": false,
+    "errors": []
+  },
+  {
+    "viewport": "tablet",
+    "width": 768,
+    "height": 1024,
+    "status": 200,
+    "overflow": false,
+    "errors": []
+  },
+  {
+    "viewport": "mobile",
+    "width": 390,
+    "height": 844,
+    "status": 200,
+    "overflow": false,
+    "errors": []
+  }
+]

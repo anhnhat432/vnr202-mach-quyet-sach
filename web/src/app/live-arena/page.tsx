@@ -35,6 +35,7 @@ export default function LiveArenaPage() {
         <p className="eyebrow">Live Arena · Chế độ khách</p>
         <h1>Hai nhịp chơi. Hai bảng xếp hạng.</h1>
         <p>Chơi thử chế độ luyện tập ngay. Cuộc thi tính điểm với một lượt duy nhất mở theo lịch giảng viên.</p>
+        <Link className="text-link" href="/kien-thuc">Ôn tập cùng Dấu Ấn Sử Việt →</Link>
         <p className="arena-status">
           <span className="arena-status__dot" />
           Chế độ luyện tập đang mở · chơi thử tự do

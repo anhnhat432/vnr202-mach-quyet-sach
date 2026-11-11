@@ -42,7 +42,11 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   allowedDevOrigins: ["127.0.0.1"],
   async headers() {
-    return [{ source: "/:path*", headers: securityHeaders }];
+    return [
+      { source: "/:path*", headers: securityHeaders },
+      // Only the knowledge route may opt in to verified documentary embeds.
+      { source: "/kien-thuc", headers: [{ key: "Content-Security-Policy", value: `${contentSecurityPolicy}; frame-src https://www.youtube-nocookie.com` }] },
+    ];
   },
 };
 
